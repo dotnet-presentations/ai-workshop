@@ -16,208 +16,169 @@ public class ProductService(
 {
     public async Task<IEnumerable<ProductInfo>> GetProductsAsync(string? categoryFilter = null)
     {
-        // Get products from database
+        // Make sure we have products
         await EnsureProductsExistAsync();
 
-        // Get from database with optional filtering
-        IQueryable<ProductInfo> query = _dbContext.Products;
-
-        // Apply category filter if provided
-        if (!string.IsNullOrEmpty(categoryFilter))
-        {
-            query = query.Where(p => p.Category == categoryFilter);
-        }
+        // Simple filtering by category if specified
+        var query = string.IsNullOrEmpty(categoryFilter)
+            ? _dbContext.Products
+            : _dbContext.Products.Where(p => p.Category == categoryFilter);
 
         return await query.ToListAsync();
     }
 
     public async Task<List<string>> GetCategoriesAsync()
     {
-        // Ensure products are initialized
         await EnsureProductsExistAsync();
-
-        // Get categories from database
-        var categories = await _dbContext.Categories
-            .Select(c => c.Name)
-            .OrderBy(c => c)
-            .ToListAsync();
-
-        return categories;
+        return await _dbContext.Categories.Select(c => c.Name).ToListAsync();
     }
 
     private async Task EnsureProductsExistAsync()
     {
-        // Check if we already have products in the database
         if (!await _dbContext.Products.AnyAsync())
         {
-            // If not, generate them
-            var products = await GenerateProductInfoAsync();
-
-            // Update ProductInfo.AvailableCategories (used for UI)
-            var categories = products.Select(p => p.Category).Distinct().OrderBy(c => c).ToList();
-            ProductInfo.AvailableCategories = categories;
-
-            // Store the categories in the database
-            foreach (var categoryName in categories)
-            {
-                _dbContext.Categories.Add(new ProductCategory { Name = categoryName });
-            }
-
-            await _dbContext.SaveChangesAsync();
-        }
-        else
-        {
-            // Set available categories for UI components
-            var categories = await _dbContext.Categories
-                .Select(c => c.Name)
-                .OrderBy(c => c)
-                .ToListAsync();
-
-            ProductInfo.AvailableCategories = categories;
+            await GenerateAndSaveProductsAsync();
         }
     }
-    private async Task<List<ProductInfo>> GenerateProductInfoAsync()
+
+    private async Task GenerateAndSaveProductsAsync()
     {
-        var products = new List<ProductInfo>();
+        // Get documents from vector store
+        var fileNames = await GetUniqueFileNamesAsync();
+        if (fileNames.Count == 0)
+        {
+            _logger.LogWarning("No documents found in vector store");
+            return;
+        }
+
+        var categories = new HashSet<string>();
+
+        // Process each file
+        foreach (var fileName in fileNames)
+        {
+            var productName = Path.GetFileNameWithoutExtension(fileName)
+                .Replace("Example_", "")
+                .Replace("_", " ");
+
+            // Get document content
+            var content = await GetDocumentContentAsync(fileName, productName);
+
+            // The key part - using AI to generate product info
+            var (description, category) = await AskAIForProductInfoAsync(content, productName);
+
+            // Save to database
+            _dbContext.Products.Add(new ProductInfo
+            {
+                Name = productName,
+                ShortDescription = description,
+                Category = category,
+                FileName = fileName
+            });
+
+            categories.Add(category);
+        }
+
+        // Save categories
+        foreach (var category in categories)
+        {
+            _dbContext.Categories.Add(new ProductCategory { Name = category });
+        }
+
+        ProductInfo.AvailableCategories = categories.ToList();
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private async Task<List<string>> GetUniqueFileNamesAsync()
+    {
         var vectorCollection = _vectorStore.GetCollection<Guid, SemanticSearchRecord>("data-genailab-ingested");
 
         try
         {
-            // Simple approach to get all unique filenames
             var dummyEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync("all documents");
             var searchResults = await vectorCollection.VectorizedSearchAsync(
                 dummyEmbedding,
                 new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 });
 
-            var allRecords = new List<SemanticSearchRecord>();
+            var uniqueFileNames = new HashSet<string>();
             await foreach (var result in searchResults.Results)
             {
-                allRecords.Add(result.Record);
+                uniqueFileNames.Add(result.Record.FileName);
             }
 
-            var uniqueFileNames = allRecords.Select(r => r.FileName).Distinct().ToList();
-
-            foreach (var fileName in uniqueFileNames)
-            {
-                // Extract product name from filename
-                var productName = GetProductNameFromFileName(fileName);
-
-                // Get content for this product
-                var contentQuery = $"Information about {productName}";
-                var contentEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync(contentQuery);
-                var contentResults = await vectorCollection.VectorizedSearchAsync(contentEmbedding,
-                    new VectorSearchOptions<SemanticSearchRecord>
-                    {
-                        Top = 5,
-                        Filter = record => record.FileName == fileName
-                    });
-
-                // Collect content
-                var contentBuilder = new StringBuilder();
-                await foreach (var item in contentResults.Results)
-                {
-                    contentBuilder.AppendLine(item.Record.Text);
-                }
-
-                // Get description and category from AI
-                var content = contentBuilder.ToString();
-                var (shortDescription, category) = await GenerateDescriptionAndCategory(content, productName, fileName);
-
-                // Create product and add to DB context
-                var product = new ProductInfo
-                {
-                    Name = productName,
-                    ShortDescription = shortDescription,
-                    Category = category,
-                    FileName = fileName
-                };
-
-                _dbContext.Products.Add(product);
-                products.Add(product);
-            }
-
-            // Save all products to the database
-            await _dbContext.SaveChangesAsync();
+            return uniqueFileNames.ToList();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during product info generation");
+            _logger.LogError(ex, "Error retrieving documents from vector store");
+            return new List<string>();
         }
+    }
 
-        return products;
-    }
-    private string GetProductNameFromFileName(string fileName)
+    private async Task<string> GetDocumentContentAsync(string fileName, string productName)
     {
-        // Simple name extraction from filename
-        return Path.GetFileNameWithoutExtension(fileName)
-            .Replace("Example_", "")
-            .Replace("_", " ");
+        var vectorCollection = _vectorStore.GetCollection<Guid, SemanticSearchRecord>("data-genailab-ingested");
+
+        try
+        {
+            var contentEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync($"Information about {productName}");
+            var contentResults = await vectorCollection.VectorizedSearchAsync(
+                contentEmbedding,
+                new VectorSearchOptions<SemanticSearchRecord>
+                {
+                    Top = 5,
+                    Filter = record => record.FileName == fileName
+                });
+
+            var contentBuilder = new StringBuilder();
+            await foreach (var item in contentResults.Results)
+            {
+                contentBuilder.AppendLine(item.Record.Text);
+            }
+
+            return contentBuilder.ToString();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Error getting content for {FileName}", fileName);
+            return string.Empty;
+        }
     }
-    private async Task<(string Description, string Category)> GenerateDescriptionAndCategory(string content, string productName, string fileName)
+
+    // Simple record for JSON deserialization
+    private record ProductResponse(string Description, string Category);
+
+    // This is the key method that uses IChatClient
+    private async Task<(string Description, string Category)> AskAIForProductInfoAsync(string content, string productName)
     {
         try
         {
-            // Create a simple prompt for both description and category
-            var prompt = $@"Based on this content about '{productName}', provide:
-1. A concise product description (max 200 characters)
-2. A category from: Electronics, Safety Equipment, Outdoor Gear, or General
-
-Format as:
-DESCRIPTION: [description]
-CATEGORY: [category]
+            // Create a simple prompt requesting JSON response
+            var prompt = $@"Based on this content about '{productName}', provide a JSON object with these properties:
+1. description: A concise product description (max 200 characters)
+2. category: One of: 'Electronics', 'Safety Equipment', 'Outdoor Gear', or 'General'
 
 Content: {content}";
 
             // Get response from the chat client
             var chatResponse = await _chatClient.GetResponseAsync(
-                new[] { new ChatMessage(ChatRole.System, "You are a product information assistant."),
-                        new ChatMessage(ChatRole.User, prompt) });
+                new[] {
+                    new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only."),
+                    new ChatMessage(ChatRole.User, prompt)
+                });            // Try to parse the JSON response
+            var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var responseJson = System.Text.Json.JsonSerializer.Deserialize<ProductResponse>(chatResponse.Text, options);
 
-            string responseText = chatResponse.Text ?? string.Empty;
-
-            // Set default values
-            string description = $"A high-quality {productName.ToLower()}";
-            string category = "General";
-
-            // Simple parsing 
-            int descIndex = responseText.IndexOf("DESCRIPTION:", StringComparison.OrdinalIgnoreCase);
-            int catIndex = responseText.IndexOf("CATEGORY:", StringComparison.OrdinalIgnoreCase);
-
-            if (descIndex >= 0 && catIndex > descIndex)
+            if (responseJson != null)
             {
-                // Extract description and category
-                description = responseText.Substring(descIndex + "DESCRIPTION:".Length, catIndex - descIndex - "DESCRIPTION:".Length).Trim();
-                category = responseText.Substring(catIndex + "CATEGORY:".Length).Trim();
-
-                // Simple category normalization
-                if (category.Contains("Electronic", StringComparison.OrdinalIgnoreCase))
-                    category = "Electronics";
-                else if (category.Contains("Safety", StringComparison.OrdinalIgnoreCase))
-                    category = "Safety Equipment";
-                else if (category.Contains("Outdoor", StringComparison.OrdinalIgnoreCase))
-                    category = "Outdoor Gear";
-                else
-                    category = "General";
-
-                // Trim description if needed
-                if (description.Length > 200)
-                {
-                    description = description.Substring(0, 197) + "...";
-                }
+                return (responseJson.Description, responseJson.Category);
             }
-            else
-            {
-                // If format wasn't followed, use simple defaults
-                _logger.LogInformation("AI response format not as expected for {ProductName}, using defaults", productName);
-            }
-
-            return (description, category);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error generating product info for {ProductName}", productName);
-            // Simple fallback with generic values
-            return ($"A high-quality {productName.ToLower()}", "General");
+            _logger.LogWarning("AI processing error for {ProductName}: {Error}", productName, ex.Message);
         }
+
+        // Simple fallback
+        return ($"A high-quality {productName}", "General");
     }
 }

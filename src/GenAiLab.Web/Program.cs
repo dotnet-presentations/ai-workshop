@@ -23,9 +23,12 @@ builder.Services.AddSingleton<IVectorStore, QdrantVectorStore>();
 builder.Services.AddScoped<DataIngestor>();
 builder.Services.AddSingleton<SemanticSearch>();
 builder.AddSqliteDbContext<IngestionCacheDbContext>("ingestionCache");
+builder.AddSqliteDbContext<ProductDbContext>("productDb");
+builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();
 IngestionCacheDbContext.Initialize(app.Services);
+ProductDbContext.Initialize(app.Services);
 
 app.MapDefaultEndpoints();
 

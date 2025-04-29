@@ -1,0 +1,82 @@
+@page "/products"
+@using GenAiLab.Web.Models
+@using GenAiLab.Web.Services
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject ProductService ProductService
+
+<PageTitle>Products - GenAI Lab</PageTitle>
+
+<h1>📦 Our Products <span class="badge bg-primary">Collection</span></h1>
+
+<div class="input-group mb-4 w-50">
+    <select class="form-select" @bind="SelectedCategory" @bind:after="ApplyFilters">
+        <option value="">✨ All Categories</option>
+        @foreach (var category in Categories)
+        {
+            <option value="@category">📁 @category</option>
+        }
+    </select>
+    <label class="input-group-text">🔍 Filter</label>
+</div>
+
+@if (ProductsList == null || !ProductsList.Any())
+{
+    <div class="alert alert-info">
+        @if (ProductsLoading)
+        {
+            <div class="d-flex align-items-center">
+                <div class="spinner-border text-primary me-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <span>Loading products...</span>
+            </div>
+        }
+        else
+        {
+            <span>📦 No products found</span>
+        }
+    </div>
+}
+else
+{
+    <div class="card mb-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <QuickGrid Items="@ProductsList.AsQueryable()" class="table table-bordered table-hover mb-0">
+                    <PropertyColumn Property="@(p => p.Name)" Title="📦 Product Name" Sortable="true" />
+                    <PropertyColumn Property="@(p => p.ShortDescription)" Title="📝 Description" />
+                    <PropertyColumn Property="@(p => p.Category)" Title="🏷️ Category" Sortable="true" />
+                </QuickGrid>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private IEnumerable<ProductInfo> ProductsList { get; set; } = Enumerable.Empty<ProductInfo>();
+    private List<string> Categories { get; set; } = new List<string>();
+    private string SelectedCategory { get; set; } = string.Empty;
+    private bool ProductsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategories();
+        await LoadProducts();
+    }
+
+    private async Task LoadCategories()
+    {
+        Categories = await ProductService.GetCategoriesAsync();
+    }
+    private async Task LoadProducts()
+    {
+        ProductsLoading = true;
+        ProductsList = await ProductService.GetProductsAsync(SelectedCategory);
+        ProductsLoading = false;
+    }
+
+    private async Task ApplyFilters()
+    {
+        await LoadProducts();
+    }
+}

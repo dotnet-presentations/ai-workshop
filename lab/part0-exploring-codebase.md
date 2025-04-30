@@ -1,260 +1,565 @@
-# Exploring the Codebase in a new AI Web Chat project
+# Exploring the Codebase & Building the Products Feature
 
 ## In this lab
 
-In this lab, you will explore the structure and components of a new AI Web Chat project created with the .NET AI project templates. You'll gain an understanding of how the different parts of the application work together to create an intelligent chatbot.
+This lab is divided into two parts:
 
-## Project Structure
+1. **Part 1: Exploring the AI Web Chatbot Template** - You'll learn about the structure and components of a new AI Web Chat project created with the .NET AI project templates.
+
+2. **Part 2: Building the Products Feature** - You'll extend your application by adding a Products feature that uses AI to generate product descriptions and categories.
+
+## Part 1: Exploring the AI Web Chatbot Template
+
+### Creating a New Project
+
+Start by creating a new project using the .NET AI Web Chatbot template:
+
+```powershell
+dotnet new ai-webchatbot -o MyGenAiLab
+cd MyGenAiLab
+```
+
+This creates a new solution with all the necessary projects and files.
+
+### Project Structure
 
 The solution consists of three main projects:
 
-- **GenAiLab.Web**: The main web application that hosts the chatbot interface
-- **GenAiLab.AppHost**: The .NET Aspire application host that orchestrates the different services
-- **GenAiLab.ServiceDefaults**: Common service configuration settings for all services in the application
+- **MyGenAiLab.Web**: The main web application that hosts the chatbot interface
+- **MyGenAiLab.AppHost**: The .NET Aspire application host that orchestrates the different services
+- **MyGenAiLab.ServiceDefaults**: Common service configuration settings for all services in the application
 
-## Exploring the .NET Aspire AppHost Configuration
+### Understanding Project Components
 
-Let's first look at the `Program.cs` file in the **GenAiLab.AppHost** project:
+#### AppHost (MyGenAiLab.AppHost)
+
+The AppHost project is responsible for orchestrating the different services required by the application. Open the `Program.cs` file:
 
 ```csharp
 var builder = DistributedApplication.CreateBuilder(args);
 
-// You will need to set the connection string to your own value
-// You can do this using Visual Studio's "Manage User Secrets" UI, or on the command line:
-//   cd this-project-directory
-//   dotnet user-secrets set ConnectionStrings:openai "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
+// Default connection string for OpenAI endpoint
 var openai = builder.AddConnectionString("openai");
 
+// Vector database for storing and querying document embeddings
 var vectorDB = builder.AddQdrant("vectordb")
     .WithDataVolume()
     .WithLifetime(ContainerLifetime.Persistent);
 
-var ingestionCache = builder.AddSqlite("ingestionCache");
-
-var webApp = builder.AddProject<Projects.GenAiLab_Web>("aichatweb-app");
-webApp.WithReference(openai);
-webApp
+// The main web application
+var web = builder.AddProject<Projects.MyGenAiLab_Web>("web")
     .WithReference(vectorDB)
-    .WaitFor(vectorDB);
-webApp
-    .WithReference(ingestionCache)
-    .WaitFor(ingestionCache);
+    .WithReference(openai);
 
 builder.Build().Run();
 ```
 
-The AppHost configuration does several key things:
+Key components:
 
-1. **Connection String Resource**: Creates a resource for Azure OpenAI that can be used by other services
+- Connection string for AI services (GitHub Models or Azure OpenAI)
+- Qdrant vector database for storing embeddings
+- Web application project reference
 
-   ```csharp
-   var openai = builder.AddConnectionString("openai");
-   ```
+#### Web Application (MyGenAiLab.Web)
 
-   This sets up a connection string for the Azure OpenAI service that will be used for AI operations.
-
-2. **Qdrant Vector Database**: Sets up a Qdrant vector database with persistent storage
-
-   ```csharp
-   var vectorDB = builder.AddQdrant("vectordb")
-      .WithDataVolume()
-      .WithLifetime(ContainerLifetime.Persistent);
-   ```
-
-   The `.WithDataVolume()` ensures data persists between runs, while `ContainerLifetime.Persistent` keeps the container running even after the AppHost shuts down.
-
-3. **SQLite Database**: Adds a database for caching ingestion data
-
-   ```csharp
-   var ingestionCache = builder.AddSqlite("ingestionCache");
-   ```
-
-   This database will store metadata about ingested documents to avoid reprocessing them multiple times.
-
-4. **Web Application Configuration**:
-
-   ```csharp
-   var webApp = builder.AddProject<Projects.GenAiLab_Web>("aichatweb-app");
-   webApp.WithReference(openai);
-   webApp
-       .WithReference(vectorDB)
-       .WaitFor(vectorDB);
-   webApp
-       .WithReference(ingestionCache)
-       .WaitFor(ingestionCache);
-   ```
-
-   This sets up the main web application with references to all three resources and configures dependencies to ensure the web app waits for the databases to be ready before starting.
-
-## The NuGet Packages in GenAiLab.Web
-
-Next, let's examine the NuGet packages in the **GenAiLab.Web.csproj** file:
-
-```xml
-<ItemGroup>
-  <PackageReference Include="Aspire.Azure.AI.OpenAI" Version="9.1.0-preview.1.25121.10" />
-  <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.4.0-preview.1.25207.5" />
-  <PackageReference Include="CommunityToolkit.Aspire.Microsoft.EntityFrameworkCore.Sqlite" Version="9.3.1-beta.260" />
-  <PackageReference Include="Microsoft.Extensions.AI" Version="9.4.0-preview.1.25207.5" />
-  <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.45.0" />
-  <PackageReference Include="PdfPig" Version="0.1.9" />
-  <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-  <PackageReference Include="Aspire.Qdrant.Client" Version="9.1.0" />
-  <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.45.0-preview" />
-</ItemGroup>
-```
-
-These packages can be grouped into several categories:
-
-1. **Microsoft Extensions for AI (MEAI) Libraries**:
-   - `Microsoft.Extensions.AI` (9.4.0-preview.1.25207.5) - The core library for AI integration in .NET
-   - `Microsoft.Extensions.AI.OpenAI` (9.4.0-preview.1.25207.5) - AI integration with OpenAI models
-
-2. **.NET Aspire Integration Packages**:
-   - `Aspire.Azure.AI.OpenAI` (9.1.0-preview.1.25121.10) - Simplifies integration with Azure OpenAI in .NET Aspire applications
-   - `CommunityToolkit.Aspire.Microsoft.EntityFrameworkCore.Sqlite` (9.3.1-beta.260) - Provides SQLite integration for .NET Aspire
-   - `Aspire.Qdrant.Client` (9.1.0) - Integrates Qdrant vector database with .NET Aspire
-
-3. **Semantic Kernel Components**:
-   - `Microsoft.SemanticKernel.Core` (1.45.0) - Core components for building semantic applications
-   - `Microsoft.SemanticKernel.Connectors.Qdrant` (1.45.0-preview) - Connects Semantic Kernel with Qdrant vector database
-
-4. **PDF Processing**:
-   - `PdfPig` (0.1.9) - Library for parsing and extracting text from PDF documents
-
-5. **Utility Libraries**:
-   - `System.Linq.Async` (6.0.1) - LINQ extensions for asynchronous operations
-
-These packages together provide the foundation for building an AI-powered chatbot with vector search capabilities.
-
-## Web Application Setup and PDF Ingestion
-
-Now let's look at the `Program.cs` file in the **GenAiLab.Web** project:
+The Web project contains the user interface and application logic. Open the `Program.cs` file:
 
 ```csharp
-var builder = WebApplication.CreateBuilder(args);
+// Add service defaults (metrics, logging, etc.)
 builder.AddServiceDefaults();
-builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-var openai = builder.AddAzureOpenAIClient("openai");
-openai.AddChatClient("gpt-4o-mini")
-    .UseFunctionInvocation()
-    .UseOpenTelemetry(configure: c =>
-        c.EnableSensitiveData = builder.Environment.IsDevelopment());
-openai.AddEmbeddingGenerator("text-embedding-3-small");
+// Add vector store services
+builder.AddQdrantVectorStore();
 
-builder.AddQdrantClient("vectordb");
+// Add GitHub Models for development
+builder.AddGitHubModels();
 
-builder.Services.AddSingleton<IVectorStore, QdrantVectorStore>();
-builder.Services.AddScoped<DataIngestor>();
-builder.Services.AddSingleton<SemanticSearch>();
-builder.AddSqliteDbContext<IngestionCacheDbContext>("ingestionCache");
-
-var app = builder.Build();
-IngestionCacheDbContext.Initialize(app.Services);
-
-// ... Standard ASP.NET Core middleware configuration ...
-
-// PDF Ingestion
-await DataIngestor.IngestDataAsync(
-    app.Services,
-    new PDFDirectorySource(Path.Combine(builder.Environment.WebRootPath, "Data")));
-
-app.Run();
+// Configure document ingestion and database
+builder.Services.AddDatabase<IngestionCacheDbContext>();
+builder.Services.AddSingleton<IIngestionSource, PDFDirectorySource>();
+builder.Services.AddSingleton<DataIngestor>();
 ```
 
-Key aspects of this configuration:
+Key services:
 
-1. **Azure OpenAI Client Configuration**:
+- Vector store for semantic search
+- GitHub Models for AI capabilities
+- Document ingestion services
 
-   ```csharp
-   var openai = builder.AddAzureOpenAIClient("openai");
-   openai.AddChatClient("gpt-4o-mini")
-       .UseFunctionInvocation()
-       .UseOpenTelemetry(configure: c =>
-           c.EnableSensitiveData = builder.Environment.IsDevelopment());
-   openai.AddEmbeddingGenerator("text-embedding-3-small");
-   ```
+#### Chat Interface
 
-   This configures:
-   - The Azure OpenAI client, referencing the connection string set up in AppHost
-   - A chat model (`gpt-4o-mini`) with function calling capabilities
-   - OpenTelemetry for monitoring and diagnostics
-   - An embedding model (`text-embedding-3-small`) for creating vector embeddings
+Explore the chat interface components:
 
-2. **Vector Database Client**:
+- `Components/Pages/Chat/Chat.razor`: Main chat page
+- `Components/Pages/Chat/ChatInput.razor`: User input component
+- `Components/Pages/Chat/ChatMessageList.razor`: Message display component
 
-   ```csharp
-   builder.AddQdrantClient("vectordb");
-   ```
+### Running the Application
 
-   This adds the Qdrant client to access the vector database.
+1. Make sure the AppHost project is set as the startup project
+2. Press F5 or click "Start" to run the application
+3. The .NET Aspire dashboard will open
+4. Navigate to the "Web" component to access the chat interface
 
-3. **Service Registration**:
+## Part 2: Building the Products Feature
 
-   ```csharp
-   builder.Services.AddSingleton<IVectorStore, QdrantVectorStore>();
-   builder.Services.AddScoped<DataIngestor>();
-   builder.Services.AddSingleton<SemanticSearch>();
-   builder.AddSqliteDbContext<IngestionCacheDbContext>("ingestionCache");
-   ```
+Now that you understand the basic structure of the application, let's extend it by adding a Products feature that uses AI to generate product descriptions and categories.
 
-   These lines register:
-   - `QdrantVectorStore` as the implementation of `IVectorStore`
-   - `DataIngestor` for processing PDF files
-   - `SemanticSearch` for performing vector searches
-   - `IngestionCacheDbContext` for tracking document processing state
+### Overview of the Products Feature
 
-4. **PDF Ingestion Process**:
+The Products feature allows users to:
 
-   ```csharp
-   await DataIngestor.IngestDataAsync(
-       app.Services,
-       new PDFDirectorySource(Path.Combine(builder.Environment.WebRootPath, "Data")));
-   ```
+- View a list of products with AI-generated descriptions
+- Filter products by category
+- See products categorized by AI based on their documentation
 
-   This critical code:
-   - Calls the static `IngestDataAsync` method of the `DataIngestor` class
-   - Creates a `PDFDirectorySource` that points to the `wwwroot/Data` directory
-   - Starts the process of extracting text from PDF files, creating vector embeddings, and storing them
+### Step 1: Create the Product Models
 
-## PDF Ingestion Flow
+1. Create a new file `Models/ProductInfo.cs`:
 
-The PDF ingestion process follows these steps:
+```csharp
+using System;
+using System.Collections.Generic;
 
-1. **PDF Location**: The application looks for PDF files in the `wwwroot/Data` directory
-2. **Text Extraction**: Using PdfPig, it extracts text content from each PDF file
-3. **Text Chunking**: The text is broken into smaller chunks suitable for embedding
-4. **Vector Generation**: The OpenAI embedding model converts each text chunk into a vector
-5. **Vector Storage**: The vectors are stored in the Qdrant database along with metadata linking back to the source document
-6. **Caching**: The SQLite database tracks which documents have been processed to avoid duplication
+namespace MyGenAiLab.Web.Models;
 
-The application includes two example PDF files in the `wwwroot/Data` directory:
+public class ProductInfo
+{
+    public Guid Id { get; set; }
+    public required string Name { get; set; }
+    public required string ShortDescription { get; set; }
+    public required string Category { get; set; }
+    public required string FileName { get; set; }
 
-- `Example_Emergency_Survival_Kit.pdf`
-- `Example_GPS_Watch.pdf`
+    // For filtering
+    public static List<string> AvailableCategories { get; set; } = new List<string>();
+}
 
-## Architecture Overview
+public class ProductCategory
+{
+    public int Id { get; set; }
+    public required string Name { get; set; }
+}
+```
 
-The application uses a Retrieval Augmented Generation (RAG) architecture:
+2. Create a database context for products in `Services/ProductDbContext.cs`:
 
-1. **User Query**: The user submits a question through the chat interface
-2. **Vector Embedding**: The query is converted to a vector embedding
-3. **Semantic Search**: The vector is used to find similar content in the Qdrant database
-4. **Context Augmentation**: Relevant document content is retrieved and included as context
-5. **AI Response Generation**: The LLM generates a response based on the query and retrieved context
-6. **Response Display**: The answer is presented to the user in the chat interface
+```csharp
+using Microsoft.EntityFrameworkCore;
+using MyGenAiLab.Web.Models;
 
-This approach allows the chatbot to provide responses that incorporate information from the ingested PDF documents, making it more accurate and useful within the specific knowledge domain.
+namespace MyGenAiLab.Web.Services;
 
-## Hands-on Exercise
+public class ProductDbContext : DbContext
+{
+    public ProductDbContext(DbContextOptions<ProductDbContext> options) : base(options) { }
 
-1. Open the solution in Visual Studio
-2. Explore the AppHost configuration in `GenAiLab.AppHost/Program.cs`
-3. Review the web application setup in `GenAiLab.Web/Program.cs`
-4. Examine the PDF ingestion process by looking at `DataIngestor.cs` and `PDFDirectorySource.cs` in the `Services/Ingestion` folder
-5. Try asking questions about the content in the PDF files once the application is running
+    public DbSet<ProductInfo> Products => Set<ProductInfo>();
+    public DbSet<ProductCategory> Categories => Set<ProductCategory>();
+}
+```
+
+### Step 2: Create the Product Service
+
+Create a new file `Services/ProductService.cs` to generate product information using AI:
+
+```csharp
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.VectorData;
+using MyGenAiLab.Web.Models;
+using System.Text;
+using OpenAI;
+using Microsoft.EntityFrameworkCore;
+
+namespace MyGenAiLab.Web.Services;
+
+public class ProductService(
+        IEmbeddingGenerator<string, Embedding<float>> _embeddingGenerator,
+        IVectorStore _vectorStore,
+        ProductDbContext _dbContext,
+        IChatClient _chatClient,
+        ILogger<ProductService> _logger)
+{
+    public async Task<IEnumerable<ProductInfo>> GetProductsAsync(string? categoryFilter = null)
+    {
+        // Make sure we have products
+        await EnsureProductsExistAsync();
+
+        // Simple filtering by category if specified
+        var query = string.IsNullOrEmpty(categoryFilter)
+            ? _dbContext.Products
+            : _dbContext.Products.Where(p => p.Category == categoryFilter);
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<List<string>> GetCategoriesAsync()
+    {
+        await EnsureProductsExistAsync();
+        return await _dbContext.Categories.Select(c => c.Name).ToListAsync();
+    }
+
+    private async Task EnsureProductsExistAsync()
+    {
+        if (!await _dbContext.Products.AnyAsync())
+        {
+            await GenerateAndSaveProductsAsync();
+        }
+    }
+}
+```
+
+### Step 3: Implement Product Generation with AI
+
+Add the following methods to the `ProductService` class:
+
+```csharp
+private async Task GenerateAndSaveProductsAsync()
+{
+    // Get documents from vector store
+    var fileNames = await GetUniqueFileNamesAsync();
+    if (fileNames.Count == 0)
+    {
+        _logger.LogWarning("No documents found in vector store");
+        return;
+    }
+
+    var categories = new HashSet<string>();
+
+    // Process each file
+    foreach (var fileName in fileNames)
+    {
+        var productName = Path.GetFileNameWithoutExtension(fileName)
+            .Replace("Example_", "")
+            .Replace("_", " ");
+
+        // Get document content
+        var content = await GetDocumentContentAsync(fileName, productName);
+
+        // The key part - using AI to generate product info
+        var (description, category) = await AskAIForProductInfoAsync(content, productName);
+
+        // Save to database
+        _dbContext.Products.Add(new ProductInfo
+        {
+            Name = productName,
+            ShortDescription = description,
+            Category = category,
+            FileName = fileName
+        });
+
+        categories.Add(category);
+    }
+
+    // Save categories
+    foreach (var category in categories)
+    {
+        _dbContext.Categories.Add(new ProductCategory { Name = category });
+    }
+
+    ProductInfo.AvailableCategories = categories.ToList();
+    await _dbContext.SaveChangesAsync();
+}
+
+private async Task<List<string>> GetUniqueFileNamesAsync()
+{
+    var vectorCollection = _vectorStore.GetCollection<Guid, SemanticSearchRecord>("data-genailab-ingested");
+
+    try
+    {
+        var dummyEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync("all documents");
+        var searchResults = await vectorCollection.VectorizedSearchAsync(
+            dummyEmbedding,
+            new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 });
+
+        var uniqueFileNames = new HashSet<string>();
+        await foreach (var result in searchResults.Results)
+        {
+            uniqueFileNames.Add(result.Record.FileName);
+        }
+
+        return uniqueFileNames.ToList();
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error retrieving documents from vector store");
+        return new List<string>();
+    }
+}
+
+private async Task<string> GetDocumentContentAsync(string fileName, string productName)
+{
+    var vectorCollection = _vectorStore.GetCollection<Guid, SemanticSearchRecord>("data-genailab-ingested");
+
+    try
+    {
+        var contentEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync($"Information about {productName}");
+        var contentResults = await vectorCollection.VectorizedSearchAsync(
+            contentEmbedding,
+            new VectorSearchOptions<SemanticSearchRecord>
+            {
+                Top = 5,
+                Filter = record => record.FileName == fileName
+            });
+
+        var contentBuilder = new StringBuilder();
+        await foreach (var item in contentResults.Results)
+        {
+            contentBuilder.AppendLine(item.Record.Text);
+        }
+
+        return contentBuilder.ToString();
+    }
+    catch (Exception ex)
+    {
+        _logger.LogWarning(ex, "Error getting content for {FileName}", fileName);
+        return string.Empty;
+    }
+}
+```
+
+### Step 4: Implement AI-Based Product Description Generation
+
+Add the following methods to use the AI service for generating product descriptions and categories:
+
+```csharp
+// Simple record for JSON deserialization
+private record ProductResponse(string Description, string Category);
+
+// This is the key method that uses IChatClient
+private async Task<(string Description, string Category)> AskAIForProductInfoAsync(string content, string productName)
+{
+    try
+    {
+        // Create a simple prompt requesting JSON response
+        var prompt = $@"Based on this content about '{productName}', provide a JSON object with these properties:
+1. description: A concise product description (max 200 characters)
+2. category: One of: 'Electronics', 'Safety Equipment', 'Outdoor Gear', or 'General'
+
+Content: {content}";
+
+        // Get response from the chat client
+        var chatResponse = await _chatClient.GetResponseAsync(
+            new[] {
+                new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only."),
+                new ChatMessage(ChatRole.User, prompt)
+            });
+
+        // Try to parse the JSON response
+        var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var responseJson = System.Text.Json.JsonSerializer.Deserialize<ProductResponse>(chatResponse.Text, options);
+
+        if (responseJson != null)
+        {
+            return (responseJson.Description, responseJson.Category);
+        }
+    }
+    catch (Exception ex)
+    {
+        _logger.LogWarning("AI processing error for {ProductName}: {Error}", productName, ex.Message);
+    }
+
+    // Simple fallback
+    return ($"A high-quality {productName}", "General");
+}
+```
+
+### Step 5: Register the Services
+
+Update your `Program.cs` file to register the new services:
+
+```csharp
+// Add database support
+builder.Services.AddDatabase<ProductDbContext>();
+
+// Register product service
+builder.Services.AddScoped<ProductService>();
+```
+
+### Step 6: Create the Products Page
+
+Create a new file `Components/Pages/Products.razor`:
+
+```csharp
+@page "/products"
+@using MyGenAiLab.Web.Models
+@using MyGenAiLab.Web.Services
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using System.Linq.Expressions
+@inject ProductService ProductService
+
+<PageTitle>Products - GenAI Lab</PageTitle>
+
+<h1>📦 Our Products</h1>
+
+@if (AllProducts == null)
+{
+    <div class="message-box">
+        <span>🔄 Loading products...</span>
+    </div>
+}
+else if (!FilteredProducts.Any())
+{
+    <div class="message-box">
+        <span>📦 No products found</span>
+    </div>
+}
+else
+{
+    <div>
+        <select @bind="CategoryFilter" @bind:after="StateHasChanged">
+            <option value="">✨ All Categories</option>
+            @foreach (var category in Categories)
+            {
+                <option value="@category">📁 @category</option>
+            }
+        </select>
+
+        <div class="product-table-container">
+            <QuickGrid Items="@FilteredProducts">
+                <PropertyColumn Property="@(p => p.Name)" Title="📦 Product Name" Sortable="true" />
+                <PropertyColumn Property="@(p => p.ShortDescription)" Title="📝 Description" />
+                <PropertyColumn Property="@(p => p.Category)" Title="🏷️ Category" Sortable="true" />
+            </QuickGrid>
+        </div>
+    </div>
+}
+
+<style>
+    h1 {
+        margin-bottom: 1.5rem;
+    }
+
+    select {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+        align-self: flex-end;
+    }
+
+    .message-box {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #3a4ed5;
+        background-color: #f0f4ff;
+        border-radius: 0.25rem;
+    }
+
+    .product-table-container {
+        margin-bottom: 2rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 0.25rem;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    ::deep table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    ::deep th {
+        background-color: #f5f5f5;
+        font-weight: 600;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid #ddd;
+    }
+
+    ::deep td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    ::deep tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    ::deep tr:hover {
+        background-color: #f0f4ff;
+    }
+
+    ::deep .col-options-button {
+        color: #3a4ed5;
+    }
+
+    ::deep .col-options-menu {
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+    }
+</style>
+
+@code {
+    private IQueryable<ProductInfo>? AllProducts;
+    private List<string> Categories { get; set; } = new List<string>();
+    private string CategoryFilter { get; set; } = string.Empty;
+
+    private IQueryable<ProductInfo> FilteredProducts
+    {
+        get
+        {
+            if (AllProducts == null)
+                return Enumerable.Empty<ProductInfo>().AsQueryable();
+
+            if (string.IsNullOrEmpty(CategoryFilter))
+                return AllProducts;
+
+            return AllProducts.Where(p => p.Category == CategoryFilter);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        Categories = await ProductService.GetCategoriesAsync();
+        var products = await ProductService.GetProductsAsync();
+        AllProducts = products.AsQueryable();
+    }
+}
+```
+
+### Step 7: Update the Navigation
+
+Add a link to the Products page in `Components/Pages/Chat/ChatHeader.razor`:
+
+```csharp
+<div class="chat-header-container main-background-gradient">
+    <div class="chat-header-controls page-width" style="display: flex; gap: 8px; align-items: center;">
+        <button class="btn-default" @onclick="@OnNewChat">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="new-chat-icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            New chat
+        </button>
+        <button class="btn-subtle" onclick="location.href='/products'" style="display: inline-flex; align-items: center;">
+            📦 Products
+        </button>
+    </div>
+
+    <h1 class="page-width">MyGenAiLab.Web</h1>
+</div>
+```
+
+### Testing the Products Feature
+
+1. Run your application and navigate to the Products page
+2. You should see a list of products with AI-generated descriptions
+3. Try filtering products by category using the dropdown
+
+## What You've Learned
+
+- How the AI Web Chatbot template is structured
+- How to use Microsoft Extensions for AI to generate product descriptions
+- How to prompt AI models for structured JSON responses
+- How to handle and parse JSON responses from AI models
+- How to use vector search to find relevant content for AI processing
 
 ## Next Steps
 
-After exploring the codebase, proceed to [Vector data and embeddings](part3-vector-data.md) to learn more about how vector embeddings are used for semantic search.
+Now that you've explored the codebase and implemented the Products feature, proceed to [Vector Data and Embeddings](part3-vector-data.md) to learn more about how the semantic search functionality works.

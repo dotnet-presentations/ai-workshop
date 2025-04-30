@@ -21,4 +21,4 @@ Learn the common patterns for interacting with AI services and models in your .N
 
 ## Next Steps
 
-Once you understand the fundamentals of MEAI, proceed to [Exploring the Codebase](part2-exploring-codebase.md) to see how these concepts are implemented in our sample application.
+Once you understand the fundamentals of MEAI, proceed to [Exploring the Codebase & Building the Products Feature](part0-exploring-codebase.md) to see how these concepts are implemented in our sample application.

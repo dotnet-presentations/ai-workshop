@@ -26,7 +26,7 @@ Before starting the lab, ensure you have:
    - Run the following command:
 
      ```powershell
-     dotnet new install Microsoft.NetExtensions.AI.WebChatBot.Templates
+     dotnet new install Microsoft.Extensions.AI.Templates
      ```
 
 3. **Verify installations:**

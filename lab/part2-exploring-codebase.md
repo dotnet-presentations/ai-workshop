@@ -30,7 +30,7 @@ Create a new project using the AI Web Chat template as follows:
 
    ![Additional Information in Visual Studio](images/vs-additional-information.png)
 
-1. Wait for Visual Studio to create the project and restore packages
+1. Wait for Visual Studio to create the project and restore packages. When you see the Sign in popup, just close it.
 
 ## Overview of the Products Feature
 
@@ -42,7 +42,8 @@ The Products feature allows users to:
 
 ## Step 1: Create the Product Models
 
-1. Create a new file `Models/ProductInfo.cs`:
+1. Add a new folder named `Models` to the project `GenAiLab`, by right-clicking on the project and selecting "Add" > "New Folder".
+1. In this new folder, create a new file `ProductInfo.cs` and replace the content with the following code:
 
 ```csharp
 using System;
@@ -63,7 +64,7 @@ public class ProductInfo
 }
 ```
 
-1. Create a database context for products in `Services/ProductDbContext.cs`:
+1. In the folder `Services` of the project `GenAiLab`, create a database context for products in `ProductDbContext.cs`, and replace the content with the following code:
 
 ```csharp
 using Microsoft.EntityFrameworkCore;
@@ -128,7 +129,7 @@ public class ProductCategory
 
 ## Step 2: Create the Product Service
 
-Create a new file `Services/ProductService.cs` to generate product information using AI:
+In the folder `Services` of the project `GenAiLab`, create a new file `ProductService.cs` to generate product information using AI. Replace the content with the following code:
 
 ```csharp
 using Microsoft.Extensions.AI;
@@ -347,6 +348,20 @@ builder.Services.AddScoped<ProductService>();
 
 ## Step 6: Create the Products Page
 
+Let's uses the new AspNetCore QuickGrid component to display the products. First, we need to add the Nuget package `Microsoft.AspNetCore.Components.QuickGrid`. 
+
+There are multiple ways to do this:
+- Open the `GenAiLab` project file and add at the end of the packages `<ItemGroup>` 
+    ```xml
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.4" />
+    ```
+or
+- Type the follinging command in the Package Manager Console:
+    ```powershell
+    NuGet\Install-Package Microsoft.AspNetCore.Components.QuickGrid -Version 9.0.4
+    ```
+
+
 Create a new file `Components/Pages/Products.razor`:
 
 ```csharp
@@ -494,7 +509,8 @@ else
 
 ## Step 7: Update the Navigation
 
-Add a link to the Products page in `Components/Pages/Chat/ChatHeader.razor`:
+In the `GenAiLab` project, let's edit the page `Components/Pages/Chat/ChatHeader.razor`. Add a button-link to the Products page after the "New chat" button. The updated code should look like this:
+
 
 ```csharp
 <div class="chat-header-container main-background-gradient">
@@ -506,9 +522,11 @@ Add a link to the Products page in `Components/Pages/Chat/ChatHeader.razor`:
             </svg>
             New chat
         </button>
+        @* 👇👇👇 Add the button here 👇👇👇 *@
         <button class="btn-subtle" onclick="location.href='/products'" style="display: inline-flex; align-items: center;">
             📦 Products
         </button>
+        @* 👆👆👆 Add the button here 👆👆👆 *@
     </div>
 
     <h1 class="page-width">GenAiLab.Web</h1>

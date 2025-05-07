@@ -2,7 +2,35 @@
 
 ## In this lab
 
-In this lab, you'll extend your AI Web Chat application by adding a Products feature that uses AI to generate product descriptions and categories. You'll learn how to craft effective prompts for AI models and work with JSON responses.
+In this lab, you'll create a new project using the AI Web Chat template. You'll then extend the application by adding a Products feature that uses AI to generate product descriptions and categories. You'll learn how to craft effective prompts for AI models and work with JSON responses.
+
+## Create a new project using the AI Web Chat template
+
+Create a new project using the AI Web Chat template as follows:
+
+1. Open Visual Studio 2022
+1. Click "Create a new project"
+1. Search for and select "AI Chat Web App" template
+
+   ![AI Web Chat template in Visual Studio](images/vs-ai-webchat-template.png)
+
+1. Click "Next"
+1. Configure your project:
+   - Enter "GenAiLab" as the project name
+   - Make sure "Place solution and project in same directory" is checked
+   - Click "Next"
+
+   ![Configure New Project in Visual Studio](images/vs-configure-new-project.png)
+
+1. Configure AI options:
+   - Select "GitHub Models" for AI service provider
+   - Select "Qdrant" for Vector store
+   - Check the box for "Use Aspire orchestration"
+   - Click "Create"
+
+   ![Additional Information in Visual Studio](images/vs-additional-information.png)
+
+1. Wait for Visual Studio to create the project and restore packages
 
 ## Overview of the Products Feature
 

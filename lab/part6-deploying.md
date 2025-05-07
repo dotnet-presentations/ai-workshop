@@ -62,38 +62,6 @@ Before deploying to production, we need to migrate our data stores from SQLite (
    dotnet run --project GenAiLab.AppHost/GenAiLab.AppHost.csproj
    ```
 
-## Deployment Options
-
-There are several options for deploying your .NET Aspire applications:
-
-### 1. Azure Container Apps (Recommended)
-
-Azure Container Apps is the recommended choice for deploying .NET Aspire applications:
-
-- **Fully managed**: No need to manage underlying infrastructure
-- **Built-in scaling**: Automatic scaling based on load
-- **Container orchestration**: Built on Kubernetes but simplified
-- **.NET Aspire integration**: Native support for .NET Aspire applications
-- **Azure Developer CLI integration**: Simplified deployment process
-
-### 2. Azure App Service
-
-Azure App Service is suitable for simpler, non-containerized deployments:
-
-- **Familiar deployment model**: Easy to use with existing knowledge
-- **Integrated with Visual Studio**: Simple deployment from IDE
-- **Multiple languages**: Supports .NET, Node.js, Python, etc.
-- **DevOps integration**: Easy CI/CD pipeline setup
-
-### 3. Azure Kubernetes Service (AKS)
-
-For more complex, scalable deployments:
-
-- **Full Kubernetes**: Complete control over orchestration
-- **Advanced scaling**: Complex scaling scenarios
-- **Multi-container**: Management of complex microservices
-- **Global distribution**: Deploy across regions
-
 ## Step 1: Prepare Your Application for Deployment
 
 1. **Configure settings for production**:

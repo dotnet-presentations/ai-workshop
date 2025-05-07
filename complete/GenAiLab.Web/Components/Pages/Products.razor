@@ -1,0 +1,139 @@
+@page "/products"
+@using GenAiLab.Web.Models
+@using GenAiLab.Web.Services
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using System.Linq.Expressions
+@inject ProductService ProductService
+
+<PageTitle>Products - GenAI Lab</PageTitle>
+
+<h1>📦 Our Products</h1>
+
+@if (AllProducts == null)
+{
+    <div class="message-box">
+        <span>🔄 Loading products...</span>
+    </div>
+}
+else if (!FilteredProducts.Any())
+{
+    <div class="message-box">
+        <span>📦 No products found</span>
+    </div>
+}
+else
+{
+    <div> <select @bind="CategoryFilter" @bind:after="StateHasChanged">
+            <option value="">✨ All Categories</option>
+            @foreach (var category in Categories)
+            {
+                <option value="@category">📁 @category</option>
+            }
+        </select>
+
+        <div class="product-table-container">
+            <QuickGrid Items="@FilteredProducts">
+                <PropertyColumn Property="@(p => p.Name)" Title="📦 Product Name" Sortable="true" />
+                <PropertyColumn Property="@(p => p.ShortDescription)" Title="📝 Description" />
+                <PropertyColumn Property="@(p => p.Category)" Title="🏷️ Category" Sortable="true" />
+            </QuickGrid>
+        </div>
+    </div>
+}
+
+<style>
+    h1 {
+        margin-bottom: 1.5rem;
+    }
+
+    .message-box {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #3a4ed5;
+        background-color: #f0f4ff;
+        border-radius: 0.25rem;
+    }
+
+    select {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+        align-self: flex-end;
+    }
+
+    .product-table-container {
+        margin-bottom: 2rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 0.25rem;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    ::deep table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    ::deep th {
+        background-color: #f5f5f5;
+        font-weight: 600;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid #ddd;
+    }
+
+    ::deep td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    ::deep tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    ::deep tr:hover {
+        background-color: #f0f4ff;
+    }
+
+    ::deep .col-options-button {
+        color: #3a4ed5;
+    }
+
+    ::deep .col-options-menu {
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+    }
+</style>
+
+@code {
+    private IQueryable<ProductInfo>? AllProducts;
+    private List<string> Categories { get; set; } = new List<string>();
+    private string CategoryFilter { get; set; } = string.Empty;
+
+    private IQueryable<ProductInfo> FilteredProducts
+    {
+        get
+        {
+            if (AllProducts == null)
+                return Enumerable.Empty<ProductInfo>().AsQueryable();
+
+            if (string.IsNullOrEmpty(CategoryFilter))
+                return AllProducts;
+
+            return AllProducts.Where(p => p.Category == CategoryFilter);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        Categories = await ProductService.GetCategoriesAsync();
+        var products = await ProductService.GetProductsAsync();
+        AllProducts = products.AsQueryable();
+    }
+}

@@ -6,11 +6,11 @@ In this lab, you will learn how to integrate GitHub Models into your .NET applic
 
 ## GitHub Models Overview
 
-GitHub Models is a service that provides free access to AI models for developers. Key benefits include:
+GitHub Models is a service that provides access to AI models for developers. Key benefits include:
 
-- **Free to use**: No cost for development scenarios
+- **Free to use for development**: No cost for development scenarios
 - **Ease of use**: Simple integration with Microsoft Extensions for AI
-- **No authentication required**: Uses anonymous access for development
+- **Authentication required**: Uses a GitHub Personal Access Token as the API key
 - **Multiple model types**: Supports text generation and embeddings
 
 GitHub Models provides access to:
@@ -37,19 +37,24 @@ This simple call does several things:
 - Sets up IEmbeddingGenerator for creating embeddings
 - Configures client settings for the GitHub endpoints
 
-1. **Setting the connection string**:
+1. **Setting up authentication**:
 
-For GitHub Models, the connection string is very simple:
+For GitHub Models, you need to set up a personal access token:
+
+1. Navigate to the Personal access tokens page of your GitHub account settings.
+2. Select Generate new token.
+3. Enter a Token name and then select Generate token.
+4. Copy the token for later use.
+
+Then, configure the app to use your personal access token in the project's local user secrets:
 
 ```json
 {
-  "ConnectionStrings": {
-    "openai": "Endpoint=https://models.inference.ai.azure.com"
-  }
+  "ConnectionStrings:openai": "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
 }
 ```
 
-This connects to the GitHub Models endpoint at models.inference.ai.azure.com without requiring an API key.
+This connects to the GitHub Models endpoint and authenticates using your personal access token as the API key.
 
 ## Step 2: Understanding GitHub Models Capabilities
 
@@ -57,7 +62,7 @@ GitHub Models supports several capabilities:
 
 ### Text Generation
 
-GitHub Models provides a chat completion model similar to GPT models:
+GitHub Models provides access to models similar to GPT models:
 
 ```csharp
 public class MyService(IChatClient chatClient)
@@ -164,8 +169,8 @@ public async Task<string> GetEnhancedDescriptionAsync(Guid productId)
 1. Create a new component `Components/ProductDetail.razor`:
 
 ```csharp
-@using MyGenAiLab.Web.Models
-@using MyGenAiLab.Web.Services
+@using GenAiLab.Web.Models
+@using GenAiLab.Web.Services
 @inject ProductService ProductService
 
 <div class="product-detail">
@@ -260,18 +265,21 @@ public async Task<string> GetEnhancedDescriptionAsync(Guid productId)
 
 When using GitHub Models, keep these limitations in mind:
 
-1. **Rate Limits**: GitHub Models has usage limits for free access
-2. **Performance**: Response times may be slower than paid services
-3. **Model Selection**: Limited model options compared to Azure OpenAI
-4. **Development Only**: Not intended for production workloads
+1. **Rate Limits**: GitHub Models has usage limits for free development access
+2. **Authentication Required**: Requires a GitHub Personal Access Token as the API key
+3. **Performance**: Response times may be slower than paid services
+4. **Model Selection**: Limited model options compared to Azure OpenAI
+5. **Development Only**: Not intended for production workloads
 
 ## Best Practices for GitHub Models
 
-1. **Error Handling**: Always implement robust error handling for AI calls
-2. **Fallback Strategies**: Provide fallbacks for when AI generation fails
-3. **Content Filtering**: Be aware that GitHub Models has content filtering
-4. **Prompt Engineering**: Carefully design prompts for best results
-5. **Local Development**: Use GitHub Models for local development before moving to Azure OpenAI for production
+1. **Token Security**: Keep your GitHub Personal Access Token secure
+2. **Connection String Format**: Ensure you're using the correct connection string format with endpoint and key
+3. **Error Handling**: Always implement robust error handling for AI calls
+4. **Fallback Strategies**: Provide fallbacks for when AI generation fails
+5. **Content Filtering**: Be aware that GitHub Models has content filtering
+6. **Prompt Engineering**: Carefully design prompts for best results
+7. **Local Development**: Use GitHub Models for local development before moving to Azure OpenAI for production
 
 ## What You've Learned
 

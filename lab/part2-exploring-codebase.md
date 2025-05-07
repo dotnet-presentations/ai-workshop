@@ -42,7 +42,7 @@ The Products feature allows users to:
 
 ## Step 1: Create the Product Models
 
-1. Add a new folder named `Models` to the project `GenAiLab`, by right-clicking on the project and selecting "Add" > "New Folder".
+1. Add a new folder named `Models` to the project GenAiLab.Web, by right-clicking on the project and selecting "Add" > "New Folder".
 1. In this new folder, create a new file `ProductInfo.cs` and replace the content with the following code:
 
 ```csharp
@@ -64,7 +64,7 @@ public class ProductInfo
 }
 ```
 
-1. In the folder `Services` of the project `GenAiLab`, create a database context for products in `ProductDbContext.cs`, and replace the content with the following code:
+1. In the folder `Services` of the project GenAiLab.Web, create a database context for products in `ProductDbContext.cs`, and replace the content with the following code:
 
 ```csharp
 using Microsoft.EntityFrameworkCore;
@@ -129,7 +129,7 @@ public class ProductCategory
 
 ## Step 2: Create the Product Service
 
-In the folder `Services` of the project `GenAiLab`, create a new file `ProductService.cs` to generate product information using AI. Replace the content with the following code:
+In the folder `Services` of the project GenAiLab.Web, create a new file `ProductService.cs` to generate product information using AI. Replace the content with the following code:
 
 ```csharp
 using Microsoft.Extensions.AI;
@@ -336,7 +336,7 @@ Content: {content}";
 
 ## Step 5: Register the Services
 
-Update your `Program.cs` file to register the new services:
+In the project `GenAiLab.Web`, update your `Program.cs` file to register the new services. Just before the `var app = builder.Build();` line (~line 26), add the following code:
 
 ```csharp
 // Add database support
@@ -351,7 +351,7 @@ builder.Services.AddScoped<ProductService>();
 Let's uses the new AspNetCore QuickGrid component to display the products. First, we need to add the Nuget package `Microsoft.AspNetCore.Components.QuickGrid`. 
 
 There are multiple ways to do this:
-- Open the `GenAiLab` project file and add at the end of the packages `<ItemGroup>` 
+- Open the GenAiLab.Web project file and add at the end of the packages `<ItemGroup>` 
     ```xml
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.4" />
     ```
@@ -509,7 +509,7 @@ else
 
 ## Step 7: Update the Navigation
 
-In the `GenAiLab` project, let's edit the page `Components/Pages/Chat/ChatHeader.razor`. Add a button-link to the Products page after the "New chat" button. The updated code should look like this:
+In the GenAiLab.Web project, let's edit the page `Components/Pages/Chat/ChatHeader.razor`. Add a button-link to the Products page after the "New chat" button. The updated code should look like this:
 
 
 ```csharp

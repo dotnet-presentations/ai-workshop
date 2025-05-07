@@ -34,8 +34,8 @@ To use Azure OpenAI, you need to set up resources in Azure:
    - Navigate to your Azure OpenAI resource
    - Select "Model deployments" from the left menu
    - Deploy the following models:
-     - `gpt-35-turbo` for chat completions
-     - `text-embedding-ada-002` for embeddings
+     - `gpt-4o-mini` for chat completions
+     - `text-embedding-3-small` for embeddings
 
 ## Step 2: Obtain API Keys and Endpoints
 
@@ -51,7 +51,7 @@ Change from GitHub Models connection string:
 ```json
 {
   "ConnectionStrings": {
-    "openai": "Endpoint=https://models.inference.ai.azure.com"
+    "openai": "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
   }
 }
 ```
@@ -78,8 +78,8 @@ Update your `Program.cs` file to use Azure OpenAI instead of GitHub Models:
 builder.AddAzureOpenAI(configureSettings: settings =>
 {
     // Optional: Configure model deployments if they don't match the default names
-    settings.TextCompletionModelDeploymentName = "gpt-35-turbo";
-    settings.EmbeddingModelDeploymentName = "text-embedding-ada-002";
+    settings.TextCompletionModelDeploymentName = "gpt-4o-mini";
+    settings.EmbeddingModelDeploymentName = "text-embedding-3-small";
 });
 ```
 
@@ -94,7 +94,7 @@ For a smooth development workflow, you can use different connection strings in d
 ```json
 {
   "ConnectionStrings": {
-    "openai": "Endpoint=https://models.inference.ai.azure.com"
+    "openai": "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
   }
 }
 ```
@@ -132,9 +132,8 @@ Azure OpenAI includes content filtering to ensure appropriate AI responses:
 
 ```csharp
 builder.AddAzureOpenAI(configureSettings: settings =>
-{
-    settings.TextCompletionModelDeploymentName = "gpt-35-turbo";
-    settings.EmbeddingModelDeploymentName = "text-embedding-ada-002";
+{    settings.TextCompletionModelDeploymentName = "gpt-4o-mini";
+    settings.EmbeddingModelDeploymentName = "text-embedding-3-small";
     
     // Configure content filtering
     settings.ContentFiltering = new ContentFilterSettings

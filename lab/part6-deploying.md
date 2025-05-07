@@ -4,6 +4,64 @@
 
 In this lab, you will learn how to deploy your AI application to production environments. You'll explore different deployment options and best practices for deploying AI applications built with .NET. We'll focus on using the Azure Developer CLI (`azd`) for a streamlined deployment experience.
 
+## Step 0: Migrating from SQLite to PostgreSQL
+
+Before deploying to production, we need to migrate our data stores from SQLite (which is great for development) to PostgreSQL (which is better suited for production workloads).
+
+1. **Add PostgreSQL NuGet packages**:
+
+   For the `GenAiLab.AppHost` project, add the Aspire PostgreSQL package:
+
+   ```powershell
+   dotnet add GenAiLab.AppHost/GenAiLab.AppHost.csproj package Aspire.Hosting.PostgreSQL
+   ```
+
+   For the `GenAiLab.Web` project, add the Npgsql Entity Framework Core package:
+
+   ```powershell
+   dotnet add GenAiLab.Web/GenAiLab.Web.csproj package Npgsql.EntityFrameworkCore.PostgreSQL
+   ```
+
+2. **Update AppHost Program.cs**:
+
+   Change the SQLite database references to PostgreSQL in `GenAiLab.AppHost/Program.cs`:
+
+   ```csharp
+   // Replace these lines:
+   var ingestionCache = builder.AddSqlite("ingestionCache");
+   var productDb = builder.AddSqlite("productDb");
+
+   // With:
+   var ingestionCache = builder.AddPostgres("ingestionCache")
+       .WithDataVolume()
+       .WithLifetime(ContainerLifetime.Persistent);
+   var productDb = builder.AddPostgres("productDb")
+       .WithDataVolume()
+       .WithLifetime(ContainerLifetime.Persistent);
+   ```
+
+3. **Update Web Project Database Context**:
+
+   In the `GenAiLab.Web/Program.cs` file, update the database context registration:
+
+   ```csharp
+   // Replace these lines:
+   builder.AddSqliteDbContext<IngestionCacheDbContext>("ingestionCache");
+   builder.AddSqliteDbContext<ProductDbContext>("productDb");
+
+   // With:
+   builder.AddNpgsqlDbContext<IngestionCacheDbContext>("ingestionCache");
+   builder.AddNpgsqlDbContext<ProductDbContext>("productDb");
+   ```
+
+4. **Test locally before deployment**:
+
+   Run the application locally to ensure the PostgreSQL migration works:
+
+   ```powershell
+   dotnet run --project GenAiLab.AppHost/GenAiLab.AppHost.csproj
+   ```
+
 ## Deployment Options
 
 There are several options for deploying your .NET Aspire applications:

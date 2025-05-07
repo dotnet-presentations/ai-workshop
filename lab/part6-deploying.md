@@ -2,24 +2,25 @@
 
 ## In this lab
 
-In this lab, you will learn how to deploy your AI application to production environments. You'll explore different deployment options and best practices for deploying AI applications built with .NET.
+In this lab, you will learn how to deploy your AI application to production environments. You'll explore different deployment options and best practices for deploying AI applications built with .NET. We'll focus on using the Azure Developer CLI (`azd`) for a streamlined deployment experience.
 
 ## Deployment Options
 
-There are several options for deploying your AI application:
+There are several options for deploying your .NET Aspire applications:
 
-### 1. Azure Container Apps
+### 1. Azure Container Apps (Recommended)
 
-Azure Container Apps is an excellent choice for deploying .NET Aspire applications:
+Azure Container Apps is the recommended choice for deploying .NET Aspire applications:
 
 - **Fully managed**: No need to manage underlying infrastructure
 - **Built-in scaling**: Automatic scaling based on load
 - **Container orchestration**: Built on Kubernetes but simplified
 - **.NET Aspire integration**: Native support for .NET Aspire applications
+- **Azure Developer CLI integration**: Simplified deployment process
 
 ### 2. Azure App Service
 
-Azure App Service is suitable for simpler deployments:
+Azure App Service is suitable for simpler, non-containerized deployments:
 
 - **Familiar deployment model**: Easy to use with existing knowledge
 - **Integrated with Visual Studio**: Simple deployment from IDE
@@ -76,265 +77,144 @@ For more complex, scalable deployments:
    });
    ```
 
-## Step 2: Containerize Your Application
+## Step 2: Set Up Azure Development Environment
 
-1. **Ensure Docker is installed and running on your development machine**
+1. **Install the Azure Developer CLI (azd)**:
 
-2. **Create a Dockerfile**:
-
-   ```dockerfile
-   # First stage - Build
-   FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-   WORKDIR /src
-   
-   # Copy project files
-   COPY ["MyGenAiLab.sln", "./"]
-   COPY ["MyGenAiLab.Web/MyGenAiLab.Web.csproj", "MyGenAiLab.Web/"]
-   COPY ["MyGenAiLab.ServiceDefaults/MyGenAiLab.ServiceDefaults.csproj", "MyGenAiLab.ServiceDefaults/"]
-   
-   # Restore packages
-   RUN dotnet restore
-   
-   # Copy all source code
-   COPY . .
-   
-   # Build application
-   RUN dotnet build "MyGenAiLab.Web/MyGenAiLab.Web.csproj" -c Release -o /app/build
-   
-   # Publish application
-   RUN dotnet publish "MyGenAiLab.Web/MyGenAiLab.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
-   
-   # Final stage - Runtime
-   FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
-   WORKDIR /app
-   COPY --from=build /app/publish .
-   
-   # Add sample PDF files
-   COPY ["MyGenAiLab.Web/wwwroot/Data", "wwwroot/Data"]
-   
-   # Set environment variables
-   ENV ASPNETCORE_ENVIRONMENT=Production
-   ENV ASPNETCORE_URLS=http://+:8080
-   
-   EXPOSE 8080
-   ENTRYPOINT ["dotnet", "MyGenAiLab.Web.dll"]
-   ```
-
-3. **Build the Docker image**:
+   If you don't already have the Azure Developer CLI installed, you can install it with:
 
    ```powershell
-   docker build -t mygenailab:latest .
+   winget install microsoft.azd
    ```
 
-4. **Test the container locally**:
+   Or using PowerShell:
 
    ```powershell
-   docker run -p 8080:8080 mygenailab:latest
+   irm https://aka.ms/install-azd.ps1 | iex
    ```
 
-   Visit <http://localhost:8080> to verify the application is working.
+2. **Login to Azure**:
+
+   ```powershell
+   azd auth login
+   ```
+
+3. **Create your Azure environment configuration**:
+
+   Create an `azure.yaml` file in the root of your project:
+
+   ```yaml
+   name: mygenailab
+   services:
+     app:
+       project: GenAiLab.AppHost/GenAiLab.AppHost.csproj
+       host: containerapp
+       language: dotnet
+   ```
+
+   This configuration tells `azd` that we're deploying a .NET project to Azure Container Apps.
 
 ## Step 3: Deploy to Azure Container Apps
 
-1. **Create an Azure Container Registry**:
+1. **Initialize your Azure environment**:
 
    ```powershell
-   # Login to Azure
-   az login
-   
-   # Create resource group
-   az group create --name rg-mygenailab --location eastus
-   
-   # Create container registry
-   az acr create --resource-group rg-mygenailab --name mygenailabregistry --sku Basic
+   # Create a new environment with a specific location
+   azd init --environment mygenailab
    ```
 
-2. **Push Docker image to ACR**:
+   When prompted, select an Azure location like East US.
+
+1. **Provision Azure resources and deploy your application**:
 
    ```powershell
-   # Login to ACR
-   az acr login --name mygenailabregistry
-   
-   # Tag the image for ACR
-   docker tag mygenailab:latest mygenailabregistry.azurecr.io/mygenailab:latest
-   
-   # Push the image
-   docker push mygenailabregistry.azurecr.io/mygenailab:latest
+   azd provision
    ```
 
-3. **Create Azure Container App**:
+   This command creates all the necessary Azure resources, including:
+   - Resource group
+   - Container registry
+   - Container apps environment
+   - Container apps for your application
+   - Log Analytics workspace
+
+1. **Deploy your application code**:
 
    ```powershell
-   # Create Container Apps Environment
-   az containerapp env create --name mygenailab-env --resource-group rg-mygenailab --location eastus
-   
-   # Create Container App
-   az containerapp create `
-       --name mygenailab `
-       --resource-group rg-mygenailab `
-       --environment mygenailab-env `
-       --image mygenailabregistry.azurecr.io/mygenailab:latest `
-       --target-port 8080 `
-       --ingress external `
-       --registry-server mygenailabregistry.azurecr.io `
-       --min-replicas 1 `
-       --max-replicas 5
+   azd deploy
    ```
 
-4. **Configure secrets and environment variables**:
+   This command builds your .NET application, creates container images, pushes them to the Azure Container Registry, and deploys them to Azure Container Apps.
+
+1. **Configure secrets and environment variables**:
 
    ```powershell
-   # Set the Azure OpenAI connection string
-   az containerapp secret set `
-       --name openai-connection `
-       --resource-group rg-mygenailab `
-       --app mygenailab `
-       --value "Endpoint=https://your-resource-name.openai.azure.com;Key=your-key-here"
+   # Set the Azure OpenAI connection string as a secret
+   azd set config openai.connectionString "Endpoint=https://your-resource-name.openai.azure.com;Key=your-key-here"
    
-   # Map the secret to an environment variable
-   az containerapp update `
-       --name mygenailab `
-       --resource-group rg-mygenailab `
-       --set-env-vars "ConnectionStrings__openai=secretref:openai-connection"
+   # Deploy the updated configuration
+   azd deploy
    ```
 
-5. **Set up deployment for Qdrant vector database**:
+1. **Application Insights for monitoring**:
+
+   .NET Aspire includes built-in support for Application Insights. To configure it, add Application Insights to your `azure.yaml`:
+
+   ```yaml
+   resources:
+     appinsights:
+       type: azure.monitor.applicationinsights
+   ```
+
+1. **Re-provision resources and deploy**:
 
    ```powershell
-   # Create Container App for Qdrant
-   az containerapp create `
-       --name mygenailab-qdrant `
-       --resource-group rg-mygenailab `
-       --environment mygenailab-env `
-       --image qdrant/qdrant:latest `
-       --target-port 6333 `
-       --ingress internal `
-       --min-replicas 1 `
-       --max-replicas 1
-   
-   # Configure storage for Qdrant
-   az containerapp update `
-       --name mygenailab-qdrant `
-       --resource-group rg-mygenailab `
-       --set-env-vars "QDRANT_STORAGE_PATH=/qdrant/storage"
-   
-   # Update main app with Qdrant connection
-   az containerapp update `
-       --name mygenailab `
-       --resource-group rg-mygenailab `
-       --set-env-vars "VectorStore__Url=https://mygenailab-qdrant.internal.mygenailab-env.eastus.azurecontainerapps.io:6333"
+   azd provision
+   azd deploy
    ```
 
-## Step 4: Setting Up CI/CD with GitHub Actions
+## Step 6: Managing Your Deployment
 
-1. **Create a GitHub workflow file** in `.github/workflows/deploy.yml`:
+Once deployed, you can manage your deployment using various tools:
 
-```yaml
-name: Deploy to Azure Container Apps
+1. **View deployment information**:
 
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+   ```powershell
+   azd show
+   ```
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '9.0.x'
-        
-    - name: Build and publish
-      run: |
-        dotnet restore
-        dotnet build --configuration Release
-        dotnet publish MyGenAiLab.Web/MyGenAiLab.Web.csproj -c Release -o publish
-      
-    - name: Log in to Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-    - name: Log in to ACR
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ secrets.ACR_LOGIN_SERVER }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
-        
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: ${{ secrets.ACR_LOGIN_SERVER }}/mygenailab:${{ github.sha }}
-        
-    - name: Deploy to Azure Container Apps
-      uses: azure/container-apps-deploy-action@v1
-      with:
-        resourceGroup: rg-mygenailab
-        containerAppName: mygenailab
-        imageToDeploy: ${{ secrets.ACR_LOGIN_SERVER }}/mygenailab:${{ github.sha }}
-```
+   This command shows your deployment details, including endpoints and resource information.
 
-1. **Add GitHub secrets** for the workflow:
-   - `AZURE_CREDENTIALS`: JSON credentials for Azure
-   - `ACR_LOGIN_SERVER`: ACR login server URL
-   - `ACR_USERNAME`: ACR username
-   - `ACR_PASSWORD`: ACR password
+2. **Monitor your application**:
 
-## Step 5: Monitoring and Logging
+   ```powershell
+   azd monitor
+   ```
 
-1. **Set up Application Insights**:
+   This opens the Application Insights dashboard for your application.
 
-```csharp
-// In Program.cs
-builder.Services.AddApplicationInsightsTelemetry(options =>
-{
-    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
-});
+3. **Update your deployment**:
 
-// Add custom telemetry
-builder.Services.AddSingleton<ITelemetryInitializer, AITelemetryInitializer>();
-```
+   After making changes to your application:
 
-1. **Create a custom telemetry initializer**:
+   ```powershell
+   azd deploy
+   ```
 
-```csharp
-public class AITelemetryInitializer : ITelemetryInitializer
-{
-    public void Initialize(ITelemetry telemetry)
-    {
-        telemetry.Context.Cloud.RoleName = "MyGenAiLab.Web";
-        
-        if (telemetry is RequestTelemetry requestTelemetry)
-        {
-            // Track AI model usage
-            if (requestTelemetry.Url.AbsolutePath.Contains("/chat"))
-            {
-                requestTelemetry.Properties["AIFeature"] = "ChatCompletion";
-            }
-            else if (requestTelemetry.Url.AbsolutePath.Contains("/products"))
-            {
-                requestTelemetry.Properties["AIFeature"] = "ProductDescription";
-            }
-        }
-    }
-}
-```
+4. **Delete your deployment**:
 
-## Step 6: Production Considerations
+   To clean up all resources:
+
+   ```powershell
+   azd down
+   ```
+
+## Step 7: Production Considerations
 
 ### Security Best Practices
 
 1. **Secure your API keys**:
-   - Use Key Vault for storing API keys and secrets
+   - Use Azure Key Vault for storing API keys and secrets
    - Never hardcode keys in your application code
    - Rotate keys periodically
 
@@ -349,7 +229,7 @@ public class AITelemetryInitializer : ITelemetryInitializer
 
 ### Scaling and Performance
 
-1. **Configure scaling rules**:
+1. **Configure scaling rules in Azure Container Apps**:
    - Set minimum and maximum replicas
    - Configure scaling metrics based on load
 
@@ -377,19 +257,19 @@ public class AITelemetryInitializer : ITelemetryInitializer
 
 ## What You've Learned
 
-- How to containerize your AI application for deployment
-- How to deploy to Azure Container Apps
-- How to set up CI/CD for automated deployments
+- How to use the Azure Developer CLI (azd) to deploy your AI application
+- How to set up and configure Azure Container Apps resources
+- How to automate deployments with GitHub Actions
 - Best practices for security, scaling, and monitoring in production
 - How to manage costs for AI applications
 
 ## Conclusion
 
-Congratulations! You've completed all labs in the Building GenAI Apps in C# tutorial. You now have the knowledge to:
+Congratulations! You've completed all labs in the Building GenAI Apps with .NET tutorial. You now have the knowledge to:
 
 1. Develop AI applications using Microsoft Extensions for AI
 2. Implement semantic search using vector embeddings
 3. Use GitHub Models for development and Azure OpenAI for production
-4. Deploy your AI application to production environments
+4. Deploy your AI application to production environments using Azure Developer CLI
 
 Continue exploring the possibilities of AI with .NET!

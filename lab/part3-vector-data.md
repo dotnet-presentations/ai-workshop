@@ -258,7 +258,7 @@ Enhance the Products page to include a search function:
 </div>
 ```
 
-2. Add the search functionality to the code-behind:
+1. Add the search functionality to the code-behind:
 
 ```csharp
 private string SearchQuery { get; set; } = string.Empty;

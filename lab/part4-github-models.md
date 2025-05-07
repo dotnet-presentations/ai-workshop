@@ -37,7 +37,7 @@ This simple call does several things:
 - Sets up IEmbeddingGenerator for creating embeddings
 - Configures client settings for the GitHub endpoints
 
-2. **Setting the connection string**:
+1. **Setting the connection string**:
 
 For GitHub Models, the connection string is very simple:
 
@@ -146,7 +146,7 @@ Keep the tone professional but engaging.";
 }
 ```
 
-2. Add a method to get the enhanced description for a specific product:
+1. Add a method to get the enhanced description for a specific product:
 
 ```csharp
 public async Task<string> GetEnhancedDescriptionAsync(Guid productId)
@@ -161,7 +161,7 @@ public async Task<string> GetEnhancedDescriptionAsync(Guid productId)
 }
 ```
 
-3. Create a new component `Components/ProductDetail.razor`:
+1. Create a new component `Components/ProductDetail.razor`:
 
 ```csharp
 @using MyGenAiLab.Web.Models
@@ -219,7 +219,7 @@ public async Task<string> GetEnhancedDescriptionAsync(Guid productId)
 }
 ```
 
-4. Update the Products.razor page to include the detail component:
+1. Update the Products.razor page to include the detail component:
 
 ```csharp
 <PropertyColumn Property="@(p => p.Name)" Title="📦 Product Name" Sortable="true">

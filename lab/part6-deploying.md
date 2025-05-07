@@ -283,7 +283,7 @@ jobs:
         imageToDeploy: ${{ secrets.ACR_LOGIN_SERVER }}/mygenailab:${{ github.sha }}
 ```
 
-2. **Add GitHub secrets** for the workflow:
+1. **Add GitHub secrets** for the workflow:
    - `AZURE_CREDENTIALS`: JSON credentials for Azure
    - `ACR_LOGIN_SERVER`: ACR login server URL
    - `ACR_USERNAME`: ACR username
@@ -304,7 +304,7 @@ builder.Services.AddApplicationInsightsTelemetry(options =>
 builder.Services.AddSingleton<ITelemetryInitializer, AITelemetryInitializer>();
 ```
 
-2. **Create a custom telemetry initializer**:
+1. **Create a custom telemetry initializer**:
 
 ```csharp
 public class AITelemetryInitializer : ITelemetryInitializer

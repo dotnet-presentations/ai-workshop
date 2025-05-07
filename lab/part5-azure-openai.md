@@ -99,7 +99,7 @@ For a smooth development workflow, you can use different connection strings in d
 }
 ```
 
-2. Update `appsettings.Production.json` to use Azure OpenAI:
+1. Update `appsettings.Production.json` to use Azure OpenAI:
 
 ```json
 {
@@ -109,7 +109,7 @@ For a smooth development workflow, you can use different connection strings in d
 }
 ```
 
-3. Use environment-specific configuration in `Program.cs`:
+1. Use environment-specific configuration in `Program.cs`:
 
 ```csharp
 if (builder.Environment.IsDevelopment())

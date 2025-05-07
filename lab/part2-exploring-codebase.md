@@ -41,7 +41,7 @@ public class ProductCategory
 }
 ```
 
-2. Create a database context for products in `Services/ProductDbContext.cs`:
+1. Create a database context for products in `Services/ProductDbContext.cs`:
 
 ```csharp
 using Microsoft.EntityFrameworkCore;

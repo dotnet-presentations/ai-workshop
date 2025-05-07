@@ -48,7 +48,7 @@ The Products feature allows users to:
 using System;
 using System.Collections.Generic;
 
-namespace MyGenAiLab.Web.Models;
+namespace GenAiLab.Web.Models;
 
 public class ProductInfo
 {
@@ -61,28 +61,68 @@ public class ProductInfo
     // For filtering
     public static List<string> AvailableCategories { get; set; } = new List<string>();
 }
-
-public class ProductCategory
-{
-    public int Id { get; set; }
-    public required string Name { get; set; }
-}
 ```
 
 1. Create a database context for products in `Services/ProductDbContext.cs`:
 
 ```csharp
 using Microsoft.EntityFrameworkCore;
-using MyGenAiLab.Web.Models;
+using GenAiLab.Web.Models;
 
-namespace MyGenAiLab.Web.Services;
+namespace GenAiLab.Web.Services;
 
 public class ProductDbContext : DbContext
 {
-    public ProductDbContext(DbContextOptions<ProductDbContext> options) : base(options) { }
+    public ProductDbContext(DbContextOptions<ProductDbContext> options) : base(options)
+    {
+    }
 
-    public DbSet<ProductInfo> Products => Set<ProductInfo>();
-    public DbSet<ProductCategory> Categories => Set<ProductCategory>();
+    public DbSet<ProductInfo> Products { get; set; }
+    public DbSet<ProductCategory> Categories { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Configure ProductInfo entity
+        modelBuilder.Entity<ProductInfo>()
+            .HasKey(p => p.Id);
+
+        modelBuilder.Entity<ProductInfo>()
+            .Property(p => p.Name)
+            .IsRequired();
+
+        modelBuilder.Entity<ProductInfo>()
+            .Property(p => p.FileName)
+            .IsRequired();
+
+        // Configure ProductCategory entity
+        modelBuilder.Entity<ProductCategory>()
+            .HasKey(c => c.Id);
+
+        modelBuilder.Entity<ProductCategory>()
+            .Property(c => c.Name)
+            .IsRequired();
+
+        modelBuilder.Entity<ProductCategory>()
+            .HasIndex(c => c.Name)
+            .IsUnique();
+    }
+
+    // Helper method to initialize the database
+    public static void Initialize(IServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+        using var context = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
+        context.Database.EnsureCreated();
+    }
+}
+
+// New entity for storing categories
+public class ProductCategory
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 }
 ```
 
@@ -93,12 +133,12 @@ Create a new file `Services/ProductService.cs` to generate product information u
 ```csharp
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.VectorData;
-using MyGenAiLab.Web.Models;
+using GenAiLab.Web.Models;
 using System.Text;
 using OpenAI;
 using Microsoft.EntityFrameworkCore;
 
-namespace MyGenAiLab.Web.Services;
+namespace GenAiLab.Web.Services;
 
 public class ProductService(
         IEmbeddingGenerator<string, Embedding<float>> _embeddingGenerator,
@@ -299,7 +339,7 @@ Update your `Program.cs` file to register the new services:
 
 ```csharp
 // Add database support
-builder.Services.AddDatabase<ProductDbContext>();
+builder.AddSqliteDbContext<ProductDbContext>("productDb");
 
 // Register product service
 builder.Services.AddScoped<ProductService>();
@@ -311,8 +351,8 @@ Create a new file `Components/Pages/Products.razor`:
 
 ```csharp
 @page "/products"
-@using MyGenAiLab.Web.Models
-@using MyGenAiLab.Web.Services
+@using GenAiLab.Web.Models
+@using GenAiLab.Web.Services
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using System.Linq.Expressions
 @inject ProductService ProductService
@@ -471,7 +511,7 @@ Add a link to the Products page in `Components/Pages/Chat/ChatHeader.razor`:
         </button>
     </div>
 
-    <h1 class="page-width">MyGenAiLab.Web</h1>
+    <h1 class="page-width">GenAiLab.Web</h1>
 </div>
 ```
 

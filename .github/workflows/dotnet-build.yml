@@ -16,8 +16,8 @@ jobs:
     strategy:
       matrix:
         solution:
-          - start/GenAiLab.sln
-          - complete/GenAiLab.sln
+          - src/start/GenAiLab.sln
+          - src/complete/GenAiLab.sln
 
     steps:
     - name: Checkout code

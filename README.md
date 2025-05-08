@@ -55,7 +55,8 @@ The lab is divided into six modules:
 The repository is structured as follows:
 
 - `/lab`: Contains all the lab instructions and documentation
-- `/src`: Contains the completed solution that you'll build during the lab
+- `/src/start`: Contains the starting code for the lab exercises
+- `/src/complete`: Contains the completed solution after all lab exercises
 
 ## Additional Resources
 

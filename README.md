@@ -29,13 +29,17 @@ The lab consists of a series of hands-on exercises where you'll build an AI-powe
 - **Azure OpenAI**: Enterprise-grade AI models for production
 - **Qdrant Vector Database**: For storing and searching vector embeddings
 
+## Getting Started
+
+Follow the [setup instructions](lab/setup.md) to get started with the lab.
+
 ## Lab Modules
 
 The lab is divided into six modules:
 
-1. [**Exploring the Codebase & Building the Products Feature**](lab/part0-exploring-codebase.md): Explore the structure of an AI Web Chat project and add a Products feature that uses AI to generate descriptions and categories.
+1. [**Microsoft Extensions for AI (MEAI) Fundamentals**](lab/part1-meai.md): Explore the structure of an AI Web Chat project and add a Products feature that uses AI to generate descriptions and categories.
 
-2. [**Microsoft Extensions for AI (MEAI) Fundamentals**](lab/part1-meai.md): Learn about the core libraries and components for AI development in .NET.
+2. [**Microsoft Extensions for AI (MEAI) Fundamentals**](lab/part2-exploring-codebase.md#building-the-products-feature): Learn about the core libraries and components for AI development in .NET.
 
 3. [**Vector Data and Embeddings**](lab/part3-vector-data.md): Understand how to use embeddings for semantic search and content matching.
 
@@ -45,9 +49,6 @@ The lab is divided into six modules:
 
 6. [**Deploying the Application**](lab/part6-deploying.md): Deploy your AI application to production environments.
 
-## Getting Started
-
-Follow the [setup instructions](lab/setup.md) to get started with the lab.
 
 ## Lab Structure
 

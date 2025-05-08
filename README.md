@@ -39,7 +39,7 @@ The lab is divided into six modules:
 
 1. [**Microsoft Extensions for AI (MEAI) Fundamentals**](lab/part1-meai.md): Explore the structure of an AI Web Chat project and add a Products feature that uses AI to generate descriptions and categories.
 
-2. [**Microsoft Extensions for AI (MEAI) Fundamentals**](lab/part2-exploring-codebase.md#building-the-products-feature): Learn about the core libraries and components for AI development in .NET.
+2. [*Building the Products Feature**](lab/part2-exploring-codebase.md#building-the-products-feature): Learn about the core libraries and components for AI development in .NET.
 
 3. [**Vector Data and Embeddings**](lab/part3-vector-data.md): Understand how to use embeddings for semantic search and content matching.
 

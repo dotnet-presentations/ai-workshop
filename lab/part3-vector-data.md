@@ -18,7 +18,7 @@ Vector embeddings are numerical representations of text that capture semantic me
 Examine the `SemanticSearch.cs` file to understand how semantic search is implemented:
 
 ```csharp
-namespace MyGenAiLab.Web.Services;
+namespace GenAiLab.Web.Services;
 
 public class SemanticSearch(
     IEmbeddingGenerator<string, Embedding<float>> embedder,
@@ -78,7 +78,7 @@ public record SearchResults(IReadOnlyList<DocumentResult> Results);
 Examine the `SemanticSearchRecord.cs` file:
 
 ```csharp
-namespace MyGenAiLab.Web.Services;
+namespace GenAiLab.Web.Services;
 
 public class SemanticSearchRecord
 {

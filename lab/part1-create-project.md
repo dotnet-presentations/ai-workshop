@@ -51,7 +51,7 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 
    ```json
    {
-     "ConnectionStrings:openai": "Endpoint=https://api.github.com/ml;Key=YOUR-GITHUB-TOKEN"
+     "ConnectionStrings:openai": "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
    }
    ```
 

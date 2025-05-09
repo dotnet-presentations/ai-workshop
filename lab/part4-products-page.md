@@ -1,48 +1,13 @@
-# Building the Products Feature
+# Write a New Products Page
 
 ## In this lab
 
-In this lab, you'll create a new project using the AI Web Chat template. You'll then extend the application by adding a Products feature that uses AI to generate product descriptions and categories. You'll learn how to craft effective prompts for AI models and work with JSON responses.
+In this lab, you'll enhance your application by creating a Products page that uses AI to generate product descriptions and categories. You'll learn how to implement product models, create a service to interact with AI, generate product information, and build a user interface to display the results.
 
-## Create a new project using the AI Web Chat template
+## Create the Product Models
 
-Create a new project using the AI Web Chat template as follows:
+1. Add a new folder named `Models` to the project `src/start/GenAiLab.Web`, by right-clicking on the project and selecting "Add" > "New Folder".
 
-1. Open Visual Studio 2022
-1. Click "Create a new project"
-1. Search for and select "AI Chat Web App" template
-
-   ![AI Web Chat template in Visual Studio](images/vs-ai-webchat-template.png)
-
-1. Click "Next"
-1. Configure your project:
-   - Enter "GenAiLab" as the project name
-   - Make sure "Place solution and project in same directory" is checked
-   - Click "Next"
-
-   ![Configure New Project in Visual Studio](images/vs-configure-new-project.png)
-
-1. Configure AI options:
-   - Select "GitHub Models" for AI service provider
-   - Select "Qdrant" for Vector store
-   - Check the box for "Use Aspire orchestration"
-   - Click "Create"
-
-   ![Additional Information in Visual Studio](images/vs-additional-information.png)
-
-1. Wait for Visual Studio to create the project and restore packages. When you see the Sign in popup, just close it.
-
-## Overview of the Products Feature
-
-The Products feature allows users to:
-
-- View a list of products with AI-generated descriptions
-- Filter products by category
-- See products categorized by AI based on their documentation
-
-## Step 1: Create the Product Models
-
-1. Add a new folder named `Models` to the project GenAiLab.Web, by right-clicking on the project and selecting "Add" > "New Folder".
 1. In this new folder, create a new file `ProductInfo.cs` and replace the content with the following code:
 
 ```csharp
@@ -64,7 +29,7 @@ public class ProductInfo
 }
 ```
 
-1. In the folder `Services` of the project GenAiLab.Web, create a database context for products in `ProductDbContext.cs`, and replace the content with the following code:
+1. In the folder `Services` of the project `src/start/GenAiLab.Web`, create a database context for products in `ProductDbContext.cs`, and replace the content with the following code:
 
 ```csharp
 using Microsoft.EntityFrameworkCore;
@@ -84,38 +49,33 @@ public class ProductDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // Configure ProductInfo entity
+        
+        // Configure cascade delete for products and categories
         modelBuilder.Entity<ProductInfo>()
             .HasKey(p => p.Id);
-
-        modelBuilder.Entity<ProductInfo>()
-            .Property(p => p.Name)
-            .IsRequired();
-
-        modelBuilder.Entity<ProductInfo>()
-            .Property(p => p.FileName)
-            .IsRequired();
-
-        // Configure ProductCategory entity
-        modelBuilder.Entity<ProductCategory>()
-            .HasKey(c => c.Id);
-
-        modelBuilder.Entity<ProductCategory>()
-            .Property(c => c.Name)
-            .IsRequired();
-
-        modelBuilder.Entity<ProductCategory>()
-            .HasIndex(c => c.Name)
-            .IsUnique();
     }
 
-    // Helper method to initialize the database
     public static void Initialize(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();
-        using var context = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
-        context.Database.EnsureCreated();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
+        dbContext.Database.EnsureCreated();
+
+        // Seed initial categories if none exist
+        if (!dbContext.Categories.Any())
+        {
+            dbContext.Categories.AddRange(
+                new ProductCategory { Name = "Electronics" },
+                new ProductCategory { Name = "Safety Equipment" },
+                new ProductCategory { Name = "Outdoor Gear" },
+                new ProductCategory { Name = "General" }
+            );
+            dbContext.SaveChanges();
+        }
+
+        ProductInfo.AvailableCategories = dbContext.Categories
+            .Select(c => c.Name)
+            .ToList();
     }
 }
 
@@ -127,9 +87,9 @@ public class ProductCategory
 }
 ```
 
-## Step 2: Create the Product Service
+## Create the Product Service
 
-In the folder `Services` of the project GenAiLab.Web, create a new file `ProductService.cs` to generate product information using AI. Replace the content with the following code:
+In the folder `Services` of the project `src/start/GenAiLab.Web`, create a new file `ProductService.cs` to generate product information using AI. Replace the content with the following code:
 
 ```csharp
 using Microsoft.Extensions.AI;
@@ -150,36 +110,40 @@ public class ProductService(
 {
     public async Task<IEnumerable<ProductInfo>> GetProductsAsync(string? categoryFilter = null)
     {
-        // Make sure we have products
-        await EnsureProductsExistAsync();
-
-        // Simple filtering by category if specified
-        var query = string.IsNullOrEmpty(categoryFilter)
-            ? _dbContext.Products
-            : _dbContext.Products.Where(p => p.Category == categoryFilter);
-
-        return await query.ToListAsync();
-    }
-
-    public async Task<List<string>> GetCategoriesAsync()
-    {
-        await EnsureProductsExistAsync();
-        return await _dbContext.Categories.Select(c => c.Name).ToListAsync();
-    }
-
-    private async Task EnsureProductsExistAsync()
-    {
+        // Check if we need to generate products first
         if (!await _dbContext.Products.AnyAsync())
         {
             await GenerateAndSaveProductsAsync();
         }
+
+        // Return products, optionally filtered by category
+        if (string.IsNullOrEmpty(categoryFilter))
+        {
+            return await _dbContext.Products.ToListAsync();
+        }
+        else
+        {
+            return await _dbContext.Products
+                .Where(p => p.Category == categoryFilter)
+                .ToListAsync();
+        }
     }
 
-    // Additional implementation will be added in the next steps
+    public async Task<List<string>> GetCategoriesAsync()
+    {
+        if (!ProductInfo.AvailableCategories.Any())
+        {
+            ProductInfo.AvailableCategories = await _dbContext.Categories
+                .Select(c => c.Name)
+                .ToListAsync();
+        }
+        
+        return ProductInfo.AvailableCategories;
+    }
 }
 ```
 
-## Step 3: Implement Product Generation with AI
+## Implement Product Generation with AI
 
 Add the following methods to the `ProductService` class:
 
@@ -188,9 +152,10 @@ private async Task GenerateAndSaveProductsAsync()
 {
     // Get documents from vector store
     var fileNames = await GetUniqueFileNamesAsync();
-    if (fileNames.Count == 0)
+    
+    if (!fileNames.Any())
     {
-        _logger.LogWarning("No documents found in vector store");
+        _logger.LogWarning("No documents found in vector store. Make sure PDFs are ingested.");
         return;
     }
 
@@ -199,32 +164,38 @@ private async Task GenerateAndSaveProductsAsync()
     // Process each file
     foreach (var fileName in fileNames)
     {
-        var productName = Path.GetFileNameWithoutExtension(fileName)
-            .Replace("Example_", "")
-            .Replace("_", " ");
-
-        // Get document content
-        var content = await GetDocumentContentAsync(fileName, productName);
-
-        // The key part - using AI to generate product info
-        var (description, category) = await AskAIForProductInfoAsync(content, productName);
-
-        // Save to database
-        _dbContext.Products.Add(new ProductInfo
+        var productName = Path.GetFileNameWithoutExtension(fileName);
+        var documentContent = await GetDocumentContentAsync(fileName, productName);
+        
+        if (string.IsNullOrWhiteSpace(documentContent))
         {
-            Name = productName,
+            continue;
+        }
+
+        // Get product description and category from AI
+        var (description, category) = await AskAIForProductInfoAsync(documentContent, productName);
+        categories.Add(category);
+
+        // Create and save product
+        var product = new ProductInfo
+        {
+            Id = Guid.NewGuid(),
+            Name = productName.Replace("_", " "),
             ShortDescription = description,
             Category = category,
             FileName = fileName
-        });
+        };
 
-        categories.Add(category);
+        _dbContext.Products.Add(product);
     }
 
     // Save categories
     foreach (var category in categories)
     {
-        _dbContext.Categories.Add(new ProductCategory { Name = category });
+        if (!await _dbContext.Categories.AnyAsync(c => c.Name == category))
+        {
+            _dbContext.Categories.Add(new ProductCategory { Name = category });
+        }
     }
 
     ProductInfo.AvailableCategories = categories.ToList();
@@ -238,14 +209,15 @@ private async Task<List<string>> GetUniqueFileNamesAsync()
     try
     {
         var dummyEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync("all documents");
-        var searchResults = await vectorCollection.VectorizedSearchAsync(
+        var allDocuments = await vectorCollection.VectorizedSearchAsync(
             dummyEmbedding,
-            new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 });
+            new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 }
+        );
 
         var uniqueFileNames = new HashSet<string>();
-        await foreach (var result in searchResults.Results)
+        await foreach (var item in allDocuments.Results)
         {
-            uniqueFileNames.Add(result.Record.FileName);
+            uniqueFileNames.Add(item.Record.FileName);
         }
 
         return uniqueFileNames.ToList();
@@ -266,10 +238,10 @@ private async Task<string> GetDocumentContentAsync(string fileName, string produ
         var contentEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync($"Information about {productName}");
         var contentResults = await vectorCollection.VectorizedSearchAsync(
             contentEmbedding,
-            new VectorSearchOptions<SemanticSearchRecord>
-            {
+            new VectorSearchOptions<SemanticSearchRecord> 
+            { 
                 Top = 5,
-                Filter = record => record.FileName == fileName
+                Filter = new VectorSearchFilter<SemanticSearchRecord>(r => r.FileName == fileName)
             });
 
         var contentBuilder = new StringBuilder();
@@ -288,7 +260,7 @@ private async Task<string> GetDocumentContentAsync(string fileName, string produ
 }
 ```
 
-## Step 4: Implement AI-Based Product Description Generation
+## Implement AI-Based Product Description Generation
 
 Add the following methods to use the AI service for generating product descriptions and categories:
 
@@ -304,7 +276,7 @@ private async Task<(string Description, string Category)> AskAIForProductInfoAsy
         // Create a simple prompt requesting JSON response
         var prompt = $@"Based on this content about '{productName}', provide a JSON object with these properties:
 1. description: A concise product description (max 200 characters)
-2. category: One of: 'Electronics', 'Safety Equipment', 'Outdoor Gear', or 'General'
+1. category: One of: 'Electronics', 'Safety Equipment', 'Outdoor Gear', or 'General'
 
 Content: {content}";
 
@@ -334,9 +306,9 @@ Content: {content}";
 }
 ```
 
-## Step 5: Register the Services
+## Register the Services
 
-In the project `GenAiLab.Web`, update your `Program.cs` file to register the new services. Just before the `var app = builder.Build();` line (~line 26), add the following code:
+In the project `src/start/GenAiLab.Web`, update your `Program.cs` file to register the new services. Just before the `var app = builder.Build();` line, add the following code:
 
 ```csharp
 // Add database support
@@ -346,21 +318,32 @@ builder.AddSqliteDbContext<ProductDbContext>("productDb");
 builder.Services.AddScoped<ProductService>();
 ```
 
-## Step 6: Create the Products Page
+And after the `var app = builder.Build();` line, add initialization for the ProductDbContext:
 
-Let's uses the new AspNetCore QuickGrid component to display the products. First, we need to add the Nuget package `Microsoft.AspNetCore.Components.QuickGrid`. 
+```csharp
+IngestionCacheDbContext.Initialize(app.Services);
+ProductDbContext.Initialize(app.Services); // Add this line
+```
+
+## Create the Products Page
+
+Let's use the new AspNetCore QuickGrid component to display the products. First, we need to add the Nuget package `Microsoft.AspNetCore.Components.QuickGrid`.
 
 There are multiple ways to do this:
-- Open the GenAiLab.Web project file and add at the end of the packages `<ItemGroup>` 
+
+- Open the GenAiLab.Web project file and add at the end of the packages `<ItemGroup>`
+
     ```xml
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.4" />
     ```
+
 or
+
 - Type the follinging command in the Package Manager Console:
+
     ```powershell
     NuGet\Install-Package Microsoft.AspNetCore.Components.QuickGrid -Version 9.0.4
     ```
-
 
 Create a new file `Components/Pages/Products.razor`:
 
@@ -507,10 +490,11 @@ else
 }
 ```
 
-## Step 7: Update the Navigation
+## Update the Navigation
 
-In the GenAiLab.Web project, let's edit the page `Components/Pages/Chat/ChatHeader.razor`. Add a button-link to the Products page after the "New chat" button. The updated code should look like this:
+In the GenAiLab.Web project, locate the file `Components/Layout/MainLayout.razor` and update it to include a link to the Products page.
 
+If your project uses a different navigation structure, find the appropriate file (such as `NavMenu.razor` or `ChatHeader.razor`) and add a navigation link to the Products page:
 
 ```csharp
 <div class="chat-header-container main-background-gradient">
@@ -536,24 +520,18 @@ In the GenAiLab.Web project, let's edit the page `Components/Pages/Chat/ChatHead
 ## Testing the Products Feature
 
 1. Run your application and navigate to the Products page
-2. You should see a list of products with AI-generated descriptions
-3. Try filtering products by category using the dropdown
+1. You should see a list of products with AI-generated descriptions
+1. Try filtering products by category using the dropdown
 
 ## What You've Learned
 
-- How to use Microsoft Extensions for AI to generate product descriptions
+- How to create models and database contexts for a new feature
+- How to build a service that interacts with AI to generate product information
+- How to use vector embeddings to find relevant document content
 - How to prompt AI models for structured JSON responses
 - How to handle and parse JSON responses from AI models
-- How to use vector search to find relevant content for AI processing
 - How to create a user interface that displays and filters AI-generated content
-
-## Key AI Concepts
-
-- **Prompt Engineering**: Crafting effective prompts for AI to generate structured data
-- **JSON Response Parsing**: Working with structured responses from AI models
-- **Error Handling**: Implementing fallbacks when AI processing fails
-- **Vector Search**: Using embeddings to find relevant document content
 
 ## Next Steps
 
-Now that you've implemented the Products feature, proceed to [Vector Data and Embeddings](part3-vector-data.md) to learn more about how the semantic search functionality works.
+Now that you've implemented the Products feature, proceed to [Deploy to Azure](part5-deploy-azure.md) to learn how to prepare your application for production deployment to Azure using the Azure Developer CLI.

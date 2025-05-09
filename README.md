@@ -31,24 +31,21 @@ The lab consists of a series of hands-on exercises where you'll build an AI-powe
 
 ## Getting Started
 
-Follow the [setup instructions](lab/setup.md) to get started with the lab.
+Follow the [setup instructions](lab/part0-setup.md) to get started with the lab.
 
 ## Lab Modules
 
-The lab is divided into six modules:
+The lab is divided into five modules:
 
-1. [**Microsoft Extensions for AI (MEAI) Fundamentals**](lab/part1-meai.md): Explore the structure of an AI Web Chat project and add a Products feature that uses AI to generate descriptions and categories.
+1. [**Create a Project with AI Web Chat Template**](lab/part1-create-project.md): Learn how to create an AI-powered web application using the .NET AI Web Chat template.
 
-2. [*Building the Products Feature**](lab/part2-exploring-codebase.md#building-the-products-feature): Learn about the core libraries and components for AI development in .NET.
+1. [**Explore the Template Code**](lab/part2-explore-template.md): Explore the structure of an AI Web Chat project, including core components like vector embeddings, semantic search, and chat interfaces.
 
-3. [**Vector Data and Embeddings**](lab/part3-vector-data.md): Understand how to use embeddings for semantic search and content matching.
+1. [**Convert from GitHub Models to Azure OpenAI**](lab/part3-azure-openai.md): Migrate your application from GitHub Models to Azure OpenAI for production-ready AI capabilities.
 
-4. [**Using GitHub Models**](lab/part4-github-models.md): Integrate GitHub Models for free AI capabilities during development.
+1. [**Write a Products Page**](lab/part4-products-page.md): Enhance your application with a new feature that uses AI to generate product information.
 
-5. [**Using Azure OpenAI**](lab/part5-azure-openai.md): Migrate to Azure OpenAI for enterprise-grade AI capabilities in production.
-
-6. [**Deploying the Application**](lab/part6-deploying.md): Deploy your AI application to production environments.
-
+1. [**Deploy to Azure**](lab/part5-deploy-azure.md): Deploy your application to Azure using Azure Developer CLI.
 
 ## Lab Structure
 

@@ -1,4 +1,4 @@
-# Setup
+# Part 0: Setup
 
 ## In this lab
 
@@ -25,7 +25,7 @@ Before starting the lab, ensure you have:
    - During installation, select the "Web & Cloud" in the workloads selection screen
    - Ensure the ".NET 9.0 SDK" is included in your installation
 
-2. **Install .NET AI Web Chatbot template:**
+1. **Install .NET AI Web Chatbot template:**
    - Open a terminal or command prompt
    - Run the following command:
 
@@ -33,7 +33,7 @@ Before starting the lab, ensure you have:
      dotnet new install Microsoft.Extensions.AI.Templates
      ```
 
-3. **Verify installations:**
+1. **Verify installations:**
    - Open a terminal or command prompt
    - Run the following commands to verify the installation:
 
@@ -54,4 +54,4 @@ cd build-2025-lab307
 
 ## Next Steps
 
-Once your setup is complete, proceed to [Part 1 - Microsoft Extensions for AI](part1-meai.md).
+Once your setup is complete, proceed to [Part 1 - Create a Project with AI Web Chat Template](part1-create-project.md).

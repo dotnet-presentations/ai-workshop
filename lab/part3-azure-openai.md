@@ -103,35 +103,6 @@ Now you'll update your application's connection string to use Azure OpenAI inste
 
    Replace `YOUR_RESOURCE_NAME` with your Azure OpenAI resource name and `YOUR_API_KEY` with the API key you copied.
 
-## Update Program.cs to use Azure OpenAI
-
-Now you need to modify the `Program.cs` file in the `GenAiLab.Web` project to use Azure OpenAI instead of GitHub Models:
-
-1. Open the `Program.cs` file in the `GenAiLab.Web` project
-
-1. Find the line that adds GitHub Models:
-
-   ```csharp
-   var openai = builder.AddGitHubModels();
-   ```
-
-1. Replace it with code to use Azure OpenAI:
-
-   ```csharp   var openai = builder.AddAzureOpenAIClient("openai");
-   ```
-
-1. The rest of the code can remain the same, as it uses the common interfaces:
-
-   ```csharp
-   openai.AddChatClient("gpt-4o-mini")
-       .UseFunctionInvocation()
-       .UseOpenTelemetry(configure: c =>
-           c.EnableSensitiveData = builder.Environment.IsDevelopment());
-   openai.AddEmbeddingGenerator("text-embedding-3-small");
-   ```
-
-This is the beauty of Microsoft Extensions for AI - the same code works with different AI providers!
-
 ## Add new Product PDFs for ingestion
 
 To test the new Azure OpenAI integration, let's add some product PDF files for ingestion:

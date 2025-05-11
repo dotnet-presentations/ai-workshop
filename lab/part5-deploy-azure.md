@@ -10,15 +10,27 @@ The first step in preparing for production is to upgrade our data storage from S
 
 1. **Add PostgreSQL NuGet packages**:
 
-   For the `GenAiLab.AppHost` project, add the Aspire PostgreSQL package:
+   **Using Visual Studio's .NET Aspire tooling**:   For the `GenAiLab.AppHost` project:
+   - Right-click on the `GenAiLab.AppHost` project in Solution Explorer
+   - Select "Add" > ".NET Aspire package..."
+   - In the package manager that opens (with pre-filtered .NET Aspire packages), search for "Aspire.Hosting.PostgreSQL"
+   - Select the package and click "Install"
+
+   For the `GenAiLab.Web` project:
+   - Right-click on the `GenAiLab.Web` project in Solution Explorer
+   - Select "Manage NuGet Packages..."
+   - Click on the "Browse" tab
+   - Search for "Npgsql.EntityFrameworkCore.PostgreSQL"
+   - Select the package and click "Install"
+
+   **Using Terminal**:   To open the terminal in Visual Studio:
+   - Go to "View" menu
+   - Select "Terminal" (or press Ctrl+`)
+
+   Then run these commands:
 
    ```powershell
    dotnet add GenAiLab.AppHost/GenAiLab.AppHost.csproj package Aspire.Hosting.PostgreSQL
-   ```
-
-   For the `GenAiLab.Web` project, add the Npgsql Entity Framework Core package:
-
-   ```powershell
    dotnet add GenAiLab.Web/GenAiLab.Web.csproj package Npgsql.EntityFrameworkCore.PostgreSQL
    ```
 
@@ -99,9 +111,7 @@ The first step in preparing for production is to upgrade our data storage from S
 
    ```powershell
    azd provision
-   ```
-
-   This command creates all the necessary Azure resources, including:
+   ```   This command creates all the necessary Azure resources, including:
    - Resource group
    - Container registry
    - Container apps environment
@@ -112,9 +122,7 @@ The first step in preparing for production is to upgrade our data storage from S
 
    ```powershell
    azd deploy
-   ```
-
-   This command:
+   ```   This command:
    - Builds your .NET application
    - Creates container images
    - Pushes them to the Azure Container Registry
@@ -158,10 +166,10 @@ Once deployed, you can manage your deployment using various Azure Developer CLI 
 
 1. **Delete your deployment**:
 
-   To clean up all resources when you're done:
+   To completely clean up all resources when you're done:
 
    ```powershell
-   azd down
+   azd down --purge --force
    ```
 
 ## Production Considerations

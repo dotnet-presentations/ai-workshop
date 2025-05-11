@@ -325,6 +325,30 @@ IngestionCacheDbContext.Initialize(app.Services);
 ProductDbContext.Initialize(app.Services); // Add this line
 ```
 
+## Update AppHost Configuration
+
+Now that we've configured the Web project, we also need to update the AppHost project to provide the SQLite database resource. Open the `GenAiLab.AppHost/Program.cs` file. Find the code which reads like this:
+
+```csharp
+webApp
+    .WithReference(ingestionCache)
+    .WaitFor(ingestionCache);
+```
+
+Immediately after that, add the following lines to create a new SQLite database resource for the product data:
+
+```csharp
+webApp
+    .WithReference(productDb)
+    .WaitFor(productDb);
+```
+
+This configuration ensures that:
+
+1. A SQLite database resource is created for product data
+1. The web application references this database resource
+1. The application waits for the database to be ready before starting
+
 ## Create the Products Page
 
 Let's use the new AspNetCore QuickGrid component to display the products. First, we need to add the Nuget package `Microsoft.AspNetCore.Components.QuickGrid`.

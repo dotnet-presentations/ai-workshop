@@ -10,15 +10,31 @@ The first step in preparing for production is to upgrade our data storage from S
 
 1. **Add PostgreSQL NuGet packages**:
 
-   For the `GenAiLab.AppHost` project, add the Aspire PostgreSQL package:
+   **Using Visual Studio's .NET Aspire tooling**:
+
+   For the `GenAiLab.AppHost` project:
+   * Right-click on the `GenAiLab.AppHost` project in Solution Explorer
+   * Select "Add" > ".NET Aspire package..."
+   * In the package manager that opens (with pre-filtered .NET Aspire packages), search for "Aspire.Hosting.PostgreSQL"
+   * Select the package and click "Install"
+
+   For the `GenAiLab.Web` project:
+   * Right-click on the `GenAiLab.Web` project in Solution Explorer
+   * Select "Manage NuGet Packages..."
+   * Click on the "Browse" tab
+   * Search for "Npgsql.EntityFrameworkCore.PostgreSQL"
+   * Select the package and click "Install"
+
+   **Using Terminal**:
+
+   To open the terminal in Visual Studio:
+   * Go to "View" menu
+   * Select "Terminal" (or press Ctrl+`)
+
+   Then run these commands:
 
    ```powershell
    dotnet add GenAiLab.AppHost/GenAiLab.AppHost.csproj package Aspire.Hosting.PostgreSQL
-   ```
-
-   For the `GenAiLab.Web` project, add the Npgsql Entity Framework Core package:
-
-   ```powershell
    dotnet add GenAiLab.Web/GenAiLab.Web.csproj package Npgsql.EntityFrameworkCore.PostgreSQL
    ```
 
@@ -102,11 +118,11 @@ The first step in preparing for production is to upgrade our data storage from S
    ```
 
    This command creates all the necessary Azure resources, including:
-   - Resource group
-   - Container registry
-   - Container apps environment
-   - Container apps for your application
-   - Log Analytics workspace
+   * Resource group
+   * Container registry
+   * Container apps environment
+   * Container apps for your application
+   * Log Analytics workspace
 
 1. **Deploy your application code**:
 
@@ -115,10 +131,10 @@ The first step in preparing for production is to upgrade our data storage from S
    ```
 
    This command:
-   - Builds your .NET application
-   - Creates container images
-   - Pushes them to the Azure Container Registry
-   - Deploys them to Azure Container Apps
+   * Builds your .NET application
+   * Creates container images
+   * Pushes them to the Azure Container Registry
+   * Deploys them to Azure Container Apps
 
 1. **Access your deployed application**:
 
@@ -158,10 +174,10 @@ Once deployed, you can manage your deployment using various Azure Developer CLI 
 
 1. **Delete your deployment**:
 
-   To clean up all resources when you're done:
+   To completely clean up all resources when you're done:
 
    ```powershell
-   azd down
+   azd down --purge --force
    ```
 
 ## Production Considerations
@@ -169,54 +185,54 @@ Once deployed, you can manage your deployment using various Azure Developer CLI 
 ### Security Best Practices
 
 1. **Secure your API keys**:
-   - Use Azure Key Vault for storing API keys and secrets
-   - Never hardcode keys in your application code
-   - Rotate keys periodically
+   * Use Azure Key Vault for storing API keys and secrets
+   * Never hardcode keys in your application code
+   * Rotate keys periodically
 
 1. **Implement proper authentication and authorization**:
-   - Add authentication to your application
-   - Protect API endpoints
-   - Consider identity providers like Azure AD
+   * Add authentication to your application
+   * Protect API endpoints
+   * Consider identity providers like Azure AD
 
 1. **Use HTTPS everywhere**:
-   - Enable HTTPS for all endpoints
-   - Configure proper CORS policies
+   * Enable HTTPS for all endpoints
+   * Configure proper CORS policies
 
 ### Scaling and Performance
 
 1. **Configure scaling rules in Azure Container Apps**:
-   - Set minimum and maximum replicas
-   - Configure scaling metrics based on load
+   * Set minimum and maximum replicas
+   * Configure scaling metrics based on load
 
 1. **Implement caching for AI responses**:
-   - Use distributed caching (Redis)
-   - Cache common AI-generated content
+   * Use distributed caching (Redis)
+   * Cache common AI-generated content
 
 1. **Optimize network communication**:
-   - Use gRPC for internal service communication
-   - Configure appropriate timeouts
+   * Use gRPC for internal service communication
+   * Configure appropriate timeouts
 
 ### Cost Management
 
 1. **Monitor AI service usage**:
-   - Track token usage with telemetry
-   - Set up cost alerts and budgets
+   * Track token usage with telemetry
+   * Set up cost alerts and budgets
 
 1. **Optimize embedding generation**:
-   - Only generate embeddings when necessary
-   - Cache embedding results
+   * Only generate embeddings when necessary
+   * Cache embedding results
 
 1. **Configure appropriate instance sizes**:
-   - Start with smaller instances and scale up as needed
-   - Use autoscaling to optimize costs
+   * Start with smaller instances and scale up as needed
+   * Use autoscaling to optimize costs
 
 ## What You've Learned
 
-- How to migrate from SQLite to PostgreSQL for production readiness
-- How to use the Azure Developer CLI (azd) to deploy your AI application
-- How to set up and configure Azure Container Apps
-- How to manage and monitor your deployed application
-- Best practices for security, scaling, and cost management in production
+* How to migrate from SQLite to PostgreSQL for production readiness
+* How to use the Azure Developer CLI (azd) to deploy your AI application
+* How to set up and configure Azure Container Apps
+* How to manage and monitor your deployed application
+* Best practices for security, scaling, and cost management in production
 
 ## Conclusion
 

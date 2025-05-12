@@ -14,13 +14,11 @@ The first step in preparing for production is to upgrade our data storage from S
    - Right-click on the `GenAiLab.AppHost` project in Solution Explorer
    - Select "Add" > ".NET Aspire package..."
    - In the package manager that opens (with pre-filtered .NET Aspire packages), search for "Aspire.Hosting.PostgreSQL"
-   - Select the package and click "Install"
-
-   For the `GenAiLab.Web` project:
+   - Select the package and click "Install"   For the `GenAiLab.Web` project:
    - Right-click on the `GenAiLab.Web` project in Solution Explorer
    - Select "Manage NuGet Packages..."
    - Click on the "Browse" tab
-   - Search for "Npgsql.EntityFrameworkCore.PostgreSQL"
+   - Search for "Aspire.Npgsql.EntityFrameworkCore.PostgreSQL"
    - Select the package and click "Install"
 
    **Using Terminal**:   To open the terminal in Visual Studio:
@@ -31,7 +29,7 @@ The first step in preparing for production is to upgrade our data storage from S
 
    ```powershell
    dotnet add GenAiLab.AppHost/GenAiLab.AppHost.csproj package Aspire.Hosting.PostgreSQL
-   dotnet add GenAiLab.Web/GenAiLab.Web.csproj package Npgsql.EntityFrameworkCore.PostgreSQL
+   dotnet add GenAiLab.Web/GenAiLab.Web.csproj package Aspire.Npgsql.EntityFrameworkCore.PostgreSQL
    ```
 
 1. **Update AppHost Program.cs**:

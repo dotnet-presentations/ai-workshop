@@ -110,35 +110,29 @@ public class ProductService(
 {
     public async Task<IEnumerable<ProductInfo>> GetProductsAsync(string? categoryFilter = null)
     {
-        // Check if we need to generate products first
-        if (!await _dbContext.Products.AnyAsync())
-        {
-            await GenerateAndSaveProductsAsync();
-        }
+        // Make sure we have products
+        await EnsureProductsExistAsync();
 
-        // Return products, optionally filtered by category
-        if (string.IsNullOrEmpty(categoryFilter))
-        {
-            return await _dbContext.Products.ToListAsync();
-        }
-        else
-        {
-            return await _dbContext.Products
-                .Where(p => p.Category == categoryFilter)
-                .ToListAsync();
-        }
+        // Simple filtering by category if specified
+        var query = string.IsNullOrEmpty(categoryFilter)
+            ? _dbContext.Products
+            : _dbContext.Products.Where(p => p.Category == categoryFilter);
+
+        return await query.ToListAsync();
     }
 
     public async Task<List<string>> GetCategoriesAsync()
     {
-        if (!ProductInfo.AvailableCategories.Any())
+        await EnsureProductsExistAsync();
+        return await _dbContext.Categories.Select(c => c.Name).ToListAsync();
+    }
+    
+    private async Task EnsureProductsExistAsync()
+    {
+        if (!await _dbContext.Products.AnyAsync())
         {
-            ProductInfo.AvailableCategories = await _dbContext.Categories
-                .Select(c => c.Name)
-                .ToListAsync();
+            await GenerateAndSaveProductsAsync();
         }
-        
-        return ProductInfo.AvailableCategories;
     }
 }
 ```
@@ -159,12 +153,14 @@ private async Task GenerateAndSaveProductsAsync()
         return;
     }
 
-    var categories = new HashSet<string>();
-
-    // Process each file
+    var categories = new HashSet<string>();    // Process each file
     foreach (var fileName in fileNames)
     {
-        var productName = Path.GetFileNameWithoutExtension(fileName);
+        var productName = Path.GetFileNameWithoutExtension(fileName)
+            .Replace("Example_", "")
+            .Replace("_", " ");
+
+        // Get document content
         var documentContent = await GetDocumentContentAsync(fileName, productName);
         
         if (string.IsNullOrWhiteSpace(documentContent))
@@ -180,7 +176,7 @@ private async Task GenerateAndSaveProductsAsync()
         var product = new ProductInfo
         {
             Id = Guid.NewGuid(),
-            Name = productName.Replace("_", " "),
+            Name = productName,
             ShortDescription = description,
             Category = category,
             FileName = fileName
@@ -198,7 +194,6 @@ private async Task GenerateAndSaveProductsAsync()
         }
     }
 
-    ProductInfo.AvailableCategories = categories.ToList();
     await _dbContext.SaveChangesAsync();
 }
 
@@ -209,15 +204,14 @@ private async Task<List<string>> GetUniqueFileNamesAsync()
     try
     {
         var dummyEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync("all documents");
-        var allDocuments = await vectorCollection.VectorizedSearchAsync(
+        var searchResults = await vectorCollection.VectorizedSearchAsync(
             dummyEmbedding,
-            new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 }
-        );
+            new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 });
 
         var uniqueFileNames = new HashSet<string>();
-        await foreach (var item in allDocuments.Results)
+        await foreach (var result in searchResults.Results)
         {
-            uniqueFileNames.Add(item.Record.FileName);
+            uniqueFileNames.Add(result.Record.FileName);
         }
 
         return uniqueFileNames.ToList();
@@ -238,10 +232,10 @@ private async Task<string> GetDocumentContentAsync(string fileName, string produ
         var contentEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync($"Information about {productName}");
         var contentResults = await vectorCollection.VectorizedSearchAsync(
             contentEmbedding,
-            new VectorSearchOptions<SemanticSearchRecord> 
-            { 
+            new VectorSearchOptions<SemanticSearchRecord>
+            {
                 Top = 5,
-                Filter = new VectorSearchFilter<SemanticSearchRecord>(r => r.FileName == fileName)
+                Filter = record => record.FileName == fileName
             });
 
         var contentBuilder = new StringBuilder();
@@ -276,11 +270,9 @@ private async Task<(string Description, string Category)> AskAIForProductInfoAsy
         // Create a simple prompt requesting JSON response
         var prompt = $@"Based on this content about '{productName}', provide a JSON object with these properties:
 1. description: A concise product description (max 200 characters)
-1. category: One of: 'Electronics', 'Safety Equipment', 'Outdoor Gear', or 'General'
+2. category: One of: 'Electronics', 'Safety Equipment', 'Outdoor Gear', or 'General'
 
-Content: {content}";
-
-        // Get response from the chat client
+Content: {content}";        // Get response from the chat client
         var chatResponse = await _chatClient.GetResponseAsync(
             new[] {
                 new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only."),

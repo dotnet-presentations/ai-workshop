@@ -59,9 +59,13 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 
 1. Save the `secrets.json` file.
 
+   > **Note:** GitHub Models uses the endpoint `models.inference.ai.azure.com`, which is the same endpoint pattern used by Azure OpenAI. This means that when deploying to production later in the lab, you can switch from GitHub Models to Azure OpenAI by simply updating the API key without changing the endpoint URL structure. You will see this later in the lab.
+
 ## Run the application
 
 Now let's run the application and explore its features:
+
+1. Make sure that Docker Desktop is running. This is required to run containerized resources like Qdrant.
 
 1. Make sure the `GenAiLab.AppHost` project is set as the startup project.
 

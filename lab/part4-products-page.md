@@ -317,9 +317,20 @@ IngestionCacheDbContext.Initialize(app.Services);
 ProductDbContext.Initialize(app.Services); // Add this line
 ```
 
+Without this initialization, you'll encounter errors when your application attempts to use the product database.
+
 ## Update AppHost Configuration
 
-Now that we've configured the Web project, we also need to update the AppHost project to provide the SQLite database resource. Open the `GenAiLab.AppHost/Program.cs` file. Find the code which reads like this:
+Now that we've configured the Web project, we also need to update the AppHost project to provide the SQLite database resource. Open the `GenAiLab.AppHost/Program.cs` file.
+
+First, add the productDb definition near the top of the file, immediately after the ingestionCache definition:
+
+```csharp
+var ingestionCache = builder.AddSqlite("ingestionCache");
+var productDb = builder.AddSqlite("productDb");
+```
+
+Then find the code which reads like this:
 
 ```csharp
 webApp
@@ -362,6 +373,11 @@ or
     ```
 
 Create a new file `Components/Pages/Products.razor`:
+
+1. In Visual Studio, right-click on the `Pages` folder under `Components` in the `GenAiLab.Web` project.
+2. Select "Add" > "Razor Component".
+3. Name the file `Products.razor`.
+4. Replace the entire content of the file with the following code:
 
 ```csharp
 @page "/products"

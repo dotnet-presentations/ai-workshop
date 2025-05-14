@@ -109,7 +109,8 @@ The first step in preparing for production is to upgrade our data storage from S
 
    ```powershell
    azd provision
-   ```   This command creates all the necessary Azure resources, including:
+   ```
+   This command creates all the necessary Azure resources, including:
    - Resource group
    - Container registry
    - Container apps environment
@@ -120,7 +121,8 @@ The first step in preparing for production is to upgrade our data storage from S
 
    ```powershell
    azd deploy
-   ```   This command:
+   ```
+   This command:
    - Builds your .NET application
    - Creates container images
    - Pushes them to the Azure Container Registry

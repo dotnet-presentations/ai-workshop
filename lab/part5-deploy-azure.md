@@ -10,15 +10,20 @@ The first step in preparing for production is to upgrade our data storage from S
 
 1. **Add PostgreSQL NuGet packages**:
 
-   **Using Visual Studio's .NET Aspire tooling**:   For the `GenAiLab.AppHost` project:
+   **Using Visual Studio's .NET Aspire tooling**:
+      For the `GenAiLab.AppHost` project:
    - Right-click on the `GenAiLab.AppHost` project in Solution Explorer
    - Select "Add" > ".NET Aspire package..."
    - In the package manager that opens (with pre-filtered .NET Aspire packages), search for "Aspire.Hosting.PostgreSQL"
-   - Select the package and click "Install"   For the `GenAiLab.Web` project:
+   - Select "9.1.0" for the package version *Important, don't skip this!*
+   - Click "Install"
+   
+     For the `GenAiLab.Web` project:
    - Right-click on the `GenAiLab.Web` project in Solution Explorer
    - Select "Manage NuGet Packages..."
    - Click on the "Browse" tab
    - Search for "Aspire.Npgsql.EntityFrameworkCore.PostgreSQL"
+   - Select "9.1.0" for the package version *Important, don't skip this!*
    - Select the package and click "Install"
 
    **Using Terminal**:   To open the terminal in Visual Studio:
@@ -28,8 +33,8 @@ The first step in preparing for production is to upgrade our data storage from S
    Then run these commands:
 
    ```powershell
-   dotnet add GenAiLab.AppHost/GenAiLab.AppHost.csproj package Aspire.Hosting.PostgreSQL
-   dotnet add GenAiLab.Web/GenAiLab.Web.csproj package Aspire.Npgsql.EntityFrameworkCore.PostgreSQL
+   dotnet add GenAiLab.AppHost/GenAiLab.AppHost.csproj package Aspire.Hosting.PostgreSQL -v 9.1.0
+   dotnet add GenAiLab.Web/GenAiLab.Web.csproj package Aspire.Npgsql.EntityFrameworkCore.PostgreSQL -v 9.1.0
    ```
 
 1. **Update AppHost Program.cs**:
@@ -42,17 +47,15 @@ The first step in preparing for production is to upgrade our data storage from S
    var productDb = builder.AddSqlite("productDb");
 
    // With:
-   var ingestionCache = builder.AddPostgres("ingestionCache")
+   var postgres = builder.AddPostgres("postgres")
        .WithLifetime(ContainerLifetime.Persistent);
-       
-   var productDb = builder.AddPostgres("productDb")
-       .WithDataVolume()
-       .WithLifetime(ContainerLifetime.Persistent);
+   var ingestionCache = postgres.AddDatabase("ingestionCache");
+   var productDb = postgres.AddDatabase("productDb");
    ```
 
 1. **Update Web Project Database Context**:
 
-   In the `GenAiLab.Web/Program.cs` file, update the database context registration:
+   In the `GenAiLab.Web/Program.cs` file, add a using statement for the new package (`using Aspire.Npgsql.EntityFrameworkCore.PostgreSQL;`), then update the database context registration:
 
    ```csharp
    // Replace these lines:
@@ -72,6 +75,14 @@ The first step in preparing for production is to upgrade our data storage from S
    dotnet run --project GenAiLab.AppHost/GenAiLab.AppHost.csproj
    ```
 
+## Configure the web application for external access
+
+  Before the web application is deployed to Azure Container Apps, you will need to configure it so that it is available via web browser. Update **AppHost** `Program.cs` to add the following line just before the call to `builder.Build().Run();` at the end of the file:
+
+  ```csharp
+  webApp.WithExternalHttpEndpoints();
+  ```
+
 ## Set Up the Azure Developer CLI
 
 1. **Install the Azure Developer CLI (azd)**:
@@ -88,6 +99,8 @@ The first step in preparing for production is to upgrade our data storage from S
    irm https://aka.ms/install-azd.ps1 | iex
    ```
 
+1. Close and re-open the terminal to make sure *azd* has been added to the path.
+
 1. **Login to Azure**:
 
    ```powershell
@@ -96,14 +109,20 @@ The first step in preparing for production is to upgrade our data storage from S
 
 ## Deploy to Azure Container Apps
 
+1. Ensure you are in the root directory which contains the solution file.
+
 1. **Initialize your Azure environment**:
 
    ```powershell
-   # Create a new environment with a specific location
-   azd init --environment mygenailab
+   # Initialize the application for managment with azd
+   azd init
    ```
 
-   When prompted, select an Azure location like East US.
+1. When prompted with "How do you wnat to initializer your app?", select the default: "Use code in the current directory"
+
+1. After scanning the directory, `azd` prompts you to confirm that it found the correct .NET Aspire _AppHost_ project. Select the **Confirm and continue initializing my app** option.
+
+1. When prompted to "Enter a unique environment name", enter "mygenailab" or choose something else if you would like.
 
 1. **Provision Azure resources**:
 
@@ -116,6 +135,14 @@ The first step in preparing for production is to upgrade our data storage from S
    - Container apps environment
    - Container apps for your application
    - Log Analytics workspace
+  
+1. When prompted to "Enter a value for the 'azureAISearch' infrastructure secured parameter, copy and past the value from your `secrets.json` file. It will begin with "Endpoint=" and end with your search key. Make sure that you grab your Azure AI Search connection string and not the Azure OpenAI connection string!
+
+1. When prompted to select a loction, select a nearby Azure datacenter.
+
+1. When prompted to "Enter a value for the 'openai' infrastructure secured parameter, copy and past the value from your `secrets.json` file. As before, it will begin with "Endpoint=" and end with your Azure OpenAI key.
+
+1. Press enter and watch as your resources are provisioned! You can either just follow along in the terminal, or you can click on the link to watch the progress in the Azure portal. Provisioning should take roughly 5 minutes, but may take longer during conference events as multiple concurrent deployments can slow things down.
 
 1. **Deploy your application code**:
 
@@ -127,6 +154,8 @@ The first step in preparing for production is to upgrade our data storage from S
    - Creates container images
    - Pushes them to the Azure Container Registry
    - Deploys them to Azure Container Apps
+  
+   This should take roughly 2 minutes, but may take longer under busy conditions.
 
 1. **Access your deployed application**:
 
@@ -146,7 +175,7 @@ Once deployed, you can manage your deployment using various Azure Developer CLI 
    azd show
    ```
 
-   This command shows your deployment details, including endpoints and resource information.
+   This command shows your deployment details, including endpoints and resource information. Launch the link for the *aichatweb-app** service and verify that it is continuing to run as it did locally.
 
 1. **Monitor your application**:
 

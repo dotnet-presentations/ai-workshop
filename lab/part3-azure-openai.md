@@ -52,40 +52,39 @@ To use Azure OpenAI, you need to set up resources in Azure:
      - Region
      - Name
      - Pricing tier
-   - Click "Review + create" and then "Create"
+   - Click "Next" on the following screens (leaving the default settings) and then "Create"
 
 ## Deploy the `gpt-4o-mini` model for chat completions
 
 After creating your Azure OpenAI resource, you need to deploy the models:
 
-1. Navigate to your Azure OpenAI resource in the Azure portal
-1. Select "Model deployments" from the left menu
-1. Click "+ Create new deployment"
-1. Select the model "gpt-4o-mini" for chat completions
-1. Enter a deployment name (e.g., "gpt-4o-mini")
-1. Set the token rate limit and other settings as needed
-1. Click "Create"
+1. Navigate to your Azure OpenAI resource by clicking the "Explore Azure AI Foundry portal" button or browsing to <https://ai.azure.com>
+1. Select "Deployments" from the left menu
+1. Click "+ Deploy model" button
+1. Select the "Deploy base model" option
+1. Select the model "gpt-4o-mini" for chat completions (you can use the search filter to narrow the list down)
+1. Leave the default deployment name and type values ("gpt-4o-mini" and Global Standard)
+1. Click "Deploy"
 
 ## Deploy the `text-embedding-3-small` model for embeddings
 
 Follow the same process to deploy the embedding model:
 
-1. Navigate to your Azure OpenAI resource in the Azure portal
-1. Select "Model deployments" from the left menu
-1. Click "+ Create new deployment"
-1. Select the model "text-embedding-3-small" for embeddings
-1. Enter a deployment name (e.g., "text-embedding-3-small")
-1. Set the token rate limit and other settings as needed
-1. Click "Create"
+1. Select "Deployments" from the left menu
+1. Click "+ Deploy model" button
+1. Select the "Deploy base model" option
+1. Select the model "text-embedding-3-small" for embeddings (again using search to filter if desired)
+1. Leave the default deployment name and type values ("text-embedding-3-small" and Global Standard)
+1. Click "Deploy"
 
 ## Obtain the Endpoint and API Keys
 
 To connect your application to Azure OpenAI, you need the endpoint and API key:
 
-1. Navigate to your Azure OpenAI resource in the Azure portal
-1. Select "Keys and Endpoint" from the left menu
-1. Copy the Endpoint URL (it will look like `https://YOUR_RESOURCE_NAME.openai.azure.com/`)
-1. Copy one of the Keys (either Key 1 or Key 2)
+1. Open one of your deployments from the above steps if you have closed it
+1. Locate the Endpoint box in the upper left
+1. Copy just the first part of the Endpoint Target URI (it will look like `https://YOUR_RESOURCE_NAME.openai.azure.com/`)
+1. Copy the key (you can use the copy button for this) 
 
 ## Update the connection strings
 

@@ -48,9 +48,7 @@ The first step in preparing for production is to upgrade our data storage from S
 
    // With:
    var postgres = builder.AddPostgres("postgres")
-       .WithDataVolume()
        .WithLifetime(ContainerLifetime.Persistent);
-  
    var ingestionCache = postgres.AddDatabase("ingestionCache");
    var productDb = postgres.AddDatabase("productDb");
    ```

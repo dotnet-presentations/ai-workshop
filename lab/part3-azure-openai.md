@@ -104,23 +104,31 @@ Now you'll update your application's connection string to use Azure OpenAI inste
 
 ## Add new Product PDFs for ingestion
 
-To test the new Azure OpenAI integration, let's add some product PDF files for ingestion:
+To test the new Azure OpenAI integration, let's add the sample product PDF manuals that are included with the lab:
 
 1. In the Solution Explorer, navigate to the `GenAiLab.Web/wwwroot/Data` folder
 
 1. Right-click on the `Data` folder and select "Add" > "Existing Item..."
 
-1. Browse to the location where you have product PDF files (or create some simple PDFs about products)
+1. Browse to the `/lab/manuals` directory in your project folder
 
-1. Select the PDF files and click "Add"
+1. Select all PDF files (Ctrl+A)
 
-For this lab, you can use the following product PDFs:
+1. Click "Add" to copy these files into your project
 
-- Emergency Survival Kit.pdf
-- Hiking Backpack.pdf
-- Rechargeable Flashlight.pdf
-- First Aid Kit.pdf
-- Solar Power Bank.pdf
+These sample manual PDFs include a variety of products such as:
+
+- Example_Backpack.pdf
+- Example_Camera.pdf
+- Example_Camping_Lantern.pdf
+- Example_Double_Hammock.pdf
+- Example_Energy_Bars.pdf
+- Example_Survival_Medkit.pdf
+- Example_Water_Filtration.pdf
+
+And many other product manuals that will provide rich content for testing the AI capabilities.
+
+> **Note**: Ingesting all of these PDFs requires processing a large number of tokens, which would likely exceed the free token limits when using GitHub Models. This is why we're adding these resources after switching to Azure OpenAI, which provides higher token limits and better scaling options. This demonstrates an important consideration when choosing between different AI providers - understanding their resource constraints and cost models is crucial for production applications.
 
 ## Run the application
 

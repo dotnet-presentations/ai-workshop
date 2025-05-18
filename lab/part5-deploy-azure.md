@@ -17,7 +17,7 @@ The first step in preparing for production is to upgrade our data storage from S
    - In the package manager that opens (with pre-filtered .NET Aspire packages), search for "Aspire.Hosting.PostgreSQL"
    - Select "9.1.0" for the package version *Important, don't skip this!*
    - Click "Install"
-   
+
      For the `GenAiLab.Web` project:
    - Right-click on the `GenAiLab.Web` project in Solution Explorer
    - Select "Manage NuGet Packages..."
@@ -120,7 +120,7 @@ The first step in preparing for production is to upgrade our data storage from S
 
 1. When prompted with "How do you wnat to initializer your app?", select the default: "Use code in the current directory"
 
-1. After scanning the directory, `azd` prompts you to confirm that it found the correct .NET Aspire _AppHost_ project. Select the **Confirm and continue initializing my app** option.
+1. After scanning the directory, `azd` prompts you to confirm that it found the correct .NET Aspire *AppHost* project. Select the **Confirm and continue initializing my app** option.
 
 1. When prompted to "Enter a unique environment name", enter "mygenailab" or choose something else if you would like.
 
@@ -129,6 +129,7 @@ The first step in preparing for production is to upgrade our data storage from S
    ```powershell
    azd provision
    ```
+
    This command creates all the necessary Azure resources, including:
    - Resource group
    - Container registry
@@ -149,6 +150,7 @@ The first step in preparing for production is to upgrade our data storage from S
    ```powershell
    azd deploy
    ```
+
    This command:
    - Builds your .NET application
    - Creates container images

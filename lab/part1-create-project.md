@@ -37,6 +37,8 @@ Create a new project using the AI Web Chat template as follows:
 
 For GitHub Models to work, you need to set up a connection string with a GitHub token:
 
+> **Note:** This step requires a GitHub account. If you don't have one yet, please follow the instructions in [Part 0: Setup](part0-setup.md#step-2-create-a-github-account-if-needed) to create a GitHub account.
+
 1. Create a GitHub token for accessing GitHub Models:
    - Go to [https://github.com/settings/tokens](https://github.com/settings/tokens)
    - Click "Generate new token (classic)"

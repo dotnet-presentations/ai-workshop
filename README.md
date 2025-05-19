@@ -59,18 +59,16 @@ The repository is structured as follows:
 - `/src/start`: Contains the starting code for the lab exercises
 - `/src/complete`: Contains the completed solution after all lab exercises
 
-
-## Session Resources 
+## Session Resources
 
 | Resources          | Links                             | Description        |
 |:-------------------|:----------------------------------|:-------------------|
-| Build session page | https://build.microsoft.com/sessions/lab307 | Event session page with downloadable recording, slides, resources, and speaker bio |
-|Microsoft Learn|https://aka.ms/build25/plan/ADAI_DevStartPlan|Official Collection or Plan with skilling resources to learn at your own pace|
-|Microsoft Learn|https://learn.microsoft.com/en-us/dotnet/machine-learning/ai-overview|.NET AI Documentation|
-|Microsoft Learn|https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview|.NET Aspire Documentation|
-|Microsoft Learn|https://learn.microsoft.com/en-us/dotnet/machine-learning/extensions-ai/|Microsoft Extensions for AI Documentation|
-|Microsoft Learn|https://learn.microsoft.com/en-us/azure/ai-services/openai/|Azure OpenAI Documentation|
-
+| Build session page | <https://build.microsoft.com/sessions/lab307> | Event session page |
+|Microsoft Learn|<https://aka.ms/build25/plan/ADAI_DevStartPlan>|AI developer resources|
+|Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/machine-learning/ai-overview>|.NET AI Documentation|
+|Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview>|.NET Aspire Documentation|
+|Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/machine-learning/extensions-ai/>|Extensions for AI Documentation|
+|Microsoft Learn|<https://learn.microsoft.com/en-us/azure/ai-services/openai/>|Azure OpenAI Documentation|
 
 ## License
 

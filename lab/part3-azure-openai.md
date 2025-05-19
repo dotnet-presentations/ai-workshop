@@ -53,6 +53,9 @@ To use Azure OpenAI, you need to set up resources in Azure:
      - **Pricing tier**: Select "Standard" (this is the only option available for Azure OpenAI)
    - Click "Next" on the following screens (leaving the default settings) and then "Create"
 
+> [!WARNING]
+> **FOR BUILD 2025 LAB ATTENDEES**: You MUST select the **"rg-mygenaiapp"** resource group that has already been created for you. Do not create a new resource group. Permissions are restricted to only allow creating resources in this resource group.
+
 ## Deploy the `gpt-4o-mini` model for chat completions
 
 After creating your Azure OpenAI resource, you need to deploy the models:

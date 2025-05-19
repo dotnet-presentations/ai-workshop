@@ -5,6 +5,7 @@ using GenAiLab.Web.Services;
 using GenAiLab.Web.Services.Ingestion;
 using OpenAI;
 using Microsoft.SemanticKernel.Connectors.Qdrant;
+using Aspire.Npgsql.EntityFrameworkCore.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
@@ -22,8 +23,8 @@ builder.AddQdrantClient("vectordb");
 builder.Services.AddSingleton<IVectorStore, QdrantVectorStore>();
 builder.Services.AddScoped<DataIngestor>();
 builder.Services.AddSingleton<SemanticSearch>();
-builder.AddSqliteDbContext<IngestionCacheDbContext>("ingestionCache");
-builder.AddSqliteDbContext<ProductDbContext>("productDb");
+builder.AddNpgsqlDbContext<IngestionCacheDbContext>("ingestionCache");
+builder.AddNpgsqlDbContext<ProductDbContext>("productDb");
 builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();

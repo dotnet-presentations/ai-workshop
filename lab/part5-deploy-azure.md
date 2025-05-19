@@ -139,7 +139,7 @@ The first step in preparing for production is to upgrade our data storage from S
   
 1. When prompted to "Enter a value for the 'azureAISearch' infrastructure secured parameter, copy and past the value from your `secrets.json` file. It will begin with "Endpoint=" and end with your search key. Make sure that you grab your Azure AI Search connection string and not the Azure OpenAI connection string!
 
-1. When prompted to select a loction, select a nearby Azure datacenter.
+1. When prompted to select a location, select "West US 3" for Build 2025 attendees (or another nearby Azure datacenter if you're following this lab outside of the conference).
 
 1. When prompted to "Enter a value for the 'openai' infrastructure secured parameter, copy and past the value from your `secrets.json` file. As before, it will begin with "Endpoint=" and end with your Azure OpenAI key.
 

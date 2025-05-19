@@ -41,7 +41,6 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
    - Go to [https://github.com/settings/tokens](https://github.com/settings/tokens)
    - Click "Generate new token (classic)"
    - Give the token a description like "AI Models Access"
-   - Select the "github_models:read" scope
    - Click "Generate token"
    - Copy the generated token (you won't be able to see it again)
 
@@ -71,6 +70,8 @@ Now let's run the application and explore its features:
 
 1. Press F5 or click the "Start Debugging" button in Visual Studio.
 
+   > **Note:** When running the application for the first time, Visual Studio may display a prompt asking you to trust the IIS Developer certificate. This prompt sometimes appears beneath the browser window. If the `aichatweb-app` resource doesn't start, check for this certificate prompt and click "Yes" to accept it. The application won't run until you've accepted this certificate.
+
 1. The .NET Aspire dashboard will open in your browser first, displaying all the services in your application.
 
 1. Shortly after, the web application will launch in another browser tab.
@@ -95,7 +96,7 @@ Explore the .NET Aspire dashboard to understand the architecture of your applica
 
 Let's test the AI functionality of the application:
 
-1. In the web application tab, you'll see a chat interface.
+1. Launch the *aiwebchat-app* by clicking on the hyperlinked URL listed in the Endpoints column in the .NET Aspire dashboard. You should see the web app launch in a seprate tab with a chat interface.
 
 1. Type a message like "What PDF documents do you have information about?" and press Enter.
 

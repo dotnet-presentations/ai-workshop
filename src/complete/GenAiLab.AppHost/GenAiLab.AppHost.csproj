@@ -10,11 +10,11 @@
     <IsAspireHost>true</IsAspireHost>
     <UserSecretsId>5fa71442-e079-4644-ba88-00b715396dfc</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.1.0" />
     <PackageReference Include="Aspire.Hosting.Qdrant" Version="9.1.0" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.Sqlite" Version="9.3.1-beta.260" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.1.0" />
   </ItemGroup>
 
   <ItemGroup>

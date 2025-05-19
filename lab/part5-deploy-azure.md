@@ -4,6 +4,9 @@
 
 In this lab, you will learn how to deploy your AI application to Azure using the Azure Developer CLI (`azd`). You'll prepare your application for production, migrate from SQLite to PostgreSQL for better scalability, and deploy your application to Azure Container Apps.
 
+> [!TIP]
+> If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the `/src/complete` folder which already includes all the necessary changes. The complete code has already been updated with the PostgreSQL configuration and external HTTP endpoints setup described in this section. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
+
 ## Prepare for Production: Migrate from SQLite to PostgreSQL
 
 The first step in preparing for production is to upgrade our data storage from SQLite (which is great for development) to PostgreSQL (which is better suited for production workloads).

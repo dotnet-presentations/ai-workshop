@@ -19,6 +19,9 @@ Before starting the lab, ensure you have:
 > [!IMPORTANT]
 > If you are completing this in the Build lab session, these prerequisites should already be installed on your virtual machine.
 
+> [!WARNING]
+> For the Build 2025 lab, all Azure resources MUST be created in the "rg-mygenaiapp" resource group. This resource group has already been created in the subscription. When creating new resources via the portal, select this resource group rather than creating a new one. Permissions are restricted to only allow creating resources in this resource group, so missing this will cause resource creation to fail.
+
 ## Step 1: Install Required Tools
 
 1. **Install Visual Studio 2022:**

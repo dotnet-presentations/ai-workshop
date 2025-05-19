@@ -122,7 +122,10 @@ The first step in preparing for production is to upgrade our data storage from S
 
 1. After scanning the directory, `azd` prompts you to confirm that it found the correct .NET Aspire *AppHost* project. Select the **Confirm and continue initializing my app** option.
 
-1. When prompted to "Enter a unique environment name", enter "mygenailab" or choose something else if you would like.
+1. When prompted to "Enter a unique environment name", enter "mygenaiapp" or choose something else if you would like.
+
+> [!WARNING]
+> **FOR BUILD 2025 LAB ATTENDEES**: You MUST enter exactly **"mygenaiapp"** as your environment name. This is because azd will automatically add the "rg-" prefix when creating the resource group. The lab environment has already been configured with "rg-mygenaiapp" as the resource group, and permissions are restricted to only allow creating resources in this resource group.
 
 1. **Provision Azure resources**:
 
@@ -136,10 +139,16 @@ The first step in preparing for production is to upgrade our data storage from S
    - Container apps environment
    - Container apps for your application
    - Log Analytics workspace
+
+> [!NOTE]
+> When provisioning resources with `azd`, it will automatically create a resource group with the prefix "rg-" added to your environment name (e.g., "rg-mygenaiapp"). For Build 2025 lab attendees, this is why it's essential to use exactly "mygenaiapp" as your environment name.
   
 1. When prompted to "Enter a value for the 'azureAISearch' infrastructure secured parameter, copy and past the value from your `secrets.json` file. It will begin with "Endpoint=" and end with your search key. Make sure that you grab your Azure AI Search connection string and not the Azure OpenAI connection string!
 
 1. When prompted to select a location, select "West US 3" for Build 2025 attendees (or another nearby Azure datacenter if you're following this lab outside of the conference).
+
+> [!WARNING]
+> **FOR BUILD 2025 LAB ATTENDEES**: You MUST select "West US 3" as your location. This region has been pre-configured with the necessary quotas for your lab environment.
 
 1. When prompted to "Enter a value for the 'openai' infrastructure secured parameter, copy and past the value from your `secrets.json` file. As before, it will begin with "Endpoint=" and end with your Azure OpenAI key.
 

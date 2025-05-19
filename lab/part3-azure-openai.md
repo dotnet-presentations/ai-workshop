@@ -43,15 +43,14 @@ The same code works whether the `IChatClient` is implemented by GitHub Models, A
 
 To use Azure OpenAI, you need to set up resources in Azure:
 
-1. **Create an Azure OpenAI resource**:
-   - Navigate to the Azure portal (<https://portal.azure.com>)
+1. **Create an Azure OpenAI resource**:   - Navigate to the Azure portal (<https://portal.azure.com>)
    - Click "Create a resource" and search for "Azure OpenAI"
    - Fill in the required details:
-     - Subscription
-     - Resource group
-     - Region
-     - Name
-     - Pricing tier
+     - **Subscription**: Will be pre-selected based on your Azure account
+     - **Resource group**: Select an existing resource group if you are doing this in a lab or create a new one (e.g., "rg-mygenaiapp")
+     - **Resource name**: Choose a unique name for your Azure OpenAI resource (e.g., "mygenaiapp-openai")
+     - **Region**: Select a region close to you (e.g., "East US" or "West Europe"). For Build 2025, we recommend using "West US 3"
+     - **Pricing tier**: Select "Standard" (this is the only option available for Azure OpenAI)
    - Click "Next" on the following screens (leaving the default settings) and then "Create"
 
 ## Deploy the `gpt-4o-mini` model for chat completions
@@ -84,7 +83,7 @@ To connect your application to Azure OpenAI, you need the endpoint and API key:
 1. Open one of your deployments from the above steps if you have closed it
 1. Locate the Endpoint box in the upper left
 1. Copy just the first part of the Endpoint Target URI (it will look like `https://YOUR_RESOURCE_NAME.openai.azure.com/`)
-1. Copy the key (you can use the copy button for this) 
+1. Copy the key (you can use the copy button for this)
 
 ## Update the connection strings
 

@@ -12,6 +12,7 @@ Before starting the lab, ensure you have:
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/)
 - .NET AI Web Chatbot template installed
 - .NET 9.0 SDK or later
+- GitHub account (required for GitHub Models access)
 - Azure subscription (optional, but recommended for full experience)
 - GitHub Copilot subscription (optional, but recommended for full experience)
 
@@ -43,7 +44,18 @@ Before starting the lab, ensure you have:
 
    - You should see the help information for the *AI Chat Web App (C#)* displayed.
 
-## Step 2: Clone the Repository
+## Step 2: Create a GitHub Account (if needed)
+
+If you don't already have a GitHub account, follow these steps to create one:
+
+1. **Create a GitHub account:**
+   - Go to [https://github.com/signup](https://github.com/signup)
+   - Enter your email address and create a password
+   - Choose a username
+   - Complete the account creation process by following the on-screen instructions
+   - Verify your email address (GitHub will send you a verification email)
+
+## Step 3: Clone the Repository
 
 Clone the lab repository to get all the necessary files:
 
@@ -54,4 +66,4 @@ cd build-2025-lab307
 
 ## Next Steps
 
-Once your setup is complete, proceed to [Part 1 - Create a Project with AI Web Chat Template](part1-create-project.md).
+Once your setup is complete, proceed to [Part 1 - Create a Project with AI Web Chat Template](part1-create-project.md)

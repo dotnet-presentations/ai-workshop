@@ -44,38 +44,41 @@ public class ProductDbContext : DbContext
     }
 
     public DbSet<ProductInfo> Products { get; set; }
-    public DbSet<ProductCategory> Categories { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public DbSet<ProductCategory> Categories { get; set; }    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
-        // Configure cascade delete for products and categories
+
+        // Configure ProductInfo entity
         modelBuilder.Entity<ProductInfo>()
             .HasKey(p => p.Id);
-    }
 
+        modelBuilder.Entity<ProductInfo>()
+            .Property(p => p.Name)
+            .IsRequired();
+
+        modelBuilder.Entity<ProductInfo>()
+            .Property(p => p.FileName)
+            .IsRequired();
+
+        // Configure ProductCategory entity
+        modelBuilder.Entity<ProductCategory>()
+            .HasKey(c => c.Id);
+
+        modelBuilder.Entity<ProductCategory>()
+            .Property(c => c.Name)
+            .IsRequired();
+
+        modelBuilder.Entity<ProductCategory>()
+            .HasIndex(c => c.Name)
+            .IsUnique();
+    }    
+
+    // Helper method to initialize the database
     public static void Initialize(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
-        dbContext.Database.EnsureCreated();
-
-        // Seed initial categories if none exist
-        if (!dbContext.Categories.Any())
-        {
-            dbContext.Categories.AddRange(
-                new ProductCategory { Name = "Electronics" },
-                new ProductCategory { Name = "Safety Equipment" },
-                new ProductCategory { Name = "Outdoor Gear" },
-                new ProductCategory { Name = "General" }
-            );
-            dbContext.SaveChanges();
-        }
-
-        ProductInfo.AvailableCategories = dbContext.Categories
-            .Select(c => c.Name)
-            .ToList();
+        using var context = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
+        context.Database.EnsureCreated();
     }
 }
 
@@ -107,8 +110,7 @@ public class ProductService(
         ProductDbContext _dbContext,
         IChatClient _chatClient,
         ILogger<ProductService> _logger)
-{
-    public async Task<IEnumerable<ProductInfo>> GetProductsAsync(string? categoryFilter = null)
+{    public async Task<IEnumerable<ProductInfo>> GetProductsAsync(string? categoryFilter = null)
     {
         // Make sure we have products
         await EnsureProductsExistAsync();
@@ -126,13 +128,14 @@ public class ProductService(
         await EnsureProductsExistAsync();
         return await _dbContext.Categories.Select(c => c.Name).ToListAsync();
     }
-    
+
     private async Task EnsureProductsExistAsync()
     {
         if (!await _dbContext.Products.AnyAsync())
         {
             await GenerateAndSaveProductsAsync();
         }
+    }
     }
 }
 ```
@@ -153,15 +156,16 @@ private async Task GenerateAndSaveProductsAsync()
         return;
     }
 
-    var categories = new HashSet<string>();    // Process each file
-    foreach (var fileName in fileNames)
+    var categories = new HashSet<string>();
+
+    // Process each file    foreach (var fileName in fileNames)
     {
         var productName = Path.GetFileNameWithoutExtension(fileName)
             .Replace("Example_", "")
             .Replace("_", " ");
 
         // Get document content
-        var documentContent = await GetDocumentContentAsync(fileName, productName);
+        var content = await GetDocumentContentAsync(fileName, productName);
         
         if (string.IsNullOrWhiteSpace(documentContent))
         {
@@ -176,7 +180,7 @@ private async Task GenerateAndSaveProductsAsync()
         var product = new ProductInfo
         {
             Id = Guid.NewGuid(),
-            Name = productName,
+            Name = productName.Replace("_", " "),
             ShortDescription = description,
             Category = category,
             FileName = fileName
@@ -194,6 +198,7 @@ private async Task GenerateAndSaveProductsAsync()
         }
     }
 
+    ProductInfo.AvailableCategories = categories.ToList();
     await _dbContext.SaveChangesAsync();
 }
 
@@ -204,14 +209,15 @@ private async Task<List<string>> GetUniqueFileNamesAsync()
     try
     {
         var dummyEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync("all documents");
-        var searchResults = await vectorCollection.VectorizedSearchAsync(
+        var allDocuments = await vectorCollection.VectorizedSearchAsync(
             dummyEmbedding,
-            new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 });
+            new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 }
+        );
 
         var uniqueFileNames = new HashSet<string>();
-        await foreach (var result in searchResults.Results)
+        await foreach (var item in allDocuments.Results)
         {
-            uniqueFileNames.Add(result.Record.FileName);
+            uniqueFileNames.Add(item.Record.FileName);
         }
 
         return uniqueFileNames.ToList();
@@ -232,8 +238,8 @@ private async Task<string> GetDocumentContentAsync(string fileName, string produ
         var contentEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync($"Information about {productName}");
         var contentResults = await vectorCollection.VectorizedSearchAsync(
             contentEmbedding,
-            new VectorSearchOptions<SemanticSearchRecord>
-            {
+            new VectorSearchOptions<SemanticSearchRecord> 
+            { 
                 Top = 5,
                 Filter = record => record.FileName == fileName
             });
@@ -272,7 +278,9 @@ private async Task<(string Description, string Category)> AskAIForProductInfoAsy
 1. description: A concise product description (max 200 characters)
 2. category: One of: 'Electronics', 'Safety Equipment', 'Outdoor Gear', or 'General'
 
-Content: {content}";        // Get response from the chat client
+Content: {content}";
+
+        // Get response from the chat client
         var chatResponse = await _chatClient.GetResponseAsync(
             new[] {
                 new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only."),
@@ -317,41 +325,6 @@ IngestionCacheDbContext.Initialize(app.Services);
 ProductDbContext.Initialize(app.Services); // Add this line
 ```
 
-Without this initialization, you'll encounter errors when your application attempts to use the product database.
-
-## Update AppHost Configuration
-
-Now that we've configured the Web project, we also need to update the AppHost project to provide the SQLite database resource. Open the `GenAiLab.AppHost/Program.cs` file.
-
-First, add the productDb definition near the top of the file, immediately after the ingestionCache definition:
-
-```csharp
-var ingestionCache = builder.AddSqlite("ingestionCache");
-var productDb = builder.AddSqlite("productDb");
-```
-
-Then find the code which reads like this:
-
-```csharp
-webApp
-    .WithReference(ingestionCache)
-    .WaitFor(ingestionCache);
-```
-
-Immediately after that, add the following lines to create a new SQLite database resource for the product data:
-
-```csharp
-webApp
-    .WithReference(productDb)
-    .WaitFor(productDb);
-```
-
-This configuration ensures that:
-
-1. A SQLite database resource is created for product data
-1. The web application references this database resource
-1. The application waits for the database to be ready before starting
-
 ## Create the Products Page
 
 Let's use the new AspNetCore QuickGrid component to display the products. First, we need to add the Nuget package `Microsoft.AspNetCore.Components.QuickGrid`.
@@ -366,18 +339,13 @@ There are multiple ways to do this:
 
 or
 
-- Type the follinging command in the Package Manager Console:
+- Type the following command in the Package Manager Console:
 
     ```powershell
     NuGet\Install-Package Microsoft.AspNetCore.Components.QuickGrid -Version 9.0.4
     ```
 
 Create a new file `Components/Pages/Products.razor`:
-
-1. In Visual Studio, right-click on the `Pages` folder under `Components` in the `GenAiLab.Web` project.
-2. Select "Add" > "Razor Component".
-3. Name the file `Products.razor`.
-4. Replace the entire content of the file with the following code:
 
 ```csharp
 @page "/products"

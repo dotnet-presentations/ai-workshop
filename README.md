@@ -43,11 +43,15 @@ flowchart TD
         Embeddings --> VectorDB
     end
     
-    style WebApp fill:#b3e0ff,stroke:#0066cc
-    style AIChatService fill:#ffcc99,stroke:#ff6600
-    style VectorDB fill:#d9b3ff,stroke:#6600cc
-    style ProductDB fill:#d9b3ff,stroke:#6600cc
-    style AIProvider fill:#ffcc99,stroke:#ff6600
+    classDef webapp fill:#2774AE,stroke:#000,color:#fff
+    classDef aiservice fill:#F58025,stroke:#000,color:#fff
+    classDef database fill:#8A2BE2,stroke:#000,color:#fff
+    classDef dataflow fill:#4CAF50,stroke:#000,color:#fff
+    
+    class WebApp webapp
+    class AIChatService,AIProvider aiservice
+    class VectorDB,ProductDB database
+    class PDFs,Ingestion,Embeddings dataflow
 ```
 
 **Architecture Overview** This diagram illustrates the component relationships in our outdoor gear application. The Blazor web application connects with three key components: a vector database for storing embeddings, an AI chat service powered by Microsoft.Extensions.AI, and a product database. The AI functionality is provided by either GitHub Models (for development) or Azure OpenAI (for production). The data flow shows how product PDFs are ingested, transformed into embeddings, and stored in the vector database to enable contextual AI responses.
@@ -93,11 +97,13 @@ flowchart LR
         ACA[Azure Container Apps]
     end
     
-    style Dev fill:#b3e0ff,stroke:#0066cc
-    style Prod fill:#ffcc99,stroke:#ff6600
-    style Local fill:#d9b3ff,stroke:#6600cc
-    style Cloud fill:#d9b3ff,stroke:#6600cc
-    style ACA fill:#b3e0ff,stroke:#0066cc
+    classDef devnode fill:#2774AE,stroke:#000,color:#fff
+    classDef prodnode fill:#F58025,stroke:#000,color:#fff
+    classDef dbnode fill:#8A2BE2,stroke:#000,color:#fff
+    
+    class Dev,ACA devnode
+    class Prod prodnode
+    class Local,Cloud dbnode
 ```
 
 **Development to Production Pathway** This diagram illustrates the transition path from a local development environment to production deployment. During development, you'll use GitHub Models and a local vector database, which provides a cost-effective environment for experimentation and testing. In production, the application transitions to Azure OpenAI for enterprise-grade AI capabilities, PostgreSQL for robust data storage, and Azure Container Apps for a scalable, managed cloud hosting environment. This migration path enables seamless transition while maintaining architectural consistency.

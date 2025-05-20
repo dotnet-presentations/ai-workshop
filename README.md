@@ -4,7 +4,7 @@
 
 # BUILD25 LAB307 - Building GenAI Apps in C#: AI Templates, GitHub Models, Azure OpenAI & More 🚀
 
-Welcome to this comprehensive lab on AI development with .NET. In this session, you'll build intelligent applications using the latest .NET AI project templates integrated with Microsoft Extensions for AI (MEAI), GitHub Models, and vector data stores. You'll learn to leverage GitHub Models during development and seamlessly transition to Azure OpenAI for production-ready scale and enterprise support. This lab provides hands-on experience with building AI solutions using modern frameworks and best practices. 💻
+Get up to speed quickly with AI app building in .NET! Explore the new .NET AI project templates integrated with Microsoft Extensions for AI (MEAI), GitHub Models, and vector data stores. Learn how to take advantage of free GitHub Models in development, then deploy with global scale and enterprise support using Azure OpenAI. Gain hands-on experience building cutting-edge intelligent solutions with state-of-the-art frameworks and best practices.
 
 ## Prerequisites
 

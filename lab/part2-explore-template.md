@@ -59,7 +59,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-var openai = builder.AddGitHubModels();
+var openai = builder.AddAzureOpenAIClient("openai");
 openai.AddChatClient("gpt-4o-mini")
     .UseFunctionInvocation()
     .UseOpenTelemetry(configure: c =>
@@ -76,8 +76,18 @@ builder.AddSqliteDbContext<IngestionCacheDbContext>("ingestionCache");
 var app = builder.Build();
 IngestionCacheDbContext.Initialize(app.Services);
 
+app.MapDefaultEndpoints();
+
 // Configure the HTTP request pipeline.
-// ...
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseAntiforgery();
 
 app.UseStaticFiles();
 app.MapRazorComponents<App>()
@@ -85,6 +95,8 @@ app.MapRazorComponents<App>()
 
 // By default, we ingest PDF files from the /wwwroot/Data directory. You can ingest from
 // other sources by implementing IIngestionSource.
+// Important: ensure that any content you ingest is trusted, as it may be reflected back
+// to users or could be a source of prompt injection risk.
 await DataIngestor.IngestDataAsync(
     app.Services,
     new PDFDirectorySource(Path.Combine(builder.Environment.WebRootPath, "Data")));
@@ -154,16 +166,30 @@ namespace GenAiLab.Web.Services;
 
 public class SemanticSearchRecord
 {
+    [VectorStoreRecordKey]
+    public required Guid Key { get; set; }
+
+    [VectorStoreRecordData(IsFilterable = true)]
     public required string FileName { get; set; }
+
+    [VectorStoreRecordData]
+    public int PageNumber { get; set; }
+
+    [VectorStoreRecordData]
     public required string Text { get; set; }
+
+    [VectorStoreRecordVector(1536, DistanceFunction.CosineSimilarity)] // 1536 is the default vector size for the OpenAI text-embedding-3-small model
+    public ReadOnlyMemory<float> Vector { get; set; }
 }
 ```
 
-This simple class represents the data stored in the vector database:
+This class represents the data stored in the vector database with specific attributes for vector storage:
 
-- `FileName`: The source document's name
+- `Key`: The unique identifier for the record, marked with `[VectorStoreRecordKey]`
+- `FileName`: The source document's name, marked as filterable with `[VectorStoreRecordData(IsFilterable = true)]`
+- `PageNumber`: The page number in the source document
 - `Text`: A chunk of text from the document
-- Each record is stored with its corresponding embedding vector
+- `Vector`: The embedding vector configured for the OpenAI text-embedding-3-small model's 1536 dimensions using cosine similarity
 
 The `SemanticSearch.cs` file shows how these records are queried:
 

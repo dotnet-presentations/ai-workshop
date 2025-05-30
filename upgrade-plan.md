@@ -59,24 +59,24 @@ This document outlines the changes needed to update the lab instructions to matc
 
 ## Cross-cutting Changes
 
-- [ ] Update all Mermaid diagrams to remove ingestion cache database components
-- [ ] Update architecture explanations to clarify that document tracking is now handled in vector database
-- [ ] Remove any troubleshooting sections related to SQLite or ingestion cache database connectivity
-- [ ] Update performance considerations to reflect vector-only storage approach
-- [ ] Review and update any code comments that reference the old ingestion cache approach
+- [x] Update all Mermaid diagrams to remove ingestion cache database components
+- [x] Update architecture explanations to clarify that document tracking is now handled in vector database
+- [x] Remove any troubleshooting sections related to SQLite or ingestion cache database connectivity
+- [x] Update performance considerations to reflect vector-only storage approach
+- [x] Review and update any code comments that reference the old ingestion cache approach
 
 ## New Concepts to Add
 
-- [ ] Explain Microsoft Extensions for Vector Data collection pattern
-- [ ] Document how `VectorStoreCollection<TKey, TRecord>` replaces Entity Framework for ingestion tracking
-- [ ] Explain benefits of vector-native storage for document ingestion cache
-- [ ] Add explanation of `IngestedChunk` and `IngestedDocument` models as vector records
-- [ ] Document the simplified architecture without separate cache database
+- [x] Explain Microsoft Extensions for Vector Data collection pattern
+- [x] Document how `VectorStoreCollection<TKey, TRecord>` replaces Entity Framework for ingestion tracking
+- [x] Explain benefits of vector-native storage for document ingestion cache
+- [x] Add explanation of `IngestedChunk` and `IngestedDocument` models as vector records
+- [x] Document the simplified architecture without separate cache database
 
 ## Technical Details to Address
 
-- [ ] Update constructor injection examples for DataIngestor to show new dependencies
-- [ ] Replace Entity Framework queries with vector collection operations
-- [ ] Update async patterns to use vector collection methods (`GetAsync`, `UpsertAsync`, `DeleteAsync`)
-- [ ] Show new service registration pattern for vector collections
-- [ ] Update error handling examples to reflect vector operations instead of database operations
+- [x] Update constructor injection examples for DataIngestor to show new dependencies
+- [x] Replace Entity Framework queries with vector collection operations
+- [x] Update async patterns to use vector collection methods (`GetAsync`, `UpsertAsync`, `DeleteAsync`)
+- [x] Show new service registration pattern for vector collections
+- [x] Update error handling examples to reflect vector operations instead of database operations

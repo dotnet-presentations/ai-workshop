@@ -1,15 +1,14 @@
-using Microsoft.Extensions.AI;
 using Microsoft.Extensions.VectorData;
 using GenAiLab.Web.Models;
 using System.Text;
 using OpenAI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
 
 namespace GenAiLab.Web.Services;
 
 public class ProductService(
-        IEmbeddingGenerator<string, Embedding<float>> _embeddingGenerator,
-        IVectorStore _vectorStore,
+        VectorStoreCollection<Guid, IngestedChunk> _vectorCollection,
         ProductDbContext _dbContext,
         IChatClient _chatClient,
         ILogger<ProductService> _logger)
@@ -87,22 +86,16 @@ public class ProductService(
         ProductInfo.AvailableCategories = categories.ToList();
         await _dbContext.SaveChangesAsync();
     }
-
     private async Task<List<string>> GetUniqueFileNamesAsync()
     {
-        var vectorCollection = _vectorStore.GetCollection<Guid, SemanticSearchRecord>("data-genailab-ingested");
-
         try
         {
-            var dummyEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync("all documents");
-            var searchResults = await vectorCollection.VectorizedSearchAsync(
-                dummyEmbedding,
-                new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 });
+            var searchResults = _vectorCollection.SearchAsync("all documents", 1000);
 
             var uniqueFileNames = new HashSet<string>();
-            await foreach (var result in searchResults.Results)
+            await foreach (var result in searchResults)
             {
-                uniqueFileNames.Add(result.Record.FileName);
+                uniqueFileNames.Add(result.Record.DocumentId);
             }
 
             return uniqueFileNames.ToList();
@@ -116,21 +109,15 @@ public class ProductService(
 
     private async Task<string> GetDocumentContentAsync(string fileName, string productName)
     {
-        var vectorCollection = _vectorStore.GetCollection<Guid, SemanticSearchRecord>("data-genailab-ingested");
-
         try
         {
-            var contentEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync($"Information about {productName}");
-            var contentResults = await vectorCollection.VectorizedSearchAsync(
-                contentEmbedding,
-                new VectorSearchOptions<SemanticSearchRecord>
-                {
-                    Top = 5,
-                    Filter = record => record.FileName == fileName
-                });
+            var contentResults = _vectorCollection.SearchAsync($"Information about {productName}", 5, new VectorSearchOptions<IngestedChunk>
+            {
+                Filter = record => record.DocumentId == fileName
+            });
 
             var contentBuilder = new StringBuilder();
-            await foreach (var item in contentResults.Results)
+            await foreach (var item in contentResults)
             {
                 contentBuilder.AppendLine(item.Record.Text);
             }
@@ -167,13 +154,13 @@ Content: {content}";
                     new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only, no markdown formatting or backticks."),
                     new ChatMessage(ChatRole.User, prompt)
                 });
-            
+
             // Remove any markdown code block indicators (```json and ```)
             string cleanedResponse = chatResponse.Text
                 .Replace("```json", "")
                 .Replace("```", "")
                 .Trim();
-            
+
             // Try to parse the cleaned JSON response
             var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var responseJson = System.Text.Json.JsonSerializer.Deserialize<ProductResponse>(cleanedResponse, options);

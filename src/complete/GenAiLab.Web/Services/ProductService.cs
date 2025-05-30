@@ -155,18 +155,28 @@ public class ProductService(
             // Create a simple prompt requesting JSON response
             var prompt = $@"Based on this content about '{productName}', provide a JSON object with these properties:
 1. description: A concise product description (max 200 characters)
-2. category: One of: 'Electronics', 'Safety Equipment', 'Outdoor Gear', or 'General'
+2. category: One of: 'Electronics', 'Safety Equipment', 'GPS', 'Backpack', 'Outdoor Gear', or 'General'
+
+Return ONLY the raw JSON object without any markdown formatting, code blocks, or backticks.
 
 Content: {content}";
 
             // Get response from the chat client
             var chatResponse = await _chatClient.GetResponseAsync(
                 new[] {
-                    new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only."),
+                    new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only, no markdown formatting or backticks."),
                     new ChatMessage(ChatRole.User, prompt)
-                });            // Try to parse the JSON response
+                });
+            
+            // Remove any markdown code block indicators (```json and ```)
+            string cleanedResponse = chatResponse.Text
+                .Replace("```json", "")
+                .Replace("```", "")
+                .Trim();
+            
+            // Try to parse the cleaned JSON response
             var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var responseJson = System.Text.Json.JsonSerializer.Deserialize<ProductResponse>(chatResponse.Text, options);
+            var responseJson = System.Text.Json.JsonSerializer.Deserialize<ProductResponse>(cleanedResponse, options);
 
             if (responseJson != null)
             {

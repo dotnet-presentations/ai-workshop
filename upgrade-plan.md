@@ -4,27 +4,27 @@ This document outlines the changes needed to update the lab instructions to matc
 
 ## Part 0: Setup
 
-- [ ] No changes required
+- [x] No changes required
 
 ## Part 1: Create Project
 
-- [ ] No changes required (template creation process remains the same)
+- [x] No changes required (template creation process remains the same)
 
 ## Part 2: Explore Template
 
-- [ ] Remove SQLite ingestion cache references from AppHost Program.cs code examples
-- [ ] Update AppHost Program.cs to show only Qdrant vector database and OpenAI connection
-- [ ] Remove `var ingestionCache = builder.AddSqlite("ingestionCache");` line
-- [ ] Remove ingestionCache references and WaitFor dependencies from webApp configuration
-- [ ] Update Web Program.cs code examples to remove `IngestionCacheDbContext` registration
-- [ ] Remove `builder.AddSqliteDbContext<IngestionCacheDbContext>("ingestionCache");` line
-- [ ] Remove `IngestionCacheDbContext.Initialize(app.Services);` line
-- [ ] Update DataIngestor service explanation to reflect new vector-based approach
-- [ ] Update DataIngestor.cs code examples to show new vector collection-based implementation
-- [ ] Remove references to Entity Framework and SQLite in the ingestion process explanation
-- [ ] Update vector data section to explain new `VectorStoreCollection` usage pattern
-- [ ] Add explanation of how `IngestedChunk` and `IngestedDocument` are now stored directly in vector database
-- [ ] Update service registration to show new vector collection services:
+- [x] Remove SQLite ingestion cache references from AppHost Program.cs code examples
+- [x] Update AppHost Program.cs to show only Qdrant vector database and OpenAI connection
+- [x] Remove `var ingestionCache = builder.AddSqlite("ingestionCache");` line
+- [x] Remove ingestionCache references and WaitFor dependencies from webApp configuration
+- [x] Update Web Program.cs code examples to remove `IngestionCacheDbContext` registration
+- [x] Remove `builder.AddSqliteDbContext<IngestionCacheDbContext>("ingestionCache");` line
+- [x] Remove `IngestionCacheDbContext.Initialize(app.Services);` line
+- [x] Update DataIngestor service explanation to reflect new vector-based approach
+- [x] Update DataIngestor.cs code examples to show new vector collection-based implementation
+- [x] Remove references to Entity Framework and SQLite in the ingestion process explanation
+- [x] Update vector data section to explain new `VectorStoreCollection` usage pattern
+- [x] Add explanation of how `IngestedChunk` and `IngestedDocument` are now stored directly in vector database
+- [x] Update service registration to show new vector collection services:
   - `builder.Services.AddQdrantCollection<Guid, IngestedChunk>("data-genailab-chunks")`
   - `builder.Services.AddQdrantCollection<Guid, IngestedDocument>("data-genailab-documents")`
 

@@ -30,31 +30,32 @@ This document outlines the changes needed to update the lab instructions to matc
 
 ## Part 3: Azure OpenAI
 
-- [ ] No changes required (AI service configuration remains the same)
+- [x] No changes required (AI service configuration remains the same)
 
 ## Part 4: Products Page
 
-- [ ] Remove SQLite ingestion cache references from AppHost configuration section
-- [ ] Update AppHost Program.cs example to remove `ingestionCache` variable and references
-- [ ] Update final AppHost Program.cs to show only productDb database (no ingestionCache)
-- [ ] Remove references to `IngestionCacheDbContext.Initialize(app.Services);` from Web Program.cs
-- [ ] Update the "What you've accomplished" section to remove mentions of ingestion cache database
-- [ ] Update database configuration explanation to focus only on productDb for the products feature
-- [ ] Update ProductService.cs to include improved JSON parsing that handles AI responses with markdown formatting
-- [ ] Add explanation of JSON cleaning logic that removes markdown code blocks (`\`\`\`json` and `\`\`\``)
-- [ ] Include updated system prompt that explicitly requests "valid JSON only, no markdown formatting or backticks"
-- [ ] Update error handling examples to show robust JSON deserialization with fallback values
+- [x] Remove SQLite ingestion cache references from AppHost configuration section
+- [x] Update AppHost Program.cs example to remove `ingestionCache` variable and references
+- [x] Update final AppHost Program.cs to show only productDb database (no ingestionCache)
+- [x] Remove references to `IngestionCacheDbContext.Initialize(app.Services);` from Web Program.cs
+- [x] Update the "What you've accomplished" section to remove mentions of ingestion cache database
+- [x] Update database configuration explanation to focus only on productDb for the products feature
+- [x] Switch from SQLite to PostgreSQL directly in Part 4 to avoid migration in Part 5
+- [x] Update AppHost to use `builder.AddPostgres("postgres")` and `postgres.AddDatabase("productDb")`
+- [x] Update Web Program.cs to use `builder.AddNpgsqlDbContext<ProductDbContext>("productDb")`
+- [x] Add PostgreSQL NuGet package installation instructions
+- [x] Update ProductService.cs to include improved JSON parsing that handles AI responses with markdown formatting
+- [x] Add explanation of JSON cleaning logic that removes markdown code blocks (`\`\`\`json` and `\`\`\``)
+- [x] Include updated system prompt that explicitly requests "valid JSON only, no markdown formatting or backticks"
+- [x] Update error handling examples to show robust JSON deserialization with fallback values
 
 ## Part 5: Deploy to Azure
 
-- [ ] Remove SQLite to PostgreSQL migration explanation for ingestion cache
-- [ ] Update AppHost Program.cs to show only productDb PostgreSQL database configuration
-- [ ] Remove `var ingestionCache = postgres.AddDatabase("ingestionCache");` line
-- [ ] Remove ingestionCache references from webApp configuration
-- [ ] Update Web Program.cs to remove `builder.AddNpgsqlDbContext<IngestionCacheDbContext>("ingestionCache");`
-- [ ] Remove `IngestionCacheDbContext.Initialize(app.Services);` from initialization code
-- [ ] Update deployment considerations to reflect simpler database setup (only productDb needed)
-- [ ] Update cost estimation section to remove ingestion cache database costs
+- [x] Remove SQLite to PostgreSQL migration explanation (no longer needed since Part 4 uses PostgreSQL)
+- [x] Remove database migration section entirely
+- [x] Update deployment process to focus on Azure Container Apps configuration
+- [x] Simplify deployment considerations since database setup is already PostgreSQL
+- [x] Update cost estimation section to remove migration-related costs
 
 ## Cross-cutting Changes
 

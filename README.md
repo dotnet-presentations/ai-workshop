@@ -10,7 +10,7 @@ Get up to speed quickly with AI app building in .NET! Explore the new .NET AI pr
 
 - Visual Studio 2022 with .NET Aspire workload installed
 - .NET AI Web Chatbot template installed
-- .NET 8.0 SDK or later
+- .NET 9.0 SDK or later
 - Azure OpenAI subscription (optional, but recommended for full experience)
 - GitHub Copilot subscription (optional, but recommended for full experience)
 
@@ -112,7 +112,7 @@ Throughout this lab, you'll implement each part of this architecture, from setti
 
 ## Key Technologies 🛠️
 
-- 🔷 **.NET 8**: Stable long-term support version of .NET
+- 🔷 **.NET 9**: The latest version of .NET
 - 🧠 **Microsoft Extensions for AI (MEAI)**: Libraries for integrating AI capabilities into .NET applications
 - 🔥 **Blazor**: For building interactive web UIs
 - 🌐 **.NET Aspire**: For orchestrating cloud-native distributed applications

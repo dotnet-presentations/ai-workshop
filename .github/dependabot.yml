@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Dependabot configuration for .NET solutions
+  
+  # Monitor NuGet packages for the start solution
+  - package-ecosystem: "nuget"
+    directory: "/src/start/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "10:00"
+      timezone: "America/Los_Angeles"
+    open-pull-requests-limit: 10
+    
+  # Monitor NuGet packages for the complete solution  
+  - package-ecosystem: "nuget"
+    directory: "/src/complete/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "10:00"
+      timezone: "America/Los_Angeles"
+    open-pull-requests-limit: 10

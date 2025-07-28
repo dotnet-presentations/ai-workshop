@@ -7,16 +7,16 @@
     <UserSecretsId>f7716fa2-dcd4-4fdf-aba2-6b805bd07306</UserSecretsId>
   </PropertyGroup>  <ItemGroup>
     <PackageReference Include="Aspire.Azure.AI.OpenAI" Version="9.3.0-preview.1.25265.20" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.7" />
     <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.5.0-preview.1.25265.7" />
-    <PackageReference Include="Microsoft.Extensions.AI" Version="9.5.0" />
-    <PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="9.5.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.53.0" />
-    <PackageReference Include="PdfPig" Version="0.1.10" />
-    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-    <PackageReference Include="Aspire.Qdrant.Client" Version="9.3.0" />
+    <PackageReference Include="Microsoft.Extensions.AI" Version="9.7.1" />
+    <PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="9.7.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.61.0" />
+    <PackageReference Include="PdfPig" Version="0.1.11" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.3" />
+    <PackageReference Include="Aspire.Qdrant.Client" Version="9.3.1" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.53.0-preview" />
-    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.1.0" />
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.3.1" />
   </ItemGroup>
 
   <ItemGroup>

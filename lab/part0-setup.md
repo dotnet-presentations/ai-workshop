@@ -11,7 +11,7 @@ Before starting the lab, ensure you have:
 - Visual Studio 2022 with the Web & Cloud workload installed
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/)
 - .NET AI Web Chatbot template installed
-- .NET 9.0 SDK or later
+- .NET 8.0 SDK or later
 - GitHub account (required for GitHub Models access)
 - Azure subscription (optional, but recommended for full experience)
 - GitHub Copilot subscription (optional, but recommended for full experience)
@@ -36,7 +36,7 @@ cd build-2025-lab307
 1. **Install Visual Studio 2022:**
    - Download and install Visual Studio 2022 from [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/)
    - During installation, select the "Web & Cloud" in the workloads selection screen
-   - Ensure the ".NET 9.0 SDK" is included in your installation
+   - Ensure the ".NET 8.0 SDK" is included in your installation
 
 1. **Install .NET AI Web Chatbot template:**
    - Open a terminal or command prompt

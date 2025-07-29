@@ -4,6 +4,9 @@
 
 In this lab, you will learn how to migrate your application from using GitHub Models during development to Azure OpenAI for production. You'll understand how the common interfaces in Microsoft Extensions for AI make this migration seamless, create an Azure OpenAI resource, deploy models, and update your application's configuration.
 
+> [!TIP]
+> **Azure AI is Often Simpler**: If you have Azure AI credentials available, Azure OpenAI setup is typically simpler than GitHub Models. The configuration requires fewer steps and has better error handling. Consider starting with Azure AI if you have access.
+
 ## Understand the IChatClient as a common interface across services
 
 Microsoft Extensions for AI provides common interfaces that work across different AI providers:

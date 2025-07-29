@@ -262,7 +262,7 @@ The lab instructions for Part 3 cover:
 
 ## Part 4: Products Page
 
-### Status: � IN PROGRESS - Infrastructure Complexity Issues
+### Status: ⏳ IN PROGRESS - Infrastructure Complexity Issues
 
 #### Implementation Progress
 
@@ -324,7 +324,7 @@ The lab instructions for Part 3 cover:
 - Terminal restart required for PATH updates
 
 **Step 3: Azure Deployment Process**
-� **IN PROGRESS** (Real deployment testing):
+🔄 **IN PROGRESS** (Real deployment testing):
 
 - ✅ `azd init` - Successfully initialized with environment "jon-workshop-test"
 - ✅ Detected .NET Aspire AppHost project correctly

@@ -13,6 +13,16 @@ There are two main objectives:
 1. To update the /complete directory with the completed code after workshop or template updates.
 2. To identify and document any issues or challenges encountered during the workshop.
 
+## Important Notes for Testing
+
+1. **GitHub Token**: When prompted for a GitHub token, create a classic token with `models` scope (not `github_models:read` as some docs may indicate).
+
+2. **Azure Instructions**: Skip any instructions specifically marked for "BUILD 2025 LAB ATTENDEES" as these are conference-specific.
+
+3. **Code Inconsistencies**: Some documentation may show code that doesn't match the current template. Focus on what actually gets generated and works, not exact code matches in documentation.
+
+4. **Database Setup**: Part 4 uses SQLite for products database, but Part 5 mentions PostgreSQL. Document this inconsistency for fixing.
+
 ## Procedure
 
 1. Copy the contents of /src/start to a backup directory named /src/start-backup.

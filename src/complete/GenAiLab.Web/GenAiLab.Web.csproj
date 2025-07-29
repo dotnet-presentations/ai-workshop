@@ -16,7 +16,6 @@
     <PackageReference Include="System.Linq.Async" Version="6.0.3" />
     <PackageReference Include="Aspire.Qdrant.Client" Version="9.3.1" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.53.0-preview" />
-    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.3.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -41,6 +41,12 @@ In this lab, you'll enhance your application by creating a Products page that le
 
 The Products feature showcases how AI can enhance traditional web applications by automatically analyzing content, generating descriptions, and organizing information - all while using provider-agnostic interfaces that would allow you to easily switch between AI services.
 
+> [!IMPORTANT]
+> **Time and Complexity Expectations**
+> This part involves significant infrastructure setup with PostgreSQL and Entity Framework integration. Allow **45-60 minutes** for completion, including time for troubleshooting potential build issues. The setup includes multiple package installations, database configuration, and container orchestration.
+>
+> **Common Issues**: You may encounter build errors related to static asset conflicts or duplicate file references. These are normal and can be resolved by cleaning build artifacts (`dotnet clean`) and rebuilding.
+
 ## Create the Product Models
 
 First, we need to define the database models that will store our AI-generated product information. These models will allow us to save product descriptions and categories for later retrieval and filtering.
@@ -151,8 +157,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GenAiLab.Web.Services;
 
 public class ProductService(
-        IEmbeddingGenerator<string, Embedding<float>> _embeddingGenerator,
-        IVectorStore _vectorStore,
+        VectorStoreCollection<Guid, IngestedChunk> _vectorCollection,
         ProductDbContext _dbContext,
         IChatClient _chatClient,
         ILogger<ProductService> _logger)
@@ -247,20 +252,14 @@ private async Task GenerateAndSaveProductsAsync()
 
 private async Task<List<string>> GetUniqueFileNamesAsync()
 {
-    var vectorCollection = _vectorStore.GetCollection<Guid, SemanticSearchRecord>("data-genailab-ingested");
-    
     try
     {
-        var dummyEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync("all documents");
-        var searchResults = await vectorCollection.VectorizedSearchAsync(
-            dummyEmbedding,
-            new VectorSearchOptions<SemanticSearchRecord> { Top = 1000 }
-        );
+        var searchResults = _vectorCollection.SearchAsync("all documents", 1000);
 
         var uniqueFileNames = new HashSet<string>();
-        await foreach (var result in searchResults.Results)
+        await foreach (var result in searchResults)
         {
-            uniqueFileNames.Add(result.Record.FileName);
+            uniqueFileNames.Add(result.Record.DocumentId);
         }
 
         return uniqueFileNames.ToList();
@@ -274,21 +273,15 @@ private async Task<List<string>> GetUniqueFileNamesAsync()
 
 private async Task<string> GetDocumentContentAsync(string fileName, string productName)
 {
-    var vectorCollection = _vectorStore.GetCollection<Guid, SemanticSearchRecord>("data-genailab-ingested");
-
     try
     {
-        var contentEmbedding = await _embeddingGenerator.GenerateEmbeddingVectorAsync($"Information about {productName}");
-        var contentResults = await vectorCollection.VectorizedSearchAsync(
-            contentEmbedding,
-            new VectorSearchOptions<SemanticSearchRecord> 
-            { 
-                Top = 5,
-                Filter = record => record.FileName == fileName
-            });
+        var contentResults = _vectorCollection.SearchAsync($"Information about {productName}", 5, new VectorSearchOptions<IngestedChunk>
+        {
+            Filter = record => record.DocumentId == fileName
+        });
 
         var contentBuilder = new StringBuilder();
-        await foreach (var item in contentResults.Results)
+        await foreach (var item in contentResults)
         {
             contentBuilder.AppendLine(item.Record.Text);
         }
@@ -730,5 +723,51 @@ This Products feature demonstrates a practical implementation of the AI architec
 5. **Presentation Layer**: Blazor UI with filtering capabilities
 
 This implementation highlights the power of combining traditional database capabilities with AI features. The AI does the heavy lifting of understanding document content, while the database provides efficient querying and filtering that would be hard to achieve using only vector search.
+
+## Troubleshooting Common Issues
+
+If you encounter problems during this lab, here are solutions for the most common issues:
+
+### Build Errors
+
+**Static Asset Conflicts**: If you see errors about duplicate CSS files or static assets:
+
+```bash
+dotnet clean
+dotnet build
+```
+
+**Package Restore Issues**: If packages aren't being restored properly:
+
+```bash
+dotnet restore
+dotnet build
+```
+
+### Runtime Issues
+
+**Container Startup Problems**: If PostgreSQL or Qdrant containers fail to start:
+
+- Check Docker Desktop is running
+- Try `docker system prune -f` to clean up containers
+- Restart Docker Desktop
+
+**Database Connection Issues**: If the application can't connect to PostgreSQL:
+
+- Verify the connection string in user secrets
+- Check that the database container is running in the Aspire dashboard
+- Try restarting the application
+
+**Vector Search Errors**: If product generation fails:
+
+- Ensure the PDF ingestion completed successfully
+- Check the Qdrant container is running and accessible
+- Verify your AI connection string is correct
+
+### Performance Notes
+
+**First Run Delay**: The first time you access the Products page, it may take 30-60 seconds to generate product information as the AI processes all documents.
+
+**Build Time**: Full rebuild with all dependencies can take 2-3 minutes. Use incremental builds when possible.
 
 > **Note:** This lab uses PostgreSQL from the start to ensure production readiness. By using PostgreSQL directly in development, we avoid the need for database migrations when deploying to Azure, making the deployment process smoother and more reliable.

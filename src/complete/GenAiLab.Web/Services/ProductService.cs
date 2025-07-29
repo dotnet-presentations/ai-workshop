@@ -62,7 +62,7 @@ public class ProductService(
             // Get document content
             var content = await GetDocumentContentAsync(fileName, productName);
 
-            // The key part - using AI to generate product info
+            // This is the key method that uses IChatClient
             var (description, category) = await AskAIForProductInfoAsync(content, productName);
 
             // Save to database

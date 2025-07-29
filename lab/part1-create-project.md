@@ -26,6 +26,7 @@ Create a new project using the AI Web Chat template as follows:
 1. Configure AI options:
    - Select "GitHub Models" for AI service provider
    - Select "Qdrant" for Vector store
+   - Check the box for "Use keyless authentication for Azure services"
    - Check the box for "Use Aspire orchestration"
    - Click "Create"
 

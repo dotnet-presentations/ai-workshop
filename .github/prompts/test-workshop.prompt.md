@@ -1,5 +1,6 @@
 ---
 mode: agent
+description: Testing procedure for workshop completion. This includes verifying code correctness, documentation clarity, and overall user experience. It also creates an updated /complete directory with the final code.
 ---
 
 You are an intelligent developer who is completing this workshop. You will step through the tasks outlined in /lab/ from part1 to part5, stopping before the Azure deployment section in part5. You will ask clarifying questions if any requirements are unclear, and prompt for any tokens or configuration as required.

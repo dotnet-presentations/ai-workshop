@@ -34,6 +34,51 @@ Create a new project using the AI Web Chat template as follows:
 
 1. Wait for Visual Studio to create the project and restore packages. When you see the Sign in popup, just close it.
 
+## Alternative: Create the project using the .NET CLI
+
+If you prefer to use the command line, you can create the same project using the .NET CLI:
+
+1. First, ensure you have the AI Chat Web App template installed:
+
+   ```powershell
+   dotnet new install Microsoft.Extensions.AI.Templates
+   ```
+
+2. Navigate to the directory where you want to create your project:
+
+   ```powershell
+   cd "C:\your\desired\path"
+   ```
+
+3. Create the project using the `dotnet new` command with the appropriate parameters:
+
+   ```powershell
+   dotnet new aichatweb --name GenAiLab --Framework net9.0 --provider githubmodels --vector-store qdrant --aspire true
+   ```
+
+   This command creates a new AI Chat Web App with:
+   - Project name: `GenAiLab`
+   - Framework: `.NET 9.0`
+   - AI service provider: `GitHub Models`
+   - Vector store: `Qdrant`
+   - .NET Aspire orchestration: `enabled`
+
+4. Navigate into the project directory:
+
+   ```powershell
+   cd GenAiLab
+   ```
+
+   > **Note for automation**: The `dotnet new aichatweb` command creates a solution structure with multiple projects. If you need to move the generated files to a specific directory structure (like `/src/start`), you may need to reorganize the files after creation.
+
+5. Open the project in your preferred editor:
+
+   ```powershell
+   code .  # For Visual Studio Code
+   # or
+   start GenAiLab.sln  # For Visual Studio
+   ```
+
 ## Set the GitHub Models connection string
 
 For GitHub Models to work, you need to set up a connection string with a GitHub token:

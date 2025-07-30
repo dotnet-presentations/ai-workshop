@@ -650,7 +650,7 @@ app.Run();
 
 1. **Run the application**: Press F5 to start the application with debugging.
 
-1. **Test the Products page**: 
+1. **Test the Products page**:
    - Navigate to the Products page using the new navigation button
    - Wait for the AI to analyze the PDF documents and generate product information
    - Try filtering by different categories
@@ -677,6 +677,7 @@ Your Products feature now works entirely with Qdrant as the data store:
 If you encounter issues:
 
 1. **Build Errors**: Clean and rebuild the solution:
+
    ```bash
    dotnet clean
    dotnet build

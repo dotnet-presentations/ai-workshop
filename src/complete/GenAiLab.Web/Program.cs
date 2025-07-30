@@ -2,6 +2,7 @@ using Microsoft.Extensions.AI;
 using GenAiLab.Web.Components;
 using GenAiLab.Web.Services;
 using GenAiLab.Web.Services.Ingestion;
+using GenAiLab.Web.Models;
 using OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,17 +19,14 @@ openai.AddEmbeddingGenerator("text-embedding-3-small");
 builder.AddQdrantClient("vectordb");
 builder.Services.AddQdrantCollection<Guid, IngestedChunk>("data-genailab-chunks");
 builder.Services.AddQdrantCollection<Guid, IngestedDocument>("data-genailab-documents");
+builder.Services.AddQdrantCollection<Guid, ProductVector>("data-genailab-products");
 builder.Services.AddScoped<DataIngestor>();
 builder.Services.AddSingleton<SemanticSearch>();
 
-// Add database support
-builder.AddNpgsqlDbContext<ProductDbContext>("productDb");
-
-// Register product service
+// Register simplified product service (no database required)
 builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();
-ProductDbContext.Initialize(app.Services); // Add this line
 
 app.MapDefaultEndpoints();
 

@@ -10,18 +10,11 @@ var vectorDB = builder.AddQdrant("vectordb")
     .WithDataVolume()
     .WithLifetime(ContainerLifetime.Persistent);
 
-var postgres = builder.AddPostgres("postgres")
-    .WithLifetime(ContainerLifetime.Persistent);
-var productDb = postgres.AddDatabase("productDb");
-
 var webApp = builder.AddProject<Projects.GenAiLab_Web>("aichatweb-app");
 webApp.WithReference(openai);
 webApp
     .WithReference(vectorDB)
     .WaitFor(vectorDB);
-webApp
-    .WithReference(productDb)
-    .WaitFor(productDb);
 webApp.WithExternalHttpEndpoints();
 
 builder.Build().Run();

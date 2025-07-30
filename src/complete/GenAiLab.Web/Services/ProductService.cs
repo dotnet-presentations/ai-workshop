@@ -1,108 +1,175 @@
 using Microsoft.Extensions.VectorData;
 using GenAiLab.Web.Models;
 using System.Text;
-using OpenAI;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.AI;
 
 namespace GenAiLab.Web.Services;
 
 public class ProductService(
-        VectorStoreCollection<Guid, IngestedChunk> _vectorCollection,
-        ProductDbContext _dbContext,
+        VectorStoreCollection<Guid, IngestedChunk> _chunkCollection,
+        VectorStoreCollection<Guid, ProductVector> _productCollection,
         IChatClient _chatClient,
+        IEmbeddingGenerator<string, Embedding<float>> _embeddingGenerator,
         ILogger<ProductService> _logger)
 {
+    private static readonly List<string> _availableCategories = new();
+
     public async Task<IEnumerable<ProductInfo>> GetProductsAsync(string? categoryFilter = null)
     {
-        // Make sure we have products
+        // Ensure products exist in vector store
         await EnsureProductsExistAsync();
 
-        // Simple filtering by category if specified
-        var query = string.IsNullOrEmpty(categoryFilter)
-            ? _dbContext.Products
-            : _dbContext.Products.Where(p => p.Category == categoryFilter);
+        // Get all products from vector store
+        var products = new List<ProductInfo>();
+        
+        try
+        {
+            // Get all products using the GetAsync method
+            var allProducts = await _productCollection.GetAsync(product => true, top: 1000).ToListAsync();
 
-        return await query.ToListAsync();
+            foreach (var productVector in allProducts)
+            {
+                var product = productVector.ToProductInfo();
+                
+                // Apply category filter if specified
+                if (string.IsNullOrEmpty(categoryFilter) || product.Category == categoryFilter)
+                {
+                    products.Add(product);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving products from vector store");
+        }
+
+        return products.OrderBy(p => p.Name);
     }
 
     public async Task<List<string>> GetCategoriesAsync()
     {
         await EnsureProductsExistAsync();
-        return await _dbContext.Categories.Select(c => c.Name).ToListAsync();
+        return _availableCategories.ToList();
     }
 
     private async Task EnsureProductsExistAsync()
     {
-        if (!await _dbContext.Products.AnyAsync())
+        try
         {
+            // Ensure collection exists
+            await _productCollection.EnsureCollectionExistsAsync();
+
+            // Check if we already have products in the vector store
+            var existingProducts = await _productCollection.GetAsync(product => true, top: 1).ToListAsync();
+            
+            if (!existingProducts.Any())
+            {
+                await GenerateAndSaveProductsAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error checking for existing products");
+            // Try to generate products anyway
             await GenerateAndSaveProductsAsync();
         }
     }
 
     private async Task GenerateAndSaveProductsAsync()
     {
-        // Get documents from vector store
+        // Get unique document filenames from the chunk collection
         var fileNames = await GetUniqueFileNamesAsync();
         if (fileNames.Count == 0)
         {
-            _logger.LogWarning("No documents found in vector store");
+            _logger.LogWarning("No documents found in vector store for product generation");
             return;
         }
 
         var categories = new HashSet<string>();
+        var products = new List<ProductVector>();
 
-        // Process each file
+        // Process each file to create products
         foreach (var fileName in fileNames)
         {
-            var productName = Path.GetFileNameWithoutExtension(fileName)
-                .Replace("Example_", "")
-                .Replace("_", " ");
-
-            // Get document content
-            var content = await GetDocumentContentAsync(fileName, productName);
-
-            // This is the key method that uses IChatClient
-            var (description, category) = await AskAIForProductInfoAsync(content, productName);
-
-            // Save to database
-            _dbContext.Products.Add(new ProductInfo
+            try
             {
-                Name = productName,
-                ShortDescription = description,
-                Category = category,
-                FileName = fileName
-            });
+                var productName = Path.GetFileNameWithoutExtension(fileName)
+                    .Replace("Example_", "")
+                    .Replace("_", " ");
 
-            categories.Add(category);
+                // Get document content from chunks
+                var content = await GetDocumentContentAsync(fileName, productName);
+                if (string.IsNullOrEmpty(content))
+                {
+                    _logger.LogWarning("No content found for file: {FileName}", fileName);
+                    continue;
+                }
+
+                // Use AI to generate product information
+                var (description, category) = await AskAIForProductInfoAsync(content, productName);
+                
+                // Generate embedding for the product (combination of name, description, and content)
+                var searchableText = $"{productName} {description} {content}";
+                var embedding = await _embeddingGenerator.GenerateAsync(searchableText);
+
+                // Create product vector
+                var productVector = new ProductVector
+                {
+                    Id = Guid.NewGuid(),
+                    Name = productName,
+                    ShortDescription = description,
+                    Category = category,
+                    FileName = fileName,
+                    FullContent = content,
+                    Vector = embedding.Vector
+                };
+
+                products.Add(productVector);
+                categories.Add(category);
+
+                _logger.LogInformation("Generated product: {ProductName} in category: {Category}", productName, category);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing file: {FileName}", fileName);
+            }
         }
 
-        // Save categories
-        foreach (var category in categories)
+        // Save all products to vector store
+        if (products.Count > 0)
         {
-            _dbContext.Categories.Add(new ProductCategory { Name = category });
+            try
+            {
+                await _productCollection.UpsertAsync(products);
+                _availableCategories.Clear();
+                _availableCategories.AddRange(categories.OrderBy(c => c));
+                
+                _logger.LogInformation("Successfully saved {Count} products to vector store", products.Count);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving products to vector store");
+            }
         }
-
-        ProductInfo.AvailableCategories = categories.ToList();
-        await _dbContext.SaveChangesAsync();
     }
+
     private async Task<List<string>> GetUniqueFileNamesAsync()
     {
         try
         {
-            var searchResults = _vectorCollection.SearchAsync("all documents", 1000);
+            // Get all chunks and extract unique document IDs
+            var allChunks = await _chunkCollection.GetAsync(chunk => true, top: 1000).ToListAsync();
+            var uniqueFileNames = allChunks
+                .Where(chunk => !string.IsNullOrEmpty(chunk.DocumentId))
+                .Select(chunk => chunk.DocumentId)
+                .Distinct()
+                .ToList();
 
-            var uniqueFileNames = new HashSet<string>();
-            await foreach (var result in searchResults)
-            {
-                uniqueFileNames.Add(result.Record.DocumentId);
-            }
-
-            return uniqueFileNames.ToList();
+            return uniqueFileNames;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving documents from vector store");
+            _logger.LogError(ex, "Error retrieving document filenames from vector store");
             return new List<string>();
         }
     }
@@ -111,22 +178,20 @@ public class ProductService(
     {
         try
         {
-            var contentResults = _vectorCollection.SearchAsync($"Information about {productName}", 5, new VectorSearchOptions<IngestedChunk>
-            {
-                Filter = record => record.DocumentId == fileName
-            });
+            // Get chunks for this specific document
+            var chunks = await _chunkCollection.GetAsync(chunk => chunk.DocumentId == fileName, top: 10).ToListAsync();
 
             var contentBuilder = new StringBuilder();
-            await foreach (var item in contentResults)
+            foreach (var chunk in chunks)
             {
-                contentBuilder.AppendLine(item.Record.Text);
+                contentBuilder.AppendLine(chunk.Text);
             }
 
             return contentBuilder.ToString();
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Error getting content for {FileName}", fileName);
+            _logger.LogWarning(ex, "Error getting content for file: {FileName}", fileName);
             return string.Empty;
         }
     }
@@ -134,12 +199,11 @@ public class ProductService(
     // Simple record for JSON deserialization
     private record ProductResponse(string Description, string Category);
 
-    // This is the key method that uses IChatClient
     private async Task<(string Description, string Category)> AskAIForProductInfoAsync(string content, string productName)
     {
         try
         {
-            // Create a simple prompt requesting JSON response
+            // Create a prompt for generating product information
             var prompt = $@"Based on this content about '{productName}', provide a JSON object with these properties:
 1. description: A concise product description (max 200 characters)
 2. category: One of: 'Electronics', 'Safety Equipment', 'GPS', 'Backpack', 'Outdoor Gear', or 'General'
@@ -155,13 +219,12 @@ Content: {content}";
                     new ChatMessage(ChatRole.User, prompt)
                 });
 
-            // Remove any markdown code block indicators (```json and ```)
+            // Clean and parse the response
             string cleanedResponse = chatResponse.Text
                 .Replace("```json", "")
                 .Replace("```", "")
                 .Trim();
 
-            // Try to parse the cleaned JSON response
             var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var responseJson = System.Text.Json.JsonSerializer.Deserialize<ProductResponse>(cleanedResponse, options);
 
@@ -172,10 +235,10 @@ Content: {content}";
         }
         catch (Exception ex)
         {
-            _logger.LogWarning("AI processing error for {ProductName}: {Error}", productName, ex.Message);
+            _logger.LogWarning(ex, "AI processing error for {ProductName}", productName);
         }
 
-        // Simple fallback
-        return ($"A high-quality {productName}", "General");
+        // Fallback response
+        return ($"A high-quality {productName.ToLowerInvariant()}", "General");
     }
 }

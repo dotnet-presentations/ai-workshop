@@ -1,8 +1,8 @@
 # Part 0: Setup
 
-## In this lab
+## In this workshop
 
-In this lab, you will set up your development environment for building AI applications with .NET. You'll install the required tools and configure your environment to work with the lab materials.
+In this workshop, you will set up your development environment for building AI applications with .NET. You'll install the required tools and configure your environment to work with the workshop materials.
 
 ## Prerequisites
 
@@ -25,13 +25,13 @@ git clone https://github.com/dotnet-presentations/build-2025-lab307.git
 cd build-2025-lab307
 ```
 
-> [!WARNING]
-> For the Build 2025 lab, all Azure resources MUST be created in the "rg-mygenaiapp" resource group. This resource group has already been created in the subscription. When creating new resources via the portal, select this resource group rather than creating a new one. Permissions are restricted to only allow creating resources in this resource group, so missing this will cause resource creation to fail.
+> [!NOTE]
+> When deploying to Azure, you may need to create resources in a specific resource group (e.g., "rg-mygenaiapp"). If you are following this workshop in a managed environment, use the resource group provided by your instructor or organization. Otherwise, you can create your own resource group as needed.
 
 ## Step 1: Install Required Tools
 
 > [!IMPORTANT]
-> If you are completing this in the Build lab session, these prerequisites should already be installed on your virtual machine.
+> If you are using a managed or pre-configured environment, some prerequisites may already be installed for you.
 
 1. **Install Visual Studio 2022:**
    - Download and install Visual Studio 2022 from [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/)

@@ -1,8 +1,8 @@
 # Convert from GitHub Models to Azure OpenAI
 
-## In this lab
+## In this workshop
 
-In this lab, you will learn how to migrate your application from using GitHub Models during development to Azure OpenAI for production. You'll understand how the common interfaces in Microsoft Extensions for AI make this migration seamless, create an Azure OpenAI resource, deploy models, and update your application's configuration.
+In this workshop, you will learn how to migrate your application from using GitHub Models during development to Azure OpenAI for production. You'll understand how the common interfaces in Microsoft Extensions for AI make this migration seamless, create an Azure OpenAI resource, deploy models, and update your application's configuration.
 
 > [!TIP]
 > **Azure AI is Often Simpler**: If you have Azure AI credentials available, Azure OpenAI setup is typically simpler than GitHub Models. The configuration requires fewer steps and has better error handling. Consider starting with Azure AI if you have access.
@@ -50,14 +50,13 @@ To use Azure OpenAI, you need to set up resources in Azure:
    - Click "Create a resource" and search for "Azure OpenAI"
    - Fill in the required details:
      - **Subscription**: Will be pre-selected based on your Azure account
-     - **Resource group**: Select an existing resource group if you are doing this in a lab or create a new one (e.g., "rg-mygenaiapp")
-     - **Resource name**: Choose a unique name for your Azure OpenAI resource (e.g., "mygenaiapp-openai")
-     - **Region**: Select a region close to you (e.g., "East US" or "West Europe"). For Build 2025, we recommend using "West US 3"
+     - **Resource group**: Select an existing resource group if you are doing this in a managed environment or create a new one (e.g., "rg-mygenaiapp")
+     - **Region**: Select a region close to you (e.g., "East US" or "West Europe")
      - **Pricing tier**: Select "Standard" (this is the only option available for Azure OpenAI)
    - Click "Next" on the following screens (leaving the default settings) and then "Create"
 
-> [!WARNING]
-> **FOR BUILD 2025 LAB ATTENDEES**: You MUST select the **"rg-mygenaiapp"** resource group that has already been created for you. Do not create a new resource group. Permissions are restricted to only allow creating resources in this resource group.
+> [!NOTE]
+> If you are using a managed environment, use the resource group provided by your instructor or organization. Otherwise, you can create your own resource group as needed.
 
 ## Deploy the `gpt-4o-mini` model for chat completions
 

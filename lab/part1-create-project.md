@@ -1,8 +1,8 @@
 # Create a new project using the AI Web Chat template
 
-## In this lab
+## In this workshop
 
-In this lab, you'll create a new project using the AI Web Chat template in Visual Studio. You'll configure GitHub Models as the AI service provider, set up the connection string, and run and explore the application.
+In this workshop, you'll create a new project using the AI Web Chat template in Visual Studio. You'll configure GitHub Models as the AI service provider, set up the connection string, and run and explore the application.
 
 ## Create the project using Visual Studio
 

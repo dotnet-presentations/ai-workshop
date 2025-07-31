@@ -1,8 +1,8 @@
 # Write a New Products Page
 
-## In this lab
+## In this workshop
 
-In this lab, you'll enhance your application by creating a Products page that leverages AI to automatically generate product descriptions and categorize items based on their content. This lab demonstrates several key concepts in modern AI application development:
+In this workshop, you'll enhance your application by creating a Products page that leverages AI to automatically generate product descriptions and categorize items based on their content. This workshop demonstrates several key concepts in modern AI application development:
 
 🧩 **What we're building:**
 

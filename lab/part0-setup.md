@@ -6,7 +6,7 @@ In this workshop, you will set up your development environment for building AI a
 
 ## Prerequisites
 
-Before starting the lab, ensure you have:
+Before starting, ensure you have:
 
 - Visual Studio 2022 with the Web & Cloud workload installed
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/)
@@ -16,13 +16,16 @@ Before starting the lab, ensure you have:
 - Azure subscription (optional, but recommended for full experience)
 - GitHub Copilot subscription (optional, but recommended for full experience)
 
+> [!TIP]
+> **Alternative: Local AI with Ollama**: If you don't have a GitHub account or prefer to work offline, this workshop includes an Ollama-based development container option that runs AI models locally. See the `.github/.devcontainer/README.md` for details.
+
 ## Clone the Repository
 
-First, clone the lab repository to get all the necessary files:
+First, clone the workshop repository to get all the necessary files:
 
 ```powershell
-git clone https://github.com/dotnet-presentations/build-2025-lab307.git
-cd build-2025-lab307
+git clone https://github.com/dotnet-presentations/ai-workshop.git
+cd ai-workshop
 ```
 
 > [!NOTE]

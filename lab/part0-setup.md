@@ -17,7 +17,7 @@ Before starting, ensure you have:
 - GitHub Copilot subscription (optional, but recommended for full experience)
 
 > [!TIP]
-> **Alternative: Local AI with Ollama**: If you don't have a GitHub account or prefer to work offline, this workshop includes an Ollama-based development container option that runs AI models locally. See the `.github/.devcontainer/README.md` for details.
+> **Alternative: Local AI with Ollama**: If you don't have a GitHub account or prefer to work offline, this workshop includes an Ollama-based development container option that runs AI models locally. See the [Development Container Options](./../.github/.devcontainer/README.md) for details.
 
 ## Clone the Repository
 

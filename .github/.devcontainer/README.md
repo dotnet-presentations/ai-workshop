@@ -1,5 +1,7 @@
 # Development Container Options
 
+[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/dotnet-presentations/ai-workshop)
+
 This workshop provides two development container configurations to suit different needs:
 
 ## 🌐 **Standard Container** (`devcontainer.json`)
@@ -39,10 +41,12 @@ This workshop provides two development container configurations to suit differen
 
 ## 🚀 **Getting Started**
 
+[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/dotnet-presentations/ai-workshop)
+
 1. **Open in Dev Container:** Use the "Dev Containers: Reopen in Container" command in VS Code
 2. **Choose your option:** VS Code will ask which devcontainer to use
 3. **Wait for setup:** The container will install all dependencies automatically
-4. **Start building:** Follow the workshop instructions!
+4. **Start building:** Follow the [workshop instructions](../../lab/part0-setup.md)!
 
 ## 💡 **Switching Between Options**
 

@@ -20,8 +20,6 @@ There are two main objectives:
 
 2. **Azure AI Preferred**: Azure AI setup is significantly simpler than GitHub Models. If Azure AI credentials are available, use them instead of GitHub Models for smoother testing experience.
 
-3. **Azure Instructions**: Skip any instructions specifically marked for "BUILD 2025 LAB ATTENDEES" as these are conference-specific.
-
 4. **Code Inconsistencies**: Some documentation may show code that doesn't match the current template. Focus on what actually gets generated and works, not exact code matches in documentation.
    - Documentation shows `SemanticSearchRecord` but actual code uses `IngestedChunk`
    - Documentation shows `IVectorStore` pattern but actual code uses `VectorStoreCollection`

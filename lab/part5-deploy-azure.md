@@ -1,8 +1,8 @@
 # Deploy to Azure
 
-## In this lab
+## In this workshop
 
-In this lab, you will learn how to deploy your AI application to Azure using the Azure Developer CLI (`azd`). You'll deploy your PostgreSQL-based application to Azure Container Apps for production use.
+In this workshop, you will learn how to deploy your AI application to Azure using the Azure Developer CLI (`azd`). You'll deploy your PostgreSQL-based application to Azure Container Apps for production use.
 
 > [!TIP]
 > If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the `/src/complete` folder which already includes all the necessary changes. The complete code has already been updated with the PostgreSQL configuration and external HTTP endpoints setup described in this section. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
@@ -56,8 +56,8 @@ In this lab, you will learn how to deploy your AI application to Azure using the
 
 1. When prompted to "Enter a unique environment name", enter "mygenaiapp" or choose something else if you would like.
 
-> [!WARNING]
-> **FOR BUILD 2025 LAB ATTENDEES**: You MUST enter exactly **"mygenaiapp"** as your environment name. This is because azd will automatically add the "rg-" prefix when creating the resource group. The lab environment has already been configured with "rg-mygenaiapp" as the resource group, and permissions are restricted to only allow creating resources in this resource group.
+> [!NOTE]
+> If you are using a managed environment, use the environment name provided by your instructor or organization. Otherwise, you can choose any name you prefer.
 
 1. **Provision Azure resources**:
 
@@ -73,14 +73,11 @@ In this lab, you will learn how to deploy your AI application to Azure using the
    - Log Analytics workspace
 
 > [!NOTE]
-> When provisioning resources with `azd`, it will automatically create a resource group with the prefix "rg-" added to your environment name (e.g., "rg-mygenaiapp"). For Build 2025 lab attendees, this is why it's essential to use exactly "mygenaiapp" as your environment name.
+> When provisioning resources with `azd`, it will automatically create a resource group with the prefix "rg-" added to your environment name (e.g., "rg-mygenaiapp").
   
 1. When prompted to "Enter a value for the 'azureAISearch' infrastructure secured parameter, copy and past the value from your `secrets.json` file. It will begin with "Endpoint=" and end with your search key. Make sure that you grab your Azure AI Search connection string and not the Azure OpenAI connection string!
 
-1. When prompted to select a location, select "West US 3" for Build 2025 attendees (or another nearby Azure datacenter if you're following this lab outside of the conference).
-
-> [!WARNING]
-> **FOR BUILD 2025 LAB ATTENDEES**: You MUST select "West US 3" as your location. This region has been pre-configured with the necessary quotas for your lab environment.
+1. When prompted to select a location, select a region close to you (e.g., "West US 3" or another nearby Azure datacenter).
 
 1. When prompted to "Enter a value for the 'openai' infrastructure secured parameter, copy and past the value from your `secrets.json` file. As before, it will begin with "Endpoint=" and end with your Azure OpenAI key.
 

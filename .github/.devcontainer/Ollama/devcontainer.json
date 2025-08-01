@@ -1,0 +1,51 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
+{
+    "name": "C# (.NET) - Ollama",
+    "image": "mcr.microsoft.com/devcontainers/dotnet:9.0",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        "ghcr.io/devcontainers/features/azure-cli:1": {
+            "installBicep": true,
+            "version": "latest"
+        },
+        "ghcr.io/azure/azure-dev/azd:0": {
+            "version": "stable"
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/prulloac/devcontainer-features/ollama:latest": {},
+        "sshd": "latest"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.copilot",
+                "ms-dotnettools.csdevkit",
+                "ms-azuretools.vscode-azure-github-copilot"
+            ]
+        }
+    },
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    "forwardPorts": [
+        17057,  // .NET Aspire dashboard
+        11434   // Ollama API
+    ],
+    "portsAttributes": {
+        "17057": {
+            "protocol": "http"
+        },
+        "11434": {
+            "protocol": "http"
+        }
+    },
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": "sudo dotnet workload update && dotnet new install Microsoft.Extensions.AI.Templates && ollama pull all-minilm && ollama pull llama3.2 && ollama pull phi4-mini",
+    "postStartCommand": "",
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    "remoteUser": "vscode",
+    "hostRequirements": {
+        "memory": "16gb",
+        "cpus": 4
+    }
+}

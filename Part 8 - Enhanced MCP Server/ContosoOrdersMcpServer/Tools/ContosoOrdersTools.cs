@@ -34,7 +34,7 @@ internal class ContosoOrdersTools
                 Items = new[] { "Hiking Boots" },
                 ShippingAddress = "456 Trail Rd, Mountain View, MV 67890",
                 OrderDate = "2025-07-30",
-                TrackingNumber = (string?)null
+                TrackingNumber = null
             },
             ["12347"] = new
             {

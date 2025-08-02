@@ -370,114 +370,23 @@ dotnet new mcpserver -n SampleMcpServer
 
 ---
 
-## Detailed Implementation Plan
+## Prerequisites and Dependencies
 
-### 5. Implementation Timeline
-
-#### Phase 1: Repository Restructuring
-
-1. **Move existing content using `git mv` to preserve history:**
-
-   ```bash
-   # Move current start directory to Part 1
-   git mv src/start "src/Part 1 - Create AI Project"
-   
-   # Move current complete directory temporarily (will be split in next steps)
-   git mv src/complete "src/temp-complete"
-   ```
-
-2. **Create per-unit directory structure in `/src/`:**
-
-   ```bash
-   # Create remaining part directories
-   mkdir "src/Part 2 - Explore Template"
-   mkdir "src/Part 3 - Azure OpenAI"
-   mkdir "src/Part 4 - Products Page"
-   mkdir "src/Part 5 - Deploy Azure"
-   mkdir "src/Part 6 - MCP Server"
-   mkdir "src/Part 7 - MCP Business Tools"
-   mkdir "src/Part 8 - MCP Publishing"
-   ```
-
-3. **Create unit snapshots by building through each part:**
-
-   ```bash
-   # Copy and modify temp-complete to create Part 3 state
-   cp -r "src/temp-complete/GenAiLab" "src/Part 3 - Azure OpenAI/"
-   # (Apply Part 3 specific changes - Azure OpenAI configuration)
-   
-   # Copy and modify for Part 4 state  
-   cp -r "src/Part 3 - Azure OpenAI/GenAiLab" "src/Part 4 - Products Page/"
-   # (Apply Part 4 specific changes - Products page implementation)
-   ```
-
-4. **Move existing lab documentation using `git mv`:**
-
-   ```bash
-   # Move existing lab files to preserve history
-   git mv lab/part1-create-project.md "src/Part 1 - Create AI Project/README.md"
-   git mv lab/part2-explore-template.md "src/Part 2 - Explore Template/README.md"
-   git mv lab/part3-azure-openai.md "src/Part 3 - Azure OpenAI/README.md"
-   git mv lab/part4-products-page.md "src/Part 4 - Products Page/README.md"
-   git mv lab/part5-deploy-azure.md "src/Part 5 - Deploy Azure/README.md"
-   ```
-
-5. **Clean up temporary directory:**
-
-   ```bash
-   # Remove temporary directory after unit creation is complete
-   rm -rf "src/temp-complete"
-   ```
-
-6. **Update any hardcoded paths in documentation and configuration files**
-
-#### Phase 2: Create MCP Projects
-
-1. **Create `/src/Part 6 - MCP Server/SampleMcpServer/` with basic MCP template**
-2. **Create `/src/Part 7 - MCP Business Tools/SampleMcpServer/` with enhanced business tools**
-3. **Add unit-specific README.md files for Parts 6-7**
-4. **Test basic and enhanced MCP functionality**
-
-#### Phase 3: Documentation Creation
-
-1. **Create Part 6 lab instructions** (`/src/Part 6 - MCP Server/README.md`)
-2. **Create Part 7 lab instructions** (`/src/Part 7 - MCP Business Tools/README.md`)
-3. **Create Part 8 lab instructions** (`/src/Part 8 - MCP Publishing/README.md`)
-4. **Update main README.md** with new structure
-5. **Update unit-specific README files** in each part directory
-
-#### Phase 4: Testing and Validation
-
-1. **Test each unit independently** to ensure working snapshots
-2. **Validate progression** from unit to unit
-3. **Test MCP server functionality** in VS Code
-4. **Test integration** with GitHub Copilot
-5. **Validate all documentation** and instructions
-
-#### Phase 5: Final Integration
-
-1. **Update testing documentation** and prompts
-2. **Create instructor guides** for new units
-3. **Validate complete workshop flow**
-4. **Final review and refinement**
-
-### 6. Prerequisites and Dependencies
-
-#### Additional Prerequisites for MCP Units
+### Additional Prerequisites for MCP Units
 
 - **.NET 10.0 SDK** (preview 6 or higher) - Required for `dnx` command
 - **Visual Studio Code** - Required for MCP integration
 - **GitHub Copilot extension** - Required to test MCP server functionality
 - **NuGet.org account** - Optional, for Part 8 publishing
 
-#### Template Dependencies
+### Template Dependencies
 
 - `Microsoft.Extensions.AI.Templates` - For MCP server template
 - `ModelContextProtocol` NuGet package - Core MCP functionality
 
-### 7. Implementation Considerations
+## Implementation Considerations
 
-#### .NET 10 Preview Requirement
+### .NET 10 Preview Requirement
 
 - **Consideration**: MCP requires .NET 10 preview, workshop uses .NET 9
 - **Solution**: Clear documentation about version requirements, provide installation links

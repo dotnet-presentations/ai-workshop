@@ -367,4 +367,4 @@ This approach eliminates the need for a separate database to track ingestion sta
 
 ## Next Steps
 
-Now that you understand the code structure of the template, proceed to [Convert from GitHub Models to Azure OpenAI](part3-azure-openai.md) to learn how to migrate your application from using GitHub Models to Azure OpenAI for production use.
+Now that you understand the code structure of the template, proceed to [Convert from GitHub Models to Azure OpenAI](../Part%204%20-%20Azure%20OpenAI/README.md) to learn how to migrate your application from using GitHub Models to Azure OpenAI for production use.

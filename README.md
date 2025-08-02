@@ -4,11 +4,24 @@ Get up to speed quickly with AI app building in .NET! Explore the new .NET AI pr
 
 ## Prerequisites
 
+### AI Web Chat Application Requirements (Parts 1-6)
+
 - Visual Studio 2022 with .NET Aspire workload installed
-- .NET AI Web Chatbot template installed
+- .NET AI Web Chatbot template installed  
 - .NET 9.0 SDK or later
 - Azure OpenAI subscription (optional, but recommended for full experience)
-- GitHub Copilot subscription (optional, but recommended for full experience)
+
+### Model Context Protocol (Parts 7-9)
+
+- .NET 10.0 SDK (preview 6 or higher) - Required for MCP development
+- Visual Studio Code with GitHub Copilot extensions
+- GitHub Copilot subscription (required for MCP testing)
+- Microsoft.Extensions.AI.Templates package
+
+### Optional but Recommended
+
+- Git for version control
+- Azure subscription for production deployment
 
 ## Lab Overview 🧪
 
@@ -119,21 +132,31 @@ Throughout this lab, you'll implement each part of this architecture, from setti
 
 ## Getting Started
 
-Follow the [setup instructions](lab/part0-setup.md) to get started with the lab.
+Follow the [setup instructions](Part%201%20-%20Setup/README.md) to get started with the lab.
 
 ## Lab Modules 📚
 
-The lab is divided into five modules:
+The lab is divided into nine modules:
 
-1. 🏗️ [**Create a Project with AI Web Chat Template**](lab/part1-create-project.md): Build a web application using the .NET AI Web Chat template.
+### AI Web Chat Application (Parts 1-6)
 
-2. 🔍 [**Explore the Template Code**](lab/part2-explore-template.md): Understand the implementation of vector embeddings, semantic search, and chat interfaces in AI Web Chat projects.
+1. 🏗️ [**Create a Project with AI Web Chat Template**](Part%202%20-%20Project%20Creation/README.md): Build a web application using the .NET AI Web Chat template.
 
-3. ☁️ [**Convert from GitHub Models to Azure OpenAI**](lab/part3-azure-openai.md): Transition from GitHub Models to the Azure OpenAI service for production-ready capabilities.
+2. 🔍 [**Explore the Template Code**](Part%203%20-%20Template%20Exploration/README.md): Understand the implementation of vector embeddings, semantic search, and chat interfaces in AI Web Chat projects.
 
-4. 🛍️ [**Write a Products Page**](lab/part4-products-page.md): Implement a product catalog that leverages AI for enhanced product information.
+3. ☁️ [**Convert from GitHub Models to Azure OpenAI**](Part%204%20-%20Azure%20OpenAI/README.md): Transition from GitHub Models to the Azure OpenAI service for production-ready capabilities.
 
-5. 🚀 [**Deploy to Azure**](lab/part5-deploy-azure.md): Deploy your application to Azure using the Azure Developer CLI.
+4. 🛍️ [**Write a Products Page**](Part%205%20-%20Products%20Page/README.md): Implement a product catalog that leverages AI for enhanced product information.
+
+5. 🚀 [**Deploy to Azure**](Part%206%20-%20Deployment/README.md): Deploy your application to Azure using the Azure Developer CLI.
+
+### Model Context Protocol (MCP) Servers (Parts 7-9)
+
+1. 🔧 [**MCP Server Basics**](Part%207%20-%20MCP%20Server%20Basics/README.md): Create your first MCP server with weather tools that extend AI agents like GitHub Copilot.
+
+2. 🏢 [**Enhanced MCP Server with Business Tools**](Part%208%20-%20Enhanced%20MCP%20Server/README.md): Build sophisticated business tools for order management, inventory, and customer service scenarios.
+
+3. 📦 [**MCP Publishing and Distribution**](Part%209%20-%20MCP%20Publishing/README.md): Package, publish, and distribute your MCP servers through NuGet for professional deployment.
 
 ## Lab Structure 📁
 

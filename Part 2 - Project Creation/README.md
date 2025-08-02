@@ -12,7 +12,7 @@ Create a new project using the AI Web Chat template as follows:
 1. Click "Create a new project"
 1. Search for and select "AI Chat Web App" template
 
-   ![AI Web Chat template in Visual Studio](images/vs-ai-webchat-template.png)
+   ![AI Web Chat template in Visual Studio](../images/vs-ai-webchat-template.png)
 
 1. Click "Next"
 1. Configure your project:
@@ -21,7 +21,7 @@ Create a new project using the AI Web Chat template as follows:
    - Make sure "Place solution and project in same directory" is checked
    - Click "Next"
 
-   ![Configure New Project in Visual Studio](images/vs-configure-new-project.png)
+   ![Configure New Project in Visual Studio](../images/vs-configure-new-project.png)
 
 1. Configure AI options:
    - Select "GitHub Models" for AI service provider
@@ -33,7 +33,7 @@ Create a new project using the AI Web Chat template as follows:
    > [!TIP]
    > **Alternative: Ollama Option**: If you're using the Ollama development container (see [Development Container Options](../.github/.devcontainer/README.md)), you can select "Ollama" as the AI service provider instead of "GitHub Models". This allows you to work with local AI models without requiring a GitHub account or internet connection.
 
-   ![Additional Information in Visual Studio](images/vs-additional-information.png)
+   ![Additional Information in Visual Studio](../images/vs-additional-information.png)
 
 1. Wait for Visual Studio to create the project and restore packages. When you see the Sign in popup, just close it.
 
@@ -89,7 +89,7 @@ If you prefer to use the command line, you can create the same project using the
 
 For GitHub Models to work, you need to set up a connection string with a GitHub token:
 
-> **Note:** This step requires a GitHub account. If you don't have one yet, please follow the instructions in [Part 0: Setup](part0-setup.md#step-2-create-a-github-account-if-needed) to create a GitHub account.
+> **Note:** This step requires a GitHub account. If you don't have one yet, please follow the instructions in [Part 1: Setup](../Part%201%20-%20Setup/README.md#step-2-create-a-github-account-if-needed) to create a GitHub account.
 
 1. Create a GitHub token for accessing GitHub Models:
    - Go to [https://github.com/settings/tokens](https://github.com/settings/tokens)
@@ -170,4 +170,4 @@ Let's test the AI functionality of the application:
 
 ## Next Steps
 
-Now that you've created and run your AI Web Chat application, proceed to [Explore the Template Code](part2-explore-template.md) to understand the underlying architecture and code structure of the application.
+Now that you've created and run your AI Web Chat application, proceed to [Explore the Template Code](../Part%203%20-%20Template%20Exploration/README.md) to understand the underlying architecture and code structure of the application.

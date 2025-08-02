@@ -114,7 +114,7 @@ To test the new Azure OpenAI integration, let's add the sample product PDF manua
 
 1. Right-click on the `Data` folder and select "Add" > "Existing Item..."
 
-1. Browse to the `/lab/manuals` directory in your project folder
+1. Browse to the `/manuals` directory in your project folder
 
 1. Select all PDF files (Ctrl+A)
 
@@ -164,4 +164,4 @@ Now let's run the application with Azure OpenAI integration:
 
 ## Next Steps
 
-Now that you've migrated your application to use Azure OpenAI, proceed to [Write a New Products Page](part4-products-page.md) to enhance your application with a Products feature that uses AI to generate product descriptions and categories.
+Now that you've migrated your application to use Azure OpenAI, proceed to [Write a New Products Page](../Part%205%20-%20Products%20Page/README.md) to enhance your application with a Products feature that uses AI to generate product descriptions and categories.

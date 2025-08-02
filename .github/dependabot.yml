@@ -1,23 +1,35 @@
 version: 2
 updates:
   # Dependabot configuration for .NET solutions
-  
-  # Monitor NuGet packages for the start solution
+
+  # Monitor NuGet packages for Part 2 - Project Creation
   - package-ecosystem: "nuget"
-    directory: "/src/start/"
+    directory: "/Part 2 - Project Creation/GenAiLab/"
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "10:00"
-      timezone: "America/Los_Angeles"
     open-pull-requests-limit: 10
-    
-  # Monitor NuGet packages for the complete solution  
+
+  # Monitor NuGet packages for Part 6 - Deployment
   - package-ecosystem: "nuget"
-    directory: "/src/complete/"
+    directory: "/Part 6 - Deployment/GenAiLab/"
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "10:00"
-      timezone: "America/Los_Angeles"
+    open-pull-requests-limit: 10
+
+  # Monitor NuGet packages for Part 7 - MCP Server Basics
+  - package-ecosystem: "nuget"
+    directory: "/Part 7 - MCP Server Basics/WeatherMcpServer/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+
+  # Monitor NuGet packages for Part 8 - Enhanced MCP Server
+  - package-ecosystem: "nuget"
+    directory: "/Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
     open-pull-requests-limit: 10

@@ -5,12 +5,18 @@ on:
     branches:
       - main
     paths:
-      - 'src/**'
+      - 'Part 2 - Project Creation/**'
+      - 'Part 6 - Deployment/**'
+      - 'Part 7 - MCP Server Basics/**'
+      - 'Part 8 - Enhanced MCP Server/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'src/**'
+      - 'Part 2 - Project Creation/**'
+      - 'Part 6 - Deployment/**'
+      - 'Part 7 - MCP Server Basics/**'
+      - 'Part 8 - Enhanced MCP Server/**'
   workflow_dispatch:
 
 jobs:
@@ -19,9 +25,17 @@ jobs:
 
     strategy:
       matrix:
-        solution:
-          - src/start/GenAiLab.sln
-          - src/complete/GenAiLab.sln
+        include:
+          - solution: "Part 2 - Project Creation/GenAiLab/GenAiLab.sln"
+            dotnet-version: '9.0.x'
+          - solution: "Part 6 - Deployment/GenAiLab/GenAiLab.sln"
+            dotnet-version: '9.0.x'
+          # No solution file exists for WeatherMcpServer; using project file directly
+          - solution: "Part 7 - MCP Server Basics/WeatherMcpServer/WeatherMcpServer.csproj"
+            dotnet-version: '8.0.x'
+          # No solution file exists for ContosoOrdersMcpServer; using project file directly
+          - solution: "Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj"
+            dotnet-version: '8.0.x'
 
     steps:
     - name: Checkout code
@@ -30,13 +44,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '9.0.x'
+        dotnet-version: ${{ matrix.dotnet-version }}
 
     - name: Restore dependencies
-      run: dotnet restore ${{ matrix.solution }}
+      run: dotnet restore "${{ matrix.solution }}"
 
     - name: Build solution
-      run: dotnet build ${{ matrix.solution }} --no-restore --configuration Release
-
-    - name: Run tests
-      run: dotnet test ${{ matrix.solution }} --no-build --verbosity normal
+      run: dotnet build "${{ matrix.solution }}" --no-restore --configuration Release

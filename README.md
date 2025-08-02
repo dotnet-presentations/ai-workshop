@@ -4,7 +4,7 @@ Get up to speed quickly with AI app building in .NET! Explore the new .NET AI pr
 
 ## Prerequisites
 
-### AI Web Chat Application (Parts 1-6)
+### AI Web Chat Application Requirements (Parts 1-6)
 
 - Visual Studio 2022 with .NET Aspire workload installed
 - .NET AI Web Chatbot template installed  

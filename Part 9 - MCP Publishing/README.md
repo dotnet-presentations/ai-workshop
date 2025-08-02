@@ -218,7 +218,7 @@ Add to your `.vscode/mcp.json` or `.mcp.json`:
 
 Ask your AI assistant:
 
-```
+```text
 What's the current weather in Tokyo?
 ```
 
@@ -226,7 +226,7 @@ What's the current weather in Tokyo?
 
 Ask your AI assistant:
 
-```
+```text
 Can you give me a 5-day forecast for London?
 ```
 
@@ -275,6 +275,8 @@ MIT License - see LICENSE file for details.
 - 🐛 [Report Issues](https://github.com/your-username/weather-mcp-server/issues)
 - 📖 [Documentation](https://github.com/your-username/weather-mcp-server/wiki)
 - 💬 [Discussions](https://github.com/your-username/weather-mcp-server/discussions)
+
+```text
 
 ```
 
@@ -349,7 +351,7 @@ Expected contents:
 
 ## Step 5: Consumer Configuration Examples
 
-### VS Code Configuration
+### VS Code MCP Configuration
 
 **`.vscode/mcp.json`**:
 

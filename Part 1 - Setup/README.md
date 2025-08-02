@@ -1,4 +1,6 @@
-# Part 0: Setup
+# Part 1: Setup
+
+> **⏱️ Estimated Time:** 15-20 minutes
 
 ## In this workshop
 

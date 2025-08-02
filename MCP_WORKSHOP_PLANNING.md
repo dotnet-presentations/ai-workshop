@@ -58,7 +58,8 @@ The workshop will use a per-unit directory structure where each part has its own
     README.md (Products page implementation)
     GenAiLab/ (with Products page added)
   Part 6 - Deployment/
-    README.md (deployment guide - uses Part 5 code)
+    README.md (deployment guide)
+    GenAiLab/ (with deployment configuration including .azure directory)
   Part 7 - Weather MCP Server/
     README.md (MCP introduction and weather server)
     WeatherMcpServer/ (basic MCP template with weather tools)

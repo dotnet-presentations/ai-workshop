@@ -112,7 +112,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 **Objective**: Test weather tools through GitHub Copilot
 
-**Test 3.1: Current Weather**
+#### Test 3.1: Current Weather
 
 1. Open GitHub Copilot Chat
 2. Enter prompt: "What's the current weather in Seattle?"
@@ -123,7 +123,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - ✅ Returns simulated weather data for Seattle
 - ✅ Response includes temperature, conditions, and humidity
 
-**Test 3.2: Weather Forecast**
+#### Test 3.2: Weather Forecast
 
 1. In Copilot Chat, enter: "Give me a 5-day weather forecast for New York"
 
@@ -133,7 +133,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - ✅ Returns 5-day forecast data
 - ✅ Each day includes date, temperature range, and conditions
 
-**Test 3.3: Invalid Location Handling**
+#### Test 3.3: Invalid Location Handling
 
 1. In Copilot Chat, enter: "What's the weather in InvalidCity?"
 
@@ -220,7 +220,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 **Objective**: Test business tools functionality
 
-**Test 7.1: Order Lookup**
+#### Test 7.1: Order Lookup
 
 1. In Copilot Chat, enter: "Look up order details for order ID 12345"
 
@@ -230,7 +230,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - ✅ Returns order information (customer: John Doe, items, status)
 - ✅ Data is properly formatted and readable
 
-**Test 7.2: Customer Search**
+#### Test 7.2: Customer Search
 
 1. Enter: "Find all orders for customer Jane Smith"
 
@@ -240,7 +240,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - ✅ Returns relevant customer order information
 - ✅ Handles customer name matching correctly
 
-**Test 7.3: Product Inventory**
+#### Test 7.3: Product Inventory
 
 1. Enter: "Check inventory for hiking boots"
 
@@ -254,7 +254,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 **Objective**: Test business tools handle edge cases properly
 
-**Test 8.1: Invalid Order ID**
+#### Test 8.1: Invalid Order ID
 
 1. Enter: "Look up order 99999"
 
@@ -264,7 +264,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - ✅ No exceptions or crashes
 - ✅ User-friendly error message
 
-**Test 8.2: Empty Customer Name**
+#### Test 8.2: Empty Customer Name
 
 1. Enter: "Find orders for customer with empty name"
 

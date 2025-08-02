@@ -85,13 +85,13 @@ By the end of Part 7, students will:
 
 ### Key Concepts to Emphasize
 
-**1. MCP Value Proposition (5 minutes)**
+#### 1. MCP Value Proposition (5 minutes)
 
 - AI agents limited to training data vs. real-time information
 - MCP bridges AI agents with live systems and custom capabilities
 - Weather example demonstrates real-world data integration
 
-**2. MCP Architecture (10 minutes)**
+#### 2. MCP Architecture (10 minutes)
 
 ```mermaid
 flowchart TD
@@ -100,14 +100,14 @@ flowchart TD
     MCP <--> Data[🌤️ Live Data Sources]
 ```
 
-**3. Tool Design Principles (10 minutes)**
+#### 3. Tool Design Principles (10 minutes)
 
 - Clear, descriptive tool names and descriptions
 - Proper parameter documentation with `[Description]` attributes
 - Error handling for invalid inputs
 - JSON serialization for structured responses
 
-### Teaching Flow (45-60 minutes)
+### Teaching Flow - Part 7 (45-60 minutes)
 
 #### **Introduction (10 minutes)**
 
@@ -171,9 +171,7 @@ A: Check tool descriptions are clear, VS Code MCP configuration is correct, and 
 
 ## Part 8: Enhanced MCP Server with Business Tools
 
-### Learning Objectives
-
-By the end of Part 8, students will:
+### Learning Objectives - Part 8
 
 - ✅ Design MCP tools that solve real business problems
 - ✅ Implement complex data structures and business logic
@@ -181,27 +179,25 @@ By the end of Part 8, students will:
 - ✅ Apply data validation and error handling principles
 - ✅ Test multi-server MCP configurations
 
-### Key Concepts to Emphasize
-
-**1. Business Context (5 minutes)**
+### Key Concepts to Emphasize - Part 8
 
 - ContosoOrders as realistic e-commerce scenario
 - Business tools: Orders, Customers, Inventory
 - Real-world applicability to any business domain
 
-**2. Tool Relationships (10 minutes)**
+#### 2. Tool Relationships (10 minutes)
 
 - Multiple tools working together
 - Data consistency across tool calls
 - Business workflow support through AI
 
-**3. Advanced MCP Patterns (10 minutes)**
+#### 3. Advanced MCP Patterns (10 minutes)
 
 - Complex parameter handling
 - Rich data structures in responses
 - Error handling for business scenarios
 
-### Teaching Flow (45-60 minutes)
+### Teaching Flow - Part 8 (45-60 minutes)
 
 #### **Business Context Introduction (10 minutes)**
 
@@ -254,7 +250,7 @@ By the end of Part 8, students will:
 
 ## Part 9: MCP Publishing and Distribution
 
-### Learning Objectives
+### Learning Objectives - Part 9
 
 By the end of Part 9, students will:
 
@@ -264,21 +260,19 @@ By the end of Part 9, students will:
 - ✅ Apply versioning and security best practices
 - ✅ Plan enterprise distribution scenarios
 
-### Key Concepts to Emphasize
-
-**1. Distribution Strategies (10 minutes)**
+### Key Concepts to Emphasize - Part 9
 
 - NuGet vs. source code vs. container distribution
 - Trade-offs between accessibility and control
 - Enterprise vs. public distribution
 
-**2. Professional Packaging (15 minutes)**
+#### 2. Professional Packaging (15 minutes)
 
 - Package metadata and documentation
 - Version management strategies
 - Security and authentication considerations
 
-**3. Maintenance and Support (10 minutes)**
+#### 3. Maintenance and Support (10 minutes)
 
 - Tool evolution and backwards compatibility
 - User support and documentation

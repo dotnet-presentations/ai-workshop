@@ -4,11 +4,24 @@ Get up to speed quickly with AI app building in .NET! Explore the new .NET AI pr
 
 ## Prerequisites
 
+### AI Web Chat Application (Parts 1-6)
+
 - Visual Studio 2022 with .NET Aspire workload installed
-- .NET AI Web Chatbot template installed
+- .NET AI Web Chatbot template installed  
 - .NET 9.0 SDK or later
 - Azure OpenAI subscription (optional, but recommended for full experience)
-- GitHub Copilot subscription (optional, but recommended for full experience)
+
+### Model Context Protocol (Parts 7-9)
+
+- .NET 10.0 SDK (preview 6 or higher) - Required for MCP development
+- Visual Studio Code with GitHub Copilot extensions
+- GitHub Copilot subscription (required for MCP testing)
+- Microsoft.Extensions.AI.Templates package
+
+### Optional but Recommended
+
+- Git for version control
+- Azure subscription for production deployment
 
 ## Lab Overview 🧪
 

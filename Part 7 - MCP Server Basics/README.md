@@ -49,11 +49,12 @@ flowchart TD
 Before starting this part, ensure you have:
 
 - ✅ **Completed Parts 1-6** of this workshop series:
-  - [Part 1: Create Project](../lab/part1-create-project.md) - Set up your development environment
-  - [Part 2: Explore Template](../lab/part2-explore-template.md) - Understanding the AI web chat template
-  - [Part 3: Azure OpenAI](../lab/part3-azure-openai.md) - Integrate with Azure OpenAI services
-  - [Part 4: Products Page](../lab/part4-products-page.md) - Build dynamic product pages
-  - [Part 5: Deploy Azure](../lab/part5-deploy-azure.md) - Deploy your application to Azure
+  - [Part 1: Setup](../Part%201%20-%20Setup/README.md) - Set up your development environment
+  - [Part 2: Create Project](../Part%202%20-%20Project%20Creation/README.md) - Understanding the AI web chat template
+  - [Part 3: Template Exploration](../Part%203%20-%20Template%20Exploration/README.md) - Integrate with Azure OpenAI services
+  - [Part 4: Azure OpenAI](../Part%204%20-%20Azure%20OpenAI/README.md) - Build dynamic product pages
+  - [Part 5: Products Page](../Part%205%20-%20Products%20Page/README.md) - Deploy your application to Azure
+  - [Part 6: Deployment](../Part%206%20-%20Deployment/README.md) - Deploy your application to Azure
 - ✅ **.NET 10.0 SDK** (preview 6 or higher) - `dotnet --version`
 - ✅ **Visual Studio Code** with GitHub Copilot extension
 - ✅ **MCP template installed** - verify with `dotnet new list | Select-String mcp`
@@ -382,4 +383,4 @@ In this part, you've learned the fundamentals of Model Context Protocol and buil
 
 ---
 
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 6: Deploy to Azure](../lab/part5-deploy-azure.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 6: Deployment](../Part%206%20-%20Deployment/README.md)

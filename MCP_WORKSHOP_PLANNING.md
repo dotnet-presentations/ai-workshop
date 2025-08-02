@@ -290,16 +290,33 @@ public async Task<string> SearchOrdersByCustomer(
 
 ## Implementation Checklist
 
-### Phase 1: Repository Restructuring
+### Prerequisites ✅ ALL VERIFIED
 
-- [ ] **1.1** Move existing `/src/start` to `/src/Part 1 - Create AI Project` using `git mv`
-- [ ] **1.2** Move existing `/src/complete` to `/src/temp-complete` using `git mv`
-- [ ] **1.3** Create new part directories (Parts 2-8)
-- [ ] **1.4** Copy and configure Part 3 snapshot (Azure OpenAI)
-- [ ] **1.5** Copy and configure Part 4 snapshot (Products Page)
-- [ ] **1.6** Move existing lab documentation to part directories using `git mv`
-- [ ] **1.7** Clean up temporary directory
-- [ ] **1.8** Update hardcoded paths in documentation
+- [x] **P.1:** Install .NET 10.0 SDK (preview 6 or higher) ✅ **Verified: 10.0.100-preview.6.25358.103**
+- [x] **P.2:** Install `Microsoft.Extensions.AI.Templates` NuGet package ✅ **Verified: mcpserver template available**
+- [x] **P.3:** Verify Visual Studio Code installation ✅ **Verified: 1.102.2**
+- [x] **P.4:** Verify GitHub Copilot extension installation ✅ **Verified: github.copilot extensions installed**
+- [x] **P.5:** Optional: Set up NuGet.org account for publishing ✅ **Confirmed: User has existing account**
+
+### Phase 1: Repository Restructuring ✅ COMPLETED (Commit: 92c601a)
+
+- [x] **1.1** Create `Part 1 - Setup` directory
+- [x] **1.2** Move `lab/part0-setup.md` → `Part 1 - Setup/README.md` using `git mv`
+- [x] **1.3** Create `Part 2 - Project Creation` directory  
+- [x] **1.4** Move `lab/part1-create-project.md` → `Part 2 - Project Creation/README.md` using `git mv`
+- [x] **1.5** Create `Part 3 - Template Exploration` directory
+- [x] **1.6** Move `lab/part2-explore-template.md` → `Part 3 - Template Exploration/README.md` using `git mv`
+- [x] **1.7** Create `Part 4 - Azure OpenAI` directory
+- [x] **1.8** Move `lab/part3-azure-openai.md` → `Part 4 - Azure OpenAI/README.md` using `git mv`
+- [x] **1.9** Create `Part 5 - Products Page` directory
+- [x] **1.10** Move `lab/part4-products-page.md` → `Part 5 - Products Page/README.md` using `git mv`
+- [x] **1.11** Create `Part 6 - Deployment` directory
+- [x] **1.12** Move `lab/part5-deploy-azure.md` → `Part 6 - Deployment/README.md` using `git mv`
+- [x] **1.13** Move `lab/images` and `lab/manuals` to repository root using `git mv`
+- [x] **1.14** Update README.md to reflect new 6-part structure
+- [x] **1.15** Fix all internal cross-references and image paths
+- [x] **1.16** Remove empty `lab` directory
+- [x] **1.17** Commit Phase 1 changes: "MCP refactor Phase 1: Restructure repository to 'Part X - Description' format"
 
 ### Phase 2: MCP Projects Creation
 

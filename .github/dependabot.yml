@@ -8,8 +8,6 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "10:00"
-      timezone: "America/Los_Angeles"
     open-pull-requests-limit: 10
     
   # Monitor NuGet packages for Part 6 - Deployment
@@ -18,8 +16,6 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "10:00"
-      timezone: "America/Los_Angeles"
     open-pull-requests-limit: 10
     
   # Monitor NuGet packages for Part 7 - MCP Server Basics
@@ -28,8 +24,6 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "10:00"
-      timezone: "America/Los_Angeles"
     open-pull-requests-limit: 10
     
   # Monitor NuGet packages for Part 8 - Enhanced MCP Server
@@ -38,6 +32,4 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "10:00"
-      timezone: "America/Los_Angeles"
     open-pull-requests-limit: 10

@@ -1,7 +1,7 @@
 # Part 8: Enhanced MCP Server with Business Tools
 
 > **⏱️ Estimated Time:** 45-60 minutes
-
+>
 > **Prerequisites**: Complete [Part 7: MCP Server Basics](../Part%207%20-%20MCP%20Server%20Basics/README.md) to understand MCP fundamentals before building business tools.
 
 ## Overview

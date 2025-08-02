@@ -74,4 +74,4 @@ If you don't already have a GitHub account, follow these steps to create one:
 
 ## Next Steps
 
-Once your setup is complete, proceed to [Part 1 - Create a Project with AI Web Chat Template](part1-create-project.md)
+Once your setup is complete, proceed to [Part 2 - Create a Project with AI Web Chat Template](../Part%202%20-%20Project%20Creation/README.md)

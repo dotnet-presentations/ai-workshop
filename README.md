@@ -9,6 +9,8 @@ Get up to speed quickly with AI app building in .NET! Explore the new .NET AI pr
 - Visual Studio 2022 with .NET Aspire workload installed
 - .NET AI Web Chatbot template installed  
 - .NET 9.0 SDK or later
+- Docker Desktop or Podman (required for .NET Aspire orchestration)
+- GitHub account (required for GitHub Models access)
 - Azure OpenAI subscription (optional, but recommended for full experience)
 
 ### Model Context Protocol (Parts 7-9)

@@ -1,5 +1,7 @@
 # Create a new project using the AI Web Chat template
 
+> **⏱️ Estimated Time:** 30-45 minutes
+
 ## In this workshop
 
 In this workshop, you'll create a new project using the AI Web Chat template in Visual Studio. You'll configure GitHub Models as the AI service provider, set up the connection string, and run and explore the application.
@@ -98,6 +100,8 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
    - Click "Generate token"
    - Copy the generated token (you won't be able to see it again)
 
+   > **Note**: We're using classic tokens for simplicity. If you prefer fine-grained tokens, you'll need to specify the `models:read` scope. See the [GitHub Models announcement](https://github.blog/changelog/2025-05-15-modelsread-now-required-for-github-models-access/) for more details.
+
 1. In the Solution Explorer, right-click on the `GenAiLab.AppHost` project and select "Manage User Secrets"
 
 1. In the `secrets.json` file that opens, add the following connection string:
@@ -167,6 +171,48 @@ Let's test the AI functionality of the application:
 - How to set up the connection string for AI services
 - How to use .NET Aspire to orchestrate multiple services
 - How to interact with an AI-powered chat application
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### Issue: Certificate Trust Prompt
+
+**Problem**: Application doesn't start, appears to hang during launch.
+
+**Solution**: Look for the IIS Developer certificate trust prompt (may be hidden behind the browser). Click "Yes" to accept the certificate.
+
+#### Issue: Build Errors After Template Creation
+
+**Problem**: Build fails with static asset conflicts or package restore issues.
+
+**Solution**:
+
+```powershell
+dotnet clean
+dotnet restore
+dotnet build
+```
+
+#### Issue: GitHub Models Connection Fails
+
+**Problem**: Authentication errors or "unauthorized" messages when testing chat.
+
+**Solution**:
+
+1. Verify your GitHub token has the correct permissions
+2. Check that the token is correctly placed in `secrets.json`
+3. Ensure the connection string format is correct: `"Endpoint=https://models.inference.ai.azure.com;Key=YOUR_TOKEN"`
+
+#### Issue: Template Not Found
+
+**Problem**: Can't find the AI Web Chat template in Visual Studio.
+
+**Solution**:
+
+1. Verify the template is installed: `dotnet new list | Select-String aichatweb`
+2. If not found, install it: `dotnet new install Microsoft.Extensions.AI.Templates`
+3. Restart Visual Studio after template installation
 
 ## Next Steps
 

@@ -1,5 +1,7 @@
 # Explore the Template Code
 
+> **⏱️ Estimated Time:** 30-40 minutes
+
 ## In this workshop
 
 In this workshop, you'll explore the code structure of the AI Web Chat template. You'll learn about the different services configured in the .NET Aspire AppHost, understand the application configuration in the Web project, explore how `IChatClient` is configured and used, and dive into Microsoft Extensions for Vector Data.

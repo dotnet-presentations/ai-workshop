@@ -1,5 +1,7 @@
 # Deploy to Azure
 
+> **⏱️ Estimated Time:** 30-45 minutes (excluding Azure provisioning time ~6 minutes)
+
 ## In this workshop
 
 In this workshop, you will learn how to deploy your AI application to Azure using the Azure Developer CLI (`azd`). You'll deploy your PostgreSQL-based application to Azure Container Apps for production use.

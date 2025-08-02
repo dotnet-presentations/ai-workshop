@@ -1,5 +1,7 @@
 # Write a New Products Page
 
+> **⏱️ Estimated Time:** 60-90 minutes
+
 ## In this workshop
 
 In this workshop, you'll enhance your application by creating a Products page that leverages AI to automatically generate product descriptions and categorize items based on their content. This workshop demonstrates several key concepts in modern AI application development:

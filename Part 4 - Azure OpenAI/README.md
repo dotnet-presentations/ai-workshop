@@ -1,11 +1,19 @@
 # Convert from GitHub Models to Azure OpenAI
 
+> **⏱️ Estimated Time:** 45-60 minutes
+
 ## In this workshop
 
 In this workshop, you will learn how to migrate your application from using GitHub Models during development to Azure OpenAI for production. You'll understand how the common interfaces in Microsoft Extensions for AI make this migration seamless, create an Azure OpenAI resource, deploy models, and update your application's configuration.
 
 > [!TIP]
-> **Azure AI is Often Simpler**: If you have Azure AI credentials available, Azure OpenAI setup is typically simpler than GitHub Models. The configuration requires fewer steps and has better error handling. Consider starting with Azure AI if you have access.
+> **Alternative AI Providers**: While this workshop focuses on migrating from GitHub Models to Azure OpenAI, the same principles apply to other providers:
+>
+> - **Azure OpenAI** (covered here): Simpler setup, better error handling, higher token limits - recommended if you have Azure access
+> - **OpenAI** (direct): Similar to Azure OpenAI but with different pricing and terms - see [OpenAI documentation](https://platform.openai.com/docs/quickstart) for setup
+> - **GitHub Models**: Great for getting started and learning, with free tier access for all GitHub users
+>
+> Choose the provider that best fits your access and requirements. The beauty of Microsoft Extensions for AI is that switching between providers requires minimal code changes.
 
 ## Understand the IChatClient as a common interface across services
 
@@ -161,6 +169,65 @@ Now let's run the application with Azure OpenAI integration:
 - How to obtain the endpoint and API keys for Azure OpenAI
 - How to update your application to use Azure OpenAI instead of GitHub Models
 - How to test the application with Azure OpenAI integration
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### Issue: Build Errors After Configuration Changes
+
+**Problem**: Build fails with static asset conflicts after updating connection strings.
+
+**Solution**:
+
+```powershell
+dotnet clean
+dotnet build
+```
+
+#### Issue: Package Restore Problems
+
+**Problem**: Missing dependencies or package restore failures.
+
+**Solution**:
+
+```powershell
+dotnet restore
+dotnet build
+```
+
+#### Issue: Azure OpenAI Deployment Not Found
+
+**Problem**: Application can't connect to Azure OpenAI, getting "deployment not found" errors.
+
+**Solution**:
+
+1. Verify both models are deployed: `gpt-4o-mini` and `text-embedding-3-small`
+2. Check deployment names match exactly (case-sensitive)
+3. Ensure the Azure OpenAI resource is in the correct region
+4. Verify the endpoint URL format: `https://YOUR_RESOURCE_NAME.openai.azure.com/`
+
+#### Issue: Invalid API Key
+
+**Problem**: Authentication errors when connecting to Azure OpenAI.
+
+**Solution**:
+
+1. Regenerate the API key in the Azure portal
+2. Update the `secrets.json` file with the new key
+3. Ensure no extra spaces or characters in the connection string
+4. Restart the application after updating secrets
+
+#### Issue: PDF Ingestion Fails
+
+**Problem**: Application crashes or fails when processing the new PDF files.
+
+**Solution**:
+
+1. Ensure all PDF files are properly copied to `wwwroot/Data`
+2. Check that the Azure OpenAI deployment has sufficient quota
+3. Monitor token usage in the Azure portal
+4. Consider processing PDFs in smaller batches if hitting rate limits
 
 ## Next Steps
 

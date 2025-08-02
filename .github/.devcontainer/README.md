@@ -46,7 +46,7 @@ This workshop provides two development container configurations to suit differen
 1. **Open in Dev Container:** Use the "Dev Containers: Reopen in Container" command in VS Code
 2. **Choose your option:** VS Code will ask which devcontainer to use
 3. **Wait for setup:** The container will install all dependencies automatically
-4. **Start building:** Follow the [workshop instructions](../../lab/part0-setup.md)!
+4. **Start building:** Follow the [workshop instructions](../../Part%201%20-%20Setup/README.md)!
 
 ## 💡 **Switching Between Options**
 

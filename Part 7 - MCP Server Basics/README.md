@@ -1,5 +1,7 @@
 # Part 7: MCP Server Basics
 
+> **⏱️ Estimated Time:** 45-60 minutes
+
 ## Overview
 
 In this part of the workshop, you'll learn how to create a **Model Context Protocol (MCP) server** that extends AI agents like GitHub Copilot with custom tools and capabilities. MCP servers allow you to provide AI agents with access to real-time data, business systems, and specialized functionality that goes beyond their built-in knowledge.
@@ -359,6 +361,53 @@ In Part 8, you'll learn how to:
 - 📦 [ModelContextProtocol NuGet Package](https://www.nuget.org/packages/ModelContextProtocol)
 - 💻 [MCP in VS Code Documentation](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
 - 🎯 [MCP .NET Guide](https://aka.ms/nuget/mcp/guide)
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### Issue: MCP Server Not Found
+
+**Problem**: VS Code can't discover the MCP server, tools not available in Copilot.
+
+**Solution**:
+
+1. Verify `.vscode/mcp.json` path is correct
+2. Check that the project builds successfully: `dotnet build`
+3. Restart VS Code after configuration changes
+4. Verify .NET 10 SDK is in PATH: `dotnet --version`
+
+#### Issue: Tool Execution Failed
+
+**Problem**: MCP server starts but tools fail to execute.
+
+**Solution**:
+
+1. Check VS Code Output panel → "MCP" channel for errors
+2. Verify tool methods have proper `[McpTool]` attributes
+3. Check for runtime exceptions in tool code
+4. Validate tool parameter types and descriptions
+
+#### Issue: .NET 10 SDK Not Found
+
+**Problem**: Template creation or build fails with SDK version errors.
+
+**Solution**:
+
+1. Install .NET 10 SDK preview: Download from [.NET Downloads](https://dotnet.microsoft.com/download/dotnet/10.0)
+2. Verify installation: `dotnet --version` should show 10.0.x
+3. Set .NET 10 as default if multiple versions installed
+
+#### Issue: GitHub Copilot Not Using Tools
+
+**Problem**: Copilot responds but doesn't use MCP tools.
+
+**Solution**:
+
+1. Verify GitHub Copilot subscription is active
+2. Check that both `github.copilot` and `github.copilot-chat` extensions are installed
+3. Try explicit tool requests: "Use the weather tool to get current conditions for Seattle"
+4. Check MCP server is running in VS Code Output panel
 
 ---
 

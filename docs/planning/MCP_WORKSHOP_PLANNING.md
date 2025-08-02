@@ -2,26 +2,7 @@
 
 ## Overview
 
-This document outlines the implementation plan for adding Model Context Pro5. **Update Lab Structure section**:
-
-   ```markdown
-   ## Lab Structure 📁
-   
-   The repository is structured as follows:
-   
-   - 📖 `/lab`: Contains all the lab instructions and documentation
-   - 🚀 `/src/Part 1 - Setup`: Prerequisites and setup (Part 1)
-   - 🆕 `/src/Part 2 - Project Creation`: Create AI Web Chat project (Part 2)
-   - 🔍 `/src/Part 3 - Template Exploration`: Template exploration (Part 3) - README only
-   - ☁️ `/src/Part 4 - Azure OpenAI`: Azure OpenAI integration (Part 4)
-   - 🛍️ `/src/Part 5 - Products Page`: Products page implementation (Part 5)
-   - 🚀 `/src/Part 6 - Deployment`: Azure deployment (Part 6) - README only
-   - 🔧 `/src/Part 7 - Weather MCP Server`: Weather MCP server (Part 7)
-   - 🏢 `/src/Part 8 - Business MCP Server`: Business MCP server with ContosoOrders tools (Part 8)
-   - 📦 `/src/Part 9 - MCP Publishing`: MCP publishing (Part 9) - README only
-   ```
-
-   **Note**: Some parts (1, 3, 6, 9) contain only README files as they focus on setup, exploration, deployment, or publishing rather than code creation.units to the existing .NET AI Workshop. The MCP units will complement the existing AI Web Chat application by teaching users how to build and publish custom MCP servers that can be consumed by AI agents like GitHub Copilot.
+This document outlines the implementation plan for adding Model Context Protocol (MCP) units to the existing .NET AI Workshop. The MCP units complement the existing AI Web Chat application by teaching users how to build and publish custom MCP servers that can be consumed by AI agents like GitHub Copilot.
 
 ## Workshop Structure
 

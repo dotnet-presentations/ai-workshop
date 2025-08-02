@@ -44,11 +44,11 @@ Parts 1, 3, 6, and 9 contain only README files as they focus on setup, explorati
 
 ## Important Notes for Testing
 
-1. **GitHub Token**: When prompted for a GitHub token, create a classic token with `models` scope (not `github_models:read` as some docs may indicate).
+1. **GitHub Token**: When prompted for a GitHub token, create a classic token (no specific scopes needed). If using fine-grained tokens, the `models:read` scope is required. See [GitHub Models announcement](https://github.blog/changelog/2025-05-15-modelsread-now-required-for-github-models-access/) for details.
 
-2. **Azure AI Preferred**: Azure AI setup is significantly simpler than GitHub Models. If Azure AI credentials are available, use them instead of GitHub Models for smoother testing experience.
+2. **AI Provider Options**: The workshop starts with GitHub Models for accessibility (all GitHub users have access), then demonstrates migration to Azure OpenAI. Azure OpenAI offers simpler setup and better error handling if you have Azure access. OpenAI direct is also an option with similar capabilities.
 
-4. **Code Inconsistencies**: Some documentation may show code that doesn't match the current template. Focus on what actually gets generated and works, not exact code matches in documentation.
+4. **Code Inconsistencies**: Some documentation may show code that doesn't match the current template exactly. Focus on what actually gets generated and works, not exact code matches in documentation. Templates evolve over time, and the workshop prioritizes functional correctness over documentation precision.
 
 6. **MCP Prerequisites**: Parts 7-9 require .NET 10 SDK preview and Visual Studio Code with GitHub Copilot extension. MCP servers use the new `mcpserver` project template and are created as separate projects.
 
@@ -72,39 +72,13 @@ Based on comprehensive testing:
 - **MCP Integration**: .NET 10 MCP template provides smooth server creation experience
 - **VS Code Integration**: MCP servers integrate well with GitHub Copilot in VS Code
 
-### Recommended Improvements
-1. **Prioritize Azure AI**: Simpler setup than GitHub Models
-2. **Realistic Time Estimates**: Update lab timing expectations based on testing
-3. **Troubleshooting Guide**: Include common build issue solutions
-4. **MCP Documentation**: Ensure clear prerequisites for .NET 10 preview and VS Code setup
-
-### Updated Testing Guidelines
+### Testing Guidelines
 - Use Azure AI credentials when available (simpler than GitHub Models)
 - Document all build errors and resolution steps meticulously
 - Test actual deployment when possible for complete validation
 - Focus on educational value and learning objectives
 - Validate that each part flows logically to the next
-
-### Post-Testing Improvement Process
-After completing the workshop testing, follow these phases for repository improvement:
-
-#### Phase 1: Code Validation & Documentation Updates
-1. **Test Each Part Independently**: Validate each code snapshot builds and functions correctly
-2. **Update Testing Documentation**: Add testing insights and discoveries to this prompt file
-3. **Update Lab Documentation**: Fix inconsistencies, add realistic time estimates, include troubleshooting
-4. **MCP Validation**: Ensure MCP server projects build correctly and integrate with VS Code
-
-#### Phase 2: Workshop Flow Validation
-5. **Test Complete Workshop Flow**: Validate progression through all 9 parts
-6. **Cross-Reference Validation**: Ensure all links between parts work correctly
-7. **Prerequisites Verification**: Confirm all required tools and SDKs are properly documented
-8. **Performance Testing**: Validate time estimates and complexity assessments
-
-#### Repository State Verification
-- Test: Each part's code snapshots build successfully and function as expected
-- Validate: Documentation clarity and cross-references between parts
-- Ensure: MCP server projects integrate properly with VS Code and GitHub Copilot
-- Verify: Complete workshop flow from Part 1 through Part 9 works smoothly
+- Use updated PowerShell commands for Windows environment testing
 
 ## Procedure
 
@@ -172,7 +146,7 @@ The workshop now uses a per-unit directory structure where each part is self-con
 ## Reproducible Commands for Common Issues
 
 ### Build Troubleshooting
-```bash
+```powershell
 # Clean build artifacts if conflicts occur
 dotnet clean
 dotnet build
@@ -183,7 +157,7 @@ dotnet build
 ```
 
 ### Git-Based Testing Validation
-```bash
+```powershell
 # Test each code snapshot builds successfully
 cd "Part 2 - Project Creation/GenAiLab" && dotnet build --verbosity minimal
 cd "Part 6 - Deployment/GenAiLab" && dotnet build --verbosity minimal
@@ -191,12 +165,12 @@ cd "Part 7 - MCP Server Basics/WeatherMcpServer" && dotnet build --verbosity min
 cd "Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer" && dotnet build --verbosity minimal
 
 # Verify workshop structure
-ls "Part */README.md"  # Should show all 9 README files
-ls "Part */*/Program.cs"  # Should show main program files in code parts
+Get-ChildItem "Part */README.md"  # Should show all 9 README files
+Get-ChildItem "Part */*/Program.cs"  # Should show main program files in code parts
 ```
 
 ### Testing Validation Commands
-```bash
+```powershell
 # Test starter project (Part 2)
 cd "Part 2 - Project Creation/GenAiLab" && dotnet build --verbosity minimal
 
@@ -204,7 +178,7 @@ cd "Part 2 - Project Creation/GenAiLab" && dotnet build --verbosity minimal
 cd "Part 6 - Deployment/GenAiLab" && dotnet build --verbosity minimal
 
 # Check workshop structure
-ls "Part */README.md"  # Should show README files for all 9 parts
+Get-ChildItem "Part */README.md"  # Should show README files for all 9 parts
 
 # Test MCP servers (Parts 7-8)
 cd "Part 7 - MCP Server Basics/WeatherMcpServer" && dotnet build --verbosity minimal
@@ -212,7 +186,7 @@ cd "Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer" && dotnet build --verbo
 ```
 
 ### MCP Server Testing Commands (Parts 7-9)
-```bash
+```powershell
 # Create and test Weather MCP Server (Part 7)
 dotnet new mcpserver -n WeatherMcpServer
 cd WeatherMcpServer && dotnet build --verbosity minimal
@@ -222,11 +196,11 @@ dotnet new mcpserver -n ContosoOrdersMcpServer
 cd ContosoOrdersMcpServer && dotnet build --verbosity minimal
 
 # Verify MCP configuration files are created
-ls *.json  # Should see mcp-server-config.json files
+Get-ChildItem *.json  # Should see mcp-server-config.json files
 ```
 
 ### Azure Deployment Testing (If Credentials Available)
-```bash
+```powershell
 # Navigate to complete project for deployment testing
 cd "Part 6 - Deployment/GenAiLab"
 

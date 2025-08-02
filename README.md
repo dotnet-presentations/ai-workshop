@@ -123,7 +123,9 @@ Follow the [setup instructions](Part%201%20-%20Setup/README.md) to get started w
 
 ## Lab Modules 📚
 
-The lab is divided into six modules:
+The lab is divided into nine modules:
+
+### AI Web Chat Application (Parts 1-6)
 
 1. 🏗️ [**Create a Project with AI Web Chat Template**](Part%202%20-%20Project%20Creation/README.md): Build a web application using the .NET AI Web Chat template.
 
@@ -134,6 +136,14 @@ The lab is divided into six modules:
 4. 🛍️ [**Write a Products Page**](Part%205%20-%20Products%20Page/README.md): Implement a product catalog that leverages AI for enhanced product information.
 
 5. 🚀 [**Deploy to Azure**](Part%206%20-%20Deployment/README.md): Deploy your application to Azure using the Azure Developer CLI.
+
+### Model Context Protocol (MCP) Servers (Parts 7-9)
+
+1. 🔧 [**MCP Server Basics**](Part%207%20-%20MCP%20Server%20Basics/README.md): Create your first MCP server with weather tools that extend AI agents like GitHub Copilot.
+
+2. 🏢 [**Enhanced MCP Server with Business Tools**](Part%208%20-%20Enhanced%20MCP%20Server/README.md): Build sophisticated business tools for order management, inventory, and customer service scenarios.
+
+3. 📦 [**MCP Publishing and Distribution**](Part%209%20-%20MCP%20Publishing/README.md): Package, publish, and distribute your MCP servers through NuGet for professional deployment.
 
 ## Lab Structure 📁
 

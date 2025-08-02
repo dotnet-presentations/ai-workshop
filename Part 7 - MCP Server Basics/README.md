@@ -189,7 +189,7 @@ Now for the exciting part - testing your custom MCP server with GitHub Copilot!
 1. **Open GitHub Copilot Chat** in VS Code
 2. **Ask for weather information**:
 
-   ```
+   ```text
    What's the current weather in Seattle?
    ```
 
@@ -202,7 +202,7 @@ Now for the exciting part - testing your custom MCP server with GitHub Copilot!
 
 1. **Ask for a forecast**:
 
-   ```
+   ```text
    Can you give me a 5-day weather forecast for Tokyo?
    ```
 
@@ -214,7 +214,7 @@ Now for the exciting part - testing your custom MCP server with GitHub Copilot!
 
 1. **Ask for comparative weather**:
 
-   ```
+   ```text
    Compare the current weather in London and Paris
    ```
 
@@ -258,7 +258,7 @@ The `[Description]` attributes are crucial:
 
 Try asking Copilot to help with travel planning:
 
-```
+```text
 I'm planning a trip to Rome next week. What should I pack based on the weather?
 ```
 
@@ -266,7 +266,7 @@ I'm planning a trip to Rome next week. What should I pack based on the weather?
 
 Ask for contextual recommendations:
 
-```
+```text
 What outdoor activities would be good in Vancouver based on the current weather?
 ```
 
@@ -274,7 +274,7 @@ What outdoor activities would be good in Vancouver based on the current weather?
 
 Compare weather across regions:
 
-```
+```text
 Which city has better weather right now: Miami, Denver, or Portland?
 ```
 

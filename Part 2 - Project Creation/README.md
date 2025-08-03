@@ -32,8 +32,7 @@ Create a new project using the AI Web Chat template as follows:
    - Check the box for "Use Aspire orchestration"
    - Click "Create"
 
-> [!TIP]
-> **Alternative: Ollama Option**: If you're using the Ollama development container (see [Development Container Options](../.github/.devcontainer/README.md)), you can select "Ollama" as the AI service provider instead of "GitHub Models". This allows you to work with local AI models without requiring a GitHub account or internet connection.
+   > **Alternative: Ollama Option**: If you're using the Ollama development container (see [Development Container Options](../.github/.devcontainer/README.md)), you can select "Ollama" as the AI service provider instead of "GitHub Models". This allows you to work with local AI models without requiring a GitHub account or internet connection.
 
    ![Additional Information in Visual Studio](../images/vs-additional-information.png)
 
@@ -68,7 +67,6 @@ If you prefer to use the command line, you can create the same project using the
    - Vector store: `Qdrant`
    - .NET Aspire orchestration: `enabled`
 
-   > [!TIP]
    > **Alternative: Ollama Option**: If you're using the Ollama development container, you can replace `--provider githubmodels` with `--provider ollama` to use local AI models instead.
 
 4. Navigate into the project directory:

@@ -7,7 +7,7 @@
 In this workshop, you will learn how to deploy your AI application to Azure using the Azure Developer CLI (`azd`). You'll deploy your PostgreSQL-based application to Azure Container Apps for production use.
 
 > [!TIP]
-> If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the `/src/complete` folder which already includes all the necessary changes. The complete code has already been updated with the PostgreSQL configuration and external HTTP endpoints setup described in this section. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
+> If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the working code snapshot provided in this `Part 6 - Deployment` folder. The complete code has already been updated with the necessary configuration for external HTTP endpoints and deployment. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
 
 ## Configure the web application for external access
 

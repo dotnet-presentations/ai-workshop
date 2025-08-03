@@ -142,31 +142,33 @@ The lab is divided into nine modules:
 
 ### AI Web Chat Application (Parts 1-6)
 
-1. 🏗️ [**Create a Project with AI Web Chat Template**](Part%202%20-%20Project%20Creation/README.md): Build a web application using the .NET AI Web Chat template.
+1. 🏗️ [**Setup**](Part%201%20-%20Setup/README.md): Configure prerequisites and development environment for the AI workshop.
 
-2. 🔍 [**Explore the Template Code**](Part%203%20-%20Template%20Exploration/README.md): Understand the implementation of vector embeddings, semantic search, and chat interfaces in AI Web Chat projects.
+2. 🏗️ [**Project Creation**](Part%202%20-%20Project%20Creation/README.md): Build a web application using the .NET AI Web Chat template.
 
-3. ☁️ [**Convert from GitHub Models to Azure OpenAI**](Part%204%20-%20Azure%20OpenAI/README.md): Transition from GitHub Models to the Azure OpenAI service for production-ready capabilities.
+3. 🔍 [**Template Exploration**](Part%203%20-%20Template%20Exploration/README.md): Understand the implementation of vector embeddings, semantic search, and chat interfaces in AI Web Chat projects.
 
-4. 🛍️ [**Write a Products Page**](Part%205%20-%20Products%20Page/README.md): Implement a product catalog that leverages AI for enhanced product information.
+4. ☁️ [**Azure OpenAI**](Part%204%20-%20Azure%20OpenAI/README.md): Transition from GitHub Models to the Azure OpenAI service for production-ready capabilities.
 
-5. 🚀 [**Deploy to Azure**](Part%206%20-%20Deployment/README.md): Deploy your application to Azure using the Azure Developer CLI.
+5. 🛍️ [**Products Page**](Part%205%20-%20Products%20Page/README.md): Implement a product catalog that leverages AI for enhanced product information.
+
+6. 🚀 [**Deployment**](Part%206%20-%20Deployment/README.md): Deploy your application to Azure using the Azure Developer CLI.
 
 ### Model Context Protocol (MCP) Servers (Parts 7-9)
 
 1. 🔧 [**MCP Server Basics**](Part%207%20-%20MCP%20Server%20Basics/README.md): Create your first MCP server with weather tools that extend AI agents like GitHub Copilot.
 
-2. 🏢 [**Enhanced MCP Server with Business Tools**](Part%208%20-%20Enhanced%20MCP%20Server/README.md): Build sophisticated business tools for order management, inventory, and customer service scenarios.
+2. 🏢 [**Enhanced MCP Server**](Part%208%20-%20Enhanced%20MCP%20Server/README.md): Build sophisticated business tools for order management, inventory, and customer service scenarios.
 
-3. 📦 [**MCP Publishing and Distribution**](Part%209%20-%20MCP%20Publishing/README.md): Package, publish, and distribute your MCP servers through NuGet for professional deployment.
+3. 📦 [**MCP Publishing**](Part%209%20-%20MCP%20Publishing/README.md): Package, publish, and distribute your MCP servers through NuGet for professional deployment.
 
 ## Lab Structure 📁
 
 The repository is structured as follows:
 
-- 📖 `/lab`: Contains all the lab instructions and documentation
-- 🚀 `/src/start`: Contains the starting code for the lab exercises
-- ✅ `/src/complete`: Contains the completed solution after all lab exercises
+- 📖 `Part 1 - Setup` through `Part 9 - MCP Publishing`: Contains all the lab instructions, documentation, and working code snapshots
+- � `manuals/`: Product documentation PDFs for the AI chatbot to reference
+- 🧪 `docs/testing/`: Testing procedures and validation reports
 
 ## Session Resources 📚
 

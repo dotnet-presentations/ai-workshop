@@ -66,7 +66,7 @@ A: Your service may have failed to start, or it may be missing some configuratio
 5. Observe the log outputs from Console log stream and System log stream to identify any errors.
 6. If logs are written to disk, use *Console* in the navigation to connect to a shell within the running container.
 
-For more troubleshooting information, visit [Container Apps troubleshooting](https://learn.microsoft.com/azure/container-apps/troubleshooting). 
+For more troubleshooting information, visit [Container Apps troubleshooting](https://learn.microsoft.com/azure/container-apps/troubleshooting).
 
 ### Additional information
 

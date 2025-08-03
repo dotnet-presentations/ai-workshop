@@ -382,98 +382,135 @@ Content: {content}";
 
 ## Create the Products UI
 
-Now let's create the user interface for displaying our AI-generated products.
-
-1. Create a new folder called `Components` > `Pages` in the `src/start/GenAiLab.Web` project (if it doesn't already exist).
+Now let's create the user interface for displaying our AI-generated products using QuickGrid component.
 
 1. In the `Components/Pages` folder, create a new file called `Products.razor` with the following content:
 
 ```razor
 @page "/products"
-@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.QuickGrid
 @inject ProductService ProductService
-@inject IJSRuntime JSRuntime
 
 <PageTitle>Products - GenAI Lab</PageTitle>
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="mb-4">🛍️ Product Catalog</h1>
-            <p class="lead text-muted mb-4">
-                AI-generated product descriptions and categories based on ingested documentation
-            </p>
-        </div>
-    </div>
+<h1>📦 Our Products</h1>
 
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="form-floating">
-                <select class="form-select" id="categoryFilter" @bind="selectedCategory" @bind:after="OnCategoryChanged">
-                    <option value="">All Categories</option>
-                    @foreach (var category in categories)
-                    {
-                        <option value="@category">@category</option>
-                    }
-                </select>
-                <label for="categoryFilter">Filter by Category</label>
-            </div>
-        </div>
-        <div class="col-md-8 d-flex align-items-end">
-            <div class="text-muted">
-                Showing @filteredProducts.Count() of @allProducts.Count() products
-            </div>
-        </div>
+@if (AllProducts == null)
+{
+    <div class="message-box">
+        <span>🔄 Loading products...</span>
     </div>
-
-    @if (isLoading)
-    {
-        <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading products...</span>
-            </div>
-            <p class="mt-3 text-muted">Loading AI-generated products...</p>
-        </div>
-    }
-    else if (!filteredProducts.Any())
-    {
-        <div class="alert alert-info">
-            <h4 class="alert-heading">No Products Found</h4>
-            <p>No products match your current filter. Try selecting a different category or clear the filter to see all products.</p>
-        </div>
-    }
-    else
-    {
-        <div class="row">
-            @foreach (var product in filteredProducts)
+}
+else if (!FilteredProducts.Any())
+{
+    <div class="message-box">
+        <span>📦 No products found</span>
+    </div>
+}
+else
+{
+    <div> <select @bind="CategoryFilter" @bind:after="StateHasChanged">
+            <option value="">✨ All Categories</option>
+            @foreach (var category in Categories)
             {
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="card-title text-primary">@product.Name</h5>
-                                <span class="badge bg-secondary">@product.Category</span>
-                            </div>
-                            <p class="card-text text-muted">@product.ShortDescription</p>
-                        </div>
-                        <div class="card-footer bg-transparent">
-                            <small class="text-muted">
-                                <i class="bi bi-file-earmark-pdf"></i> @product.FileName
-                            </small>
-                        </div>
-                    </div>
-                </div>
+                <option value="@category">📁 @category</option>
             }
+        </select>
+
+        <div class="product-table-container">
+            <QuickGrid Items="@FilteredProducts">
+                <PropertyColumn Property="@(p => p.Name)" Title="📦 Product Name" Sortable="true" />
+                <PropertyColumn Property="@(p => p.ShortDescription)" Title="📝 Description" />
+                <PropertyColumn Property="@(p => p.Category)" Title="🏷️ Category" Sortable="true" />
+            </QuickGrid>
         </div>
+    </div>
+}
+
+<style>
+    h1 {
+        margin-bottom: 1.5rem;
     }
-</div>
+
+    .message-box {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #3a4ed5;
+        background-color: #f0f4ff;
+        border-radius: 0.25rem;
+    }
+
+    select {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+        align-self: flex-end;
+    }
+
+    .product-table-container {
+        margin-bottom: 2rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 0.25rem;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    ::deep table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    ::deep th {
+        background-color: #f5f5f5;
+        font-weight: 600;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid #ddd;
+    }
+
+    ::deep td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    ::deep tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    ::deep tr:hover {
+        background-color: #f0f4ff;
+    }
+
+    ::deep .col-options-button {
+        color: #3a4ed5;
+    }
+
+    ::deep .col-options-menu {
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+    }
+</style>
 
 @code {
-    private List<ProductInfo> allProducts = new();
-    private List<ProductInfo> filteredProducts = new();
-    private List<string> categories = new();
-    private string selectedCategory = "";
-    private bool isLoading = true;
+    private IQueryable<ProductInfo>? AllProducts;
+    private List<string> Categories { get; set; } = new List<string>();
+    private string CategoryFilter { get; set; } = string.Empty;
+
+    private IQueryable<ProductInfo> FilteredProducts
+    {
+        get
+        {
+            if (AllProducts == null)
+                return Enumerable.Empty<ProductInfo>().AsQueryable();
+
+            if (string.IsNullOrEmpty(CategoryFilter))
+                return AllProducts;
+
+            return AllProducts.Where(p => p.Category == CategoryFilter);
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -482,33 +519,9 @@ Now let's create the user interface for displaying our AI-generated products.
 
     private async Task LoadData()
     {
-        isLoading = true;
-        StateHasChanged();
-
-        try
-        {
-            allProducts = (await ProductService.GetProductsAsync()).ToList();
-            categories = await ProductService.GetCategoriesAsync();
-            filteredProducts = allProducts.ToList();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading products: {ex.Message}");
-        }
-        finally
-        {
-            isLoading = false;
-            StateHasChanged();
-        }
-    }
-
-    private async Task OnCategoryChanged()
-    {
-        filteredProducts = string.IsNullOrEmpty(selectedCategory)
-            ? allProducts.ToList()
-            : allProducts.Where(p => p.Category == selectedCategory).ToList();
-
-        StateHasChanged();
+        Categories = await ProductService.GetCategoriesAsync();
+        var products = await ProductService.GetProductsAsync();
+        AllProducts = products.AsQueryable();
     }
 }
 ```
@@ -517,45 +530,54 @@ Now let's create the user interface for displaying our AI-generated products.
 
 Let's add a link to our new Products page in the navigation.
 
-1. Open the file `src/start/GenAiLab.Web/Components/Layout/ChatHeader.razor`
+1. Open the file `Components/Pages/Chat/ChatHeader.razor`
 
-1. Look for the existing navigation buttons and add a new Products button. Find this section in the file:
-
-```razor
-<div class="nav-buttons">
-    <a href="/" class="btn btn-outline-light me-2">
-        <i class="bi bi-chat-dots"></i> Chat
-    </a>
-</div>
-```
-
-1. Replace it with this updated version that includes the Products button:
+1. Find the existing navigation section and update it to include the Products button. Replace the existing `chat-header-controls` div with:
 
 ```razor
-<div class="nav-buttons">
-    <a href="/" class="btn btn-outline-light me-2">
-        <i class="bi bi-chat-dots"></i> Chat
-    </a>
-    <a href="/products" class="btn btn-outline-light">
-        <i class="bi bi-grid-3x3-gap"></i> Products
-    </a>
-</div>
+    <div class="chat-header-controls page-width" style="display: flex; gap: 8px; align-items: center;">
+        <button class="btn-default" @onclick="@OnNewChat">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="new-chat-icon">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            New chat
+        </button>
+        <button class="btn-subtle" onclick="location.href='/products'"
+            style="display: inline-flex; align-items: center;">
+            📦 Products
+        </button>
+    </div>
 ```
 
-## Add Required Packages
+## Add Required Packages and Update Imports
 
-We need to add one package for the QuickGrid component used in our UI.
+We need to add the QuickGrid package and update our imports to include the necessary namespaces.
 
-1. Right-click on the `src/start/GenAiLab.Web` project and select "Manage NuGet Packages"
+1. Open the `GenAiLab.Web.csproj` file and add the QuickGrid package to the `<ItemGroup>` with other PackageReferences:
 
-1. Click on the "Browse" tab and search for `Microsoft.AspNetCore.Components.QuickGrid`
+```xml
+<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.7" />
+<PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="9.7.0" />
+```
 
-1. Install the latest version (should be 9.0.x)
+1. Open `Components/_Imports.razor` and add the missing using directives:
 
-Alternatively, you can run this command in the terminal from the `src/start/GenAiLab.Web` directory:
-
-```bash
-dotnet add package Microsoft.AspNetCore.Components.QuickGrid
+```razor
+@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.Extensions.AI
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using GenAiLab.Web
+@using GenAiLab.Web.Components
+@using GenAiLab.Web.Components.Layout
+@using GenAiLab.Web.Models
+@using GenAiLab.Web.Services
 ```
 
 ## Update Program.cs for Services
@@ -685,9 +707,19 @@ If you encounter issues:
    dotnet build
    ```
 
+1. **JavaScript Module Conflicts**: If you see `BLAZOR105` errors about multiple JS module files, delete any duplicate `.razor.js` files:
+
+   ```bash
+   # Remove duplicate JavaScript files if they exist
+   Remove-Item "Components\Pages\Chat\ChatInput.razor.js" -Force -ErrorAction SilentlyContinue
+   Remove-Item "Components\Pages\Chat\ChatMessageList.razor.js" -Force -ErrorAction SilentlyContinue
+   ```
+
 1. **No Products Shown**: Ensure your PDF files are in the `/wwwroot/Data` directory and that the ingestion process completed successfully
 
 1. **AI Processing Issues**: Check the console logs for AI response parsing errors - the service includes fallback mechanisms for malformed responses
+
+1. **PageTitle or QuickGrid Not Found**: Ensure all required packages are installed and the `_Imports.razor` file includes all necessary using directives as shown above
 
 ## Summary
 

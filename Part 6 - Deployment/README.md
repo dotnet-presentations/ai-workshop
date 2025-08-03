@@ -43,6 +43,11 @@ In this workshop, you will learn how to deploy your AI application to Azure usin
 
 ## Deploy to Azure Container Apps
 
+> [!IMPORTANT]
+> **Vector Database Configuration**: This deployment uses **Qdrant** as the vector database, which runs as a containerized service in Azure Container Apps. No additional vector database setup is required.
+>
+> If you prefer to use **Azure AI Search** instead, see the "Alternative: Azure AI Search Deployment" section below.
+
 1. Ensure you are in the root directory which contains the solution file.
 
 1. **Initialize your Azure environment**:
@@ -52,7 +57,7 @@ In this workshop, you will learn how to deploy your AI application to Azure usin
    azd init
    ```
 
-1. When prompted with "How do you wnat to initializer your app?", select the default: "Use code in the current directory"
+1. When prompted with "How do you want to initialize your app?", select the default: "Use code in the current directory"
 
 1. After scanning the directory, `azd` prompts you to confirm that it found the correct .NET Aspire *AppHost* project. Select the **Confirm and continue initializing my app** option.
 
@@ -71,17 +76,25 @@ In this workshop, you will learn how to deploy your AI application to Azure usin
    - Resource group
    - Container registry
    - Container apps environment
-   - Container apps for your application
+   - Container apps for your application and Qdrant vector database
    - Log Analytics workspace
 
 > [!NOTE]
 > When provisioning resources with `azd`, it will automatically create a resource group with the prefix "rg-" added to your environment name (e.g., "rg-mygenaiapp").
   
-1. When prompted to "Enter a value for the 'azureAISearch' infrastructure secured parameter, copy and past the value from your `secrets.json` file. It will begin with "Endpoint=" and end with your search key. Make sure that you grab your Azure AI Search connection string and not the Azure OpenAI connection string!
-
 1. When prompted to select a location, select a region close to you (e.g., "West US 3" or another nearby Azure datacenter).
 
-1. When prompted to "Enter a value for the 'openai' infrastructure secured parameter, copy and past the value from your `secrets.json` file. As before, it will begin with "Endpoint=" and end with your Azure OpenAI key.
+1. When prompted to "Enter a value for the 'openai' infrastructure secured parameter", enter your Azure OpenAI connection string in the format:
+
+   ```text
+   Endpoint=https://your-resource.openai.azure.com/;Key=your-api-key
+   ```
+
+   Or use your environment variable:
+
+   ```text
+   Endpoint=$env:WORKSHOP_AZURE_OPENAI_ENDPOINT;Key=$env:WORKSHOP_AZURE_OPENAI_KEY
+   ```
 
 1. Press enter and watch as your resources are provisioned! You can either just follow along in the terminal, or you can click on the link to watch the progress in the Azure portal. Provisioning should take roughly 5 minutes, but may take longer during conference events as multiple concurrent deployments can slow things down.
 
@@ -93,7 +106,7 @@ In this workshop, you will learn how to deploy your AI application to Azure usin
 
    This command:
    - Builds your .NET application
-   - Creates container images
+   - Creates container images for both the web app and Qdrant
    - Pushes them to the Azure Container Registry
    - Deploys them to Azure Container Apps
   
@@ -106,6 +119,56 @@ In this workshop, you will learn how to deploy your AI application to Azure usin
    ```powershell
    azd show
    ```
+
+## Alternative: Azure AI Search Deployment
+
+If you prefer to use Azure AI Search instead of Qdrant for vector storage, follow these steps:
+
+> [!NOTE]
+> Azure AI Search provides a managed vector database service but requires additional Azure resources and configuration.
+
+### Prerequisites for Azure AI Search
+
+1. **Create an Azure AI Search service** in the Azure portal:
+   - Go to Azure portal → Create a resource → Azure AI Search
+   - Choose a pricing tier (Basic or higher for vector search)
+   - Note the endpoint URL and admin key
+
+1. **Update your application configuration**:
+   - Modify `Program.cs` to use Azure AI Search instead of Qdrant
+   - Update connection strings and service registrations
+   - Install Azure AI Search NuGet packages
+
+### Azure AI Search Deployment Steps
+
+1. **Add Azure AI Search credentials to the credential setup script**:
+
+   Add to `.github/scripts/setup-workshop-credentials.ps1`:
+
+   ```powershell
+   $env:WORKSHOP_AZURE_SEARCH_ENDPOINT = "https://your-search-service.search.windows.net"
+   $env:WORKSHOP_AZURE_SEARCH_KEY = "your-admin-key"
+   ```
+
+1. **Follow the same azd deployment steps** as above, but when prompted for infrastructure parameters:
+   - Provide your Azure AI Search connection string when prompted for 'azureAISearch'
+   - Format: `Endpoint=https://your-search-service.search.windows.net;Key=your-admin-key`
+
+### Benefits of Azure AI Search vs Qdrant
+
+**Azure AI Search advantages:**
+
+- Fully managed service (no container management)
+- Built-in security and compliance features
+- Integration with other Azure AI services
+- Advanced filtering and faceting capabilities
+
+**Qdrant advantages:**
+
+- Simpler deployment (runs as container)
+- Open source and vendor-neutral
+- Lower cost for development scenarios
+- Faster setup and testing
 
 ## Manage Your Deployment
 

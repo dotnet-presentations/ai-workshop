@@ -192,3 +192,25 @@ The workshop structure and code snapshots are now properly aligned and fully fun
 **📚 Documentation Quality**: All README files provide clear, step-by-step instructions that can be followed without guesswork.
 
 **🔧 Deployment Enhancements**: Added Azure AI Search as alternative option with credential management in setup script.
+
+## Update: Post-Production Qdrant Predicate Fix
+
+**Date**: August 2, 2025  
+**Issue**: Qdrant client version compatibility - queries using `=> true` predicates failing  
+**Resolution**: Updated ProductService.cs in Parts 5 and 6 to use meaningful predicates  
+
+**Changes Made**:
+
+- `product => true` → `product => !string.IsNullOrEmpty(product.Name)`
+- `chunk => true` → `chunk => !string.IsNullOrEmpty(chunk.DocumentId)`
+
+**Validation**: Both Part 5 and Part 6 build successfully with the updated predicates ✅
+
+**Files Updated**:
+
+- `Part 5 - Products Page/GenAiLab/GenAiLab.Web/Services/ProductService.cs`
+- `Part 6 - Deployment/GenAiLab/GenAiLab.Web/Services/ProductService.cs`
+- `Part 5 - Products Page/README.md` (code instructions updated)
+- `.github/prompts/test-workshop.prompt.md` (added Issue 8 documentation)
+
+**Impact**: This ensures Qdrant queries work with current client library versions while maintaining all functionality.

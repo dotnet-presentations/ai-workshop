@@ -162,6 +162,13 @@ Based on comprehensive testing conducted in August 2025, the following issues ha
 **Solution**: Use full command with all parameters from environment variables.
 **Validation**: Verify all environment variables are set before deployment.
 
+### Issue 8: Qdrant Query Predicates Cannot Use `=> true`
+**Problem**: Qdrant queries using `product => true` or `chunk => true` fail with newer Qdrant client versions.
+**Solution**: Use meaningful predicates like `product => !string.IsNullOrEmpty(product.Name)` or `chunk => !string.IsNullOrEmpty(chunk.DocumentId)`.
+**Validation**: Build should succeed and queries should return expected results.
+**Files Affected**: ProductService.cs in Parts 5 and 6, and README.md instructions in Part 5.
+**Status**: ✅ Fixed in both code snapshots and README instructions.
+
 
 Based on comprehensive testing:
 

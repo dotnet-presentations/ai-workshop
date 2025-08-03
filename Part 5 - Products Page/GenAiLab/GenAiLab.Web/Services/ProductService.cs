@@ -25,7 +25,7 @@ public class ProductService(
         try
         {
             // Get all products using the GetAsync method
-            var allProducts = await _productCollection.GetAsync(product => true, top: 1000).ToListAsync();
+            var allProducts = await _productCollection.GetAsync(product => !string.IsNullOrEmpty(product.Name), top: 1000).ToListAsync();
 
             foreach (var productVector in allProducts)
             {
@@ -60,7 +60,7 @@ public class ProductService(
             await _productCollection.EnsureCollectionExistsAsync();
 
             // Check if we already have products in the vector store
-            var existingProducts = await _productCollection.GetAsync(product => true, top: 1).ToListAsync();
+            var existingProducts = await _productCollection.GetAsync(product => !string.IsNullOrEmpty(product.Name), top: 1).ToListAsync();
 
             if (!existingProducts.Any())
             {
@@ -158,7 +158,7 @@ public class ProductService(
         try
         {
             // Get all chunks and extract unique document IDs
-            var allChunks = await _chunkCollection.GetAsync(chunk => true, top: 1000).ToListAsync();
+            var allChunks = await _chunkCollection.GetAsync(chunk => !string.IsNullOrEmpty(chunk.DocumentId), top: 1000).ToListAsync();
             var uniqueFileNames = allChunks
                 .Where(chunk => !string.IsNullOrEmpty(chunk.DocumentId))
                 .Select(chunk => chunk.DocumentId)

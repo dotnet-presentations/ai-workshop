@@ -41,12 +41,6 @@ In this workshop, you'll enhance your application by creating a Products page th
 
 The Products feature showcases how AI can enhance applications using a simplified, single-database architecture that reduces infrastructure complexity while providing powerful search and storage capabilities.
 
-> [!IMPORTANT]
-> **Simplified Architecture Benefits**
-> This approach uses **Qdrant as the single data store** for both document chunks and product metadata. This eliminates the complexity of PostgreSQL setup and Entity Framework configuration, reducing setup time to **15-25 minutes**.
->
-> **What's Different**: Instead of managing two databases (PostgreSQL + Qdrant), we store everything in Qdrant vector collections, making the solution simpler to deploy and maintain.
-
 ## Create the Product Models
 
 First, we need to define the models that will store our AI-generated product information in the vector database.

@@ -106,7 +106,7 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 
    ```json
    {
-     "ConnectionStrings:openai": "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
+     "ConnectionStrings:openai": "Endpoint=https://models.github.ai;Key=YOUR-API-KEY"
    }
    ```
 
@@ -114,7 +114,7 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 
 1. Save the `secrets.json` file.
 
-   > **Note:** GitHub Models uses the endpoint `models.inference.ai.azure.com`, which is the same endpoint pattern used by Azure OpenAI. This means that when deploying to production later in the lab, you can switch from GitHub Models to Azure OpenAI by simply updating the API key without changing the endpoint URL structure. You will see this later in the lab.
+   > **Note:** GitHub Models now use the endpoint `models.github.ai`. While the previous endpoint `models.inference.ai.azure.com` is [still supported until October 2025](https://github.blog/changelog/2025-07-17-deprecation-of-azure-endpoint-for-github-models/), it's best to use the new endpoint now.
 
 ## Run the application
 
@@ -200,7 +200,7 @@ dotnet build
 
 1. Verify your GitHub token has the correct permissions
 2. Check that the token is correctly placed in `secrets.json`
-3. Ensure the connection string format is correct: `"Endpoint=https://models.inference.ai.azure.com;Key=YOUR_TOKEN"`
+3. Ensure the connection string format is correct: `"Endpoint=https://models.github.ai;Key=YOUR_TOKEN"`
 
 #### Issue: Template Not Found
 

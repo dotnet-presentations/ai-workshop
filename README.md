@@ -178,6 +178,39 @@ The repository is structured as follows:
 |Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/machine-learning/extensions-ai/>|Extensions for AI Documentation|
 |Microsoft Learn|<https://learn.microsoft.com/en-us/azure/ai-services/openai/>|Azure OpenAI Documentation|
 
+## Testing the Workshop 🧪
+
+For workshop instructors and contributors who want to validate the workshop content, a comprehensive testing procedure is available:
+
+### Automated Credential Setup
+
+Before testing the workshop, run the credential setup script to configure required API keys and endpoints:
+
+```powershell
+# Navigate to the workshop root directory
+cd ai-workshop
+
+# Run the credential setup script
+.\.github\scripts\setup-workshop-credentials.ps1
+```
+
+This script will prompt you for:
+
+- **GitHub Token**: For GitHub Models access (classic token or fine-grained with `models:read` scope)
+- **Azure OpenAI Endpoint**: Your Azure OpenAI service endpoint URL
+- **Azure OpenAI Key**: Your Azure OpenAI service API key
+
+The credentials are saved as environment variables (`WORKSHOP_GITHUB_TOKEN`, `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`) and will be available for subsequent testing sessions.
+
+### Testing Procedure
+
+The complete testing procedure and validation scripts are available in `.github/prompts/test-workshop.prompt.md`. This includes:
+
+- Step-by-step testing instructions for all 9 workshop parts
+- Automated build validation commands
+- Common troubleshooting scenarios
+- Documentation improvement tracking
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

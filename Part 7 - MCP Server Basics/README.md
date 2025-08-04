@@ -280,7 +280,7 @@ Now that we've added our weather tools alongside the original random number tool
    dotnet build
    ```
 
-   You should see a successful build output. If there are any errors, review the code in `Tools/ExampleTools.cs`.
+   You should see a successful build output. If there are any errors, review the code in `Tools/RandomNumberTools.cs` and `Tools/WeatherTools.cs`.
 
 2. **Test the server locally** by running it:
 

@@ -608,8 +608,8 @@ using Microsoft.Extensions.AI;
 using GenAiLab.Web.Components;
 using GenAiLab.Web.Services;
 using GenAiLab.Web.Services.Ingestion;
-using GenAiLab.Web.Models;
 using OpenAI;
+using GenAiLab.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
@@ -628,8 +628,6 @@ builder.Services.AddQdrantCollection<Guid, IngestedDocument>("data-genailab-docu
 builder.Services.AddQdrantCollection<Guid, ProductVector>("data-genailab-products");
 builder.Services.AddScoped<DataIngestor>();
 builder.Services.AddSingleton<SemanticSearch>();
-
-// Register product service
 builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();

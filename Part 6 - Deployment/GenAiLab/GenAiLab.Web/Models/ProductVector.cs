@@ -1,4 +1,4 @@
-using Microsoft.Extensions.VectorData;
+﻿using Microsoft.Extensions.VectorData;
 
 namespace GenAiLab.Web.Models;
 

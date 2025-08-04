@@ -14,7 +14,8 @@ var webApp = builder.AddProject<Projects.GenAiLab_Web>("aichatweb-app");
 webApp.WithReference(openai);
 webApp
     .WithReference(vectorDB)
-    .WaitFor(vectorDB)
-    .WithExternalHttpEndpoints();
+    .WaitFor(vectorDB);
+
+webApp.WithExternalHttpEndpoints();
 
 builder.Build().Run();

@@ -151,16 +151,16 @@ public class ProductService(
 
         // Get all products from vector store
         var products = new List<ProductInfo>();
-        
+
         try
         {
             // Get all products using the GetAsync method
-            var allProducts = await _productCollection.GetAsync(product => !string.IsNullOrEmpty(product.Name), top: 1000).ToListAsync();
+            var allProducts = await _productCollection.GetAsync(product => product.Name != null && product.Name != "", top: 1000).ToListAsync();
 
             foreach (var productVector in allProducts)
             {
                 var product = productVector.ToProductInfo();
-                
+
                 // Apply category filter if specified
                 if (string.IsNullOrEmpty(categoryFilter) || product.Category == categoryFilter)
                 {
@@ -190,8 +190,10 @@ public class ProductService(
             await _productCollection.EnsureCollectionExistsAsync();
 
             // Check if we already have products in the vector store
-            var existingProducts = await _productCollection.GetAsync(product => !string.IsNullOrEmpty(product.Name), top: 1).ToListAsync();
-            
+            var existingProducts = await _productCollection.GetAsync(
+                product => product.Name != null && product.Name != "", top: 1
+            ).ToListAsync();
+
             if (!existingProducts.Any())
             {
                 await GenerateAndSaveProductsAsync();
@@ -237,7 +239,7 @@ public class ProductService(
 
                 // Use AI to generate product information
                 var (description, category) = await AskAIForProductInfoAsync(content, productName);
-                
+
                 // Generate embedding for the product (combination of name, description, and content)
                 var searchableText = $"{productName} {description} {content}";
                 var embedding = await _embeddingGenerator.GenerateAsync(searchableText);
@@ -273,7 +275,7 @@ public class ProductService(
                 await _productCollection.UpsertAsync(products);
                 _availableCategories.Clear();
                 _availableCategories.AddRange(categories.OrderBy(c => c));
-                
+
                 _logger.LogInformation("Successfully saved {Count} products to vector store", products.Count);
             }
             catch (Exception ex)
@@ -288,7 +290,7 @@ public class ProductService(
         try
         {
             // Get all chunks and extract unique document IDs
-            var allChunks = await _chunkCollection.GetAsync(chunk => !string.IsNullOrEmpty(chunk.DocumentId), top: 1000).ToListAsync();
+            var allChunks = await _chunkCollection.GetAsync(chunk => chunk.DocumentId != null && chunk.DocumentId != "", top: 1000).ToListAsync();
             var uniqueFileNames = allChunks
                 .Where(chunk => !string.IsNullOrEmpty(chunk.DocumentId))
                 .Select(chunk => chunk.DocumentId)

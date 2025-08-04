@@ -192,7 +192,6 @@ Explore the .NET Aspire dashboard to understand the architecture of your applica
 1. You'll see several services running:
    - `aichatweb-app`: The main web application
    - `vectordb`: The Qdrant vector database service
-   - `ingestionCache`: SQLite database for caching ingestion state
 
 1. Click on each service to see more details:
    - Explore the endpoints tab to see service URLs

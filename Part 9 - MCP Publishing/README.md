@@ -55,9 +55,9 @@ There are several ways to distribute MCP servers:
 
 ### Configure Package Metadata
 
-For this example, we'll publish the **WeatherMcpServer** from Part 7. First, update the project file with proper metadata:
+For this example, we'll publish the **MyMcpServer** from Part 7. First, update the project file with proper metadata:
 
-1. **Open** `Part 7 - MCP Server Basics/WeatherMcpServer/WeatherMcpServer.csproj`
+1. **Open** `Part 7 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj`
 
 2. **Update the package information**:
 
@@ -70,7 +70,7 @@ For this example, we'll publish the **WeatherMcpServer** from Part 7. First, upd
     <Nullable>enable</Nullable>
     
     <!-- NuGet Package Information -->
-    <PackageId>YourName.WeatherMcpServer</PackageId>
+    <PackageId>YourName.MyMcpServer</PackageId>
     <Version>1.0.0</Version>
     <Authors>Your Name</Authors>
     <Company>Your Organization</Company>
@@ -82,7 +82,7 @@ For this example, we'll publish the **WeatherMcpServer** from Part 7. First, upd
     <PackageReadmeFile>README.md</PackageReadmeFile>
     
     <!-- MCP Server Configuration -->
-    <McpServerName>WeatherMcpServer</McpServerName>
+    <McpServerName>MyMcpServer</McpServerName>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>weather-mcp-server</ToolCommandName>
   </PropertyGroup>
@@ -105,7 +105,7 @@ Update `.mcp/server.json` with publication information:
 
 ```json
 {
-  "name": "WeatherMcpServer",
+  "name": "MyMcpServer",
   "version": "1.0.0",
   "description": "Provides weather information tools for AI agents",
   "author": "Your Name",
@@ -171,10 +171,10 @@ Update `.mcp/server.json` with publication information:
 
 Create a professional README for package consumers:
 
-**Create** `Part 7 - MCP Server Basics/WeatherMcpServer/PACKAGE_README.md`:
+**Create** `Part 7 - MCP Server Basics/MyMcpServer/PACKAGE_README.md`:
 
 ```markdown
-# WeatherMcpServer
+# MyMcpServer
 
 A Model Context Protocol (MCP) server that provides weather information tools for AI agents like GitHub Copilot.
 
@@ -190,7 +190,7 @@ A Model Context Protocol (MCP) server that provides weather information tools fo
 ### Using dnx (Recommended)
 
 ```bash
-dnx YourName.WeatherMcpServer --version 1.0.0 --yes
+dnx YourName.MyMcpServer --version 1.0.0 --yes
 ```
 
 ### Manual Configuration
@@ -200,11 +200,11 @@ Add to your `.vscode/mcp.json` or `.mcp.json`:
 ```json
 {
   "servers": {
-    "WeatherMcpServer": {
+    "MyMcpServer": {
       "type": "stdio",
       "command": "dnx",
       "args": [
-        "YourName.WeatherMcpServer",
+        "YourName.MyMcpServer",
         "--version",
         "1.0.0",
         "--yes"
@@ -289,7 +289,7 @@ MIT License - see LICENSE file for details.
 1. **Build the package**:
 
    ```powershell
-   cd "Part 7 - MCP Server Basics\WeatherMcpServer"
+   cd "Part 7 - MCP Server Basics\MyMcpServer"
    dotnet pack -c Release
    ```
 
@@ -297,20 +297,20 @@ MIT License - see LICENSE file for details.
 
    ```powershell
    # Install locally for testing
-   dotnet tool install --global --add-source ./bin/Release YourName.WeatherMcpServer
+   dotnet tool install --global --add-source ./bin/Release YourName.MyMcpServer
    
    # Test the tool
-   weather-mcp-server --help
+   my-mcp-server --help
    
    # Uninstall after testing
-   dotnet tool uninstall --global YourName.WeatherMcpServer
+   dotnet tool uninstall --global YourName.MyMcpServer
    ```
 
 ### Validate Package Contents
 
 ```powershell
 # Extract and examine package contents
-Expand-Archive bin/Release/YourName.WeatherMcpServer.1.0.0.nupkg -DestinationPath temp
+Expand-Archive bin/Release/YourName.MyMcpServer.1.0.0.nupkg -DestinationPath temp
 Get-ChildItem temp -Recurse
 ```
 
@@ -334,12 +334,12 @@ Expected contents:
 1. **Publish the package**:
 
    ```powershell
-   dotnet nuget push bin/Release/YourName.WeatherMcpServer.1.0.0.nupkg --api-key YOUR_API_KEY --source https://api.nuget.org/v3/index.json
+   dotnet nuget push bin/Release/YourName.MyMcpServer.1.0.0.nupkg --api-key YOUR_API_KEY --source https://api.nuget.org/v3/index.json
    ```
 
 2. **Verify publication**:
    - Check [nuget.org](https://nuget.org) for your package
-   - Test installation: `dnx YourName.WeatherMcpServer`
+   - Test installation: `dnx YourName.MyMcpServer`
 
 ### Publication Checklist
 
@@ -360,11 +360,11 @@ Expected contents:
 ```json
 {
   "servers": {
-    "WeatherMcpServer": {
+    "MyMcpServer": {
       "type": "stdio",
       "command": "dnx", 
       "args": [
-        "YourName.WeatherMcpServer",
+        "YourName.MyMcpServer",
         "--version",
         "1.0.0",
         "--yes"
@@ -384,11 +384,11 @@ Expected contents:
 ```json
 {
   "servers": {
-    "WeatherMcpServer": {
+    "MyMcpServer": {
       "type": "stdio",
       "command": "dnx",
       "args": [
-        "YourName.WeatherMcpServer", 
+        "YourName.MyMcpServer", 
         "--version",
         "1.0.0"
       ],

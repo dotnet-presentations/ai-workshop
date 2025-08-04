@@ -151,13 +151,13 @@ The ContosoOrders tools return rich, structured business data:
    ```json
    {
      "servers": {
-       "WeatherMcpServer": {
+       "MyMcpServer": {
          "type": "stdio",
          "command": "dotnet",
          "args": [
            "run",
            "--project", 
-           "Part 7 - MCP Server Basics/WeatherMcpServer"
+           "Part 7 - MCP Server Basics/MyMcpServer"
          ]
        },
        "ContosoOrdersMcpServer": {
@@ -178,13 +178,13 @@ The ContosoOrders tools return rich, structured business data:
    ```json
    {
      "servers": {
-       "WeatherMcpServer": {
+       "MyMcpServer": {
          "type": "stdio",
          "command": "dotnet",
          "args": [
            "run",
            "--project",
-           "../../Part 7 - MCP Server Basics/WeatherMcpServer"
+           "../../Part 7 - MCP Server Basics/MyMcpServer"
          ]
        },
        "ContosoOrdersMcpServer": {

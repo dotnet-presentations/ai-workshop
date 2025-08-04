@@ -675,6 +675,8 @@ app.Run();
    - Try filtering by different categories
    - Verify that products display with AI-generated descriptions
 
+   ![Products Page](../images/products-page.png)
+
 ## How It Works
 
 Your Products feature now works entirely with Qdrant as the data store:

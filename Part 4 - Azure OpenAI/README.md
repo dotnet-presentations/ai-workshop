@@ -128,6 +128,8 @@ To test the new Azure OpenAI integration, let's add the sample product PDF manua
 
 1. Click "Add" to copy these files into your project
 
+   ![Adding More Manuals](../images/adding-more-manuals.png)
+
 These sample manual PDFs include a variety of products such as:
 
 - Example_Backpack.pdf
@@ -151,6 +153,10 @@ Now let's run the application with Azure OpenAI integration:
 1. Press F5 or click the "Start Debugging" button in Visual Studio
 
 1. The .NET Aspire dashboard will open in your browser
+
+1. You can observe the PDF ingestion process by checking the logs for the `aichatweb-app` service, which will show the DataIngestor processing the newly added PDF documents:
+
+   ![Ingesting PDFs](../images/ingesting-pdfs.png)
 
 1. Shortly after, the web application will launch in another browser tab
 

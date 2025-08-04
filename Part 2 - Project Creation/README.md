@@ -179,6 +179,8 @@ Now let's run the application and explore its features:
 
    > **Note:** When running the application for the first time, Visual Studio may display a prompt asking you to trust the IIS Developer certificate. This prompt sometimes appears beneath the browser window. If the `aichatweb-app` resource doesn't start, check for this certificate prompt and click "Yes" to accept it. The application won't run until you've accepted this certificate.
 
+   ![Trust SSL Certificate](../images/trust-ssl-certificate.png)
+
 1. The .NET Aspire dashboard will open in your browser first, displaying all the services in your application.
 
 1. Shortly after, the web application will launch in another browser tab.
@@ -204,6 +206,8 @@ Explore the .NET Aspire dashboard to understand the architecture of your applica
 Let's test the AI functionality of the application:
 
 1. Launch the *aiwebchat-app* by clicking on the hyperlinked URL listed in the Endpoints column in the .NET Aspire dashboard. You should see the web app launch in a seprate tab with a chat interface.
+
+   ![Chat Example](../images/chat-example.png)
 
 1. Type a message like "What PDF documents do you have information about?" and press Enter.
 

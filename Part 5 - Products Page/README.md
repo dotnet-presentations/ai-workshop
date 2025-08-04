@@ -386,35 +386,6 @@ When you call `GetResponseAsync<ProductResponse>()` with `useJsonSchemaResponseF
 
 This eliminates the need for manual string manipulation and provides compile-time type safety.
 
-### Comparison: Before vs After
-
-**Before (Manual JSON Parsing):**
-```csharp
-var chatResponse = await _chatClient.GetResponseAsync(messages);
-string cleanedResponse = chatResponse.Text
-    .Replace("```json", "")
-    .Replace("```", "")
-    .Trim();
-var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-var responseJson = JsonSerializer.Deserialize<ProductResponse>(cleanedResponse, options);
-```
-
-**After (Structured Output):**
-```csharp
-var chatResponse = await _chatClient.GetResponseAsync<ProductResponse>(
-    messages, 
-    options: default, 
-    useJsonSchemaResponseFormat: true);
-var responseJson = chatResponse.Result;
-```
-
-### Key Benefits
-
-- **Type Safety**: Direct deserialization with compile-time checking
-- **Reliability**: No manual string manipulation that could fail
-- **Maintainability**: Cleaner, more readable code
-- **Error Handling**: Built-in validation and error handling
-- **Performance**: Reduced parsing overhead
 
 For more information about structured output capabilities in Microsoft.Extensions.AI, see the [official documentation](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions).
 

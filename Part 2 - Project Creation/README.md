@@ -109,23 +109,27 @@ Due to recent updates in .NET Aspire 9.4 and dependency changes in AI packages, 
 
 ### Using the .NET CLI
 
-If you prefer to use the command line, you can update all packages using the NuGet CLI:
+If you prefer to use the command line, you can update all packages using the `dotnet outdated` tool:
 
-1. Navigate to the solution directory (if not already there):
+1. First, install the `dotnet outdated` global tool if you haven't already:
+
+   ```powershell
+   dotnet tool install --global dotnet-outdated-tool
+   ```
+
+2. Navigate to the solution directory (if not already there):
 
    ```powershell
    cd GenAiLab
    ```
 
-2. Update all packages in the solution, including prerelease versions:
+3. Update all packages in the solution, including prerelease versions:
 
    ```powershell
-   nuget update GenAiLab.sln -Prerelease
+   dotnet outdated --solution GenAiLab.sln --upgrade --pre-release Always
    ```
 
-   > **Note**: This command requires the NuGet CLI to be installed. If you don't have it installed, you can install it via `dotnet tool install --global NuGet.CommandLine` or use the Visual Studio method above.
-
-3. After the update completes, restore and build the solution to ensure everything is working:
+4. After the update completes, restore and build the solution to ensure everything is working:
 
    ```powershell
    dotnet restore

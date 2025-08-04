@@ -344,21 +344,16 @@ Return ONLY the raw JSON object without any markdown formatting, code blocks, or
 
 Content: {content}";
 
-            // Get response from the chat client
-            var chatResponse = await _chatClient.GetResponseAsync(
+            // Get structured response from the chat client using structured output
+            var chatResponse = await _chatClient.GetResponseAsync<ProductResponse>(
                 new[] {
                     new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only, no markdown formatting or backticks."),
                     new ChatMessage(ChatRole.User, prompt)
-                });
+                }, 
+                options: default, 
+                useJsonSchemaResponseFormat: true);
 
-            // Clean and parse the response
-            string cleanedResponse = chatResponse.Text
-                .Replace("```json", "")
-                .Replace("```", "")
-                .Trim();
-
-            var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var responseJson = System.Text.Json.JsonSerializer.Deserialize<ProductResponse>(cleanedResponse, options);
+            var responseJson = chatResponse.Result;
 
             if (responseJson != null)
             {
@@ -375,6 +370,23 @@ Content: {content}";
     }
 }
 ```
+
+## Understanding Structured Output with useJsonSchemaResponseFormat
+
+The `AskAIForProductInfoAsync` method demonstrates modern AI integration using **structured output** instead of manual JSON parsing. This approach provides several key benefits:
+
+### The `useJsonSchemaResponseFormat` Parameter
+
+When you call `GetResponseAsync<ProductResponse>()` with `useJsonSchemaResponseFormat: true`, the AI framework:
+
+1. **Automatically generates a JSON schema** from your `ProductResponse` record type
+2. **Instructs the AI model** to respond in the exact format specified by the schema
+3. **Validates the response** against the schema before deserialization
+4. **Deserializes directly** to your strongly-typed object
+
+This eliminates the need for manual string manipulation and provides compile-time type safety.
+
+For more information about structured output capabilities in Microsoft.Extensions.AI, see the [official documentation](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions).
 
 ## Create the Products UI
 

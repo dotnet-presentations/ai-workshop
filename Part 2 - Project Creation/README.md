@@ -1,6 +1,6 @@
 # Create a new project using the AI Web Chat template
 
-> **⏱️ Estimated Time:** 30-45 minutes
+> **⏱️ Estimated Time:** 35-50 minutes
 
 ## In this workshop
 
@@ -85,6 +85,57 @@ If you prefer to use the command line, you can create the same project using the
    start GenAiLab.sln  # For Visual Studio
    ```
 
+## Update NuGet packages
+
+Due to recent updates in .NET Aspire 9.4 and dependency changes in AI packages, you need to update all NuGet packages in the solution to their latest versions (including prerelease packages) before running the application:
+
+### Using Visual Studio
+
+1. In the Solution Explorer, right-click on the solution file (`GenAiLab.sln`) and select "Manage NuGet Packages for Solution..."
+
+   ![Manage NuGet Packages for Solution](../images/manage-nuget-solution.png)
+
+1. In the NuGet Package Manager, click on the "Updates" tab
+
+1. Check the "Include prerelease" checkbox to include preview versions of AI packages
+
+1. Click "Update All" to update all packages to their latest versions
+
+   ![Update All Prerelease Packages](../images/update-all-prerelease.png)
+
+1. Review and accept any license agreements that appear
+
+1. Wait for all packages to be updated and restored
+
+### Using the .NET CLI
+
+If you prefer to use the command line, you can update all packages using the `dotnet outdated` tool:
+
+1. First, install the `dotnet outdated` global tool if you haven't already:
+
+   ```powershell
+   dotnet tool install --global dotnet-outdated-tool
+   ```
+
+2. Navigate to the solution directory (if not already there):
+
+   ```powershell
+   cd GenAiLab
+   ```
+
+3. Update all packages in the solution, including prerelease versions:
+
+   ```powershell
+   dotnet outdated --solution GenAiLab.sln --upgrade --pre-release Always
+   ```
+
+4. After the update completes, restore and build the solution to ensure everything is working:
+
+   ```powershell
+   dotnet restore
+   dotnet build
+   ```
+
 ## Set the GitHub Models connection string
 
 For GitHub Models to work, you need to set up a connection string with a GitHub token:
@@ -165,6 +216,7 @@ Let's test the AI functionality of the application:
 ## What You've Learned
 
 - How to create a new project using the AI Web Chat template in Visual Studio
+- How to update NuGet packages in a solution to get the latest AI and Aspire components
 - How to configure GitHub Models as the AI service provider
 - How to set up the connection string for AI services
 - How to use .NET Aspire to orchestrate multiple services

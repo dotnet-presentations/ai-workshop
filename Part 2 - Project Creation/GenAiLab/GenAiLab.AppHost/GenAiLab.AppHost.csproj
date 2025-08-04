@@ -8,12 +8,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsAspireHost>true</IsAspireHost>
-    <UserSecretsId>96b66ffb-9a83-4fd2-b63f-996452625d04</UserSecretsId>
+    <UserSecretsId>6e0ddb18-9421-4d8b-a3cc-9ddde029d949</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.0" />
-    <PackageReference Include="Aspire.Hosting.Qdrant" Version="9.3.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.4.0" />
+    <PackageReference Include="Aspire.Hosting.Qdrant" Version="9.4.0" />
   </ItemGroup>
 
   <ItemGroup>

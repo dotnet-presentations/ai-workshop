@@ -416,6 +416,7 @@ var responseJson = chatResponse.Result;
 - **Error Handling**: Built-in validation and error handling
 - **Performance**: Reduced parsing overhead
 
+
 For more information about structured output capabilities in Microsoft.Extensions.AI, see the [official documentation](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions).
 
 ## Create the Products UI

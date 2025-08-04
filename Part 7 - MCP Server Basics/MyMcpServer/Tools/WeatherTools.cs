@@ -2,17 +2,26 @@ using System.ComponentModel;
 using System.Text.Json;
 using ModelContextProtocol.Server;
 
+namespace MyMcpServer.Tools;
+
 /// <summary>
-/// Weather MCP tools for demonstration purposes.
-/// These tools can be invoked by MCP clients to get weather information.
+/// Weather tools that provide current weather and forecast information.
 /// </summary>
 internal class WeatherTools
 {
+    private static readonly string[] WeatherConditions = [
+        "Sunny", "Partly Cloudy", "Cloudy", "Overcast", "Light Rain", 
+        "Heavy Rain", "Snow", "Fog", "Windy", "Stormy"
+    ];
+
     [McpServerTool]
     [Description("Gets current weather for a specified city.")]
     public async Task<string> GetCurrentWeather(
         [Description("Name of the city to get weather for")] string city)
     {
+        // Simulate API call delay
+        await Task.Delay(500);
+        
         // Simulate weather API call with realistic data
         var weatherData = new
         {
@@ -21,6 +30,7 @@ internal class WeatherTools
             Condition = GetRandomWeatherCondition(),
             Humidity = Random.Shared.Next(30, 90) + "%",
             WindSpeed = Random.Shared.Next(5, 25) + " km/h",
+            Pressure = Random.Shared.Next(980, 1040) + " hPa",
             LastUpdated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
         };
 
@@ -32,14 +42,18 @@ internal class WeatherTools
     public async Task<string> GetWeatherForecast(
         [Description("Name of the city to get forecast for")] string city)
     {
+        // Simulate API call delay
+        await Task.Delay(800);
+        
         var forecast = new
         {
             City = city,
-            Forecast = Enumerable.Range(1, 5).Select(day => new
+            Forecast = Enumerable.Range(0, 5).Select(day => new
             {
                 Date = DateTime.Now.AddDays(day).ToString("yyyy-MM-dd"),
-                HighTemp = Random.Shared.Next(15, 30) + "°C",
-                LowTemp = Random.Shared.Next(-5, 15) + "°C",
+                DayName = DateTime.Now.AddDays(day).ToString("dddd"),
+                HighTemp = Random.Shared.Next(15, 35) + "°C",
+                LowTemp = Random.Shared.Next(-5, 20) + "°C",
                 Condition = GetRandomWeatherCondition(),
                 ChanceOfRain = Random.Shared.Next(0, 100) + "%"
             }).ToArray()
@@ -50,7 +64,6 @@ internal class WeatherTools
 
     private static string GetRandomWeatherCondition()
     {
-        var conditions = new[] { "Sunny", "Partly Cloudy", "Cloudy", "Rainy", "Thunderstorms", "Snow", "Foggy" };
-        return conditions[Random.Shared.Next(conditions.Length)];
+        return WeatherConditions[Random.Shared.Next(WeatherConditions.Length)];
     }
 }

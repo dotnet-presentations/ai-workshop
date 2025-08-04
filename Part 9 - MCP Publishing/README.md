@@ -377,7 +377,7 @@ Expected contents:
 }
 ```
 
-### Visual Studio Configuration
+### Visual Studio 2022 Configuration
 
 **`.mcp.json`** (in solution directory):
 
@@ -391,7 +391,10 @@ Expected contents:
         "YourName.WeatherMcpServer", 
         "--version",
         "1.0.0"
-      ]
+      ],
+      "env": {
+        "WEATHER_UNITS": "celsius"
+      }
     }
   }
 }

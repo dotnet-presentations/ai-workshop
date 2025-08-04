@@ -248,7 +248,7 @@ internal class WeatherTools
 }
 ```
 
-2. **Register the new weather tools** in `Program.cs`. Update the file to register both tool classes:
+1. **Register the new weather tools** in `Program.cs`. Update the file to register both tool classes:
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;

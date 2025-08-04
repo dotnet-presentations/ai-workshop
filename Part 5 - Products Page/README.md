@@ -386,7 +386,6 @@ When you call `GetResponseAsync<ProductResponse>()` with `useJsonSchemaResponseF
 
 This eliminates the need for manual string manipulation and provides compile-time type safety.
 
-
 For more information about structured output capabilities in Microsoft.Extensions.AI, see the [official documentation](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions).
 
 ## Create the Products UI

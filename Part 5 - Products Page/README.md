@@ -344,21 +344,16 @@ Return ONLY the raw JSON object without any markdown formatting, code blocks, or
 
 Content: {content}";
 
-            // Get response from the chat client
-            var chatResponse = await _chatClient.GetResponseAsync(
+            // Get structured response from the chat client
+            var chatResponse = await _chatClient.GetResponseAsync<ProductResponse>(
                 new[] {
                     new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only, no markdown formatting or backticks."),
                     new ChatMessage(ChatRole.User, prompt)
-                });
+                }, 
+                options: default, 
+                useJsonSchemaResponseFormat: true);
 
-            // Clean and parse the response
-            string cleanedResponse = chatResponse.Text
-                .Replace("```json", "")
-                .Replace("```", "")
-                .Trim();
-
-            var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var responseJson = System.Text.Json.JsonSerializer.Deserialize<ProductResponse>(cleanedResponse, options);
+            var responseJson = chatResponse.Result;
 
             if (responseJson != null)
             {

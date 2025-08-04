@@ -255,7 +255,7 @@ dotnet build
 
 1. Verify your GitHub token has the correct permissions
 2. Check that the token is correctly placed in `secrets.json`
-3. Ensure the connection string format is correct: `"Endpoint=https://models.github.ai;Key=YOUR_TOKEN"`
+3. Ensure the connection string format is correct: `"Endpoint=https://models.inference.ai.azure.com;Key=YOUR_TOKEN"`
 
 #### Issue: Template Not Found
 

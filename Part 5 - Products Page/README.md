@@ -382,6 +382,7 @@ Now let's create the user interface for displaying our AI-generated products usi
 
 ```razor
 @page "/products"
+@using GenAiLab.Web.Models
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject ProductService ProductService

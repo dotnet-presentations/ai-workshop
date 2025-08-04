@@ -157,7 +157,7 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 
    ```json
    {
-     "ConnectionStrings:openai": "Endpoint=https://models.github.ai;Key=YOUR-API-KEY"
+      "ConnectionStrings:openai": "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
    }
    ```
 

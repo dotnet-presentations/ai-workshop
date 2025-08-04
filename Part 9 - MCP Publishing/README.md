@@ -141,7 +141,7 @@ Update `.mcp/server.json` with publication information:
     },
     {
       "name": "GetWeatherForecast", 
-      "description": "Gets a 5-day weather forecast for a specified city",
+      "description": "Gets a 5-day weather forecast for a specified city starting from tomorrow",
       "parameters": {
         "city": {
           "type": "string",

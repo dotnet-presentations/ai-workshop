@@ -217,7 +217,7 @@ internal class WeatherTools
     }
 
     [McpServerTool]
-    [Description("Gets a 5-day weather forecast for a specified city.")]
+    [Description("Gets a 5-day weather forecast for a specified city starting from tomorrow.")]
     public async Task<string> GetWeatherForecast(
         [Description("Name of the city to get forecast for")] string city)
     {
@@ -227,7 +227,7 @@ internal class WeatherTools
         var forecast = new
         {
             City = city,
-            Forecast = Enumerable.Range(0, 5).Select(day => new
+            Forecast = Enumerable.Range(1, 5).Select(day => new
             {
                 Date = DateTime.Now.AddDays(day).ToString("yyyy-MM-dd"),
                 DayName = DateTime.Now.AddDays(day).ToString("dddd"),

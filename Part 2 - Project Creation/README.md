@@ -235,6 +235,14 @@ Let's test the AI functionality of the application:
 
 **Solution**: Look for the IIS Developer certificate trust prompt (may be hidden behind the browser). Click "Yes" to accept the certificate.
 
+**Alternative Solution**: If the certificate dialog has been dismissed or doesn't show, you can manually trust the development certificate using the .NET CLI:
+
+```powershell
+dotnet dev-certs https --trust
+```
+
+This command will regenerate and trust the ASP.NET Core HTTPS development certificate. For more information, see [Trust the ASP.NET Core HTTPS development certificate](https://learn.microsoft.com/aspnet/core/security/enforcing-ssl#trust-the-aspnet-core-https-development-certificate).
+
 #### Issue: Build Errors After Template Creation
 
 **Problem**: Build fails with static asset conflicts or package restore issues.

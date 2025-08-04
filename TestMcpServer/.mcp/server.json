@@ -1,18 +1,18 @@
 {
   "$schema": "https://modelcontextprotocol.io/schemas/draft/2025-07-09/server.json",
-  "description": "<your description here>",
-  "name": "io.github.<your GitHub username here>/<your repo name>",
+  "description": "A test Model Context Protocol server for development and testing",
+  "name": "io.github.example-user/test-mcp-server",
   "packages": [
     {
       "registry_name": "nuget",
-      "name": "<your package ID here>",
+      "name": "TestMcpServer",
       "version": "0.1.0-beta",
       "package_arguments": [],
       "environment_variables": []
     }
   ],
   "repository": {
-    "url": "https://github.com/<your GitHub username here>/<your repo name>",
+    "url": "https://github.com/example-user/test-mcp-server",
     "source": "github"
   },
   "version_detail": {

@@ -1,18 +1,18 @@
 {
   "$schema": "https://modelcontextprotocol.io/schemas/draft/2025-07-09/server.json",
-  "description": "<your description here>",
-  "name": "io.github.<your GitHub username here>/<your repo name>",
+  "description": "A Model Context Protocol server for managing Contoso business orders",
+  "name": "io.github.example-user/contoso-orders-mcp-server",
   "packages": [
     {
       "registry_name": "nuget",
-      "name": "<your package ID here>",
+      "name": "ContosoOrdersMcpServer",
       "version": "0.1.0-beta",
       "package_arguments": [],
       "environment_variables": []
     }
   ],
   "repository": {
-    "url": "https://github.com/<your GitHub username here>/<your repo name>",
+    "url": "https://github.com/example-user/contoso-orders-mcp-server",
     "source": "github"
   },
   "version_detail": {

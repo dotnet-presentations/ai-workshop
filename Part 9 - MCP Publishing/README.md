@@ -103,6 +103,8 @@ For this example, we'll publish the **MyMcpServer** from Part 7. First, update t
 
 Update `.mcp/server.json` with publication information:
 
+> **Important**: Replace all placeholder values (like `your-username`, `Your Name`, etc.) with your actual project information before publishing to any package registry.
+
 ```json
 {
   "name": "MyMcpServer",

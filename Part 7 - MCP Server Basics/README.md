@@ -168,7 +168,7 @@ internal class RandomNumberTools
 
 We'll replace this with weather functionality while keeping the same class name for simplicity.
 
-**`.mcp/server.json`** - Metadata that describes your MCP server to package managers.
+**`.mcp/server.json`** - Metadata that describes your MCP server to package managers. Contains example values that should be customized for actual publication.
 
 ## Step 4: Add Weather Tools Alongside Random Number Tools
 

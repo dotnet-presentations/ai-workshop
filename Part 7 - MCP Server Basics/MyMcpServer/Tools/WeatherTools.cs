@@ -10,7 +10,7 @@ namespace MyMcpServer.Tools;
 internal class WeatherTools
 {
     private static readonly string[] WeatherConditions = [
-        "Sunny", "Partly Cloudy", "Cloudy", "Overcast", "Light Rain", 
+        "Sunny", "Partly Cloudy", "Cloudy", "Overcast", "Light Rain",
         "Heavy Rain", "Snow", "Fog", "Windy", "Stormy"
     ];
 
@@ -21,7 +21,7 @@ internal class WeatherTools
     {
         // Simulate API call delay
         await Task.Delay(500);
-        
+
         // Simulate weather API call with realistic data
         var weatherData = new
         {
@@ -44,7 +44,7 @@ internal class WeatherTools
     {
         // Simulate API call delay
         await Task.Delay(800);
-        
+
         var forecast = new
         {
             City = city,

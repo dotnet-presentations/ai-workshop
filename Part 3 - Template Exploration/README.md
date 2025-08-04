@@ -367,6 +367,15 @@ This approach eliminates the need for a separate database to track ingestion sta
 - How Microsoft Extensions for Vector Data simplifies document ingestion with vector-native storage
 - How the simplified architecture eliminates the need for separate ingestion cache databases
 
-## Next Steps
+## 🎯 Next Steps
 
-Now that you understand the code structure of the template, proceed to [Convert from GitHub Models to Azure OpenAI](../Part%204%20-%20Azure%20OpenAI/README.md) to learn how to migrate your application from using GitHub Models to Azure OpenAI for production use.
+Great job exploring the template architecture! Now let's scale up to production-ready AI services.
+
+**Continue to** → [Part 4: Convert from GitHub Models to Azure OpenAI](../Part%204%20-%20Azure%20OpenAI/README.md)
+
+In Part 4, you'll learn how to:
+
+- ☁️ Migrate from GitHub Models to Azure OpenAI for production
+- 🔑 Set up Azure OpenAI resources and API keys
+- 🚀 Deploy AI models for chat and embeddings
+- 📊 Handle higher token limits and better scaling

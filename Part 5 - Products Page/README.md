@@ -729,3 +729,16 @@ You've successfully implemented a Products page that demonstrates:
 - ✅ **Provider-agnostic AI integration** that works with any configured AI service
 
 This approach eliminates the complexity of managing multiple databases while providing the same functionality with better performance and simpler deployment.
+
+## 🎯 Next Steps
+
+Outstanding! You've built a sophisticated AI-powered product catalog. Ready to deploy to the cloud?
+
+**Continue to** → [Part 6: Deployment](../Part%206%20-%20Deployment/README.md)
+
+In Part 6, you'll learn how to:
+
+- ☁️ Deploy your AI application to Azure using Azure Developer CLI
+- 🚀 Set up Azure Container Apps for production workloads
+- 🔧 Configure monitoring and scaling for your application
+- 🛡️ Implement security best practices for production

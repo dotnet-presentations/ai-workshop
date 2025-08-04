@@ -72,6 +72,15 @@ If you don't already have a GitHub account, follow these steps to create one:
    - Complete the account creation process by following the on-screen instructions
    - Verify your email address (GitHub will send you a verification email)
 
-## Next Steps
+## 🎯 Next Steps
 
-Once your setup is complete, proceed to [Part 2 - Create a Project with AI Web Chat Template](../Part%202%20-%20Project%20Creation/README.md)
+Ready to build your first AI application? Let's get started!
+
+**Continue to** → [Part 2: Create a Project with AI Web Chat Template](../Part%202%20-%20Project%20Creation/README.md)
+
+In Part 2, you'll learn how to:
+
+- 🚀 Create a new AI Web Chat project using Visual Studio
+- ⚙️ Configure GitHub Models for AI services
+- 🔧 Set up the development environment
+- 🧪 Test your first AI-powered application

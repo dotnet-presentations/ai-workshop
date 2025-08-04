@@ -235,6 +235,15 @@ dotnet build
 3. Monitor token usage in the Azure portal
 4. Consider processing PDFs in smaller batches if hitting rate limits
 
-## Next Steps
+## 🎯 Next Steps
 
-Now that you've migrated your application to use Azure OpenAI, proceed to [Write a New Products Page](../Part%205%20-%20Products%20Page/README.md) to enhance your application with a Products feature that uses AI to generate product descriptions and categories.
+Fantastic! Your application is now powered by Azure OpenAI. Let's add some exciting new features!
+
+**Continue to** → [Part 5: Write a New Products Page](../Part%205%20-%20Products%20Page/README.md)
+
+In Part 5, you'll learn how to:
+
+- 🛍️ Build an AI-powered product catalog
+- 🤖 Use AI to generate product descriptions automatically
+- 🔍 Implement smart categorization and filtering
+- 📊 Work with vector databases as primary storage

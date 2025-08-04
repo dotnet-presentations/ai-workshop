@@ -259,14 +259,27 @@ Once deployed, you can manage your deployment using various Azure Developer CLI 
 - How to manage and monitor your deployed application
 - Best practices for security, scaling, and cost management in production
 
+## 🎯 Next Steps
+
+Congratulations! Your AI application is now running in production. Ready to explore the cutting edge of AI extensibility?
+
+**Continue to** → [Part 7: MCP Server Basics](../Part%207%20-%20MCP%20Server%20Basics/README.md)
+
+In Part 7, you'll learn about Model Context Protocol (MCP) and how to:
+
+- 🔧 Build custom tools that extend AI agents
+- 🌤️ Create your first MCP server with weather tools
+- 🤖 Integrate with GitHub Copilot and VS Code
+- ⚡ Enable AI agents to interact with external systems
+
 ## Conclusion
 
-Congratulations! You've completed all parts of the AI Web Chat template lab. You now have the knowledge to:
+Congratulations! You've completed the AI Web Chat application series (Parts 1-6). You now have the knowledge to:
 
-1. Create AI applications using the AI Web Chat template
-2. Understand and customize the template code structure
-3. Migrate from GitHub Models to Azure OpenAI
-4. Implement AI-powered features like the Products page using PostgreSQL
-5. Deploy your application to production environments using Azure
+1. ✅ Create AI applications using the AI Web Chat template
+2. ✅ Understand and customize the template code structure
+3. ✅ Migrate from GitHub Models to Azure OpenAI
+4. ✅ Implement AI-powered features like the Products page
+5. ✅ Deploy your application to production environments using Azure
 
 Continue exploring the possibilities of AI with .NET and build amazing AI-powered applications!

@@ -268,6 +268,15 @@ dotnet build
 2. If not found, install it: `dotnet new install Microsoft.Extensions.AI.Templates`
 3. Restart Visual Studio after template installation
 
-## Next Steps
+## 🎯 Next Steps
 
-Now that you've created and run your AI Web Chat application, proceed to [Explore the Template Code](../Part%203%20-%20Template%20Exploration/README.md) to understand the underlying architecture and code structure of the application.
+Excellent work! Your AI application is running successfully. Time to dive deeper into the code!
+
+**Continue to** → [Part 3: Explore the Template Code](../Part%203%20-%20Template%20Exploration/README.md)
+
+In Part 3, you'll learn how to:
+
+- 🏗️ Understand the application architecture and structure
+- 🔍 Explore the AI integration patterns
+- 📊 Learn about vector database usage
+- 🧩 Discover how components work together

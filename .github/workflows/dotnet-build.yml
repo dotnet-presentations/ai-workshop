@@ -30,8 +30,8 @@ jobs:
             dotnet-version: '9.0.x'
           - solution: "Part 6 - Deployment/GenAiLab/GenAiLab.sln"
             dotnet-version: '9.0.x'
-          # No solution file exists for WeatherMcpServer; using project file directly
-          - solution: "Part 7 - MCP Server Basics/WeatherMcpServer/WeatherMcpServer.csproj"
+          # No solution file exists for MyMcpServer; using project file directly
+          - solution: "Part 7 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj"
             dotnet-version: '8.0.x'
           # No solution file exists for ContosoOrdersMcpServer; using project file directly
           - solution: "Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj"

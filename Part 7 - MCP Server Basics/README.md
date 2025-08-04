@@ -59,20 +59,71 @@ Before starting this part, ensure you have:
   - [Part 6: Deployment](../Part%206%20-%20Deployment/README.md) - Deploy your application to Azure
 - ✅ **.NET 10.0 SDK** (preview 6 or higher) - `dotnet --version`
 - ✅ **Visual Studio Code** with GitHub Copilot extension
-- ✅ **MCP template installed** - verify with `dotnet new list | Select-String mcp`
+- ✅ **Active GitHub Copilot subscription**
 
-## Step 1: Understanding the Project Structure
+## Step 1: Verify the MCP Server Template
 
-Navigate to the `Part 7 - MCP Server Basics` directory and explore the `WeatherMcpServer` project:
+The MCP server template is included in the `Microsoft.Extensions.AI.Templates` package that you installed in Part 2. Let's verify it's available:
+
+1. **Verify the template is available and see its options**:
+
+   ```powershell
+   dotnet new mcpserver -h
+   ```
+
+   You should see help output showing the MCP Server template options, including:
+
+   ```text
+   MCP Server (C#)
+   Author: Microsoft
+   Description: A template for creating a Model Context Protocol server...
+   
+   Options:
+     -n, --name <name>           The name for the output being created...
+     -o, --output <output>       Location to place the generated output...
+   ```
+
+   > **Note**: If you get an error that the template is not found, make sure you have .NET 10.0 SDK (preview 6 or higher) installed and the templates were installed correctly in Part 2. You can reinstall with: `dotnet new install Microsoft.Extensions.AI.Templates`
+
+## Step 2: Create Your First MCP Server
+
+Now let's create a new MCP server project using the template:
+
+1. **Navigate to the Part 7 directory**:
+
+   ```powershell
+   cd "Part 7 - MCP Server Basics"
+   ```
+
+2. **Create a new MCP server project**:
+
+   ```powershell
+   dotnet new mcpserver -n MyMcpServer
+   ```
+
+   This command creates a new MCP server project with:
+   - Basic MCP server infrastructure  
+   - Example `RandomNumberTools` implementation
+   - Configuration files for VS Code integration
+
+3. **Navigate to the new project**:
+
+   ```powershell
+   cd MyMcpServer
+   ```
+
+## Step 3: Understanding the Generated Project Structure
+
+The MCP template has created a complete MCP server project for you. Let's explore what was generated:
 
 ```text
-WeatherMcpServer/
+MyMcpServer/
 ├── Program.cs                    # MCP server startup and configuration
 ├── Tools/
-│   └── WeatherTools.cs          # Custom weather tools implementation
+│   └── RandomNumberTools.cs     # Example tools implementation
 ├── .mcp/
 │   └── server.json              # MCP server metadata and configuration
-└── WeatherMcpServer.csproj      # Project file with MCP dependencies
+└── MyMcpServer.csproj           # Project file with MCP dependencies
 ```
 
 ### Key Files Explained
@@ -87,58 +138,149 @@ builder.Logging.AddConsole(o => o.LogToStandardErrorThreshold = LogLevel.Trace);
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
-    .WithTools<WeatherTools>();
+    .WithTools<RandomNumberTools>();
 ```
 
-**`Tools/WeatherTools.cs`** - Contains the custom tools that AI agents can use:
+**`Tools/RandomNumberTools.cs`** - Contains example tools that AI agents can use. We'll customize this for weather functionality.
 
-- `GetCurrentWeather(string city)` - Get current weather for a city
-- `GetWeatherForecast(string city)` - Get 5-day forecast for a city
-
-**`.mcp/server.json`** - Metadata that describes your MCP server to package managers.
-
-## Step 2: Examine the Weather Tools
-
-Open `WeatherMcpServer/Tools/WeatherTools.cs` and examine the implementation:
+The template generates a simple `RandomNumberTools` class with a `GetRandomNumber` method:
 
 ```csharp
-[McpServerTool]
-[Description("Gets current weather for a specified city.")]
-public async Task<string> GetCurrentWeather(
-    [Description("Name of the city to get weather for")] string city)
-{
-    // Simulate weather API call with realistic data
-    var weatherData = new
-    {
-        City = city,
-        Temperature = Random.Shared.Next(-10, 35) + "°C",
-        Condition = GetRandomWeatherCondition(),
-        Humidity = Random.Shared.Next(30, 90) + "%",
-        WindSpeed = Random.Shared.Next(5, 25) + " km/h",
-        LastUpdated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-    };
+using System.ComponentModel;
+using ModelContextProtocol.Server;
 
-    return JsonSerializer.Serialize(weatherData, new JsonSerializerOptions { WriteIndented = true });
+/// <summary>
+/// Sample MCP tools for demonstration purposes.
+/// These tools can be invoked by MCP clients to perform various operations.
+/// </summary>
+internal class RandomNumberTools
+{
+    [McpServerTool]
+    [Description("Generates a random number between the specified minimum and maximum values.")]
+    public int GetRandomNumber(
+        [Description("Minimum value (inclusive)")] int min = 0,
+        [Description("Maximum value (exclusive)")] int max = 100)
+    {
+        return Random.Shared.Next(min, max);
+    }
 }
 ```
 
-### Key MCP Concepts
+We'll replace this with weather functionality while keeping the same class name for simplicity.
 
-1. **`[McpServerTool]` Attribute**: Marks a method as an MCP tool that AI agents can discover and use
-2. **`[Description]` Attributes**: Provide context to AI agents about what the tool does and what parameters mean
-3. **JSON Serialization**: MCP tools return structured data as JSON strings
-4. **Async Methods**: Tools can perform async operations (database calls, API requests, etc.)
+**`.mcp/server.json`** - Metadata that describes your MCP server to package managers. Contains example values that should be customized for actual publication.
 
-## Step 3: Build and Test the MCP Server
+## Step 4: Add Weather Tools Alongside Random Number Tools
 
-1. **Build the project** to ensure everything compiles:
+Instead of replacing the existing tools, let's add new weather tools alongside the template-generated random number tools. This way you can see both examples working together.
+
+1. **Create a new weather tools file** `Tools/WeatherTools.cs`:
+
+```csharp
+using System.ComponentModel;
+using System.Text.Json;
+using ModelContextProtocol.Server;
+
+namespace MyMcpServer.Tools;
+
+/// <summary>
+/// Weather tools that provide current weather and forecast information.
+/// </summary>
+internal class WeatherTools
+{
+    private static readonly string[] WeatherConditions = [
+        "Sunny", "Partly Cloudy", "Cloudy", "Overcast", "Light Rain", 
+        "Heavy Rain", "Snow", "Fog", "Windy", "Stormy"
+    ];
+
+    [McpServerTool]
+    [Description("Gets current weather for a specified city.")]
+    public async Task<string> GetCurrentWeather(
+        [Description("Name of the city to get weather for")] string city)
+    {
+        // Simulate API call delay
+        await Task.Delay(500);
+        
+        // Simulate weather API call with realistic data
+        var weatherData = new
+        {
+            City = city,
+            Temperature = Random.Shared.Next(-10, 35) + "°C",
+            Condition = GetRandomWeatherCondition(),
+            Humidity = Random.Shared.Next(30, 90) + "%",
+            WindSpeed = Random.Shared.Next(5, 25) + " km/h",
+            Pressure = Random.Shared.Next(980, 1040) + " hPa",
+            LastUpdated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+        };
+
+        return JsonSerializer.Serialize(weatherData, new JsonSerializerOptions { WriteIndented = true });
+    }
+
+    [McpServerTool]
+    [Description("Gets a 5-day weather forecast for a specified city starting from tomorrow.")]
+    public async Task<string> GetWeatherForecast(
+        [Description("Name of the city to get forecast for")] string city)
+    {
+        // Simulate API call delay
+        await Task.Delay(800);
+        
+        var forecast = new
+        {
+            City = city,
+            Forecast = Enumerable.Range(1, 5).Select(day => new
+            {
+                Date = DateTime.Now.AddDays(day).ToString("yyyy-MM-dd"),
+                DayName = DateTime.Now.AddDays(day).ToString("dddd"),
+                HighTemp = Random.Shared.Next(15, 35) + "°C",
+                LowTemp = Random.Shared.Next(-5, 20) + "°C",
+                Condition = GetRandomWeatherCondition(),
+                ChanceOfRain = Random.Shared.Next(0, 100) + "%"
+            }).ToArray()
+        };
+
+        return JsonSerializer.Serialize(forecast, new JsonSerializerOptions { WriteIndented = true });
+    }
+
+    private static string GetRandomWeatherCondition()
+    {
+        return WeatherConditions[Random.Shared.Next(WeatherConditions.Length)];
+    }
+}
+```
+
+1. **Register the new weather tools** in `Program.cs`. Update the file to register both tool classes:
+
+```csharp
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+var builder = Host.CreateApplicationBuilder(args);
+
+// Configure all logs to go to stderr (stdout is used for the MCP protocol messages).
+builder.Logging.AddConsole(o => o.LogToStandardErrorThreshold = LogLevel.Trace);
+
+// Add the MCP services: the transport to use (stdio) and the tools to register.
+builder.Services
+    .AddMcpServer()
+    .WithStdioServerTransport()
+    .WithTools<RandomNumberTools>()     // Original template tools
+    .WithTools<WeatherTools>();         // Our new weather tools
+
+await builder.Build().RunAsync();
+```
+
+## Step 5: Build and Test the MCP Server
+
+Now that we've added our weather tools alongside the original random number tools, let's build and test the MCP server:
+
+1. **Build the project** to ensure everything compiles correctly:
 
    ```powershell
-   cd "Part 7 - MCP Server Basics\WeatherMcpServer"
    dotnet build
    ```
 
-   You should see a successful build with warnings about async methods (this is expected for this demo).
+   You should see a successful build output. If there are any errors, review the code in `Tools/RandomNumberTools.cs` and `Tools/WeatherTools.cs`.
 
 2. **Test the server locally** by running it:
 
@@ -146,61 +288,176 @@ public async Task<string> GetCurrentWeather(
    dotnet run
    ```
 
-   The server will start and wait for MCP protocol messages. You can press `Ctrl+C` to stop it.
+   The server will start and wait for MCP protocol messages. You should see output similar to:
 
-## Step 4: Configure VS Code to Use Your MCP Server
+   ```text
+   info: Microsoft.Hosting.Lifetime[14]
+         Now listening on: stdio
+   info: Microsoft.Hosting.Lifetime[0]
+         Application started. Press Ctrl+C to shut down.
+   ```
+
+   Press `Ctrl+C` to stop the server after verifying it starts successfully.
+
+### Key MCP Concepts You've Implemented
+
+Now that you've built your own MCP server, let's review the key concepts:
+
+1. **`[McpServerTool]` Attributes**: Mark methods as tools available to AI agents
+2. **`[Description]` Attributes**: Provide context to AI agents about what tools do and what parameters mean
+3. **Async Methods**: Tools can perform async operations (database calls, API requests, etc.)
+4. **JSON Serialization**: MCP tools return structured data as JSON strings
+5. **Realistic Data Simulation**: The tools simulate real API calls with delays and varied data
+
+## Step 6: Configure VS Code to Use Your MCP Server
 
 Now you'll configure VS Code to use your custom MCP server alongside GitHub Copilot.
 
-1. **Create the MCP configuration directory** in your workspace:
+1. **Navigate back to the workshop root directory**:
 
    ```powershell
-   cd ..\..\  # Navigate back to repository root
+   cd ..\..  # Navigate back to repository root
+   ```
+
+2. **Create the MCP configuration directory** in your workspace:
+
+   ```powershell
    mkdir .vscode -Force
    ```
 
-2. **Create the MCP configuration file** `.vscode/mcp.json`:
+3. **Create the MCP configuration file** `.vscode/mcp.json`:
 
    ```json
    {
      "servers": {
-       "WeatherMcpServer": {
+       "MyMcpServer": {
          "type": "stdio",
          "command": "dotnet",
          "args": [
            "run",
            "--project",
-           "Part 7 - MCP Server Basics/WeatherMcpServer"
+           "Part 7 - MCP Server Basics/MyMcpServer"
          ]
        }
      }
    }
    ```
 
-3. **Restart VS Code** to pick up the new MCP configuration:
+4. **Restart VS Code** to pick up the new MCP configuration:
    - Close VS Code completely
    - Reopen VS Code in your workshop directory
    - VS Code will automatically detect and load your MCP server
 
-## Step 5: Test MCP Integration with GitHub Copilot
+## Step 7: Alternative - Configure Visual Studio 2022 to Use Your MCP Server
+
+If you prefer to use **Visual Studio 2022** instead of VS Code, you can configure it to use your MCP server as well.
+
+### Prerequisites for Visual Studio 2022
+
+- **Visual Studio 2022 version 17.14** or later
+- **GitHub Copilot** extension installed and active subscription
+- **Agent mode** enabled (preview feature)
+
+### Configuration Steps
+
+1. **Navigate to your solution directory** (where the `.sln` file is located):
+
+   ```powershell
+   cd "Part 2 - Project Creation\GenAiLab"  # or your main solution directory
+   ```
+
+2. **Create the MCP configuration file** `.mcp.json` in your solution directory:
+
+   ```json
+   {
+     "servers": {
+       "MyMcpServer": {
+         "type": "stdio",
+         "command": "dotnet",
+         "args": [
+           "run",
+           "--project",
+           "../../Part 7 - MCP Server Basics/MyMcpServer"
+         ]
+       }
+     }
+   }
+   ```
+
+3. **Add the configuration file to your solution** (optional but recommended):
+   - Right-click on the solution in **Solution Explorer**
+   - Select **Add > Existing Item**
+   - Navigate to and select the `.mcp.json` file
+   - Choose **Add as Link** to include it in your solution
+
+4. **Enable Agent Mode in GitHub Copilot**:
+   - Open the **GitHub Copilot Chat** window
+   - Click the **Ask** dropdown
+   - Select **Agent** mode
+
+5. **Restart Visual Studio** to pick up the new MCP configuration
+
+### Configuration File Locations
+
+Visual Studio checks for MCP configurations in several locations, in this order:
+
+1. `%USERPROFILE%\.mcp.json` - Global configuration for all solutions
+2. `<SOLUTIONDIR>\.vs\mcp.json` - VS-specific, user-specific configuration
+3. `<SOLUTIONDIR>\.mcp.json` - Solution-wide configuration (recommended for source control)
+4. `<SOLUTIONDIR>\.vscode\mcp.json` - Shared with VS Code
+5. `<SOLUTIONDIR>\.cursor\mcp.json` - Shared with Cursor
+
+### Testing in Visual Studio 2022
+
+1. **Open GitHub Copilot Chat**
+2. **Ensure Agent mode is selected** (from the Ask dropdown)
+3. **Test weather functionality**:
+
+   ```text
+   What's the current weather in New York?
+   ```
+
+4. **Grant tool permissions** when prompted:
+   - Visual Studio will ask for permission to use MCP tools
+   - Select **Allow** with your preferred scope (session, solution, or always)
+
+### Managing Tool Approvals
+
+- **Tool confirmations**: When tools are invoked, Copilot requests confirmation
+- **Permission levels**: You can allow tools for the current session, solution, or all future invocations
+- **Reset permissions**: Go to **Tools > Options > GitHub > Copilot > Tools** to reset tool approval settings
+
+## Step 8: Test MCP Integration with GitHub Copilot
 
 Now for the exciting part - testing your custom MCP server with GitHub Copilot!
 
-### Test 1: Current Weather
+### Test 1: Random Number Tool (From Template)
 
 1. **Open GitHub Copilot Chat** in VS Code
-2. **Ask for weather information**:
+2. **Test the original template tool**:
+
+   ```text
+   Give me a random number between 1 and 100
+   ```
+
+3. **Expected behavior**:
+   - Copilot should detect your MyMcpServer
+   - It will use the `GetRandomNumber` tool
+   - You'll see a random number returned
+
+### Test 2: Current Weather
+
+1. **Ask for weather information**:
 
    ```text
    What's the current weather in Seattle?
    ```
 
-3. **Expected behavior**:
-   - Copilot should detect your WeatherMcpServer
-   - It will use the `GetCurrentWeather` tool
+2. **Expected behavior**:
+   - Copilot should use the `GetCurrentWeather` tool
    - You'll see realistic weather data returned
 
-### Test 2: Weather Forecast
+### Test 3: Weather Forecast
 
 1. **Ask for a forecast**:
 
@@ -212,7 +469,7 @@ Now for the exciting part - testing your custom MCP server with GitHub Copilot!
    - Copilot should use the `GetWeatherForecast` tool
    - You'll see a 5-day forecast with temperatures and conditions
 
-### Test 3: Multiple Cities
+### Test 4: Multiple Cities
 
 1. **Ask for comparative weather**:
 
@@ -224,7 +481,7 @@ Now for the exciting part - testing your custom MCP server with GitHub Copilot!
    - Copilot should call `GetCurrentWeather` twice
    - You'll get weather data for both cities
 
-## Step 6: Understanding MCP Tool Discovery
+## Step 9: Understanding MCP Tool Discovery
 
 ### How AI Agents Discover Your Tools
 
@@ -237,9 +494,10 @@ When VS Code starts, it:
 
 ### Tool Descriptions Matter
 
-The `[Description]` attributes are crucial:
+The `[Description]` attributes are crucial for AI understanding:
 
 ```csharp
+[McpServerTool]
 [Description("Gets current weather for a specified city.")]
 //            ^ This helps AI understand when to use this tool
 
@@ -254,7 +512,7 @@ The `[Description]` attributes are crucial:
 - ✅ Use natural language that AI can understand
 - ✅ Include examples when helpful
 
-## Step 7: Explore Advanced Scenarios
+## Step 10: Explore Advanced Scenarios
 
 ### Scenario 1: Weather for Travel Planning
 
@@ -329,6 +587,7 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 ### Integration Points
 
 - **VS Code configuration** in `.vscode/mcp.json`
+- **Visual Studio 2022 configuration** in `.mcp.json` (solution directory)
 - **GitHub Copilot** automatically discovers and uses MCP tools
 - **Real-time execution** - tools run when AI needs them
 - **Logging and debugging** through VS Code Output panel
@@ -337,9 +596,11 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 
 1. **Create** MCP server project with `dotnet new mcpserver`
 2. **Implement** custom tools with proper attributes
-3. **Configure** VS Code to use your server
+3. **Configure** VS Code or Visual Studio 2022 to use your server
 4. **Test** with GitHub Copilot conversations
 5. **Iterate** and improve based on AI usage patterns
+
+> **🚀 Advanced Challenge**: If you're moving quickly and want an extra challenge, check out the [official Microsoft quickstart guide](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/build-mcp-server) which shows how to publish your MCP server to NuGet for others to use. This is covered in more detail in Part 9, but the quickstart provides a streamlined approach if you want to try it now!
 
 ## Next Steps
 

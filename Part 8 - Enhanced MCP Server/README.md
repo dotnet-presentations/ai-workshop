@@ -146,18 +146,18 @@ The ContosoOrders tools return rich, structured business data:
 
 2. **Update your MCP configuration** to include both servers.
 
-   Update `.vscode/mcp.json` to run both weather and business servers:
+   **For VS Code** - Update `.vscode/mcp.json` to run both weather and business servers:
 
    ```json
    {
      "servers": {
-       "WeatherMcpServer": {
+       "MyMcpServer": {
          "type": "stdio",
          "command": "dotnet",
          "args": [
            "run",
            "--project", 
-           "Part 7 - MCP Server Basics/WeatherMcpServer"
+           "Part 7 - MCP Server Basics/MyMcpServer"
          ]
        },
        "ContosoOrdersMcpServer": {
@@ -173,7 +173,34 @@ The ContosoOrders tools return rich, structured business data:
    }
    ```
 
-3. **Restart VS Code** to load the new business server configuration.
+   **For Visual Studio 2022** - Update `.mcp.json` in your solution directory:
+
+   ```json
+   {
+     "servers": {
+       "MyMcpServer": {
+         "type": "stdio",
+         "command": "dotnet",
+         "args": [
+           "run",
+           "--project",
+           "../../Part 7 - MCP Server Basics/MyMcpServer"
+         ]
+       },
+       "ContosoOrdersMcpServer": {
+         "type": "stdio",
+         "command": "dotnet",
+         "args": [
+           "run",
+           "--project",
+           "../../Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer"
+         ]
+       }
+     }
+   }
+   ```
+
+3. **Restart your IDE** (VS Code or Visual Studio 2022) to load the new business server configuration.
 
 ## Step 5: Test Business Scenarios with GitHub Copilot
 

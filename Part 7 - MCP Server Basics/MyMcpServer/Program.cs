@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MyMcpServer.Tools;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Logging.AddConsole(o => o.LogToStandardErrorThreshold = LogLevel.Trace);
 builder.Services
     .AddMcpServer()
     .WithStdioServerTransport()
-    .WithTools<WeatherTools>();
+    .WithTools<RandomNumberTools>()     // Original template tools
+    .WithTools<WeatherTools>();         // Our new weather tools
 
 await builder.Build().RunAsync();

@@ -6,8 +6,8 @@ Get up to speed quickly with AI app building in .NET! Explore the new .NET AI pr
 
 ### AI Web Chat Application Requirements (Parts 1-6)
 
-- Visual Studio 2022 with .NET Aspire workload installed
-- .NET AI Web Chatbot template installed  
+- Visual Studio 2022 or Visual Studio 2026
+- .NET AI Web Chatbot template installed (instructions in Part 1 - Setup)
 - .NET 9.0 SDK or later
 - Docker Desktop or Podman (required for .NET Aspire orchestration)
 - GitHub account (required for GitHub Models access)

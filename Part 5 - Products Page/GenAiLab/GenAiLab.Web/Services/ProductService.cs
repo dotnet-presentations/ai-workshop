@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.VectorData;
+using Microsoft.Extensions.VectorData;
 using GenAiLab.Web.Models;
 using System.Text;
 using Microsoft.Extensions.AI;
@@ -214,7 +214,7 @@ Return ONLY the raw JSON object without any markdown formatting, code blocks, or
 
 Content: {content}";
 
-            // Get structured response from the chat client
+            // Get structured response from the chat client using structured output
             var chatResponse = await _chatClient.GetResponseAsync<ProductResponse>(
                 new[] {
                     new ChatMessage(ChatRole.System, "You are a product information assistant. Respond with valid JSON only, no markdown formatting or backticks."),

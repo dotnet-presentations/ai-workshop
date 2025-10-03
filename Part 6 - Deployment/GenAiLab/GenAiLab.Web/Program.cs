@@ -2,8 +2,8 @@ using Microsoft.Extensions.AI;
 using GenAiLab.Web.Components;
 using GenAiLab.Web.Services;
 using GenAiLab.Web.Services.Ingestion;
-using OpenAI;
 using GenAiLab.Web.Models;
+using OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();

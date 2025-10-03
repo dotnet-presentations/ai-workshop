@@ -77,42 +77,55 @@ function Set-WorkshopCredentials {
         $azureKey = Read-Host -Prompt "Enter your Azure OpenAI API key" -AsSecureString
         if ($azureKey.Length -gt 0) {
             $env:WORKSHOP_AZURE_OPENAI_KEY = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($azureKey))
-                [Environment]::SetEnvironmentVariable("WORKSHOP_AZURE_OPENAI_KEY", $AzureOpenAIKey, "User")
-}
-
-# Check for Azure Subscription ID
-$AzureSubscriptionId = [Environment]::GetEnvironmentVariable("WORKSHOP_AZURE_SUBSCRIPTION_ID", "User")
-if (-not $AzureSubscriptionId) {
-    Write-Host "`n🔑 Azure Subscription ID not found. Please provide your Azure subscription ID for deployment." -ForegroundColor Yellow
-    Write-Host "You can find this in the Azure Portal under Subscriptions." -ForegroundColor Gray
-    
-    do {
-        $AzureSubscriptionId = Read-Host "Enter Azure Subscription ID"
-    } while ([string]::IsNullOrWhiteSpace($AzureSubscriptionId))
-    
-    Write-Host "✅ Saving Azure Subscription ID to environment variables..." -ForegroundColor Green
-    [Environment]::SetEnvironmentVariable("WORKSHOP_AZURE_SUBSCRIPTION_ID", $AzureSubscriptionId, "User")
-}
-
-# Check for Azure Location
-$AzureLocation = [Environment]::GetEnvironmentVariable("WORKSHOP_AZURE_LOCATION", "User")
-if (-not $AzureLocation) {
-    Write-Host "`n🌍 Azure Location not found. Please provide your preferred Azure region for deployment." -ForegroundColor Yellow
-    Write-Host "Common options: eastus, westus2, centralus, westeurope, eastasia" -ForegroundColor Gray
-    
-    do {
-        $AzureLocation = Read-Host "Enter Azure Location (e.g., eastus)"
-    } while ([string]::IsNullOrWhiteSpace($AzureLocation))
-    
-    Write-Host "✅ Saving Azure Location to environment variables..." -ForegroundColor Green
-    [Environment]::SetEnvironmentVariable("WORKSHOP_AZURE_LOCATION", $AzureLocation, "User")
-}
+            [Environment]::SetEnvironmentVariable("WORKSHOP_AZURE_OPENAI_KEY", $env:WORKSHOP_AZURE_OPENAI_KEY, "User")
             Write-Host "✓ Azure OpenAI key saved to environment variable WORKSHOP_AZURE_OPENAI_KEY" -ForegroundColor Green
         } else {
             Write-Host "⚠ Azure OpenAI key was empty, skipping..." -ForegroundColor Yellow
         }
     } else {
         Write-Host "✓ Azure OpenAI key found in environment variable WORKSHOP_AZURE_OPENAI_KEY" -ForegroundColor Green
+    }
+    
+    
+    Write-Host ""
+    
+    # Check for Azure Subscription ID
+    if (-not $env:WORKSHOP_AZURE_SUBSCRIPTION_ID) {
+        Write-Host "Azure Subscription ID not found in environment variable WORKSHOP_AZURE_SUBSCRIPTION_ID" -ForegroundColor Yellow
+        Write-Host "This is needed for Azure deployment in Part 6" -ForegroundColor Gray
+        Write-Host ""
+        
+        $azureSubscriptionId = Read-Host -Prompt "Enter your Azure Subscription ID (or press Enter to skip)"
+        if ($azureSubscriptionId.Length -gt 0) {
+            $env:WORKSHOP_AZURE_SUBSCRIPTION_ID = $azureSubscriptionId
+            [Environment]::SetEnvironmentVariable("WORKSHOP_AZURE_SUBSCRIPTION_ID", $azureSubscriptionId, "User")
+            Write-Host "✓ Azure Subscription ID saved to environment variable WORKSHOP_AZURE_SUBSCRIPTION_ID" -ForegroundColor Green
+        } else {
+            Write-Host "⚠ Azure Subscription ID was empty, skipping..." -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "✓ Azure Subscription ID found in environment variable WORKSHOP_AZURE_SUBSCRIPTION_ID" -ForegroundColor Green
+    }
+    
+    Write-Host ""
+    
+    # Check for Azure Location
+    if (-not $env:WORKSHOP_AZURE_LOCATION) {
+        Write-Host "Azure Location not found in environment variable WORKSHOP_AZURE_LOCATION" -ForegroundColor Yellow
+        Write-Host "This is needed for Azure deployment in Part 6" -ForegroundColor Gray
+        Write-Host "Common options: eastus, westus2, centralus, westeurope, eastasia" -ForegroundColor Gray
+        Write-Host ""
+        
+        $azureLocation = Read-Host -Prompt "Enter your Azure Location (or press Enter to skip)"
+        if ($azureLocation.Length -gt 0) {
+            $env:WORKSHOP_AZURE_LOCATION = $azureLocation
+            [Environment]::SetEnvironmentVariable("WORKSHOP_AZURE_LOCATION", $azureLocation, "User")
+            Write-Host "✓ Azure Location saved to environment variable WORKSHOP_AZURE_LOCATION" -ForegroundColor Green
+        } else {
+            Write-Host "⚠ Azure Location was empty, skipping..." -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "✓ Azure Location found in environment variable WORKSHOP_AZURE_LOCATION" -ForegroundColor Green
     }
     
     Write-Host ""

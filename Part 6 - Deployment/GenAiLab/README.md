@@ -18,16 +18,12 @@ This incompatibility can be addressed by upgrading to Docker Desktop 4.41.1. See
 ## Using GitHub Models
 To use models hosted by GitHub Models, you will need to create a GitHub personal access token. The token should not have any scopes or permissions. See [Managing your personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 
-Configure your token for this project using .NET User Secrets:
+From the command line, configure your token for this project using .NET User Secrets by running the following commands:
 
-1. In Visual Studio, right-click on the GenAiLab.AppHost project in the Solution Explorer and select "Manage User Secrets".
-2. This opens a `secrets.json` file where you can store your API keys without them being tracked in source control. Add the following key and value:
-
-   ```json
-   {
-     "ConnectionStrings:openai": "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
-   }
-   ```
+```sh
+cd GenAiLab.AppHost
+dotnet user-secrets set ConnectionStrings:openai "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
+```
 
 Learn more about [prototyping with AI models using GitHub Models](https://docs.github.com/github-models/prototyping-with-ai-models).
 
@@ -54,9 +50,9 @@ Note: Qdrant and Docker are excellent open source products, but are not maintain
 
 ## Trust the localhost certificate
 
-Several .NET Aspire templates include ASP.NET Core projects that are configured to use HTTPS by default. If this is the first time you're running the project, an exception might occur when loading the Aspire dashboard. This error can be resolved by trusting the self-signed development certificate with the .NET CLI.
+Several Aspire templates include ASP.NET Core projects that are configured to use HTTPS by default. If this is the first time you're running the project, an exception might occur when loading the Aspire dashboard. This error can be resolved by trusting the self-signed development certificate with the .NET CLI.
 
-See [Troubleshoot untrusted localhost certificate in .NET Aspire](https://learn.microsoft.com/dotnet/aspire/troubleshooting/untrusted-localhost-certificate) for more information.
+See [Troubleshoot untrusted localhost certificate in Aspire](https://learn.microsoft.com/dotnet/aspire/troubleshooting/untrusted-localhost-certificate) for more information.
 
 # Updating JavaScript dependencies
 

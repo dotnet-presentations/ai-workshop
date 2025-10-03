@@ -216,6 +216,9 @@ csx/
 ecf/
 rcf/
 
+# Azure Developer CLI (azd) environment files
+.azure/
+
 # Windows Store app package directories and files
 AppPackages/
 BundleArtifacts/

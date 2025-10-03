@@ -88,11 +88,11 @@ For both VS Code and Visual Studio, the configuration file uses the following se
 
 .NET MCP servers use the [ModelContextProtocol](https://www.nuget.org/packages/ModelContextProtocol) C# SDK. For more information about MCP:
 
-- [Official Documentation](https://modelcontextprotocol.io/)
-- [Protocol Specification](https://spec.modelcontextprotocol.io/)
-- [GitHub Organization](https://github.com/modelcontextprotocol)
+* [Official Documentation](https://modelcontextprotocol.io/)
+* [Protocol Specification](https://spec.modelcontextprotocol.io/)
+* [GitHub Organization](https://github.com/modelcontextprotocol)
 
 Refer to the VS Code or Visual Studio documentation for more information on configuring and using MCP servers:
 
-- [Use MCP servers in VS Code (Preview)](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
-- [Use MCP servers in Visual Studio (Preview)](https://learn.microsoft.com/visualstudio/ide/mcp-servers)
+* [Use MCP servers in VS Code (Preview)](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
+* [Use MCP servers in Visual Studio (Preview)](https://learn.microsoft.com/visualstudio/ide/mcp-servers)

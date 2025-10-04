@@ -8,7 +8,7 @@ In this workshop, you'll explore the code structure of the AI Web Chat template.
 
 ## Services in .NET Aspire AppHost Program.cs
 
-Let's start by examining the `Program.cs` file in the `GenAiLab.AppHost` project:
+Let's start by examining the [`AppHost.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.AppHost/AppHost.cs) file in the `GenAiLab.AppHost` project:
 
 ```csharp
 var builder = DistributedApplication.CreateBuilder(args);
@@ -40,7 +40,7 @@ Key components in the AppHost:
 
 ## Application configuration in Web Program.cs
 
-Now let's look at the `Program.cs` file in the `GenAiLab.Web` project:
+Now let's look at the [`Program.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Program.cs) file in the `GenAiLab.Web` project:
 
 ```csharp
 using Microsoft.Extensions.AI;
@@ -123,7 +123,7 @@ openai.AddChatClient("gpt-4o-mini")
         c.EnableSensitiveData = builder.Environment.IsDevelopment());
 ```
 
-The `IChatClient` is used in the `Chat.razor` component to handle user messages and generate AI responses:
+The `IChatClient` is used in the [`Chat.razor`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Components/Pages/Chat/Chat.razor#L58-L84) component to handle user messages and generate AI responses:
 
 ```csharp
 @code {
@@ -182,7 +182,7 @@ These collections store:
 
 ### DataIngestor Service with Vector Collections
 
-Let's examine how the `DataIngestor.cs` uses vector collections directly:
+Let's examine how the [`DataIngestor.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Services/Ingestion/DataIngestor.cs#L18-L57) uses vector collections directly:
 
 ```csharp
 public class DataIngestor(
@@ -249,7 +249,7 @@ The template uses several vector collection methods:
 
 ### IngestedChunk for Vector Storage
 
-The `IngestedChunk.cs` file shows how data is structured for vector storage:
+The [`IngestedChunk.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Services/IngestedChunk.cs) file shows how data is structured for vector storage:
 
 ```csharp
 namespace GenAiLab.Web.Services;
@@ -284,7 +284,7 @@ This class represents the data stored in the vector database with specific attri
 - `Text`: A chunk of text from the document
 - `Vector`: The embedding vector configured for the OpenAI text-embedding-3-small model's 1536 dimensions using cosine similarity. The property returns the Text, which will be automatically embedded when stored.
 
-The `SemanticSearch.cs` file shows how these records are queried:
+The [`SemanticSearch.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Services/SemanticSearch.cs) file shows how these records are queried:
 
 ```csharp
 public class SemanticSearch(

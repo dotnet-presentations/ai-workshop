@@ -143,13 +143,14 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 > **Note:** This step requires a GitHub account. If you don't have one yet, please follow the instructions in [Part 1: Setup](../Part%201%20-%20Setup/README.md#step-2-create-a-github-account-if-needed) to create a GitHub account.
 
 1. Create a GitHub token for accessing GitHub Models:
-   - Go to [https://github.com/settings/tokens](https://github.com/settings/tokens)
-   - Click "Generate new token (classic)"
-   - Give the token a description like "AI Models Access"
-   - Click "Generate token"
+   - Go to [https://github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new)
+   - Click "Generate new token" (fine-grained token)
+   - Enter a name for the token, such as "AI Models Access"
+   - Under **Permissions**, set **Models** to **Access: Read-only**
+   - Click "Generate token" at the bottom of the page
    - Copy the generated token (you won't be able to see it again)
 
-   > **Note**: We're using classic tokens for simplicity. If you prefer fine-grained tokens, you'll need to specify the `models:read` scope. See the [GitHub Models announcement](https://github.blog/changelog/2025-05-15-modelsread-now-required-for-github-models-access/) for more details.
+   > **Note**: For additional guidance on configuring GitHub Models access, see the [Microsoft documentation quickstart](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/ai-templates?tabs=dotnet-cli%2Cconfigure-visual-studio%2Cconfigure-visual-studio-aspire&pivots=github-models#configure-access-to-github-models).
 
 1. In the Solution Explorer, right-click on the `GenAiLab.AppHost` project and select "Manage User Secrets"
 

@@ -8,7 +8,7 @@ In this workshop, you'll explore the code structure of the AI Web Chat template.
 
 ## Services in .NET Aspire AppHost Program.cs
 
-Let's start by examining the `Program.cs` file in the `GenAiLab.AppHost` project:
+Let's start by examining the [`AppHost.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.AppHost/AppHost.cs) file in the `GenAiLab.AppHost` project:
 
 ```csharp
 var builder = DistributedApplication.CreateBuilder(args);
@@ -40,7 +40,7 @@ Key components in the AppHost:
 
 ## Application configuration in Web Program.cs
 
-Now let's look at the `Program.cs` file in the `GenAiLab.Web` project:
+Now let's look at the [`Program.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Program.cs) file in the `GenAiLab.Web` project:
 
 ```csharp
 using Microsoft.Extensions.AI;
@@ -99,8 +99,8 @@ app.Run();
 Key components in the Web Program.cs:
 
 1. **Service Registration**: Setting up Razor components, service defaults, etc.
-1. **GitHub Models Setup**:
-   - Adding GitHub Models as the AI provider
+1. **Azure OpenAI Setup**:
+   - Adding Azure OpenAI client with connection string reference
    - Configuring a chat client with the "gpt-4o-mini" model
    - Setting up an embedding generator with "text-embedding-3-small" model
 1. **Qdrant Client**: Connecting to the Qdrant vector database
@@ -116,27 +116,41 @@ The `IChatClient` interface is a key part of Microsoft Extensions for AI. Let's 
 
 ```csharp
 // Configuration in Program.cs
-var openai = builder.AddGitHubModels();
+var openai = builder.AddAzureOpenAIClient("openai");
 openai.AddChatClient("gpt-4o-mini")
     .UseFunctionInvocation()
     .UseOpenTelemetry(configure: c =>
         c.EnableSensitiveData = builder.Environment.IsDevelopment());
 ```
 
-The `IChatClient` is used in the `Chat.razor` component to handle user messages and generate AI responses:
+The `IChatClient` is used in the [`Chat.razor`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Components/Pages/Chat/Chat.razor#L58-L84) component to handle user messages and generate AI responses:
 
 ```csharp
 @code {
-    [Inject]
-    private IChatClient ChatClient { get; set; } = default!;
+    @inject IChatClient ChatClient
     
-    private async Task HandleUserMessageAsync(string userMessage)
+    private async Task AddUserMessageAsync(ChatMessage userMessage)
     {
-        // ...
-        var response = await ChatClient.GetResponseAsync(
-            SystemPrompt, 
-            chatHistory.Select(m => new ChatMessage(m.Role, m.Content)).ToArray());
-        // ...
+        // Add the user message to the conversation
+        messages.Add(userMessage);
+        
+        // Stream and display a new response from the IChatClient
+        var responseText = new TextContent("");
+        currentResponseMessage = new ChatMessage(ChatRole.Assistant, [responseText]);
+        currentResponseCancellation = new();
+        await foreach (var update in ChatClient.GetStreamingResponseAsync(
+            messages.Skip(statefulMessageCount), chatOptions, currentResponseCancellation.Token))
+        {
+            messages.AddMessages(update, filter: c => c is not TextContent);
+            responseText.Text += update.Text;
+            chatOptions.ConversationId = update.ConversationId;
+            ChatMessageItem.NotifyChanged(currentResponseMessage);
+        }
+        
+        // Store the final response in the conversation
+        messages.Add(currentResponseMessage!);
+        statefulMessageCount = chatOptions.ConversationId is not null ? messages.Count : 0;
+        currentResponseMessage = null;
     }
 }
 ```
@@ -168,7 +182,7 @@ These collections store:
 
 ### DataIngestor Service with Vector Collections
 
-Let's examine how the `DataIngestor.cs` uses vector collections directly:
+Let's examine how the [`DataIngestor.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Services/Ingestion/DataIngestor.cs#L18-L57) uses vector collections directly:
 
 ```csharp
 public class DataIngestor(
@@ -209,7 +223,7 @@ public class DataIngestor(
     {
         var documentId = document.DocumentId;
         var chunksToDelete = await chunksCollection.GetAsync(record => record.DocumentId == documentId, int.MaxValue).ToListAsync();
-        if (chunksToDelete.Any())
+        if (chunksToDelete.Count != 0)
         {
             await chunksCollection.DeleteAsync(chunksToDelete.Select(r => r.Key));
         }
@@ -233,130 +247,113 @@ The template uses several vector collection methods:
 - `DeleteAsync()`: Remove documents and their associated chunks
 - `EnsureCollectionExistsAsync()`: Create collections if they don't exist
 
-### SemanticSearchRecord for Vector Storage
+### IngestedChunk for Vector Storage
 
-The `SemanticSearchRecord.cs` file shows how data is structured for vector storage:
+The [`IngestedChunk.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Services/IngestedChunk.cs) file shows how data is structured for vector storage:
 
 ```csharp
 namespace GenAiLab.Web.Services;
 
-public class SemanticSearchRecord
+public class IngestedChunk
 {
-    [VectorStoreRecordKey]
+    private const int VectorDimensions = 1536; // 1536 is the default vector size for the OpenAI text-embedding-3-small model
+    private const string VectorDistanceFunction = DistanceFunction.CosineSimilarity;
+
+    [VectorStoreKey]
     public required Guid Key { get; set; }
 
-    [VectorStoreRecordData(IsFilterable = true)]
-    public required string FileName { get; set; }
+    [VectorStoreData(IsIndexed = true)]
+    public required string DocumentId { get; set; }
 
-    [VectorStoreRecordData]
+    [VectorStoreData]
     public int PageNumber { get; set; }
 
-    [VectorStoreRecordData]
+    [VectorStoreData]
     public required string Text { get; set; }
 
-    [VectorStoreRecordVector(1536, DistanceFunction.CosineSimilarity)] // 1536 is the default vector size for the OpenAI text-embedding-3-small model
-    public ReadOnlyMemory<float> Vector { get; set; }
+    [VectorStoreVector(VectorDimensions, DistanceFunction = VectorDistanceFunction)]
+    public string? Vector => Text;
 }
 ```
 
 This class represents the data stored in the vector database with specific attributes for vector storage:
 
-- `Key`: The unique identifier for the record, marked with `[VectorStoreRecordKey]`
-- `FileName`: The source document's name, marked as filterable with `[VectorStoreRecordData(IsFilterable = true)]`
+- `Key`: The unique identifier for the record, marked with `[VectorStoreKey]`
+- `DocumentId`: The source document's identifier, marked as indexed with `[VectorStoreData(IsIndexed = true)]`
 - `PageNumber`: The page number in the source document
 - `Text`: A chunk of text from the document
-- `Vector`: The embedding vector configured for the OpenAI text-embedding-3-small model's 1536 dimensions using cosine similarity
+- `Vector`: The embedding vector configured for the OpenAI text-embedding-3-small model's 1536 dimensions using cosine similarity. The property returns the Text, which will be automatically embedded when stored.
 
-The `SemanticSearch.cs` file shows how these records are queried:
+The [`SemanticSearch.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.Web/Services/SemanticSearch.cs) file shows how these records are queried:
 
 ```csharp
 public class SemanticSearch(
-    IEmbeddingGenerator<string, Embedding<float>> embedder,
-    IVectorStore vectorStore,
-    ILogger<SemanticSearch> logger)
+    VectorStoreCollection<Guid, IngestedChunk> vectorCollection)
 {
-    private const string CollectionName = "data-genailab-ingested";
-    
-    public async Task<SearchResults> Search(string query)
+    public async Task<IReadOnlyList<IngestedChunk>> SearchAsync(string text, string? documentIdFilter, int maxResults)
     {
-        try
+        var nearest = vectorCollection.SearchAsync(text, maxResults, new VectorSearchOptions<IngestedChunk>
         {
-            // Generate an embedding vector for the query
-            var queryEmbedding = await embedder.GenerateEmbeddingVectorAsync(query);
-            
-            // Search the vector database for similar document chunks
-            var collection = vectorStore.GetCollection<Guid, SemanticSearchRecord>(CollectionName);
-            var searchResults = await collection.VectorizedSearchAsync(
-                queryEmbedding,
-                new VectorSearchOptions<SemanticSearchRecord> { Top = 5 }
-            );
-            
-            // Process and return results
-            var results = new List<DocumentResult>();
-            await foreach (var match in searchResults.Results)
-            {
-                results.Add(new DocumentResult
-                {
-                    FileName = match.Record.FileName,
-                    Text = match.Record.Text,
-                    Score = match.Score
-                });
-            }
-            
-            return new SearchResults(results);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error performing semantic search");
-            return new SearchResults(new List<DocumentResult>());
-        }
+            Filter = documentIdFilter is { Length: > 0 } ? record => record.DocumentId == documentIdFilter : null,
+        });
+
+        return await nearest.Select(result => result.Record).ToListAsync();
     }
 }
 ```
+
+Key features of semantic search:
+
+1. **Automatic Embedding**: The text parameter is automatically converted to an embedding vector
+2. **Vector Similarity**: Finds the most similar chunks using the embedding vector
+3. **Optional Filtering**: Can filter results by document ID if specified
+4. **Direct Results**: Returns the actual `IngestedChunk` records with their text content
 
 ## Document Ingestion and Embeddings with Vector Collections
 
-Let's examine how embeddings are generated during document ingestion using the new vector collection approach. The `PDFDirectorySource` creates chunks and the `DataIngestor` processes them:
+Document ingestion is handled by the `DataIngestor` service working with `IIngestionSource` implementations. The `PDFDirectorySource` processes PDF files and creates chunks that are stored directly in vector collections.
+
+### How Ingestion Works
+
+When the application starts, it processes documents from the specified source:
 
 ```csharp
-public async Task<IEnumerable<IngestedChunk>> CreateChunksForDocumentAsync(IngestedDocument document)
+await DataIngestor.IngestDataAsync(
+    app.Services,
+    new PDFDirectorySource(Path.Combine(builder.Environment.WebRootPath, "Data")));
+```
+
+The ingestion process:
+
+1. **Checks for Changes**: Compares current documents with previously ingested documents
+2. **Removes Deleted Documents**: If a document was removed, deletes its chunks and metadata
+3. **Processes New/Modified Documents**: For each changed document:
+   - Removes old chunks if the document was previously ingested
+   - Creates new `IngestedDocument` metadata record
+   - Splits the document into chunks
+   - Creates `IngestedChunk` records with text content
+   - Stores chunks in the vector collection (embeddings are generated automatically)
+
+### Automatic Vector Generation
+
+A key feature is that embeddings are generated automatically:
+
+```csharp
+public class IngestedChunk
 {
-    // Get the document content and split into chunks
-    var chunks = SplitDocumentIntoChunks(document.Content);
-    var ingestedChunks = new List<IngestedChunk>();
+    // ... other properties ...
     
-    foreach (var (chunk, pageNumber) in chunks)
-    {
-        // Skip empty chunks
-        if (string.IsNullOrWhiteSpace(chunk)) continue;
-        
-        // Create the ingested chunk record
-        var ingestedChunk = new IngestedChunk
-        {
-            Key = Guid.NewGuid(),
-            DocumentId = document.DocumentId,
-            Text = chunk,
-            PageNumber = pageNumber,
-            // Vector will be generated automatically by the vector collection
-        };
-        
-        ingestedChunks.Add(ingestedChunk);
-    }
-    
-    return ingestedChunks;
+    [VectorStoreVector(VectorDimensions, DistanceFunction = VectorDistanceFunction)]
+    public string? Vector => Text;
 }
 ```
 
-Key steps in the new vector-based workflow:
+When an `IngestedChunk` is stored via `chunksCollection.UpsertAsync()`, the vector collection automatically:
+1. Takes the `Text` property value (returned by the `Vector` property)
+2. Generates an embedding using the configured embedding generator
+3. Stores both the text and its embedding vector
 
-1. Documents are retrieved from a source (like PDFs in the wwwroot/Data directory)
-1. Each document is split into smaller chunks for better search precision
-1. For each chunk, an `IngestedChunk` record is created with the text content
-1. The embedding vectors are generated automatically when the chunks are stored in the vector collection
-1. Both document metadata and chunks are stored directly in vector collections
-1. During search, query text is converted to an embedding, and vector similarity finds relevant chunks
-
-This approach eliminates the need for a separate database to track ingestion state, as the vector collections handle both storage and retrieval of document chunks and their metadata.
+This approach eliminates the need for manual embedding generation and ensures consistency across all document chunks.
 
 ## What You've Learned
 

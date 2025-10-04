@@ -16,15 +16,7 @@ This incompatibility can be addressed by upgrading to Docker Desktop 4.41.1. See
 # Configure the AI Model Provider
 
 ## Using GitHub Models
-To use models hosted by GitHub Models, you will need to create a GitHub personal access token with **Models: Read-only** permission. To create the token:
-
-1. Navigate to the [Personal access tokens page](https://github.com/settings/personal-access-tokens/new) of your GitHub account settings under Developer Settings.
-2. Select "Generate new token" (fine-grained token).
-3. Enter a name for the token, and under **Permissions**, set **Models** to **Access: Read-only**.
-4. Select "Generate token" at the bottom of the page.
-5. Copy the token for use in the steps ahead.
-
-For more details, see the [Microsoft documentation quickstart](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/ai-templates?tabs=dotnet-cli%2Cconfigure-visual-studio%2Cconfigure-visual-studio-aspire&pivots=github-models#configure-access-to-github-models) and [Managing your personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+To use models hosted by GitHub Models, you will need to create a GitHub personal access token. The token should not have any scopes or permissions. See [Managing your personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 
 From the command line, configure your token for this project using .NET User Secrets by running the following commands:
 

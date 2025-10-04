@@ -166,8 +166,6 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 
 1. Save the `secrets.json` file.
 
-   > **Note:** GitHub Models now use the endpoint `models.github.ai`. While the previous endpoint `models.inference.ai.azure.com` is [still supported until October 2025](https://github.blog/changelog/2025-07-17-deprecation-of-azure-endpoint-for-github-models/), it's best to use the new endpoint now.
-
 ## Run the application
 
 Now let's run the application and explore its features:

@@ -198,7 +198,7 @@ cd ai-workshop
 
 This script will prompt you for:
 
-- **GitHub Token**: For GitHub Models access (classic token or fine-grained with `models:read` scope)
+- **GitHub Token**: For GitHub Models access (fine-grained token with **Models: Read-only** permission)
 - **Azure OpenAI Endpoint**: Your Azure OpenAI service endpoint URL
 - **Azure OpenAI Key**: Your Azure OpenAI service API key
 

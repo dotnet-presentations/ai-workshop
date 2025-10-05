@@ -279,6 +279,8 @@ Help resolve a customer issue: John Doe says his tent order is delayed. Can you:
 
 ## Step 7: Security and Validation Considerations
 
+> **📚 Note**: This step provides **educational content** about security best practices. The code examples below demonstrate concepts you should consider when building production MCP servers. **You don't need to modify the ContosoOrdersMcpServer project** - these are examples to learn from for your own future projects.
+
 When building business MCP tools, consider these important aspects:
 
 ### Data Validation
@@ -324,6 +326,8 @@ catch (Exception ex)
 - ✅ **Sanitize outputs** to prevent data leakage
 
 ## Step 8: Advanced Business Scenarios
+
+> **📚 Note**: This step shows **example patterns** for advanced business scenarios. These code examples demonstrate how you could extend MCP servers beyond the basic ContosoOrdersMcpServer. **You don't need to implement these** - they're provided as inspiration for building your own advanced MCP tools.
 
 ### Multi-System Integration
 
@@ -381,6 +385,8 @@ public class ContosoOrdersTools
 
 ## Step 9: Performance and Scalability
 
+> **📚 Note**: This step demonstrates **performance optimization techniques** for production MCP servers. These are **example patterns** showing how to improve scalability - you don't need to add them to ContosoOrdersMcpServer. Use these concepts when building high-performance MCP servers in the future.
+
 ### Caching Strategies
 
 ```csharp
@@ -427,6 +433,8 @@ public async Task<string> GetCustomerOrderSummary(string customerId)
 
 ## Step 10: Monitoring and Observability
 
+> **📚 Note**: This step presents **monitoring and logging best practices** for production MCP servers. These are **example implementations** to guide your future work - you don't need to add this code to ContosoOrdersMcpServer. Consider these patterns when deploying MCP servers to production environments.
+
 ### Tool Usage Logging
 
 ```csharp
@@ -454,6 +462,8 @@ public async Task<string> GetOrderDetails(string orderId)
 ```
 
 ## Step 11: Testing Business Logic
+
+> **📚 Note**: This step illustrates **unit testing patterns** for MCP tools. These are **example test cases** showing how to validate business logic - you don't need to add tests to ContosoOrdersMcpServer for this workshop. Use these patterns when building production MCP servers that require comprehensive testing.
 
 ### Unit Testing MCP Tools
 

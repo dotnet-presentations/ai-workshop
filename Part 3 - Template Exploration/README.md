@@ -457,11 +457,11 @@ Here's how the automatic vector generation works when storing chunks:
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#000', 'primaryBorderColor': '#333', 'lineColor': '#333', 'secondaryColor': '#e1f5fe', 'tertiaryColor': '#f3e5f5' }}}%%
 flowchart TB
-    Chunk["IngestedChunk Object<br/>---<br/>Key: Guid<br/>DocumentId: string<br/>PageNumber: int<br/>Text: 'Product features...'<br/><br/>[VectorStoreVector]<br/>Vector property → returns Text"]
+    Chunk["IngestedChunk Object<br/>---<br/>Key: Guid<br/>DocumentId: string<br/>PageNumber: int<br/>Text: 'Product features...'<br/><br/>VectorStoreVector attribute<br/>Vector property → returns Text"]
     
     Chunk -->|Call UpsertAsync| VectorCollection[Vector Collection Framework]
     
-    VectorCollection -->|1. Detect [VectorStoreVector] attribute| Detect{Attribute<br/>Found?}
+    VectorCollection -->|1. Detect VectorStoreVector attribute| Detect{Attribute<br/>Found?}
     
     Detect -->|Yes| Extract[2. Get value from Vector property<br/>Result: 'Product features...']
     

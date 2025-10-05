@@ -61,4 +61,4 @@ This template leverages JavaScript libraries to provide essential functionality.
 # Learn More
 To learn more about development with .NET and AI, check out the following links:
 
-* [AI for .NET Developers](https://learn.microsoft.com/dotnet/ai/)
+- [AI for .NET Developers](https://learn.microsoft.com/dotnet/ai/)

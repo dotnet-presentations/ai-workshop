@@ -366,60 +366,46 @@ Document ingestion is handled by the `DataIngestor` service working with `IInges
 
 ### Data Ingestion Flow Diagram
 
-Here's a detailed view of how PDF documents are processed and stored:
+Here's a simplified view of how PDF documents are processed and stored:
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#000', 'primaryBorderColor': '#333', 'lineColor': '#333', 'secondaryColor': '#e1f5fe', 'tertiaryColor': '#f3e5f5' }}}%%
-sequenceDiagram
-    participant App as Web Application
-    participant DI as DataIngestor
-    participant PDF as PDFDirectorySource
-    participant DocDB as Documents Collection<br/>(Qdrant)
-    participant ChunkDB as Chunks Collection<br/>(Qdrant)
-    participant AI as Embedding Generator<br/>(Azure OpenAI)
+flowchart TD
+    Start([Application Starts]) --> Init[DataIngestor.IngestDataAsync]
+    Init --> Check{Check for<br/>Changes}
     
-    App->>DI: IngestDataAsync(PDFDirectorySource)
-    DI->>DocDB: EnsureCollectionExistsAsync()
-    DI->>ChunkDB: EnsureCollectionExistsAsync()
+    Check -->|Deleted| Delete[Remove old chunks<br/>and metadata]
+    Check -->|New/Modified| Process[Process PDF]
+    Check -->|No Changes| Done
     
-    DI->>DocDB: GetAsync(sourceId filter)
-    DocDB-->>DI: existing documents
+    Delete --> Check
     
-    DI->>PDF: GetDeletedDocumentsAsync()
-    PDF-->>DI: deleted documents list
+    Process --> Extract[Extract & Chunk Text<br/>200 char chunks]
+    Extract --> Store[Store in Qdrant]
+    Store --> Embed[Auto-generate Embeddings<br/>via Azure OpenAI]
+    Embed --> Check
     
-    loop For each deleted document
-        DI->>ChunkDB: GetAsync(documentId filter)
-        ChunkDB-->>DI: chunks to delete
-        DI->>ChunkDB: DeleteAsync(chunk keys)
-        DI->>DocDB: DeleteAsync(document key)
-    end
+    Done([Ingestion Complete])
     
-    DI->>PDF: GetNewOrModifiedDocumentsAsync()
-    PDF-->>DI: new/modified documents list
-    
-    loop For each new/modified document
-        DI->>ChunkDB: GetAsync(documentId filter)
-        ChunkDB-->>DI: old chunks
-        DI->>ChunkDB: DeleteAsync(old chunk keys)
-        
-        DI->>DocDB: UpsertAsync(document metadata)
-        
-        DI->>PDF: CreateChunksForDocumentAsync()
-        Note over PDF: 1. Open PDF file<br/>2. Extract text from pages<br/>3. Split into paragraphs<br/>4. Chunk text (200 chars)
-        PDF-->>DI: IngestedChunk objects
-        
-        DI->>ChunkDB: UpsertAsync(chunks)
-        Note over ChunkDB,AI: Automatic embedding generation
-        ChunkDB->>AI: Generate embeddings for chunk.Text
-        AI-->>ChunkDB: Vector embeddings (1536 dims)
-        ChunkDB-->>DI: Chunks stored with vectors
-    end
-    
-    DI-->>App: Ingestion complete
+    style Start fill:#e8f5e8
+    style Init fill:#e1f5fe
+    style Check fill:#fff4e6
+    style Process fill:#f9d5e5
+    style Extract fill:#f9d5e5
+    style Store fill:#e1f5fe
+    style Embed fill:#d5e8d4
+    style Done fill:#e8f5e8
 ```
 
-This diagram shows the complete ingestion pipeline from PDF files to searchable vector embeddings, including change detection, cleanup, and automatic embedding generation.
+This flowchart shows the main ingestion process: checking for document changes, processing new/modified PDFs by extracting and chunking text, storing in Qdrant, and automatically generating embeddings via Azure OpenAI.
+
+**Key steps:**
+
+1. **Check for Changes**: Compare current PDFs with previously ingested documents
+2. **Process PDF**: For new/modified files, extract text and split into 200-character chunks
+3. **Store in Qdrant**: Save chunks in the vector database
+4. **Auto-generate Embeddings**: Azure OpenAI converts text to 1536-dimensional vectors
+5. **Loop**: Process continues until all changes are handled
 
 ### How Ingestion Works
 

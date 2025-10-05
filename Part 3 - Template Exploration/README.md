@@ -6,6 +6,57 @@
 
 In this workshop, you'll explore the code structure of the AI Web Chat template. You'll learn about the different services configured in the .NET Aspire AppHost, understand the application configuration in the Web project, explore how `IChatClient` is configured and used, and dive into Microsoft Extensions for Vector Data.
 
+## Architecture Overview
+
+Before diving into the code, let's visualize how the different components work together:
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#000', 'primaryBorderColor': '#333', 'lineColor': '#333', 'secondaryColor': '#e1f5fe', 'tertiaryColor': '#f3e5f5' }}}%%
+graph TB
+    subgraph AppHost[".NET Aspire AppHost"]
+        AH[AppHost Program.cs]
+    end
+    
+    subgraph Web["GenAiLab.Web Application"]
+        WP[Web Program.cs]
+        DI[DataIngestor]
+        SS[SemanticSearch]
+        CHAT[Chat.razor]
+    end
+    
+    subgraph External["External Services"]
+        OAI[Azure OpenAI<br/>Chat + Embeddings]
+        QD[(Qdrant Vector DB<br/>Chunks & Documents)]
+    end
+    
+    subgraph Data["Data Sources"]
+        PDF[PDF Files<br/>wwwroot/Data]
+    end
+    
+    AH -->|orchestrates| Web
+    AH -->|configures| OAI
+    AH -->|provisions| QD
+    
+    WP -->|registers services| DI
+    WP -->|registers services| SS
+    WP -->|ingests at startup| PDF
+    
+    DI -->|processes PDFs| PDF
+    DI -->|stores chunks| QD
+    DI -->|generates embeddings via| OAI
+    
+    CHAT -->|queries| SS
+    CHAT -->|sends messages to| OAI
+    SS -->|searches| QD
+    
+    style AppHost fill:#e8f5e8
+    style Web fill:#e1f5fe
+    style External fill:#fff4e6
+    style Data fill:#f9d5e5
+```
+
+This diagram shows how .NET Aspire orchestrates the web application and its dependencies, with the web app coordinating data ingestion and semantic search using Azure OpenAI and Qdrant.
+
 ## Services in .NET Aspire AppHost Program.cs
 
 Let's start by examining the [`AppHost.cs`](../Part%202%20-%20Project%20Creation/GenAiLab/GenAiLab.AppHost/AppHost.cs) file in the `GenAiLab.AppHost` project:
@@ -313,6 +364,49 @@ Key features of semantic search:
 
 Document ingestion is handled by the `DataIngestor` service working with `IIngestionSource` implementations. The `PDFDirectorySource` processes PDF files and creates chunks that are stored directly in vector collections.
 
+### Data Ingestion Flow Diagram
+
+Here's a simplified view of how PDF documents are processed and stored:
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#000', 'primaryBorderColor': '#333', 'lineColor': '#333', 'secondaryColor': '#e1f5fe', 'tertiaryColor': '#f3e5f5' }}}%%
+flowchart TD
+    Start([Application Starts]) --> Init[DataIngestor.IngestDataAsync]
+    Init --> Check{Check for<br/>Changes}
+    
+    Check -->|Deleted| Delete[Remove old chunks<br/>and metadata]
+    Check -->|New/Modified| Process[Process PDF]
+    Check -->|No Changes| Done
+    
+    Delete --> Check
+    
+    Process --> Extract[Extract & Chunk Text<br/>200 char chunks]
+    Extract --> Store[Store in Qdrant]
+    Store --> Embed[Auto-generate Embeddings<br/>via Azure OpenAI]
+    Embed --> Check
+    
+    Done([Ingestion Complete])
+    
+    style Start fill:#e8f5e8
+    style Init fill:#e1f5fe
+    style Check fill:#fff4e6
+    style Process fill:#f9d5e5
+    style Extract fill:#f9d5e5
+    style Store fill:#e1f5fe
+    style Embed fill:#d5e8d4
+    style Done fill:#e8f5e8
+```
+
+This flowchart shows the main ingestion process: checking for document changes, processing new/modified PDFs by extracting and chunking text, storing in Qdrant, and automatically generating embeddings via Azure OpenAI.
+
+**Key steps:**
+
+1. **Check for Changes**: Compare current PDFs with previously ingested documents
+2. **Process PDF**: For new/modified files, extract text and split into 200-character chunks
+3. **Store in Qdrant**: Save chunks in the vector database
+4. **Auto-generate Embeddings**: Azure OpenAI converts text to 1536-dimensional vectors
+5. **Loop**: Process continues until all changes are handled
+
 ### How Ingestion Works
 
 When the application starts, it processes documents from the specified source:
@@ -349,11 +443,90 @@ public class IngestedChunk
 ```
 
 When an `IngestedChunk` is stored via `chunksCollection.UpsertAsync()`, the vector collection automatically:
+
 1. Takes the `Text` property value (returned by the `Vector` property)
 2. Generates an embedding using the configured embedding generator
 3. Stores both the text and its embedding vector
 
 This approach eliminates the need for manual embedding generation and ensures consistency across all document chunks.
+
+#### Vector Storage Architecture
+
+Here's how the automatic vector generation works when storing chunks:
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#000', 'primaryBorderColor': '#333', 'lineColor': '#333', 'secondaryColor': '#e1f5fe', 'tertiaryColor': '#f3e5f5' }}}%%
+flowchart TB
+    Chunk["IngestedChunk Object<br/>---<br/>Key: Guid<br/>DocumentId: string<br/>PageNumber: int<br/>Text: 'Product features...'<br/><br/>VectorStoreVector attribute<br/>Vector property → returns Text"]
+    
+    Chunk -->|Call UpsertAsync| VectorCollection[Vector Collection Framework]
+    
+    VectorCollection -->|1. Detect VectorStoreVector attribute| Detect{Attribute<br/>Found?}
+    
+    Detect -->|Yes| Extract[2. Get value from Vector property<br/>Result: 'Product features...']
+    
+    Extract --> Generate[3. Call Azure OpenAI<br/>Embedding Generator<br/>text-embedding-3-small model]
+    
+    Generate --> Embed[4. Generate 1536-dimensional<br/>vector embedding]
+    
+    Embed --> Store[5. Store in Qdrant]
+    
+    Store --> Result["Stored Record<br/>---<br/>Metadata: Key, DocumentId, Text<br/>Vector: float array 1536 dims<br/>Distance: Cosine Similarity"]
+    
+    style Chunk fill:#e1f5fe
+    style VectorCollection fill:#fff4e6
+    style Detect fill:#fff4e6
+    style Extract fill:#f9d5e5
+    style Generate fill:#d5e8d4
+    style Embed fill:#d5e8d4
+    style Store fill:#e1f5fe
+    style Result fill:#e8f5e8
+```
+
+**Key Concept**: The `[VectorStoreVector]` attribute on the `Vector` property enables automatic embedding generation:
+
+1. **Attribute Detection**: Framework detects properties marked with `[VectorStoreVector]`
+2. **Text Extraction**: Gets the text value from the Vector property
+3. **Embedding Generation**: Sends text to Azure OpenAI's text-embedding-3-small model
+4. **Vector Creation**: Converts text into a 1536-dimensional vector
+5. **Storage**: Stores both the original text metadata and the generated vector using cosine similarity for distance calculations
+
+This automatic process eliminates manual embedding generation and ensures consistency.
+
+### Semantic Search Flow
+
+Once documents are ingested, the `SemanticSearch` service enables finding relevant content:
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#000', 'primaryBorderColor': '#333', 'lineColor': '#333', 'secondaryColor': '#e1f5fe', 'tertiaryColor': '#f3e5f5' }}}%%
+sequenceDiagram
+    participant User as User/Chat
+    participant SS as SemanticSearch
+    participant VDB as Chunks Collection<br/>(Qdrant)
+    participant AI as Embedding Generator<br/>(Azure OpenAI)
+    
+    User->>SS: SearchAsync("What is X?", filter, maxResults)
+    
+    SS->>AI: Generate embedding for query text
+    Note over AI: Converts "What is X?"<br/>to 1536-dim vector
+    AI-->>SS: Query vector
+    
+    SS->>VDB: SearchAsync(query vector, options)
+    Note over VDB: 1. Compare query vector<br/>with stored vectors<br/>2. Calculate cosine similarity<br/>3. Rank by similarity<br/>4. Apply filters (if any)<br/>5. Return top N results
+    
+    VDB-->>SS: List of IngestedChunk records<br/>(most similar first)
+    
+    SS-->>User: Relevant text chunks with context
+    Note over User: Chunks used for<br/>RAG (Retrieval Augmented<br/>Generation) in chat
+```
+
+The semantic search process:
+
+1. **Query Embedding**: User's search text is automatically converted to a vector
+2. **Vector Similarity Search**: Qdrant compares the query vector with all stored chunk vectors using cosine similarity
+3. **Ranking**: Results are ranked by similarity score (closest matches first)
+4. **Filtering**: Optional DocumentId filter can restrict results to specific documents
+5. **Results**: Returns the most relevant text chunks that can be used for RAG in the chat interface
 
 ## What You've Learned
 

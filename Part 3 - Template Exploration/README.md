@@ -417,13 +417,6 @@ sequenceDiagram
     end
     
     DI-->>App: Ingestion complete
-    
-    style App fill:#e8f5e8
-    style DI fill:#e1f5fe
-    style PDF fill:#f9d5e5
-    style DocDB fill:#fff4e6
-    style ChunkDB fill:#fff4e6
-    style AI fill:#d5e8d4
 ```
 
 This diagram shows the complete ingestion pipeline from PDF files to searchable vector embeddings, including change detection, cleanup, and automatic embedding generation.
@@ -494,7 +487,7 @@ graph LR
     
     subgraph Stored["Stored Data"]
         META[Metadata:<br/>Key, DocumentId,<br/>PageNumber, Text]
-        VECT[Vector:<br/>float[1536]<br/>embedding]
+        VECT["Vector:<br/>float array<br/>1536 dimensions"]
     end
     
     IC -->|chunk object| UPSERT
@@ -504,11 +497,6 @@ graph LR
     UPSERT -->|all properties| META
     META --> STORE
     VECT --> STORE
-    
-    style IC fill:#e1f5fe
-    style VDB fill:#fff4e6
-    style Stored fill:#e8f5e8
-    style EMB fill:#d5e8d4
 ```
 
 The `[VectorStoreVector]` attribute marks the `Vector` property, which returns the `Text`. The vector collection framework automatically:
@@ -544,11 +532,6 @@ sequenceDiagram
     
     SS-->>User: Relevant text chunks with context
     Note over User: Chunks used for<br/>RAG (Retrieval Augmented<br/>Generation) in chat
-    
-    style User fill:#e8f5e8
-    style SS fill:#e1f5fe
-    style VDB fill:#fff4e6
-    style AI fill:#d5e8d4
 ```
 
 The semantic search process:

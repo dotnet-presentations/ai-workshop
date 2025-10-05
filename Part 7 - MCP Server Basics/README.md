@@ -149,6 +149,8 @@ The template generates a simple `RandomNumberTools` class with a `GetRandomNumbe
 using System.ComponentModel;
 using ModelContextProtocol.Server;
 
+namespace MyMcpServer.Tools;
+
 /// <summary>
 /// Sample MCP tools for demonstration purposes.
 /// These tools can be invoked by MCP clients to perform various operations.
@@ -166,7 +168,7 @@ internal class RandomNumberTools
 }
 ```
 
-We'll replace this with weather functionality while keeping the same class name for simplicity.
+We'll add weather functionality alongside this, keeping both tools available.
 
 **`.mcp/server.json`** - Metadata that describes your MCP server to package managers. Contains example values that should be customized for actual publication.
 
@@ -248,12 +250,13 @@ internal class WeatherTools
 }
 ```
 
-1. **Register the new weather tools** in `Program.cs`. Update the file to register both tool classes:
+2. **Register the new weather tools** in `Program.cs`. Update the file to register both tool classes:
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MyMcpServer.Tools;
 
 var builder = Host.CreateApplicationBuilder(args);
 

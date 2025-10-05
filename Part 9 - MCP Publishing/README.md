@@ -175,7 +175,7 @@ Create a professional README for package consumers:
 
 **Create** `Part 7 - MCP Server Basics/MyMcpServer/PACKAGE_README.md`:
 
-```markdown
+````markdown
 # MyMcpServer
 
 A Model Context Protocol (MCP) server that provides weather information tools for AI agents like GitHub Copilot.
@@ -280,9 +280,7 @@ MIT License - see LICENSE file for details.
 - 📖 [Documentation](https://github.com/your-username/weather-mcp-server/wiki)
 - 💬 [Discussions](https://github.com/your-username/weather-mcp-server/discussions)
 
-```text
-
-```
+````
 
 ## Step 3: Build and Test the Package
 

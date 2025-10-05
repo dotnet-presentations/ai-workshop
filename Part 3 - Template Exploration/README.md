@@ -452,46 +452,46 @@ This approach eliminates the need for manual embedding generation and ensures co
 
 #### Vector Storage Architecture
 
-Here's how the automatic vector generation works:
+Here's how the automatic vector generation works when storing chunks:
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#000', 'primaryBorderColor': '#333', 'lineColor': '#333', 'secondaryColor': '#e1f5fe', 'tertiaryColor': '#f3e5f5' }}}%%
-graph LR
-    subgraph IC["IngestedChunk Object"]
-        KEY[Key: Guid]
-        DOC[DocumentId: string]
-        PAGE[PageNumber: int]
-        TEXT[Text: string]
-        VEC["Vector property<br/>returns Text"]
-    end
+flowchart TB
+    Chunk["IngestedChunk Object<br/>---<br/>Key: Guid<br/>DocumentId: string<br/>PageNumber: int<br/>Text: 'Product features...'<br/><br/>[VectorStoreVector]<br/>Vector property → returns Text"]
     
-    subgraph VDB["Vector Collection"]
-        UPSERT[UpsertAsync]
-        EMB[Embedding<br/>Generator]
-        STORE[(Storage)]
-    end
+    Chunk -->|Call UpsertAsync| VectorCollection[Vector Collection Framework]
     
-    subgraph Stored["Stored Data"]
-        META[Metadata:<br/>Key, DocumentId,<br/>PageNumber, Text]
-        VECT["Vector:<br/>float array<br/>1536 dimensions"]
-    end
+    VectorCollection -->|1. Detect [VectorStoreVector] attribute| Detect{Attribute<br/>Found?}
     
-    IC -->|chunk object| UPSERT
-    VEC -.->|provides text| EMB
-    UPSERT -->|detect VectorStoreVector| EMB
-    EMB -->|text-embedding-3-small| VECT
-    UPSERT -->|all properties| META
-    META --> STORE
-    VECT --> STORE
+    Detect -->|Yes| Extract[2. Get value from Vector property<br/>Result: 'Product features...']
+    
+    Extract --> Generate[3. Call Azure OpenAI<br/>Embedding Generator<br/>text-embedding-3-small model]
+    
+    Generate --> Embed[4. Generate 1536-dimensional<br/>vector embedding]
+    
+    Embed --> Store[5. Store in Qdrant]
+    
+    Store --> Result["Stored Record<br/>---<br/>Metadata: Key, DocumentId, Text<br/>Vector: float array 1536 dims<br/>Distance: Cosine Similarity"]
+    
+    style Chunk fill:#e1f5fe
+    style VectorCollection fill:#fff4e6
+    style Detect fill:#fff4e6
+    style Extract fill:#f9d5e5
+    style Generate fill:#d5e8d4
+    style Embed fill:#d5e8d4
+    style Store fill:#e1f5fe
+    style Result fill:#e8f5e8
 ```
 
-The `[VectorStoreVector]` attribute marks the `Vector` property, which returns the `Text`. The vector collection framework automatically:
+**Key Concept**: The `[VectorStoreVector]` attribute on the `Vector` property enables automatic embedding generation:
 
-- Detects properties marked with `[VectorStoreVector]`
-- Gets the value from that property (the text string)
-- Calls the configured embedding generator (text-embedding-3-small)
-- Converts the text into a 1536-dimensional vector
-- Stores both the original text and the generated vector using cosine similarity for distance calculation
+1. **Attribute Detection**: Framework detects properties marked with `[VectorStoreVector]`
+2. **Text Extraction**: Gets the text value from the Vector property
+3. **Embedding Generation**: Sends text to Azure OpenAI's text-embedding-3-small model
+4. **Vector Creation**: Converts text into a 1536-dimensional vector
+5. **Storage**: Stores both the original text metadata and the generated vector using cosine similarity for distance calculations
+
+This automatic process eliminates manual embedding generation and ensures consistency.
 
 ### Semantic Search Flow
 

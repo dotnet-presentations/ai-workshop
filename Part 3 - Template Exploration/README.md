@@ -244,7 +244,7 @@ sequenceDiagram
     
     VDB-->>Search: Top 5 relevant chunks<br/>from ingested documents
     
-    Search-->>Chat: Formatted results<br/>&lt;result filename="..." page_number="..."&gt;...&lt;/result&gt;
+    Search-->>Chat: Formatted results in XML format
     
     Chat->>LLM: Function result (search results)
     
@@ -252,10 +252,12 @@ sequenceDiagram
     
     LLM-->>Chat: Final response with citations
     
-    Chat-->>User: "The GPS watch has [features]...<br/>&lt;citation filename='...' page_number='...'&gt;quote&lt;/citation&gt;"
+    Chat-->>User: Answer with citations in XML format
 ```
 
 This sequence diagram shows the complete flow from user question to AI response, highlighting how the LLM autonomously decides to call the search function.
+
+**Note on data format:** The search results are returned in XML format like `<result filename="..." page_number="...">text</result>`, and the LLM includes citations as `<citation filename='...' page_number='...'>quote</citation>`.
 
 ### Enabling Function Invocation in Program.cs
 

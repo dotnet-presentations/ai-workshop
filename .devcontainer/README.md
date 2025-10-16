@@ -79,7 +79,7 @@ Once your Codespace is ready:
 
 #### GitHub Token for GitHub Models
 
-1. Create a GitHub token with **Models: Read-only** permission at <https://github.com/settings/personal-access-tokens/new>
+1. Create a GitHub token with **Models: Read-only** permission at [GitHub token settings](https://github.com/settings/personal-access-tokens/new)
 2. In your Codespace, open the terminal
 3. Navigate to the Part 2 solution:
 

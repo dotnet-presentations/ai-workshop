@@ -1,10 +1,28 @@
 # Part 1: Setup
 
-> **⏱️ Estimated Time:** 15-20 minutes
+> **⏱️ Estimated Time:** 15-20 minutes (or 5 minutes with GitHub Codespaces!)
 
 ## In this workshop
 
 In this workshop, you will set up your development environment for building AI applications with .NET. You'll install the required tools and configure your environment to work with the workshop materials.
+
+## 🚀 Quick Start with GitHub Codespaces (Recommended)
+
+The fastest way to get started with no local installation required!
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dotnet-presentations/ai-workshop?quickstart=1)
+
+**Why use Codespaces?**
+- ✅ No Docker installation required
+- ✅ Pre-configured environment with all tools
+- ✅ Works from any computer with a browser
+- ✅ Perfect for workshops and training sessions
+
+Click the badge above, then skip to [Step 2: Create a GitHub Account](#step-2-create-a-github-account-if-needed) to continue. [Learn more about Codespaces](../.devcontainer/README.md).
+
+## Local Development Setup
+
+If you prefer to work locally or need offline access, follow the steps below.
 
 ## Prerequisites
 

@@ -79,13 +79,16 @@ Once your Codespace is ready:
 
 #### GitHub Token for GitHub Models
 
-1. Create a GitHub token with **Models: Read-only** permission at https://github.com/settings/personal-access-tokens/new
+1. Create a GitHub token with **Models: Read-only** permission at <https://github.com/settings/personal-access-tokens/new>
 2. In your Codespace, open the terminal
 3. Navigate to the Part 2 solution:
+
    ```bash
    cd "Part 2 - Project Creation/GenAiLab"
    ```
+
 4. Set the user secret:
+
    ```bash
    dotnet user-secrets set "ConnectionStrings:openai" "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-GITHUB-TOKEN" --project GenAiLab.AppHost
    ```
@@ -97,11 +100,13 @@ To avoid re-entering your token each time:
 1. Go to your GitHub settings → Codespaces → Secrets
 2. Add a new secret named `GITHUB_MODEL_TOKEN`
 3. Update your `.devcontainer/devcontainer.json` to include:
+
    ```json
    "containerEnv": {
      "GITHUB_MODEL_TOKEN": "${localEnv:GITHUB_MODEL_TOKEN}"
    }
    ```
+
 4. Access it in your application configuration
 
 #### Azure OpenAI Configuration

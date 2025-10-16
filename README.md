@@ -9,6 +9,7 @@ The fastest way to get started! No local setup required - everything runs in the
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dotnet-presentations/ai-workshop?quickstart=1)
 
 Click the badge above to launch a fully configured development environment with:
+
 - ✅ .NET 9.0 SDK pre-installed
 - ✅ All required tools (Docker, Azure CLI, GitHub CLI)
 - ✅ AI templates ready to use

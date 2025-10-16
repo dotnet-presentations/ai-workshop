@@ -157,10 +157,12 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 2. **For Visual Studio users**: In the Solution Explorer, right-click on the `GenAiLab.AppHost` project and select "Manage User Secrets"
 
    **For Codespaces/CLI users**: Open a terminal and run:
+
    ```bash
    cd "Part 2 - Project Creation/GenAiLab"
    dotnet user-secrets set "ConnectionStrings:openai" "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-GITHUB-TOKEN" --project GenAiLab.AppHost
    ```
+
    Replace `YOUR-GITHUB-TOKEN` with the token you created in step 1.
 
 3. **For Visual Studio users only**: In the `secrets.json` file that opens, add the following connection string:
@@ -194,6 +196,7 @@ Now let's run the application and explore its features:
 1. Open a terminal in VS Code (Terminal → New Terminal)
 
 1. Navigate to the AppHost project and run it:
+
    ```bash
    cd "Part 2 - Project Creation/GenAiLab"
    dotnet run --project GenAiLab.AppHost

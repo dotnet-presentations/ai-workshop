@@ -13,6 +13,7 @@ The fastest way to get started with no local installation required!
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dotnet-presentations/ai-workshop?quickstart=1)
 
 **Why use Codespaces?**
+
 - ✅ No Docker installation required
 - ✅ Pre-configured environment with all tools
 - ✅ Works from any computer with a browser

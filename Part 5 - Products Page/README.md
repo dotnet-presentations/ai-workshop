@@ -388,6 +388,37 @@ This eliminates the need for manual string manipulation and provides compile-tim
 
 For more information about structured output capabilities in Microsoft.Extensions.AI, see the [official documentation](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.chatclientstructuredoutputextensions).
 
+## Add Required Packages and Update Imports
+
+We need to add the QuickGrid package and update our imports to include the necessary namespaces.
+
+1. Open the `GenAiLab.Web.csproj` file and add the QuickGrid package to the `<ItemGroup>` with other PackageReferences:
+
+```xml
+<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.7" />
+<PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="9.7.0" />
+```
+
+1. Open `Components/_Imports.razor` and add the missing using directives:
+
+```razor
+@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.Extensions.AI
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using GenAiLab.Web
+@using GenAiLab.Web.Components
+@using GenAiLab.Web.Components.Layout
+@using GenAiLab.Web.Models
+@using GenAiLab.Web.Services
+```
+
 ## Create the Products UI
 
 Now let's create the user interface for displaying our AI-generated products using QuickGrid component.
@@ -556,37 +587,6 @@ Let's add a link to our new Products page in the navigation.
             📦 Products
         </button>
     </div>
-```
-
-## Add Required Packages and Update Imports
-
-We need to add the QuickGrid package and update our imports to include the necessary namespaces.
-
-1. Open the `GenAiLab.Web.csproj` file and add the QuickGrid package to the `<ItemGroup>` with other PackageReferences:
-
-```xml
-<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.7" />
-<PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="9.7.0" />
-```
-
-1. Open `Components/_Imports.razor` and add the missing using directives:
-
-```razor
-@using System.Net.Http
-@using System.Net.Http.Json
-@using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.AspNetCore.Components.Routing
-@using Microsoft.AspNetCore.Components.Web
-@using static Microsoft.AspNetCore.Components.Web.RenderMode
-@using Microsoft.AspNetCore.Components.Web.Virtualization
-@using Microsoft.Extensions.AI
-@using Microsoft.JSInterop
-@using Microsoft.AspNetCore.Components.QuickGrid
-@using GenAiLab.Web
-@using GenAiLab.Web.Components
-@using GenAiLab.Web.Components.Layout
-@using GenAiLab.Web.Models
-@using GenAiLab.Web.Services
 ```
 
 ## Update Program.cs for Services

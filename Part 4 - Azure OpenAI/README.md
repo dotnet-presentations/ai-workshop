@@ -56,10 +56,12 @@ To use Azure OpenAI, you need to set up resources in Azure:
 
 1. **Create an Azure OpenAI resource**:   - Navigate to the Azure portal (<https://portal.azure.com>)
    - Click "Create a resource" and search for "Azure OpenAI"
+   - Create a new resrouce group: **rg-aiworkshop**
    - Fill in the required details:
      - **Subscription**: Will be pre-selected based on your Azure account
      - **Resource group**: Select an existing resource group if you are doing this in a managed environment or create a new one (e.g., "rg-mygenaiapp")
      - **Region**: Select a region close to you (e.g., "East US" or "West Europe")
+     - **Name**: This is a unique name, so please do something unique to you like **mynamelocationworkshop**
      - **Pricing tier**: Select "Standard" (this is the only option available for Azure OpenAI)
    - Click "Next" on the following screens (leaving the default settings) and then "Create"
 

@@ -27,8 +27,8 @@
     },
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     "forwardPorts": [
-        17057,  // .NET Aspire dashboard
-        11434   // Ollama API
+        17057,
+        11434
     ],
     "portsAttributes": {
         "17057": {

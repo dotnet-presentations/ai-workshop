@@ -1,8 +1,8 @@
 # Development Container Options
 
-> **📍 LOCATION UPDATE**: The primary devcontainer configuration has moved to `/.devcontainer/` for GitHub Codespaces support. This location is kept for backward compatibility with local VS Code dev containers.
+> **📍 LOCATION UPDATE**: The primary devcontainer configuration has moved to `.devcontainer/` (repository root) for GitHub Codespaces support. This location is kept for backward compatibility with local VS Code dev containers.
 >
-> **For GitHub Codespaces**, use the configurations at [`/.devcontainer/`](../../.devcontainer/README.md)
+> **For GitHub Codespaces**, use the configurations at [`.devcontainer/`](../../.devcontainer/README.md)
 
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/dotnet-presentations/ai-workshop)
 

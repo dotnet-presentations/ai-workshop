@@ -1,10 +1,21 @@
 # Create a new project using the AI Web Chat template
 
-> **⏱️ Estimated Time:** 35-50 minutes
+> **⏱️ Estimated Time:** 35-50 minutes (or skip if using Codespaces with pre-loaded solution)
 
 ## In this workshop
 
 In this workshop, you'll create a new project using the AI Web Chat template in Visual Studio. You'll configure GitHub Models as the AI service provider, set up the connection string, and run and explore the application.
+
+## 🚀 Using GitHub Codespaces?
+
+If you're running this workshop in GitHub Codespaces, a starting solution is already available in `src/start/GenAiLab/`. You can:
+
+- **Option A**: Use the pre-loaded solution and skip to [Configure GitHub Models Authentication](#configure-github-models-authentication)
+- **Option B**: Follow the instructions below to create a new project from scratch
+
+👉 [Learn about the starting solution](../src/start/README.md)
+
+---
 
 ## Create the project using Visual Studio
 

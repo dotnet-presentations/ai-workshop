@@ -2,6 +2,23 @@
 
 Get up to speed quickly with AI app building in .NET! Explore the new .NET AI project templates integrated with Microsoft Extensions for AI (MEAI), GitHub Models, and vector data stores. Learn how to take advantage of free GitHub Models in development, then deploy with global scale and enterprise support using Azure OpenAI. Gain hands-on experience building cutting-edge intelligent solutions with state-of-the-art frameworks and best practices.
 
+## 🚀 Quick Start Options
+
+### Option 1: GitHub Codespaces (Recommended for Quick Start)
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dotnet-presentations/ai-workshop?quickstart=1)
+
+**No installation required!** Run the entire workshop in the cloud with GitHub Codespaces. Perfect for users who:
+- Can't install Docker locally
+- Have corporate firewall restrictions  
+- Want to get started immediately
+
+👉 [Learn more about running in Codespaces](.devcontainer/README.md)
+
+### Option 2: Local Development
+
+Follow the [setup instructions](Part%201%20-%20Setup/README.md) to install prerequisites on your local machine.
+
 ## Prerequisites
 
 ### AI Web Chat Application Requirements (Parts 1-6)

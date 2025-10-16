@@ -1,10 +1,12 @@
 # Create a new project using the AI Web Chat template
 
-> **⏱️ Estimated Time:** 35-50 minutes
+> **⏱️ Estimated Time:** 35-50 minutes (or skip to [Run the Application](#run-the-application) if using GitHub Codespaces)
 
 ## In this workshop
 
 In this workshop, you'll create a new project using the AI Web Chat template in Visual Studio. You'll configure GitHub Models as the AI service provider, set up the connection string, and run and explore the application.
+
+> **💡 Using GitHub Codespaces?** If you opened this workshop in GitHub Codespaces, the Part 2 project is already created and restored! You can skip directly to [Set the GitHub Models connection string](#set-the-github-models-connection-string) and continue from there.
 
 ## Create the project using Visual Studio
 
@@ -152,9 +154,16 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 
    > **Note**: For additional guidance on configuring GitHub Models access, see the [Microsoft documentation quickstart](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/ai-templates?tabs=dotnet-cli%2Cconfigure-visual-studio%2Cconfigure-visual-studio-aspire&pivots=github-models#configure-access-to-github-models).
 
-1. In the Solution Explorer, right-click on the `GenAiLab.AppHost` project and select "Manage User Secrets"
+2. **For Visual Studio users**: In the Solution Explorer, right-click on the `GenAiLab.AppHost` project and select "Manage User Secrets"
 
-1. In the `secrets.json` file that opens, add the following connection string:
+   **For Codespaces/CLI users**: Open a terminal and run:
+   ```bash
+   cd "Part 2 - Project Creation/GenAiLab"
+   dotnet user-secrets set "ConnectionStrings:openai" "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-GITHUB-TOKEN" --project GenAiLab.AppHost
+   ```
+   Replace `YOUR-GITHUB-TOKEN` with the token you created in step 1.
+
+3. **For Visual Studio users only**: In the `secrets.json` file that opens, add the following connection string:
 
    ```json
    {
@@ -164,11 +173,13 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
 
    Replace `YOUR-API-KEY` with the GitHub token you created in step 1.
 
-1. Save the `secrets.json` file.
+4. **For Visual Studio users only**: Save the `secrets.json` file.
 
 ## Run the application
 
 Now let's run the application and explore its features:
+
+### For Visual Studio Users
 
 1. Make sure that Docker Desktop is running. This is required to run containerized resources like Qdrant.
 
@@ -176,15 +187,33 @@ Now let's run the application and explore its features:
 
 1. Press F5 or click the "Start Debugging" button in Visual Studio.
 
-   > **Note:** When running the application for the first time, Visual Studio may display a prompt asking you to trust the IIS Developer certificate. This prompt sometimes appears beneath the browser window. If the `aichatweb-app` resource doesn't start, check for this certificate prompt and click "Yes" to accept it. The application won't run until you've accepted this certificate.
+### For GitHub Codespaces Users
 
-   ![Trust SSL Certificate](../images/trust-ssl-certificate.png)
+1. Docker is already running in your Codespace - no need to start it separately.
+
+1. Open a terminal in VS Code (Terminal → New Terminal)
+
+1. Navigate to the AppHost project and run it:
+   ```bash
+   cd "Part 2 - Project Creation/GenAiLab"
+   dotnet run --project GenAiLab.AppHost
+   ```
+
+1. VS Code will detect the forwarded ports and show a notification. Click "Open in Browser" when the Aspire dashboard port (typically 18888 or 15xxx) is ready.
+
+1. The .NET Aspire dashboard will open showing all services. Look for the `aichatweb-app` endpoint and click it to open the web application.
+
+### What Happens Next (All Users)
+
+> **Note for Visual Studio users:** When running the application for the first time, Visual Studio may display a prompt asking you to trust the IIS Developer certificate. This prompt sometimes appears beneath the browser window. If the `aichatweb-app` resource doesn't start, check for this certificate prompt and click "Yes" to accept it. The application won't run until you've accepted this certificate.
+
+![Trust SSL Certificate](../images/trust-ssl-certificate.png)
 
 1. The .NET Aspire dashboard will open in your browser first, displaying all the services in your application.
 
-1. Shortly after, the web application will launch in another browser tab.
+1. Shortly after, the web application will launch in another browser tab (or you can click the endpoint in the Aspire dashboard).
 
-> If you run into issues running the Qdrant container, stop debugging and start it again.
+> **Troubleshooting**: If you run into issues running the Qdrant container, stop debugging and start it again. In Codespaces, check that Docker is running with `docker ps`.
 
 ## Review the services in the .NET Aspire dashboard
 

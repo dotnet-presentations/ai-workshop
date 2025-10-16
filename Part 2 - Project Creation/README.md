@@ -126,7 +126,7 @@ If you prefer to use the command line, you can update all packages using the `do
 3. Update all packages in the solution, including prerelease versions:
 
    ```powershell
-   dotnet outdated --solution GenAiLab.sln --upgrade --pre-release Always
+   dotnet outdated GenAiLab.sln --upgrade --pre-release Always
    ```
 
 4. After the update completes, restore and build the solution to ensure everything is working:

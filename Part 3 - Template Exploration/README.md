@@ -213,6 +213,229 @@ Key points about `IChatClient`:
 1. It supports both one-off responses and conversation history
 1. It enables function calling and other advanced features
 
+## How Function Invocation Connects the LLM to the Vector Database
+
+One of the most powerful features of the AI Web Chat template is how it uses **function invocation** to enable the large language model (LLM) to search the vector database when needed. This creates a Retrieval Augmented Generation (RAG) system where the AI can access your custom data.
+
+### Function Invocation Architecture
+
+Here's how the LLM decides when to search the vector database and retrieve relevant information:
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#000', 'primaryBorderColor': '#333', 'lineColor': '#333', 'secondaryColor': '#e1f5fe', 'tertiaryColor': '#f3e5f5' }}}%%
+sequenceDiagram
+    participant User
+    participant Chat as Chat.razor
+    participant LLM as IChatClient<br/>(LLM with Function Calling)
+    participant Search as SearchAsync Function
+    participant VDB as Vector Database<br/>(Qdrant)
+    
+    User->>Chat: "What are the GPS watch features?"
+    
+    Chat->>LLM: Send message + available tools<br/>(SearchAsync function)
+    
+    Note over LLM: LLM analyzes the question<br/>and decides it needs to<br/>search for information
+    
+    LLM->>Chat: Function call request<br/>SearchAsync("GPS watch features")
+    
+    Chat->>Search: Execute SearchAsync<br/>searchPhrase: "GPS watch features"
+    
+    Search->>VDB: Vector similarity search<br/>for "GPS watch features"
+    
+    VDB-->>Search: Top 5 relevant chunks<br/>from ingested documents
+    
+    Search-->>Chat: Formatted results<br/>&lt;result filename="..." page_number="..."&gt;...&lt;/result&gt;
+    
+    Chat->>LLM: Function result (search results)
+    
+    Note over LLM: LLM uses search results<br/>to generate accurate answer<br/>with citations
+    
+    LLM-->>Chat: Final response with citations
+    
+    Chat-->>User: "The GPS watch has [features]...<br/>&lt;citation filename='...' page_number='...'&gt;quote&lt;/citation&gt;"
+```
+
+This sequence diagram shows the complete flow from user question to AI response, highlighting how the LLM autonomously decides to call the search function.
+
+### Enabling Function Invocation in Program.cs
+
+Function invocation is enabled when configuring the chat client:
+
+```csharp
+// From Program.cs
+var openai = builder.AddAzureOpenAIClient("openai");
+openai.AddChatClient("gpt-4o-mini")
+    .UseFunctionInvocation()  // This enables the LLM to call functions
+    .UseOpenTelemetry(configure: c =>
+        c.EnableSensitiveData = builder.Environment.IsDevelopment());
+```
+
+The `.UseFunctionInvocation()` middleware:
+
+1. **Intercepts function call requests** from the LLM
+2. **Executes the requested function** with the parameters the LLM provides
+3. **Returns the function results** back to the LLM
+4. **Continues the conversation** so the LLM can use the results
+
+Without this middleware, the LLM would only receive function call *requests* but wouldn't be able to execute them.
+
+### Registering the Search Function in Chat.razor
+
+The search function is registered as a tool that the LLM can use:
+
+```csharp
+// From Chat.razor OnInitialized
+protected override void OnInitialized()
+{
+    statefulMessageCount = 0;
+    messages.Add(new(ChatRole.System, SystemPrompt));
+    chatOptions.Tools = [AIFunctionFactory.Create(SearchAsync)];
+}
+```
+
+**What happens here:**
+
+1. `AIFunctionFactory.Create(SearchAsync)` analyzes the `SearchAsync` method
+2. It reads the `[Description]` attributes to understand what the function does
+3. It creates a tool definition that gets sent to the LLM with each request
+4. The LLM sees the tool definition and knows it can call this function when needed
+
+The tool definition sent to the LLM looks conceptually like this:
+
+```json
+{
+  "name": "SearchAsync",
+  "description": "Searches for information using a phrase or keyword",
+  "parameters": {
+    "searchPhrase": {
+      "type": "string",
+      "description": "The phrase to search for."
+    },
+    "filenameFilter": {
+      "type": "string",
+      "description": "If possible, specify the filename to search that file only. If not provided or empty, the search includes all files.",
+      "required": false
+    }
+  }
+}
+```
+
+### The SearchAsync Function Implementation
+
+Here's how the search function is implemented:
+
+```csharp
+[Description("Searches for information using a phrase or keyword")]
+private async Task<IEnumerable<string>> SearchAsync(
+    [Description("The phrase to search for.")] string searchPhrase,
+    [Description("If possible, specify the filename to search that file only. If not provided or empty, the search includes all files.")] string? filenameFilter = null)
+{
+    await InvokeAsync(StateHasChanged);  // Update UI to show function is being called
+    var results = await Search.SearchAsync(searchPhrase, filenameFilter, maxResults: 5);
+    return results.Select(result =>
+        $"<result filename=\"{result.DocumentId}\" page_number=\"{result.PageNumber}\">{result.Text}</result>");
+}
+```
+
+**Key aspects of this function:**
+
+1. **Description Attributes**: The `[Description]` attributes provide context to the LLM about when and how to use this function
+2. **Parameters**: The LLM can extract search phrases from the user's question and pass them as parameters
+3. **Vector Search**: Calls `SemanticSearch.SearchAsync()` to find the most relevant chunks from the vector database
+4. **Formatted Results**: Returns results in a structured XML format that the LLM can parse and use
+5. **UI Update**: Calls `StateHasChanged()` so users can see when a search is happening
+
+### How the LLM Decides to Call the Function
+
+The LLM uses several factors to decide when to call the search function:
+
+1. **System Prompt**: The system prompt tells the LLM to "Use the search tool to find relevant information"
+2. **Function Description**: The description "Searches for information using a phrase or keyword" helps the LLM understand the function's purpose
+3. **User Question**: When a user asks a question that requires specific information, the LLM recognizes it needs to search
+4. **Context**: If the conversation history doesn't contain the needed information, the LLM will search
+
+**Example decision process:**
+
+- User asks: "What are the GPS watch features?"
+- LLM thinks: "I need specific information about GPS watch features"
+- LLM sees: SearchAsync tool is available for finding information
+- LLM decides: Call `SearchAsync(searchPhrase: "GPS watch features")`
+- LLM receives: Relevant text chunks about GPS watches
+- LLM generates: Answer based on the search results with citations
+
+### The Complete RAG Flow
+
+Here's what happens in a complete Retrieval Augmented Generation (RAG) interaction:
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#f4f4f4', 'primaryTextColor': '#000', 'primaryBorderColor': '#333', 'lineColor': '#333', 'secondaryColor': '#e1f5fe', 'tertiaryColor': '#f3e5f5' }}}%%
+flowchart TB
+    Start([User Asks Question]) --> AddMsg[Add user message<br/>to conversation]
+    
+    AddMsg --> Stream[Call ChatClient.<br/>GetStreamingResponseAsync]
+    
+    Stream --> LLMAnalyze{LLM Analyzes:<br/>Do I need more info?}
+    
+    LLMAnalyze -->|Yes, need to search| FuncCall[LLM returns<br/>function call request]
+    LLMAnalyze -->|No, can answer directly| DirectAnswer[LLM generates<br/>direct response]
+    
+    FuncCall --> Middleware[UseFunctionInvocation<br/>middleware intercepts]
+    
+    Middleware --> Execute[Execute SearchAsync<br/>with LLM's parameters]
+    
+    Execute --> VectorSearch[Vector similarity search<br/>in Qdrant]
+    
+    VectorSearch --> Results[Return top 5<br/>matching chunks]
+    
+    Results --> BackToLLM[Send results<br/>back to LLM]
+    
+    BackToLLM --> LLMGenerate[LLM generates answer<br/>using search results]
+    
+    LLMGenerate --> AddCitations[LLM adds citations<br/>in XML format]
+    
+    AddCitations --> StreamToUser[Stream response<br/>to user]
+    
+    DirectAnswer --> StreamToUser
+    
+    StreamToUser --> End([User sees answer<br/>with citations])
+    
+    style Start fill:#e8f5e8
+    style LLMAnalyze fill:#fff4e6
+    style FuncCall fill:#f9d5e5
+    style Middleware fill:#e1f5fe
+    style VectorSearch fill:#e1f5fe
+    style LLMGenerate fill:#d5e8d4
+    style End fill:#e8f5e8
+```
+
+**Step-by-step breakdown:**
+
+1. **User Question**: User submits a question through the chat interface
+2. **Message Added**: The question is added to the conversation history
+3. **LLM Analysis**: The LLM analyzes whether it needs additional information
+4. **Function Call Decision**:
+   - If needed: LLM requests to call SearchAsync with specific parameters
+   - If not needed: LLM generates a direct response
+5. **Middleware Interception**: `UseFunctionInvocation()` middleware catches the function call request
+6. **Function Execution**: `SearchAsync` is executed with the LLM's chosen parameters
+7. **Vector Search**: The search service queries Qdrant for semantically similar content
+8. **Results Return**: Top 5 matching chunks are formatted and returned to the middleware
+9. **Back to LLM**: The function results are sent back to the LLM as part of the conversation
+10. **Answer Generation**: The LLM uses the search results to generate an accurate, grounded response
+11. **Citations Added**: The LLM includes citations in the specified XML format
+12. **Streaming Response**: The complete answer is streamed back to the user
+
+### Why This Approach is Powerful
+
+This function invocation pattern provides several benefits:
+
+1. **Autonomous Decision Making**: The LLM decides when it needs to search, not hardcoded logic
+2. **Dynamic Parameter Selection**: The LLM extracts the right search terms from the user's question
+3. **Grounded Responses**: Answers are based on actual data from your documents, not the LLM's training data
+4. **Transparent Citations**: Users can see exactly which documents and pages were used
+5. **Flexible RAG**: The same pattern can be extended with additional functions (e.g., calculator, weather, database queries)
+6. **Provider Agnostic**: Works with any LLM that supports function calling (OpenAI, Azure OpenAI, etc.)
+
 ## Microsoft Extensions for Vector Data with Vector Collections
 
 The template uses Microsoft Extensions for Vector Data to implement document ingestion and semantic search. Instead of using a separate database for tracking ingested documents, everything is stored directly in vector collections.
@@ -533,6 +756,10 @@ The semantic search process:
 - How services are configured and orchestrated in .NET Aspire
 - How the main application is structured and configured
 - How `IChatClient` is set up and used for interacting with AI models
+- **How function invocation enables the LLM to autonomously search the vector database**
+- **How `.UseFunctionInvocation()` middleware processes function calls**
+- **How `AIFunctionFactory.Create()` registers functions as tools for the LLM**
+- **How the complete RAG (Retrieval Augmented Generation) flow works from question to cited answer**
 - How vector collections are used to store both document chunks and metadata
 - How Microsoft Extensions for Vector Data simplifies document ingestion with vector-native storage
 - How the simplified architecture eliminates the need for separate ingestion cache databases

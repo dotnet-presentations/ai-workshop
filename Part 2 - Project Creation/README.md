@@ -162,7 +162,7 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
    }
    ```
 
-   Replace `YOUR-GITHUB-TOKEN` with the GitHub token you created in step 1.
+   Replace `YOUR-API-KEY` with the GitHub token you created in step 1.
 
 1. Save the `secrets.json` file.
 
@@ -183,6 +183,8 @@ Now let's run the application and explore its features:
 1. The .NET Aspire dashboard will open in your browser first, displaying all the services in your application.
 
 1. Shortly after, the web application will launch in another browser tab.
+
+> If you run into issues running the Qdrant container, stop debugging and start it again.
 
 ## Review the services in the .NET Aspire dashboard
 

@@ -1,12 +1,33 @@
 # Part 1: Setup
 
-> **⏱️ Estimated Time:** 15-20 minutes
+> **⏱️ Estimated Time:** 15-20 minutes (or 3-5 minutes with Codespaces)
 
 ## In this workshop
 
 In this workshop, you will set up your development environment for building AI applications with .NET. You'll install the required tools and configure your environment to work with the workshop materials.
 
-## Prerequisites
+## 🚀 Quick Start: Use GitHub Codespaces
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dotnet-presentations/ai-workshop?quickstart=1)
+
+**No installation required!** Skip the rest of this setup page and start the workshop immediately using GitHub Codespaces. All prerequisites are pre-configured.
+
+- ✅ No Docker installation needed
+- ✅ No .NET SDK installation needed  
+- ✅ Works with corporate firewalls
+- ✅ Starting solution pre-loaded in `src/start/`
+
+👉 [Learn more about Codespaces setup](../.devcontainer/README.md)
+
+After your Codespace loads, continue to [Part 2: Project Creation](../Part%202%20-%20Project%20Creation/README.md).
+
+---
+
+## Local Development Setup
+
+If you prefer to run the workshop on your local machine, follow these steps:
+
+### Prerequisites
 
 Before starting, ensure you have:
 
@@ -19,7 +40,7 @@ Before starting, ensure you have:
 - GitHub Copilot subscription (optional, but recommended for full experience)
 
 > [!TIP]
-> **Alternative: Local AI with Ollama**: If you don't have a GitHub account or prefer to work offline, this workshop includes an Ollama-based development container option that runs AI models locally. See the [Development Container Options](./../.github/.devcontainer/README.md) for details.
+> **Alternative: Local AI with Ollama**: If you don't have a GitHub account or prefer to work offline, this workshop includes an Ollama-based development container option that runs AI models locally. See the [Development Container Options](../.devcontainer/README.md) for details.
 
 ## Clone the Repository
 

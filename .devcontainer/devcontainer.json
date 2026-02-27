@@ -1,0 +1,48 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
+{
+    "name": ".NET AI Workshop",
+    "image": "mcr.microsoft.com/devcontainers/dotnet:9.0",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        "ghcr.io/devcontainers/features/azure-cli:1": {
+            "installBicep": true,
+            "version": "latest"
+        },
+        "ghcr.io/azure/azure-dev/azd:0": {
+            "version": "stable"
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.copilot",
+                "ms-dotnettools.csdevkit",
+                "ms-azuretools.vscode-azure-github-copilot"
+            ],
+            "settings": {
+                "dotnet.defaultSolution": "Part 2 - Project Creation/GenAiLab/GenAiLab.sln"
+            }
+        }
+    },
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // Port ranges for Aspire dashboard (typically 18888 or dynamically allocated 15000-19999)
+    "forwardPorts": [15000, 15001, 15002, 15003, 15004, 18888],
+    "portsAttributes": {
+        "18888": {
+            "label": "Aspire Dashboard",
+            "protocol": "http",
+            "onAutoForward": "notify"
+        }
+    },
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": "bash .devcontainer/post-create.sh",
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    "remoteUser": "vscode",
+    "hostRequirements": {
+        "memory": "8gb",
+        "cpus": 2
+    }
+}

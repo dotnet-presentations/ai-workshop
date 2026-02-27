@@ -9,6 +9,7 @@ on:
       - 'Part 6 - Deployment/**'
       - 'Part 7 - MCP Server Basics/**'
       - 'Part 8 - Enhanced MCP Server/**'
+      - 'src/start/**'
   pull_request:
     branches:
       - main
@@ -17,6 +18,7 @@ on:
       - 'Part 6 - Deployment/**'
       - 'Part 7 - MCP Server Basics/**'
       - 'Part 8 - Enhanced MCP Server/**'
+      - 'src/start/**'
   workflow_dispatch:
 
 jobs:
@@ -29,6 +31,9 @@ jobs:
           - solution: "Part 2 - Project Creation/GenAiLab/GenAiLab.sln"
             dotnet-version: '9.0.x'
           - solution: "Part 6 - Deployment/GenAiLab/GenAiLab.sln"
+            dotnet-version: '9.0.x'
+          # Codespaces starting solution
+          - solution: "src/start/GenAiLab/GenAiLab.sln"
             dotnet-version: '9.0.x'
           # No solution file exists for MyMcpServer; using project file directly
           - solution: "Part 7 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj"

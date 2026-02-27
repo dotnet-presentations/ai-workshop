@@ -1,10 +1,21 @@
 # Create a new project using the AI Web Chat template
 
-> **⏱️ Estimated Time:** 35-50 minutes
+> **⏱️ Estimated Time:** 35-50 minutes (or skip if using Codespaces with pre-loaded solution)
 
 ## In this workshop
 
 In this workshop, you'll create a new project using the AI Web Chat template in Visual Studio. You'll configure GitHub Models as the AI service provider, set up the connection string, and run and explore the application.
+
+## 🚀 Using GitHub Codespaces?
+
+If you're running this workshop in GitHub Codespaces, a starting solution is already available in `src/start/GenAiLab/`. You can:
+
+- **Option A**: Use the pre-loaded solution and skip to [Configure GitHub Models Authentication](#configure-github-models-authentication)
+- **Option B**: Follow the instructions below to create a new project from scratch
+
+👉 [Learn about the starting solution](../src/start/README.md)
+
+---
 
 ## Create the project using Visual Studio
 
@@ -32,7 +43,7 @@ Create a new project using the AI Web Chat template as follows:
    - Check the box for "Use Aspire orchestration"
    - Click "Create"
 
-   > **Alternative: Ollama Option**: If you're using the Ollama development container (see [Development Container Options](../.github/.devcontainer/README.md)), you can select "Ollama" as the AI service provider instead of "GitHub Models". This allows you to work with local AI models without requiring a GitHub account or internet connection.
+   > **Alternative: Ollama Option**: If you're using the Ollama development container (see [Development Container Options](../.devcontainer/README.md)), you can select "Ollama" as the AI service provider instead of "GitHub Models". This allows you to work with local AI models without requiring a GitHub account or internet connection.
 
    ![Additional Information in Visual Studio](../images/vs-additional-information.png)
 

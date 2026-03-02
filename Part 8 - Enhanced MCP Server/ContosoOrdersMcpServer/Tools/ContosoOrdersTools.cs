@@ -10,7 +10,7 @@ internal class ContosoOrdersTools
 {
     [McpServerTool]
     [Description("Retrieves order information from the Contoso business system.")]
-    public async Task<string> GetOrderDetails(
+    public string GetOrderDetails(
         [Description("The order ID to look up")] string orderId)
     {
         // Simulate business data lookup
@@ -58,7 +58,7 @@ internal class ContosoOrdersTools
 
     [McpServerTool]
     [Description("Searches for orders by customer name.")]
-    public async Task<string> SearchOrdersByCustomer(
+    public string SearchOrdersByCustomer(
         [Description("Customer name to search for")] string customerName)
     {
         // Simulate customer search
@@ -90,7 +90,7 @@ internal class ContosoOrdersTools
 
     [McpServerTool]
     [Description("Gets inventory status for a specific product.")]
-    public async Task<string> GetProductInventory(
+    public string GetProductInventory(
         [Description("Product name or SKU to check inventory for")] string productName)
     {
         // Simulate inventory lookup

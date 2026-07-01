@@ -9,6 +9,10 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 10
+    groups:
+      part-2-nuget:
+        patterns:
+          - "*"
 
   # Monitor NuGet packages for Part 6 - Deployment
   - package-ecosystem: "nuget"
@@ -17,6 +21,10 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 10
+    groups:
+      part-6-nuget:
+        patterns:
+          - "*"
 
   # Monitor NuGet packages for Part 7 - MCP Server Basics
   - package-ecosystem: "nuget"
@@ -25,6 +33,10 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 10
+    groups:
+      part-7-nuget:
+        patterns:
+          - "*"
 
   # Monitor NuGet packages for Part 8 - Enhanced MCP Server
   - package-ecosystem: "nuget"
@@ -33,3 +45,7 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 10
+    groups:
+      part-8-nuget:
+        patterns:
+          - "*"

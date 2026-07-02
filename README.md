@@ -172,7 +172,7 @@ The repository is structured as follows:
 
 ## Session Resources 📚
 
-| Resources          | Links                             | Description        |
+|Resources|Links|Description|
 |:-------------------|:----------------------------------|:-------------------|
 |Microsoft Learn|<https://aka.ms/build25/plan/ADAI_DevStartPlan>|AI developer resources|
 |Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/machine-learning/ai-overview>|.NET AI Documentation|

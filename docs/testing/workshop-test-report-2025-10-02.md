@@ -1,7 +1,8 @@
 # Workshop Test Report - October 2, 2025
 
 ## Test Environment
-- .NET SDK Version(s): 
+
+- .NET SDK Version(s):
   - .NET 9.0.305 (for Parts 1-6)
   - .NET 10.0.100-rc.1.25451.107 (for Parts 7-9)
   - .NET 8.0.414 (available)
@@ -12,8 +13,9 @@
 ## Part-by-Part Results
 
 ### Part 1 - Setup
+
 - Status: ✅ Pass
-- Notes: 
+- Notes:
   - All prerequisites verified successfully
   - .NET 9.0.305 installed for Parts 1-6
   - .NET 10.0.100-rc.1 installed for Parts 7-9 (MCP)
@@ -25,6 +27,7 @@
 - Documentation Clarity: ✅ Excellent - Clear prerequisites list, well-organized
 
 ### Part 2 - Project Creation
+
 - Status: ✅ Pass
 - Notes:
   - Successfully created project using: `dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant`
@@ -41,6 +44,7 @@
   - Part 2 - Project Creation/GenAiLab/ updated with fresh template
 
 ### Part 3 - Template Exploration
+
 - Status: ✅ Pass
 - Notes:
   - Documentation-only part, no code changes
@@ -57,6 +61,7 @@
 - Documentation Clarity: ✅ Excellent - Comprehensive code explanations with clear examples
 
 ### Part 4 - Azure OpenAI
+
 - Status: ✅ Pass
 - Notes:
   - Updated user secrets to use Azure OpenAI endpoint and key
@@ -66,13 +71,14 @@
   - No code changes required - IChatClient abstraction works seamlessly
   - Azure resources already created and configured (gpt-4o-mini, text-embedding-3-small)
   - **Build**: ✅ Clean build succeeded in 11.8s
-  - **Run**: ✅ Application started successfully, Aspire dashboard accessible at https://localhost:17043
+  - **Run**: ✅ Application started successfully, Aspire dashboard accessible at <https://localhost:17043>
   - Time taken: ~8 minutes
 - Documentation Clarity: ✅ Excellent - Clear migration steps, emphasizes provider-agnostic design
 - **Snapshot Comparison**: Configuration change only (user secrets)
 - **Snapshot Updated**: ✅ Yes - Part 4 - Azure OpenAI/GenAiLab/ created
 
 ### Part 5 - Products Page
+
 - Status: ✅ Pass
 - Notes:
   - Implemented products page with AI-powered product generation
@@ -89,7 +95,7 @@
   - Updated _Imports.razor with QuickGrid and Models namespaces
   - Updated Program.cs: Added ProductVector collection registration, ProductService DI
   - **Build**: ✅ Clean build succeeded in 24.7s (14.9s for Web project)
-  - **Run**: ✅ Application started successfully at https://localhost:17043
+  - **Run**: ✅ Application started successfully at <https://localhost:17043>
   - Time taken: ~20 minutes
 - Documentation Clarity: ✅ Excellent - Clear step-by-step instructions with complete code samples
 - **Snapshot Comparison**: Major additions - new Models/, ProductService.cs, Products.razor, navigation updates
@@ -98,6 +104,7 @@
   - src/complete/ updated with Part 5 code
 
 ### Part 6 - Deployment
+
 - Status: ✅ Pass (Configuration Verified) / ⚠️ Full Deployment Not Completed
 - Notes:
   - Part 6 is primarily about Azure deployment with `azd` (Azure Developer CLI)
@@ -106,7 +113,7 @@
   - **Build**: ✅ Clean build succeeded in 11.8s (Release configuration)
   - **azd CLI**: ✅ Verified installed (version 1.18.0)
   - **Azure Credentials**: ✅ All credentials verified via environment variables
-  - **azd Authentication**: ✅ Authenticated as jongalloway@gmail.com
+  - **azd Authentication**: ✅ Authenticated as <jongalloway@gmail.com>
   - **Deployment Attempts**: ⚠️ Multiple attempts made with technical challenges:
     - `azd init`: ✅ Successfully initialized environment "octworkshoptest"
     - `azd up --no-prompt`: ❌ Tool limitation - panics when secure parameters (OpenAI connection) required in non-interactive mode
@@ -117,7 +124,7 @@
     - Interactive mode (`azd up` without --no-prompt) is required for secure parameters
     - Directory context must be managed with Push-Location/Pop-Location pattern
     - Azure resource cleanup takes 20-25 minutes
-  - **Recommendation**: 
+  - **Recommendation**:
     - For repeatable testing: Configuration-only verification (azure.yaml exists, Release build succeeds)
     - For full deployment testing: Use interactive `azd up`, factor in 7-12 minutes deployment + 20-25 minutes cleanup
   - **Snapshot Validation**: ✅ Verified Part 5 vs src/complete shows only expected difference (WithExternalHttpEndpoints line)
@@ -139,6 +146,7 @@
 ### Summary: Parts 1-6 Complete ✅
 
 All AI Web Chat application parts (1-6) have been successfully tested and verified:
+
 - ✅ Part 1: Environment setup and prerequisites
 - ✅ Part 2: Project creation with `dotnet new aichatweb`
 - ✅ Part 3: Template exploration and architecture review
@@ -151,6 +159,7 @@ All AI Web Chat application parts (1-6) have been successfully tested and verifi
 ---
 
 ### Part 7 - MCP Server Basics
+
 - Status: ✅ Pass
 - Notes:
   - **Template Generation**: Successfully created MCP server using `dotnet new mcpserver -n MyMcpServer` in test-workspace
@@ -176,6 +185,7 @@ All AI Web Chat application parts (1-6) have been successfully tested and verifi
 - **Key Finding**: Template generation pattern has evolved between .NET 10 preview 6 and RC 1 - current template generates without namespaces, updated to match reference pattern
 
 ### Part 8 - Enhanced MCP Server
+
 - Status: ✅ Pass
 - Notes:
   - **Approach**: Tested existing ContosoOrdersMcpServer snapshot (Part 8 is exploration-focused, not template generation)
@@ -199,6 +209,7 @@ All AI Web Chat application parts (1-6) have been successfully tested and verifi
 - **Key Finding**: MCP servers can target different .NET versions (8.0 for business servers, 10.0 for new templates)
 
 ### Part 9 - MCP Publishing
+
 - Status: ✅ Pass (Documentation Review)
 - Notes:
   - **Scope**: Documentation-only part focused on publishing and distribution workflows
@@ -221,11 +232,13 @@ All AI Web Chat application parts (1-6) have been successfully tested and verifi
 ### Summary: Parts 7-9 Complete ✅
 
 All Model Context Protocol (MCP) server parts (7-9) have been successfully tested and verified:
+
 - ✅ Part 7: Created MCP server with weather tools using dotnet new mcpserver template
 - ✅ Part 8: Built and tested business MCP server with ContosoOrders tools
 - ✅ Part 9: Reviewed comprehensive publishing and distribution documentation
 
 **Important Discoveries**:
+
 1. **Template Evolution**: .NET 10 RC template generates code without namespaces, but reference snapshots use namespace pattern
 2. **Multi-Framework Support**: MCP servers can target different .NET versions (8.0, 9.0, 10.0)
 3. **Expected Warnings**: async methods without await (CS1998) are acceptable in MCP tool implementations
@@ -271,6 +284,7 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 ### Test Completion Status
 
 **Parts 1-6 (AI Web Chat Application)**: ✅ Complete
+
 - Part 1: Setup and prerequisites verification
 - Part 2: Project creation with `dotnet new aichatweb` template
 - Part 3: Template exploration and architecture review
@@ -279,6 +293,7 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 - Part 6: Deployment configuration (code verified, full deployment not performed due to azd --no-prompt limitations)
 
 **Parts 7-9 (Model Context Protocol Servers)**: ✅ Complete
+
 - Part 7: MCP server creation with `dotnet new mcpserver` template, weather tools implementation
 - Part 8: Business MCP server testing with ContosoOrders tools
 - Part 9: Publishing and distribution documentation review
@@ -286,23 +301,27 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 ### Major Findings and Recommendations
 
 #### 1. Template Evolution and Versioning
+
 - **.NET 10 RC Template Changes**: The `dotnet new mcpserver` template in .NET 10 RC generates code without namespace declarations, differing from reference snapshots which use `namespace MyMcpServer.Tools;`
 - **Recommendation**: Document that template output may vary between SDK versions; both patterns are valid
 - **Impact**: Testers should expect minor differences and understand this is normal template evolution
 
 #### 2. Azure Deployment Testing Challenges
+
 - **azd --no-prompt Limitation**: Cannot handle secure parameters (OpenAI connection strings), requires interactive mode
 - **Time Requirements**: Full deployment cycle is 30-35 minutes (7-12 min deploy + 20-25 min cleanup)
 - **Recommendation**: Default to configuration-only testing; reserve full deployment for specific validation needs
 - **Workaround**: Use `azd up` in interactive mode when deployment testing is required
 
 #### 3. Multi-Framework Support
+
 - **AI Web Chat Apps** (Parts 2-6): Target .NET 9.0 with .NET Aspire
 - **MCP Servers**: Support multiple frameworks (.NET 8.0 for Part 8, .NET 9/10 for Part 7)
 - **Recommendation**: Clearly document SDK version requirements per part
 - **Impact**: Testers need multiple SDK versions installed for complete workshop testing
 
 #### 4. Expected Build Warnings
+
 - **MCP Async Warnings** (CS1998): Three warnings in Part 8 are expected and documented
 - **Location**: ContosoOrdersTools.cs lines 13, 61, 93
 - **Reason**: Methods use async signature for API consistency despite synchronous implementation
@@ -311,6 +330,7 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 ### Test Environment Validation
 
 **Working Correctly**:
+
 - ✅ .NET 9.0 SDK for AI Web Chat applications
 - ✅ .NET 10.0 RC SDK for MCP server template generation
 - ✅ .NET 8.0 SDK for legacy MCP servers
@@ -320,6 +340,7 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 - ✅ Credential management via environment variables
 
 **Limitations Discovered**:
+
 - ⚠️ Azure Developer CLI (azd) --no-prompt mode incompatible with secure parameters
 - ⚠️ Template namespace patterns changed between .NET 10 preview 6 and RC 1
 - ⚠️ Terminal directory context management requires Push-Location/Pop-Location pattern
@@ -327,12 +348,14 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 ### Documentation Quality Assessment
 
 **Excellent** (Parts 1-5, 7-9):
+
 - Clear step-by-step instructions
 - Comprehensive code examples
 - Good troubleshooting sections
 - Realistic time estimates
 
 **Good** (Part 6):
+
 - Deployment steps well documented
 - Could benefit from more explicit guidance on azd --no-prompt limitations
 - Updated during this test with deployment testing lessons learned
@@ -365,7 +388,7 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 ### Time Estimates Validation
 
 | Part | Estimated Time | Actual Test Time | Variance |
-|------|---------------|------------------|----------|
+| ------ | --------------- | ------------------ | ---------- |
 | Part 1 | 15-20 min | ~5 min | ✅ Faster (prerequisites already met) |
 | Part 2 | 30-45 min | ~8 min | ✅ Faster (template generation quick) |
 | Part 3 | 20-30 min | ~5 min | ✅ Faster (documentation review) |
@@ -378,6 +401,7 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 | **Total** | **4-6 hours** | **~2 hours** | ✅ Faster overall |
 
 **Note**: Actual testing was faster due to:
+
 - AI agent efficiency in code generation and file operations
 - No manual UI interaction or delays
 - Prerequisites already configured

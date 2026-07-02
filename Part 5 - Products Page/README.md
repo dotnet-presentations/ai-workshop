@@ -14,7 +14,7 @@ In this workshop, you'll enhance your application by creating a Products page th
 
 🔍 **Key technical concepts you'll learn:**
 
-- **AI Service Abstraction**: Work with `IChatClient` interface that allows you to interact with AI models without being tied to a specific provider (like GitHub Models or Azure OpenAI)
+- **AI Service Abstraction**: Work with `IChatClient` interface that allows you to interact with AI models without being tied to a specific provider (like Azure OpenAI or GitHub Models)
   
 - **Vector Database as Primary Store**: Learn how vector databases can serve as both storage and search engine, eliminating the need for separate databases
 
@@ -703,7 +703,7 @@ Your Products feature now works entirely with Qdrant as the data store:
 
 1. **Simplified Architecture**: No PostgreSQL setup required - everything uses Qdrant collections
 
-1. **AI Integration**: The service uses your configured AI provider (GitHub Models or Azure OpenAI) to process content and generate structured product information
+1. **AI Integration**: The service uses your configured AI provider (Azure OpenAI or GitHub Models) to process content and generate structured product information
 
 ## Troubleshooting
 

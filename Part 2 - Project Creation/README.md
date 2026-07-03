@@ -4,7 +4,7 @@
 
 ## In this workshop
 
-In this workshop, you'll create a new project using the AI Web Chat template in Visual Studio. You'll configure GitHub Models as the AI service provider, set up the connection string, and run and explore the application.
+In this workshop, you'll create a new project using the AI Web Chat template in Visual Studio. You'll configure Azure AI Foundry (Azure OpenAI) as the AI service provider, set up the connection string, and run and explore the application.
 
 ## Create the project using Visual Studio
 
@@ -26,13 +26,15 @@ Create a new project using the AI Web Chat template as follows:
    ![Configure New Project in Visual Studio](../images/vs-configure-new-project.png)
 
 1. Configure AI options:
-   - Select "GitHub Models" for AI service provider
+   - Select "Azure OpenAI" for AI service provider
    - Select "Qdrant" for Vector store
    - Check the box for "Use keyless authentication for Azure services"
    - Check the box for "Use Aspire orchestration"
    - Click "Create"
 
-   > **Alternative: Ollama Option**: If you're using the Ollama development container (see [Development Container Options](../.github/.devcontainer/README.md)), you can select "Ollama" as the AI service provider instead of "GitHub Models". This allows you to work with local AI models without requiring a GitHub account or internet connection.
+   > **Alternative: Ollama Option**: If you're using the Ollama development container (see [Development Container Options](../.github/.devcontainer/README.md)), you can select "Ollama" as the AI service provider instead of "Azure OpenAI". This allows you to work with local AI models without requiring an Azure or GitHub account or internet connection.
+   >
+   > **Legacy: GitHub Models**: GitHub Models is being [retired on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/). You can still select "GitHub Models" as a temporary fallback, but Azure AI Foundry is the recommended provider.
 
    ![Additional Information in Visual Studio](../images/vs-additional-information.png)
 
@@ -57,17 +59,17 @@ If you prefer to use the command line, you can create the same project using the
 3. Create the project using the `dotnet new` command with the appropriate parameters:
 
    ```powershell
-   dotnet new aichatweb --name GenAiLab --Framework net9.0 --provider githubmodels --vector-store qdrant --aspire true
+   dotnet new aichatweb --name GenAiLab --Framework net9.0 --provider azureopenai --vector-store qdrant --aspire true
    ```
 
    This command creates a new AI Chat Web App with:
    - Project name: `GenAiLab`
    - Framework: `.NET 9.0`
-   - AI service provider: `GitHub Models`
+   - AI service provider: `Azure OpenAI (Azure AI Foundry)`
    - Vector store: `Qdrant`
    - .NET Aspire orchestration: `enabled`
 
-   > **Alternative: Ollama Option**: If you're using the Ollama development container, you can replace `--provider githubmodels` with `--provider ollama` to use local AI models instead.
+   > **Alternative: Ollama Option**: If you're using the Ollama development container, you can replace `--provider azureopenai` with `--provider ollama` to use local AI models instead. GitHub Models (`--provider githubmodels`) remains available as a legacy fallback until its [retirement on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/).
 
 4. Navigate into the project directory:
 
@@ -136,11 +138,39 @@ If you prefer to use the command line, you can update all packages using the `do
    dotnet build
    ```
 
-## Set the GitHub Models connection string
+## Set the Azure AI Foundry connection string
 
-For GitHub Models to work, you need to set up a connection string with a GitHub token:
+Your application uses **Azure AI Foundry** (Azure OpenAI models) as its AI provider. You'll need an Azure OpenAI resource with the `gpt-4o-mini` (chat) and `text-embedding-3-small` (embeddings) models deployed.
 
-> **Note:** This step requires a GitHub account. If you don't have one yet, please follow the instructions in [Part 1: Setup](../Part%201%20-%20Setup/README.md#step-2-create-a-github-account-if-needed) to create a GitHub account.
+> **Note:** The detailed steps to create an Azure OpenAI resource and deploy these two models are covered in [Part 4: Azure AI Foundry](../Part%204%20-%20Azure%20OpenAI/README.md#create-the-azure-openai-resource). If your instructor provided a pre-provisioned resource, use the endpoint and key they gave you.
+
+1. Deploy (or obtain access to) an Azure OpenAI resource with:
+   - `gpt-4o-mini` deployed for chat completions
+   - `text-embedding-3-small` deployed for embeddings
+
+1. Copy your resource **endpoint** (it looks like `https://YOUR_RESOURCE_NAME.openai.azure.com/`) and an **API key**.
+
+1. In the Solution Explorer, right-click on the `GenAiLab.AppHost` project and select "Manage User Secrets".
+
+1. In the `secrets.json` file that opens, add the following connection string:
+
+   ```json
+   {
+      "ConnectionStrings:openai": "Endpoint=https://YOUR_RESOURCE_NAME.openai.azure.com/;Key=YOUR_API_KEY"
+   }
+   ```
+
+   Replace `YOUR_RESOURCE_NAME` and `YOUR_API_KEY` with your Azure OpenAI resource values.
+
+1. Save the `secrets.json` file.
+
+<details>
+<summary><strong>Legacy fallback: GitHub Models</strong> (retiring July 30, 2026)</summary>
+
+> [!WARNING]
+> GitHub Models is being [fully retired on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/), with scheduled brownouts on July 16 and July 23. Use it only if you don't yet have Azure access, and expect it to stop working after retirement.
+
+If you need to use GitHub Models as a temporary fallback (and created the project with `--provider githubmodels`):
 
 1. Create a GitHub token for accessing GitHub Models:
    - Go to [https://github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new)
@@ -150,21 +180,17 @@ For GitHub Models to work, you need to set up a connection string with a GitHub 
    - Click "Generate token" at the bottom of the page
    - Copy the generated token (you won't be able to see it again)
 
-   > **Note**: For additional guidance on configuring GitHub Models access, see the [Microsoft documentation quickstart](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/ai-templates?tabs=dotnet-cli%2Cconfigure-visual-studio%2Cconfigure-visual-studio-aspire&pivots=github-models#configure-access-to-github-models).
-
-1. In the Solution Explorer, right-click on the `GenAiLab.AppHost` project and select "Manage User Secrets"
-
-1. In the `secrets.json` file that opens, add the following connection string:
+1. In the `GenAiLab.AppHost` user secrets, add this connection string instead:
 
    ```json
    {
-      "ConnectionStrings:openai": "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
+      "ConnectionStrings:openai": "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-GITHUB-TOKEN"
    }
    ```
 
-   Replace `YOUR-API-KEY` with the GitHub token you created in step 1.
+   Replace `YOUR-GITHUB-TOKEN` with the token you created.
 
-1. Save the `secrets.json` file.
+</details>
 
 ## Run the application
 
@@ -221,7 +247,7 @@ Let's test the AI functionality of the application:
 
 - How to create a new project using the AI Web Chat template in Visual Studio
 - How to update NuGet packages in a solution to get the latest AI and Aspire components
-- How to configure GitHub Models as the AI service provider
+- How to configure Azure AI Foundry (Azure OpenAI) as the AI service provider
 - How to set up the connection string for AI services
 - How to use .NET Aspire to orchestrate multiple services
 - How to interact with an AI-powered chat application
@@ -256,15 +282,15 @@ dotnet restore
 dotnet build
 ```
 
-#### Issue: GitHub Models Connection Fails
+#### Issue: Azure OpenAI Connection Fails
 
 **Problem**: Authentication errors or "unauthorized" messages when testing chat.
 
 **Solution**:
 
-1. Verify your GitHub token has the correct permissions
-2. Check that the token is correctly placed in `secrets.json`
-3. Ensure the connection string format is correct: `"Endpoint=https://models.inference.ai.azure.com;Key=YOUR_TOKEN"`
+1. Verify your Azure OpenAI (Azure AI Foundry) resource has `gpt-4o-mini` and `text-embedding-3-small` deployed
+2. Check that the endpoint and key are correctly placed in `secrets.json`
+3. Ensure the connection string format is correct: `"Endpoint=https://YOUR_RESOURCE_NAME.openai.azure.com/;Key=YOUR_API_KEY"`
 
 #### Issue: Template Not Found
 

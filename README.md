@@ -1,6 +1,6 @@
 # .NET AI Workshop
 
-Get up to speed quickly with AI app building in .NET! Explore the new .NET AI project templates integrated with Microsoft Extensions for AI (MEAI), GitHub Models, and vector data stores. Learn how to take advantage of free GitHub Models in development, then deploy with global scale and enterprise support using Azure OpenAI. Gain hands-on experience building cutting-edge intelligent solutions with state-of-the-art frameworks and best practices.
+Get up to speed quickly with AI app building in .NET! Explore the new .NET AI project templates integrated with Microsoft Extensions for AI (MEAI), Azure AI Foundry, and vector data stores. Learn how to build with Azure AI Foundry (Azure OpenAI) models for both development and production, with GitHub Models and local models (Foundry Local / Ollama) available as fallbacks. Gain hands-on experience building cutting-edge intelligent solutions with state-of-the-art frameworks and best practices.
 
 ## Prerequisites
 
@@ -10,8 +10,8 @@ Get up to speed quickly with AI app building in .NET! Explore the new .NET AI pr
 - .NET AI Web Chatbot template installed (instructions in Part 1 - Setup)
 - .NET 9.0 SDK or later
 - Docker Desktop or Podman (required for .NET Aspire orchestration)
-- GitHub account (required for GitHub Models access)
-- Azure OpenAI subscription (optional, but recommended for full experience)
+- Azure subscription with access to Azure AI Foundry (Azure OpenAI) — the primary AI provider
+- GitHub account (optional; GitHub Models is a legacy fallback [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/))
 
 ### Model Context Protocol (Parts 7-9)
 
@@ -32,7 +32,7 @@ The lab consists of a series of hands-on exercises where you'll build an AI-powe
 - 🤖 **AI Chatbot**: A conversational interface that can answer questions about products
 - 📋 **Product Catalog**: AI-generated product descriptions and categories
 - 🔍 **Semantic Search**: Vector-based search using document embeddings
-- 🔌 **Integration with GitHub Models and Azure OpenAI**: Use free models for development and enterprise-grade models for production
+- 🔌 **Integration with Azure AI Foundry**: Use Azure OpenAI models for development and production, with GitHub Models and local models (Foundry Local / Ollama) as fallbacks
 
 ## What We're Building
 
@@ -45,7 +45,7 @@ flowchart TD
     User([User]) <--> WebApp[Web Application<br>Blazor UI]
     WebApp <--> VectorDB[(Vector Database<br>Qdrant)]
     WebApp <--> AIChatService[AI Chat Service<br>Microsoft.Extensions.AI]
-    AIChatService <--> AIProvider[AI Provider<br>GitHub Models / Azure OpenAI]
+    AIChatService <--> AIProvider[AI Provider<br>Azure AI Foundry / GitHub Models legacy]
     
     subgraph Data Flow
         PDFs[Product PDFs] --> Ingestion[Data Ingestion]
@@ -66,7 +66,7 @@ flowchart TD
     class PDFs,Ingestion,Embeddings dataflow
 ```
 
-**Architecture Overview** This diagram illustrates the component relationships in our outdoor gear application. The Blazor web application connects with three key components: a vector database for storing embeddings, an AI chat service powered by Microsoft.Extensions.AI, and a product database. The AI functionality is provided by either GitHub Models (for development) or Azure OpenAI (for production). The data flow shows how product PDFs are ingested, transformed into embeddings, and stored in the vector database to enable contextual AI responses.
+**Architecture Overview** This diagram illustrates the component relationships in our outdoor gear application. The Blazor web application connects with three key components: a vector database for storing embeddings, an AI chat service powered by Microsoft.Extensions.AI, and a product database. The AI functionality is provided by Azure AI Foundry (Azure OpenAI models), with GitHub Models available as a legacy fallback (retiring July 30, 2026). The data flow shows how product PDFs are ingested, transformed into embeddings, and stored in the vector database to enable contextual AI responses.
 
 ### Component Interaction 🔄
 
@@ -95,7 +95,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    Dev[Development<br>GitHub Models] --> Prod[Production<br>Azure OpenAI]
+    Dev[Development<br>Azure AI Foundry] --> Prod[Production<br>Azure AI Foundry]
     Local[Local Vector DB<br>Qdrant] --> Cloud[Cloud Vector DB<br>Qdrant]
     
     subgraph Development Environment

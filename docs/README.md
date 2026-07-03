@@ -11,6 +11,7 @@ This directory contains all documentation related to the .NET AI Workshop develo
 
 ### 👨‍🏫 Instructor Resources (`/instructor`)
 
+- **[ATTENDEE_AI_ACCESS.md](instructor/ATTENDEE_AI_ACCESS.md)** - Instructor-only note on providing an AI access fallback (azure-ai-proxy-lite) for attendees who can't provision their own Azure AI Foundry resource
 - **[MCP_INSTRUCTOR_GUIDE.md](instructor/MCP_INSTRUCTOR_GUIDE.md)** - Complete instructor guide for teaching Parts 7-9 (MCP components) of the workshop
 
 ## Quick Navigation

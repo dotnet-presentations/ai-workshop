@@ -10,16 +10,52 @@ In this workshop, you will set up your development environment for building AI a
 
 Before starting, ensure you have:
 
-- Visual Studio 2022 with the Web & Cloud workload installed
+- **.NET 10 SDK** or later
+- **Visual Studio 2026** (with the Web & Cloud workload) **or** Visual Studio Code with the **C# Dev Kit** extension
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/)
-- .NET AI Web Chatbot template installed
-- .NET 9.0 SDK or later
-- GitHub account (required for GitHub Models access)
-- Azure subscription (optional, but recommended for full experience)
-- GitHub Copilot subscription (optional, but recommended for full experience)
+- **An Azure subscription with access to Azure AI Foundry (Azure OpenAI)** — the primary AI provider for this workshop
+- GitHub Copilot subscription (recommended; used later for the MCP and GitHub Copilot SDK units)
+- (Optional) A GitHub account — GitHub Models is available only as a legacy fallback that is [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)
 
 > [!TIP]
-> **Alternative: Local AI with Ollama**: If you don't have a GitHub account or prefer to work offline, this workshop includes an Ollama-based development container option that runs AI models locally. See the [Development Container Options](./../.github/.devcontainer/README.md) for details.
+> **No Azure access? Local fallback:** you can run local models with **Foundry Local** or **Ollama** for the chat exercises. See the [Development Container Options](./../.github/.devcontainer/README.md). Note that the full retrieval-augmented generation (RAG) exercise also needs an embedding model.
+
+## Before the workshop: provision Azure AI Foundry ⏳
+
+> [!IMPORTANT]
+> Complete this **before** the workshop. Creating the resource and deploying models takes a little time, and model quota sometimes requires a request that isn't instant. Arriving with this done means you can start building right away.
+
+You'll need an **Azure AI Foundry (Azure OpenAI)** resource with **two** models deployed:
+
+1. **Create the resource**
+   - Go to the [Azure AI Foundry portal](https://ai.azure.com) and sign in with your Azure account.
+   - Create (or select) a project. If prompted, create a new resource group such as `rg-aiworkshop`.
+
+1. **Deploy the chat model**
+   - Open **Deployments** → **+ Deploy model** → **Deploy base model**.
+   - Deploy **`gpt-4o-mini`** (leave the default deployment name).
+
+1. **Deploy the embedding model** (required for the RAG exercises)
+   - Deploy **`text-embedding-3-small`** (leave the default deployment name).
+
+1. **Confirm quota**
+   - If a deployment is blocked by quota, request quota for that model/region. This can take time, so do it early.
+
+1. **Capture your endpoint and key**
+   - From a deployment, copy the resource **endpoint** (it looks like `https://YOUR_RESOURCE_NAME.openai.azure.com/`) and an **API key**.
+   - Keep these handy for Part 2. If your instructor provided a pre-provisioned resource, use the endpoint and key they gave you.
+
+> [!CAUTION]
+> **Never hardcode your key or connection string in source code.** In Part 2 you'll store it with .NET **user secrets** *before* wiring the AI provider. Treat the key like a password — don't paste it into files you might commit.
+
+### Verify your setup
+
+Confirm the SDK and template tooling are installed:
+
+```powershell
+dotnet --version          # should report 10.x
+dotnet new aichatweb --help
+```
 
 ## Clone the Repository
 
@@ -38,10 +74,10 @@ cd ai-workshop
 > [!IMPORTANT]
 > If you are using a managed or pre-configured environment, some prerequisites may already be installed for you.
 
-1. **Install Visual Studio 2022:**
-   - Download and install Visual Studio 2022 from [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/)
-   - During installation, select the "Web & Cloud" in the workloads selection screen
-   - Ensure the ".NET 9.0 SDK" is included in your installation
+1. **Install Visual Studio 2026 or VS Code:**
+   - Visual Studio 2026: download from [https://visualstudio.microsoft.com/downloads/](https://visualstudio.microsoft.com/downloads/) and select the "Web & Cloud" workload during installation.
+   - Or Visual Studio Code with the [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit) extension.
+   - Ensure the **.NET 10 SDK** is installed (`dotnet --version` reports `10.x`).
 
 1. **Install .NET AI Web Chatbot template:**
    - Open a terminal or command prompt
@@ -80,7 +116,7 @@ Ready to build your first AI application? Let's get started!
 
 In Part 2, you'll learn how to:
 
-- 🚀 Create a new AI Web Chat project using Visual Studio
-- ⚙️ Configure GitHub Models for AI services
+- 🚀 Create a new AI Web Chat project using the AI Web Chat template
+- ⚙️ Configure Azure AI Foundry (Azure OpenAI) for AI services
 - 🔧 Set up the development environment
 - 🧪 Test your first AI-powered application

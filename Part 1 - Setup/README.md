@@ -33,7 +33,7 @@ You'll need an **Azure AI Foundry (Azure OpenAI)** resource with **two** models 
 
 1. **Deploy the chat model**
    - Open **Deployments** → **+ Deploy model** → **Deploy base model**.
-   - Deploy **`gpt-4o-mini`** (leave the default deployment name).
+   - Deploy **`gpt-4.1-mini`** (leave the default deployment name).
 
 1. **Deploy the embedding model** (required for the RAG exercises)
    - Deploy **`text-embedding-3-small`** (leave the default deployment name).

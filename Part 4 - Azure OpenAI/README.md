@@ -68,7 +68,7 @@ To use Azure OpenAI, you need to set up resources in Azure:
 > [!NOTE]
 > If you are using a managed environment, use the resource group provided by your instructor or organization. Otherwise, you can create your own resource group as needed.
 
-## Deploy the `gpt-4o-mini` model for chat completions
+## Deploy the `gpt-4.1-mini` model for chat completions
 
 After creating your Azure OpenAI resource, you need to deploy the models:
 
@@ -76,8 +76,8 @@ After creating your Azure OpenAI resource, you need to deploy the models:
 1. Select "Deployments" from the left menu
 1. Click "+ Deploy model" button
 1. Select the "Deploy base model" option
-1. Select the model "gpt-4o-mini" for chat completions (you can use the search filter to narrow the list down)
-1. Leave the default deployment name and type values ("gpt-4o-mini" and Global Standard)
+1. Select the model "gpt-4.1-mini" for chat completions (you can use the search filter to narrow the list down)
+1. Leave the default deployment name and type values ("gpt-4.1-mini" and Global Standard)
 1. Click "Deploy"
 
 ## Deploy the `text-embedding-3-small` model for embeddings
@@ -210,7 +210,7 @@ dotnet build
 
 **Solution**:
 
-1. Verify both models are deployed: `gpt-4o-mini` and `text-embedding-3-small`
+1. Verify both models are deployed: `gpt-4.1-mini` and `text-embedding-3-small`
 2. Check deployment names match exactly (case-sensitive)
 3. Ensure the Azure OpenAI resource is in the correct region
 4. Verify the endpoint URL format: `https://YOUR_RESOURCE_NAME.openai.azure.com/`

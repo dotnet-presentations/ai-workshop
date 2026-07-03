@@ -108,7 +108,7 @@ builder.AddServiceDefaults();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 var openai = builder.AddAzureOpenAIClient("openai");
-openai.AddChatClient("gpt-4o-mini")
+openai.AddChatClient("gpt-4.1-mini")
     .UseFunctionInvocation()
     .UseOpenTelemetry(configure: c =>
         c.EnableSensitiveData = builder.Environment.IsDevelopment());
@@ -155,7 +155,7 @@ Key components in the Web Program.cs:
 1. **Service Registration**: Setting up Razor components, service defaults, etc.
 1. **Azure OpenAI Setup**:
    - Adding Azure OpenAI client with connection string reference
-   - Configuring a chat client with the "gpt-4o-mini" model
+   - Configuring a chat client with the "gpt-4.1-mini" model
    - Setting up an embedding generator with "text-embedding-3-small" model
 1. **Qdrant Client**: Connecting to the Qdrant vector database
 1. **Vector Collection Services**: Registering collections for ingested chunks and documents directly in the vector database
@@ -171,7 +171,7 @@ The `IChatClient` interface is a key part of Microsoft Extensions for AI. Let's 
 ```csharp
 // Configuration in Program.cs
 var openai = builder.AddAzureOpenAIClient("openai");
-openai.AddChatClient("gpt-4o-mini")
+openai.AddChatClient("gpt-4.1-mini")
     .UseFunctionInvocation()
     .UseOpenTelemetry(configure: c =>
         c.EnableSensitiveData = builder.Environment.IsDevelopment());
@@ -269,7 +269,7 @@ Function invocation is enabled when configuring the chat client:
 ```csharp
 // From Program.cs
 var openai = builder.AddAzureOpenAIClient("openai");
-openai.AddChatClient("gpt-4o-mini")
+openai.AddChatClient("gpt-4.1-mini")
     .UseFunctionInvocation()  // This enables the LLM to call functions
     .UseOpenTelemetry(configure: c =>
         c.EnableSensitiveData = builder.Environment.IsDevelopment());

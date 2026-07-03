@@ -140,12 +140,12 @@ If you prefer to use the command line, you can update all packages using the `do
 
 ## Set the Azure AI Foundry connection string
 
-Your application uses **Azure AI Foundry** (Azure OpenAI models) as its AI provider. You'll need an Azure OpenAI resource with the `gpt-4o-mini` (chat) and `text-embedding-3-small` (embeddings) models deployed.
+Your application uses **Azure AI Foundry** (Azure OpenAI models) as its AI provider. You'll need an Azure OpenAI resource with the `gpt-4.1-mini` (chat) and `text-embedding-3-small` (embeddings) models deployed.
 
 > **Note:** The detailed steps to create an Azure OpenAI resource and deploy these two models are covered in [Part 4: Azure AI Foundry](../Part%204%20-%20Azure%20OpenAI/README.md#create-the-azure-openai-resource). If your instructor provided a pre-provisioned resource, use the endpoint and key they gave you.
 
 1. Deploy (or obtain access to) an Azure OpenAI resource with:
-   - `gpt-4o-mini` deployed for chat completions
+   - `gpt-4.1-mini` deployed for chat completions
    - `text-embedding-3-small` deployed for embeddings
 
 1. Copy your resource **endpoint** (it looks like `https://YOUR_RESOURCE_NAME.openai.azure.com/`) and an **API key**.
@@ -288,7 +288,7 @@ dotnet build
 
 **Solution**:
 
-1. Verify your Azure OpenAI (Azure AI Foundry) resource has `gpt-4o-mini` and `text-embedding-3-small` deployed
+1. Verify your Azure OpenAI (Azure AI Foundry) resource has `gpt-4.1-mini` and `text-embedding-3-small` deployed
 2. Check that the endpoint and key are correctly placed in `secrets.json`
 3. Ensure the connection string format is correct: `"Endpoint=https://YOUR_RESOURCE_NAME.openai.azure.com/;Key=YOUR_API_KEY"`
 

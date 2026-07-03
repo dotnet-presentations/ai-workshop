@@ -157,7 +157,7 @@ dotnet new mcpserver --help
 - **.NET 9**: AI Web Chat applications with Blazor and .NET Aspire
 - **.NET 8**: MCP server applications  
 - **Microsoft Extensions for AI**: Core AI integration libraries
-- **GitHub Models**: Free AI models for development
+- **GitHub Models**: Legacy dev-only provider, retiring July 30, 2026 — use Azure AI Foundry (Azure OpenAI) instead
 - **Azure OpenAI**: Enterprise-grade AI models for production
 - **Qdrant**: Vector database for embeddings and semantic search
 - **Docker**: Container orchestration for vector databases

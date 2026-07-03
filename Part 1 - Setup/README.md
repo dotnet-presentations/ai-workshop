@@ -6,6 +6,9 @@
 
 In this workshop, you will set up your development environment for building AI applications with .NET. You'll install the required tools and configure your environment to work with the workshop materials.
 
+> [!IMPORTANT]
+> **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (brownouts July 16 & 23). Set up **Azure AI Foundry (Azure OpenAI)** as your primary provider; the GitHub account below is only for the legacy fallback.
+
 ## Prerequisites
 
 Before starting, ensure you have:

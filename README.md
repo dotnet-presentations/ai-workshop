@@ -2,6 +2,9 @@
 
 Get up to speed quickly with AI app building in .NET! Explore the new .NET AI project templates integrated with Microsoft Extensions for AI (MEAI), Azure AI Foundry, and vector data stores. Learn how to build with Azure AI Foundry (Azure OpenAI) models for both development and production, with GitHub Models and local models (Foundry Local / Ollama) available as fallbacks. Gain hands-on experience building cutting-edge intelligent solutions with state-of-the-art frameworks and best practices.
 
+> [!IMPORTANT]
+> **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (with brownouts on July 16 and 23). This workshop uses **Azure AI Foundry (Azure OpenAI)** as the primary provider; GitHub Models appears only as a legacy fallback. See [Part 5 - Providers and Fallbacks](Part%205%20-%20Providers%20and%20Fallbacks/README.md).
+
 ## Prerequisites
 
 ### AI Web Chat Application Requirements (Parts 1-6)
@@ -128,7 +131,7 @@ Throughout this lab, you'll implement each part of this architecture, from setti
 - 🧠 **Microsoft Extensions for AI (MEAI)**: Libraries for integrating AI capabilities into .NET applications
 - 🔥 **Blazor**: For building interactive web UIs
 - 🌐 **.NET Aspire**: For orchestrating cloud-native distributed applications
-- 🐱 **GitHub Models**: Free AI models for development
+- 🐱 **GitHub Models** (legacy — [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)): Free during development; use Azure AI Foundry instead
 - ☁️ **Azure OpenAI**: Enterprise-grade AI models for production
 - 🔮 **Qdrant Vector Database**: For storing and searching vector embeddings
 

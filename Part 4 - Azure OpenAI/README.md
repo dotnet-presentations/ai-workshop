@@ -6,12 +6,17 @@
 
 In this workshop, you will learn how to migrate your application from using GitHub Models during development to Azure OpenAI for production. You'll understand how the common interfaces in Microsoft Extensions for AI make this migration seamless, create an Azure OpenAI resource, deploy models, and update your application's configuration.
 
+> [!IMPORTANT]
+> **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (brownouts July 16 & 23). It appears here only as a legacy starting point — **Azure AI Foundry (Azure OpenAI)** is the recommended provider.
+
+<!-- -->
+
 > [!TIP]
 > **Alternative AI Providers**: While this workshop focuses on migrating from GitHub Models to Azure OpenAI, the same principles apply to other providers:
 >
 > - **Azure OpenAI** (covered here): Simpler setup, better error handling, higher token limits - recommended if you have Azure access
 > - **OpenAI** (direct): Similar to Azure OpenAI but with different pricing and terms - see [OpenAI documentation](https://platform.openai.com/docs/quickstart) for setup
-> - **GitHub Models**: Great for getting started and learning, with free tier access for all GitHub users
+> - **GitHub Models** (legacy — retiring July 30, 2026): Was great for getting started with free access for all GitHub users; prefer Azure AI Foundry now
 >
 > Choose the provider that best fits your access and requirements. The beauty of Microsoft Extensions for AI is that switching between providers requires minimal code changes.
 

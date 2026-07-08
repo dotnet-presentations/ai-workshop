@@ -18,7 +18,7 @@ This workshop provides two development container configurations to suit differen
 
 **Use this if you:**
 
-- Have a GitHub account for GitHub Models
+- Have a GitHub account for GitHub Models (legacy fallback, [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/) — prefer Azure AI Foundry)
 - Plan to use Azure OpenAI
 - Want to follow the workshop as designed
 

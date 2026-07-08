@@ -55,7 +55,7 @@ dotnet add package Microsoft.Extensions.Logging.Console
 ## Step 3: Store your credentials
 
 Initialize user-secrets, then set your endpoint, key, and model. Get these from
-the Azure AI Foundry portal (**https://ai.azure.com**).
+the Azure AI Foundry portal (**[https://ai.azure.com](https://ai.azure.com/)**).
 
 ```bash
 dotnet user-secrets init
@@ -128,7 +128,7 @@ caching, and telemetry.
 dotnet run
 ```
 
-```
+```text
 Chat app ready. Type a message (or 'exit' to quit).
 
 You: Give me one tip for learning .NET

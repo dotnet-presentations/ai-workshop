@@ -24,7 +24,7 @@ direct heat; never place the boots on a radiator, as this damages the membrane.
 
 The TrailBlazer 3000 includes a 2-year limited warranty covering manufacturing
 defects. The warranty does not cover normal wear of the sole or damage from
-improper drying. To make a claim, contact support@contoso.example with your order
+improper drying. To make a claim, contact <support@contoso.example> with your order
 number.
 
 ## Return policy

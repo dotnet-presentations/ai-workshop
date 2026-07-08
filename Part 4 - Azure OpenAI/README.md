@@ -9,6 +9,8 @@ In this workshop, you will learn how to migrate your application from using GitH
 > [!IMPORTANT]
 > **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (brownouts July 16 & 23). It appears here only as a legacy starting point — **Azure AI Foundry (Azure OpenAI)** is the recommended provider.
 
+<!-- -->
+
 > [!TIP]
 > **Alternative AI Providers**: While this workshop focuses on migrating from GitHub Models to Azure OpenAI, the same principles apply to other providers:
 >

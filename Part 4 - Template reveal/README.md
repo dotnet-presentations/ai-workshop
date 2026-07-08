@@ -14,6 +14,8 @@ faith.
 > memory and vanished on exit. A production app needs a persistent, orchestrated
 > vector database.
 
+<!-- -->
+
 > RAG evaluation (the "RAG triad": groundedness, relevance, context quality) is a
 > great optional enrichment for this part — see
 > [Steve Sanderson's dotnet-ai-workshop, Ch 6](https://github.com/SteveSandersonMS/dotnet-ai-workshop). Reference and adapt with attribution.

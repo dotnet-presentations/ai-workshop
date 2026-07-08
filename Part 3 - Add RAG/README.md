@@ -13,7 +13,7 @@ piece because you wrote it yourself.
 
 ## What you will build
 
-```
+```text
 question ─▶ embed ─▶ cosine search over stored chunks ─▶ top-k context
                                                               │
 document ─▶ chunk ─▶ embed ─▶ store (in-memory list) ─────────┘
@@ -115,7 +115,7 @@ Run it and ask something only the document knows:
 dotnet run
 ```
 
-```
+```text
 You: How do I dry the boots?
 Assistant: Air-dry them away from direct heat. Never place them on a radiator,
 as that damages the waterproof membrane.

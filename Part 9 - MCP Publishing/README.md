@@ -88,8 +88,8 @@ For this example, we'll publish the **MyMcpServer** from Part 7. First, update t
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
-    <PackageReference Include="ModelContextProtocol" Version="1.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
+    <PackageReference Include="ModelContextProtocol" Version="1.4.1" />
   </ItemGroup>
   
   <ItemGroup>

@@ -10,4 +10,8 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
+    groups:
+      nuget-all:
+        patterns:
+          - "*"
     open-pull-requests-limit: 10

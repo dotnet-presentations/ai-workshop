@@ -1,4 +1,4 @@
-# Part 4: Template reveal — scaffold `aichatweb` and understand the code
+# Part 4: AI Web Chat Template — scaffold `aichatweb` and understand the code
 
 You've now built a chat app (Part 2) and a RAG loop (Part 3) **by hand**. You know
 what an `IChatClient` is, what an embedding is, what a vector search does, and why

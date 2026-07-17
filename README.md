@@ -153,7 +153,7 @@ The primary sequence below reflects the current converged workshop flow and keep
 
 3. 🧩 [**Add RAG**](Part%203%20-%20Add%20RAG/README.md): Add retrieval-augmented generation with embeddings and semantic search.
 
-4. 🔍 [**Template Reveal**](Part%204%20-%20Template%20reveal/README.md): Compare your manual implementation with the generated template architecture.
+4. 🔍 [**AI Web Chat Template**](Part%204%20-%20Template%20reveal/README.md): Compare your manual implementation with the generated template architecture.
 
 5. 🔁 [**Providers and Fallbacks**](Part%205%20-%20Providers%20and%20Fallbacks/README.md): Configure provider options and fallback paths (Azure AI Foundry primary).
 

@@ -115,7 +115,7 @@ If you don't already have a GitHub account, follow these steps to create one:
 
 Ready to build your first AI application? Let's get started!
 
-**Continue to** → [Part 2: Create a Project with AI Web Chat Template](../Part%202%20-%20Project%20Creation/README.md)
+**Continue to** → [Part 2: Build Chat App](../Part%202%20-%20Build%20Chat%20App/README.md)
 
 In Part 2, you'll learn how to:
 

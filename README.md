@@ -141,19 +141,21 @@ Follow the [setup instructions](Part%201%20-%20Setup/README.md) to get started w
 
 ## Lab Modules 📚
 
-The lab is divided into nine modules:
+The lab is divided into nine modules.
+
+The primary sequence below reflects the current converged workshop flow and keeps advanced modules explicitly optional for pacing.
 
 ### AI Web Chat Application (Parts 1-6)
 
 1. 🏗️ [**Setup**](Part%201%20-%20Setup/README.md): Configure prerequisites and development environment for the AI workshop.
 
-2. 🏗️ [**Project Creation**](Part%202%20-%20Project%20Creation/README.md): Build a web application using the .NET AI Web Chat template.
+2. 💬 [**Build Chat App**](Part%202%20-%20Build%20Chat%20App/README.md): Build and run a minimal console-based AI chat app.
 
-3. 🔍 [**Template Exploration**](Part%203%20-%20Template%20Exploration/README.md): Understand the implementation of vector embeddings, semantic search, and chat interfaces in AI Web Chat projects.
+3. 🧩 [**Add RAG**](Part%203%20-%20Add%20RAG/README.md): Add retrieval-augmented generation with embeddings and semantic search.
 
-4. ☁️ [**Azure OpenAI**](Part%204%20-%20Azure%20OpenAI/README.md): Transition from GitHub Models to the Azure OpenAI service for production-ready capabilities.
+4. 🔍 [**Template Reveal**](Part%204%20-%20Template%20reveal/README.md): Compare your manual implementation with the generated template architecture.
 
-5. 🛍️ [**Products Page**](Part%205%20-%20Products%20Page/README.md): Implement a product catalog that leverages AI for enhanced product information.
+5. 🔁 [**Providers and Fallbacks**](Part%205%20-%20Providers%20and%20Fallbacks/README.md): Configure provider options and fallback paths (Azure AI Foundry primary).
 
 6. 🚀 [**Deployment**](Part%206%20-%20Deployment/README.md): Deploy your application to Azure using the Azure Developer CLI.
 
@@ -161,9 +163,9 @@ The lab is divided into nine modules:
 
 1. 🔧 [**MCP Server Basics**](Part%207%20-%20MCP%20Server%20Basics/README.md): Create your first MCP server with weather tools that extend AI agents like GitHub Copilot.
 
-2. 🏢 [**Enhanced MCP Server**](Part%208%20-%20Enhanced%20MCP%20Server/README.md): Build sophisticated business tools for order management, inventory, and customer service scenarios.
+2. 🏢 [**Enhanced MCP Server**](Part%208%20-%20Enhanced%20MCP%20Server/README.md) *(Optional / bonus)*: Build sophisticated business tools for order management, inventory, and customer service scenarios.
 
-3. 📦 [**MCP Publishing**](Part%209%20-%20MCP%20Publishing/README.md): Package, publish, and distribute your MCP servers through NuGet for professional deployment.
+3. 📦 [**MCP Publishing**](Part%209%20-%20MCP%20Publishing/README.md) *(Optional / bonus)*: Package, publish, and distribute your MCP servers through NuGet for professional deployment.
 
 ## Lab Structure 📁
 

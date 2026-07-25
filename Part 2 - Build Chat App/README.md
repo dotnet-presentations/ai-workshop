@@ -204,3 +204,5 @@ In **Part 3** you'll extend this app with **retrieval-augmented generation
 (RAG)** — by hand — so you understand how embeddings and vector search feed
 context to the model. Only after that do you meet the template that wires it all
 up for you.
+
+**Continue to** → [Part 3: Add RAG](../Part%203%20-%20Add%20RAG/README.md)

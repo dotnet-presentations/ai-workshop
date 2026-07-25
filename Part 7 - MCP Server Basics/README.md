@@ -54,7 +54,7 @@ Before starting this part, ensure you have:
   - [Part 1: Setup](../Part%201%20-%20Setup/README.md) - Set up your development environment
   - [Part 2: Build Chat App](../Part%202%20-%20Build%20Chat%20App/README.md) - Build the core chat loop by hand
   - [Part 3: Add RAG](../Part%203%20-%20Add%20RAG/README.md) - Add embeddings and retrieval by hand
-  - [Part 4: AI Web Chat Template](../Part%204%20-%20Template%20reveal/README.md) - Map your hand-built concepts to the generated template
+  - [Part 4: AI Web Chat Template](../Part%204%20-%20AI%20Web%20Chat%20Template/README.md) - Map your hand-built concepts to the generated template
   - [Part 5: Providers and Fallbacks](../Part%205%20-%20Providers%20and%20Fallbacks/README.md) - Configure provider strategy and fallback options
   - [Part 6: Deployment](../Part%206%20-%20Deployment/README.md) - Deploy your application to Azure
 - ✅ **.NET 10.0 SDK** (preview 6 or higher) - `dotnet --version`

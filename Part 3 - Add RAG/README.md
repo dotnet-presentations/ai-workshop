@@ -139,6 +139,10 @@ your document and declines when the answer isn't there.
 
 ## What's next
 
-In **Part 4** you'll scaffold the **aichatweb template** and see this same flow
-applied in an app architecture with Qdrant, ingestion services, and semantic
-search — using the same `IChatClient` and `IEmbeddingGenerator` abstractions.
+Your knowledge base lives in memory, so it's rebuilt on every run and can't scale.
+In **Part 4** you'll scaffold the **aichatweb template** and see how it solves
+these problems with a real vector store (Qdrant), ingestion services, and
+semantic search, using the same `IChatClient` and `IEmbeddingGenerator`
+abstractions you just used by hand.
+
+**Continue to** -> [Part 4: AI Web Chat Template](../Part%204%20-%20AI%20Web%20Chat%20Template/README.md)

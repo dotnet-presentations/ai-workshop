@@ -399,8 +399,8 @@ We need to add the QuickGrid package and update our imports to include the neces
 1. Open the `GenAiLab.Web.csproj` file and add the QuickGrid package to the `<ItemGroup>` with other PackageReferences:
 
 ```xml
-<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.7" />
-<PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="9.7.0" />
+<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.18" />
+<PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.8.0" />
 ```
 
 1. Open `Components/_Imports.razor` and add the missing using directives:

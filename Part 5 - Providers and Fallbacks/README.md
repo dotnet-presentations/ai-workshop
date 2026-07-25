@@ -155,3 +155,5 @@ You've now covered the AI half end-to-end: build by hand, meet the template,
 swap providers. The rest of the workshop moves to **tools and agents** — starting
 with the **Model Context Protocol (MCP)**, where you build a tool your app (and
 later an agent) can call.
+
+**Continue to** → [Part 6: Deployment](../Part%206%20-%20Deployment/README.md)

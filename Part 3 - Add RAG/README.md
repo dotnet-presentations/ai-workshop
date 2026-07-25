@@ -137,3 +137,5 @@ In **Part 4** you'll scaffold the **aichatweb template** and see how it solves
 exactly these problems — a real vector store (Qdrant), a document ingestion
 pipeline, and semantic search — using the same `IChatClient` and
 `IEmbeddingGenerator` abstractions you just used by hand.
+
+**Continue to** → [Part 4: AI Web Chat Template](../Part%204%20-%20AI%20Web%20Chat%20Template/README.md)

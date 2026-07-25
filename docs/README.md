@@ -46,9 +46,9 @@ The workshop is structured as 9 parts:
 
 **Model Context Protocol Extension (Parts 7-9):**
 
-- Part 7: Create Weather MCP Server
-- Part 8: Create Business MCP Server
-- Part 9: Publish and Share MCP Servers
+- Part 7: MCP Server Basics
+- Part 8: Enhanced MCP Server
+- Part 9: MCP Publishing
 
 ## Contributing
 

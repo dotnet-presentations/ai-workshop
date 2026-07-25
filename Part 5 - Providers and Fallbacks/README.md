@@ -19,8 +19,7 @@ provider changes become configuration updates.
 
 ## Provider 1: [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (primary)
 
-This is what Parts 2-4 already use, the Azure-specific client adapted to
-`IChatClient`:
+This is what Parts 2-4 already use: the Azure-specific client, adapted to `IChatClient`:
 
 ```csharp
 using Azure;

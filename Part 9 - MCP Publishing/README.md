@@ -769,7 +769,7 @@ You now have a complete path for building, publishing, and maintaining MCP serve
 
 ## Workshop Complete! 🎉
 
-🏆 **Completed:** all 9 parts of the AI Workshop series:
+🏆 **Completed all 9 parts** of the AI Workshop series:
 
 **AI Web Chat Application (Parts 1-6)**:
 

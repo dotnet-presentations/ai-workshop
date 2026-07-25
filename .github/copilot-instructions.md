@@ -2,17 +2,17 @@
 
 Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
-This repository contains a comprehensive .NET AI workshop with 9 parts covering AI web chat applications and Model Context Protocol (MCP) servers. The workshop teaches building AI-powered applications using .NET 9, Blazor, Microsoft Extensions for AI, GitHub Models, Azure OpenAI, and vector databases.
+This repository contains a comprehensive .NET AI workshop with 9 parts covering AI web chat applications and Model Context Protocol (MCP) servers. The workshop teaches building AI-powered applications using .NET 10, Blazor, Microsoft Extensions for AI, GitHub Models, Azure OpenAI, and vector databases.
 
 ## Working Effectively
 
 ### Prerequisites and Environment Setup
-- Install .NET 9.0 SDK for AI Web Chat applications (Parts 1-6):
+- Install .NET 10.0 SDK for AI Web Chat applications (Parts 1-6):
   ```bash
-  curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0
+  curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0
   export PATH="$HOME/.dotnet:$PATH"
   ```
-- Install .NET 8.0 SDK for MCP servers (Parts 7-8) - typically already available
+- Install .NET 10.0 SDK for MCP servers (Parts 7-9)
 - Install Docker Desktop or Podman (required for .NET Aspire orchestration and Qdrant vector database)
 - Install Microsoft Extensions AI templates:
   ```bash
@@ -30,7 +30,7 @@ This repository contains a comprehensive .NET AI workshop with 9 parts covering 
 
 ### Major Project Solutions
 1. **Part 4 AI Web Chat Template (Basic)**: `Part 4 - AI Web Chat Template/GenAiLab/GenAiLab.sln`
-   - .NET 9.0 solution with Blazor web app, service defaults, and AppHost
+  - .NET 10.0 solution with Blazor web app, service defaults, and AppHost
    - Build time: ~11 seconds, Restore time: ~18 seconds
    
 2. **Part 6 AI Web Chat (Full)**: `Part 6 - Deployment/GenAiLab/GenAiLab.sln`
@@ -38,11 +38,11 @@ This repository contains a comprehensive .NET AI workshop with 9 parts covering 
    - Same build timing as Part 2
    
 3. **Part 7 MCP Server (Basic)**: `Part 7 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj`
-   - .NET 8.0 MCP server with weather tools
+  - .NET 10.0 MCP server with weather tools
    - Build time: ~2 seconds, Restore time: ~5 seconds
    
 4. **Part 8 MCP Server (Enhanced)**: `Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj`
-   - .NET 8.0 business MCP server with order management tools
+  - .NET 10.0 business MCP server with order management tools
    - Build time: ~4 seconds with 3 warnings (expected)
 
 ### Running Applications
@@ -154,8 +154,8 @@ dotnet new mcpserver --help
 
 ## Key Technologies Used
 
-- **.NET 9**: AI Web Chat applications with Blazor and .NET Aspire
-- **.NET 8**: MCP server applications  
+- **.NET 10**: AI Web Chat applications with Blazor and .NET Aspire
+- **.NET 10**: MCP server applications  
 - **Microsoft Extensions for AI**: Core AI integration libraries
 - **GitHub Models**: Legacy dev-only provider, retiring July 30, 2026 — use [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) instead
 - **Azure OpenAI**: Enterprise-grade AI models for production
@@ -167,7 +167,7 @@ dotnet new mcpserver --help
 
 ### Build Issues
 - Ensure correct .NET SDK version is installed and in PATH
-- For .NET 9 issues, verify SDK installation: `dotnet --list-sdks | grep 9.0`
+- For .NET 10 issues, verify SDK installation: `dotnet --list-sdks | grep 10.0`
 - For Docker issues with AI Web Chat, ensure Docker Desktop is running
 
 ### Template Issues  

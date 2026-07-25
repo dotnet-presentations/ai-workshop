@@ -19,7 +19,7 @@ of this for you.
 ## Prerequisites
 
 - .NET 10 SDK
-- An Azure AI Foundry resource with a **`gpt-5-mini`** chat model deployed
+- A [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) resource with a **`gpt-5-mini`** chat model deployed
   (see [Part 1 - Setup](../Part%201%20-%20Setup/README.md))
 
 > [!CAUTION]
@@ -54,73 +54,133 @@ dotnet add package Microsoft.Extensions.Logging.Console
 
 ## Step 3: Store your credentials
 
-Initialize user-secrets, then set your endpoint, key, and model. Get these from
-the Azure AI Foundry portal (**[https://ai.azure.com](https://ai.azure.com/)**).
+Store your endpoint and key with .NET user-secrets. Get these values from the
+[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)
+portal (**[https://ai.azure.com](https://ai.azure.com/)**).
+
+### Option A: Command line (PowerShell)
 
 ```bash
 dotnet user-secrets init
 dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
 dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
-dotnet user-secrets set "AzureOpenAI:ChatModel" "gpt-5-mini"
 ```
 
-## Step 4: Write the code
+### Option B: Visual Studio 2026
 
-Replace the contents of `Program.cs` with the code in
-[ChatApp/Program.cs](ChatApp/Program.cs). Work through it section by section:
+1. Open your `ChatApp` project in Visual Studio 2026.
+2. In Solution Explorer, right-click the `ChatApp` project.
+3. Select **Manage User Secrets**.
+4. Add these values to the opened `secrets.json` file:
 
-### Configuration (secrets-first)
-
-`ConfigurationBuilder().AddUserSecrets<Program>()` reads the values you set in
-Step 3. If a required value is missing, the app throws a clear error telling you
-which secret to set — no silent failures, no keys in code.
-
-### Create an `IChatClient`
-
-```csharp
-IChatClient chatClient = new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(key))
-    .GetChatClient(chatModel)
-    .AsIChatClient();
-```
-
-`AzureOpenAIClient` is the provider-specific SDK. `.AsIChatClient()` adapts it to
-`IChatClient`, the abstraction the rest of your app uses. Because every provider
-(Azure OpenAI, OpenAI, Ollama, Foundry Local, …) surfaces the same `IChatClient`,
-you can swap models later without changing your app logic.
-
-### A chat loop with history
-
-The conversation lives in a `List<ChatMessage>`. Each turn you add the user's
-message, send the **whole list** to the model (so it has full context), then add
-the assistant's reply. The first message is a `ChatRole.System` prompt that sets
-the assistant's behavior.
-
-### Streaming responses
-
-```csharp
-await foreach (ChatResponseUpdate update in chatClient.GetStreamingResponseAsync(history))
+```json
 {
-    Console.Write(update.Text);
+    "AzureOpenAI:Endpoint": "https://YOUR-RESOURCE.openai.azure.com/",
+    "AzureOpenAI:Key": "YOUR-KEY"
 }
 ```
 
-`GetStreamingResponseAsync` yields the answer token-by-token so the user sees
-output immediately instead of waiting for the full response.
+For the full Visual Studio flow, see:
+[Manage user secrets with Visual Studio](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-10.0&tabs=windows%2Cpowershell#manage-user-secrets-with-visual-studio).
 
-### A middleware pipeline
+## Step 4: Write the code
+
+Open `Program.cs` and build it in sections from top to bottom.
+
+### 4.1 Add using directives and configuration
 
 ```csharp
-IChatClient chatClient = /* ... */
+using Azure;
+using Azure.AI.OpenAI;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+
+var config = new ConfigurationBuilder()
+    .AddUserSecrets<Program>()
+    .Build();
+
+string endpoint = config["AzureOpenAI:Endpoint"]
+    ?? throw new InvalidOperationException(
+        "Missing 'AzureOpenAI:Endpoint'. Run: dotnet user-secrets set \"AzureOpenAI:Endpoint\" \"https://YOUR-RESOURCE.openai.azure.com/\"");
+string key = config["AzureOpenAI:Key"]
+    ?? throw new InvalidOperationException(
+        "Missing 'AzureOpenAI:Key'. Run: dotnet user-secrets set \"AzureOpenAI:Key\" \"YOUR-KEY\"");
+const string chatModel = "gpt-5-mini";
+```
+
+This is a secrets-first setup: endpoint/key come from user-secrets, while the
+model has a code default (`gpt-5-mini`) so students can easily experiment.
+
+### 4.2 Create the chat client and add logging middleware
+
+```csharp
+using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+    builder.AddConsole().SetMinimumLevel(LogLevel.Warning));
+
+IChatClient chatClient = new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(key))
+    .GetChatClient(chatModel)
     .AsIChatClient()
     .AsBuilder()
     .UseLogging(loggerFactory)
     .Build();
 ```
 
-`.AsBuilder()` lets you wrap the client with cross-cutting behavior. `UseLogging`
-logs every request and response — and you added it **without changing any of your
-chat-loop code**. This same pattern is how you'll later add function calling,
-caching, and telemetry.
+`AzureOpenAIClient` is the provider-specific SDK, and `.AsIChatClient()` adapts
+it to the provider-agnostic `IChatClient` abstraction used by your app.
+
+### 4.3 Add conversation history and startup messages
+
+```csharp
+var history = new List<ChatMessage>
+{
+    new(ChatRole.System, "You are a helpful, concise assistant for a .NET workshop.")
+};
+
+Console.WriteLine("Chat app ready. Type a message (or 'exit' to quit).");
+Console.WriteLine();
+```
+
+### 4.4 Add the chat loop with streaming responses
+
+```csharp
+while (true)
+{
+    Console.Write("You: ");
+    string? input = Console.ReadLine();
+
+    if (string.IsNullOrWhiteSpace(input) ||
+        input.Equals("exit", StringComparison.OrdinalIgnoreCase))
+    {
+        break;
+    }
+
+    history.Add(new ChatMessage(ChatRole.User, input));
+
+    Console.Write("Assistant: ");
+    var assistantText = new System.Text.StringBuilder();
+
+    await foreach (ChatResponseUpdate update in chatClient.GetStreamingResponseAsync(history))
+    {
+        Console.Write(update.Text);
+        assistantText.Append(update.Text);
+    }
+
+    Console.WriteLine();
+    Console.WriteLine();
+
+    history.Add(new ChatMessage(ChatRole.Assistant, assistantText.ToString()));
+}
+
+Console.WriteLine("Goodbye!");
+```
+
+`GetStreamingResponseAsync` yields tokens as they arrive, so users see output
+immediately instead of waiting for the full completion.
+
+### 4.5 Final check
+
+Your completed file should now match [ChatApp/Program.cs](ChatApp/Program.cs).
 
 ## Step 5: Run it
 

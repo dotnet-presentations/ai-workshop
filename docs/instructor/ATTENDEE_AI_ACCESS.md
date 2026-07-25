@@ -1,12 +1,12 @@
 # Instructor Note: Attendee AI Access Fallback
 
 > **Audience:** Workshop leaders only. This is **not** part of the attendee-facing
-> content. Attendees are expected to bring their own Azure AI Foundry access (see
+> content. Attendees are expected to bring their own [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) access (see
 > [Part 1 - Setup](../../Part%201%20-%20Setup/README.md)).
 
 ## The problem
 
-The workshop's main path assumes each attendee can provision an Azure AI Foundry
+The workshop's main path assumes each attendee can provision a [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)
 resource and deploy `gpt-5-mini` + `text-embedding-3-small`. In practice, a
 handful of attendees won't be able to — no subscription, corporate policy blocks,
 quota/region issues, or they simply run out of time during setup.

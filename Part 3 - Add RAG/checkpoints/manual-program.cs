@@ -1,4 +1,7 @@
-﻿// =============================================================================
+// Checkpoint A (manual ingestion): complete reference implementation
+// Source of truth for this checkpoint is Part 3 - Add RAG/RagChatApp/Program.cs.
+
+// =============================================================================
 // Part 3 - Add RAG by hand (console)
 // =============================================================================
 // This continues the Part 2 chat app. Now we ground the model in a document it
@@ -13,9 +16,6 @@
 // Theme: the same swappable-abstraction idea from Part 2 (swap the chat provider)
 // now applies to embeddings and vector stores. In Part 4 the template will do all
 // of this for you - and you'll understand every moving part because you built it.
-//
-// Adapted with thanks from Steve Sanderson's dotnet-ai-workshop
-// (https://github.com/SteveSandersonMS/dotnet-ai-workshop), chapters 2, 3, and 6.
 // =============================================================================
 
 using Azure;
@@ -23,11 +23,6 @@ using Azure.AI.OpenAI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 
-// -----------------------------------------------------------------------------
-// 0. Secrets-first configuration (same pattern as Part 2)
-// -----------------------------------------------------------------------------
-//   dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
-//   dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
 var config = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
@@ -41,26 +36,12 @@ string key = config["AzureOpenAI:Key"]
 const string chatModel = "gpt-5-mini";
 const string embeddingModel = "text-embedding-3-small";
 
-// One Azure client, two abstractions: a chat client AND an embedding generator.
 var azureClient = new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(key));
-
 IChatClient chatClient = azureClient.GetChatClient(chatModel).AsIChatClient();
 
-// -----------------------------------------------------------------------------
-// 1. IEmbeddingGenerator
-// -----------------------------------------------------------------------------
-// An embedding turns text into a vector (an array of floats). Texts with similar
-// meaning produce vectors that point in similar directions - that's what lets us
-// search by meaning instead of by keyword.
 IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator =
     azureClient.GetEmbeddingClient(embeddingModel).AsIEmbeddingGenerator();
 
-// -----------------------------------------------------------------------------
-// 2. Chunk the document
-// -----------------------------------------------------------------------------
-// We split the document into paragraph-sized chunks. Real systems use smarter
-// chunking, but paragraphs are enough to see RAG work. Each chunk must be small
-// enough to embed meaningfully yet large enough to carry a complete idea.
 string docPath = Path.Combine(AppContext.BaseDirectory, "sample-docs", "contoso-trailblazer-3000.md");
 string document = await File.ReadAllTextAsync(docPath);
 
@@ -69,12 +50,6 @@ string[] chunks = document
     .Where(c => c.Length > 0)
     .ToArray();
 
-// -----------------------------------------------------------------------------
-// 3. Embed + store (in-memory - no vector database)
-// -----------------------------------------------------------------------------
-// We embed every chunk once at startup and keep the vectors in a plain list.
-// This is deliberately naive: it doesn't persist and it won't scale - which is
-// exactly the motivation for the real vector store you'll meet in Part 4.
 Console.WriteLine($"Embedding {chunks.Length} chunks from the product guide...");
 
 GeneratedEmbeddings<Embedding<float>> embeddings =
@@ -90,9 +65,6 @@ Console.WriteLine("Knowledge base ready. Ask about the Contoso TrailBlazer 3000 
 Console.WriteLine("(Type 'exit' to quit.)");
 Console.WriteLine();
 
-// -----------------------------------------------------------------------------
-// The chat loop - now grounded in the document
-// -----------------------------------------------------------------------------
 var history = new List<ChatMessage>();
 
 while (true)
@@ -106,11 +78,6 @@ while (true)
         break;
     }
 
-    // -------------------------------------------------------------------------
-    // 4. Cosine similarity search (written by hand)
-    // -------------------------------------------------------------------------
-    // Embed the question with the SAME generator, then rank every stored chunk by
-    // cosine similarity and take the top matches. This is the heart of retrieval.
     ReadOnlyMemory<float> questionVector =
         (await embeddingGenerator.GenerateAsync(input)).Vector;
 
@@ -122,19 +89,12 @@ while (true)
         .Select(x => x.Text)
         .ToArray();
 
-    // -------------------------------------------------------------------------
-    // 5. Augment the prompt, then answer
-    // -------------------------------------------------------------------------
-    // We rebuild the system message every turn with the freshly retrieved context
-    // and instruct the model to answer ONLY from it. That grounding is what turns
-    // a general chat model into a document-aware assistant.
     string context = string.Join("\n\n---\n\n", topChunks);
     var systemPrompt = new ChatMessage(ChatRole.System,
         "You are a product support assistant. Answer the user's question using ONLY " +
         "the context below. If the answer isn't in the context, say you don't know.\n\n" +
         $"Context:\n{context}");
 
-    // Send: system prompt (with context) + the running conversation + this question.
     var messages = new List<ChatMessage> { systemPrompt };
     messages.AddRange(history);
     messages.Add(new ChatMessage(ChatRole.User, input));
@@ -149,18 +109,12 @@ while (true)
     Console.WriteLine();
     Console.WriteLine();
 
-    // Keep the conversation going (history holds the user/assistant turns only;
-    // the context is re-retrieved and re-injected fresh each turn).
     history.Add(new ChatMessage(ChatRole.User, input));
     history.Add(new ChatMessage(ChatRole.Assistant, answer.ToString()));
 }
 
 Console.WriteLine("Goodbye!");
 
-// -----------------------------------------------------------------------------
-// Naive cosine similarity: dot(a, b) / (|a| * |b|).
-// Returns a value from -1 (opposite) to 1 (identical direction).
-// -----------------------------------------------------------------------------
 static float CosineSimilarity(ReadOnlySpan<float> a, ReadOnlySpan<float> b)
 {
     float dot = 0f, magA = 0f, magB = 0f;

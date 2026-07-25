@@ -7,7 +7,7 @@
 In this workshop, you will set up your development environment for building AI applications with .NET. You'll install the required tools and configure your environment to work with the workshop materials.
 
 > [!IMPORTANT]
-> **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (brownouts July 16 & 23). Set up **Azure AI Foundry (Azure OpenAI)** as your primary provider; the GitHub account below is only for the legacy fallback.
+> **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (brownouts July 16 & 23). Set up **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)** as your primary provider; the GitHub account below is only for the legacy fallback.
 
 ## Prerequisites
 
@@ -16,22 +16,22 @@ Before starting, ensure you have:
 - **.NET 10 SDK** or later
 - **Visual Studio 2026** (with the Web & Cloud workload) **or** Visual Studio Code with the **C# Dev Kit** extension
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/)
-- **An Azure subscription with access to Azure AI Foundry (Azure OpenAI)** — the primary AI provider for this workshop
+- **An Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)** — the primary AI provider for this workshop
 - GitHub Copilot subscription (recommended; used later for the MCP and GitHub Copilot SDK units)
 - (Optional) A GitHub account — GitHub Models is available only as a legacy fallback that is [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)
 
 > [!TIP]
 > **No Azure access? Local fallback:** you can run local models with **Foundry Local** or **Ollama** for the chat exercises. See the [Development Container Options](./../.github/.devcontainer/README.md). Note that the full retrieval-augmented generation (RAG) exercise also needs an embedding model.
 
-## Before the workshop: provision Azure AI Foundry ⏳
+## Before the workshop: provision [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) ⏳
 
 > [!IMPORTANT]
 > Complete this **before** the workshop. Creating the resource and deploying models takes a little time, and model quota sometimes requires a request that isn't instant. Arriving with this done means you can start building right away.
 
-You'll need an **Azure AI Foundry (Azure OpenAI)** resource with **two** models deployed:
+You'll need an **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)** resource with **two** models deployed:
 
 1. **Create the resource**
-   - Go to the [Azure AI Foundry portal](https://ai.azure.com) and sign in with your Azure account.
+   - Go to the [Microsoft Foundry portal](https://ai.azure.com) and sign in with your Azure account.
    - Create (or select) a project. If prompted, create a new resource group such as `rg-aiworkshop`.
 
 1. **Deploy the chat model**
@@ -53,11 +53,10 @@ You'll need an **Azure AI Foundry (Azure OpenAI)** resource with **two** models 
 
 ### Verify your setup
 
-Confirm the SDK and template tooling are installed:
+Confirm the .NET SDK is installed:
 
 ```powershell
 dotnet --version          # should report 10.x
-dotnet new aichatweb --help
 ```
 
 ## Clone the Repository
@@ -82,23 +81,19 @@ cd ai-workshop
    - Or Visual Studio Code with the [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit) extension.
    - Ensure the **.NET 10 SDK** is installed (`dotnet --version` reports `10.x`).
 
-1. **Install .NET AI Web Chatbot template:**
-   - Open a terminal or command prompt
-   - Run the following command:
+1. **Verify core tooling:**
+    - Open a terminal or command prompt.
+    - Run the following commands:
 
-     ```powershell
-     dotnet new install Microsoft.Extensions.AI.Templates
-     ```
+       ```powershell
+       dotnet --version
+       docker --version
+       ```
 
-1. **Verify installations:**
-   - Open a terminal or command prompt
-   - Run the following commands to verify the installation:
+    - You should see a `.NET 10.x` SDK version and a Docker version.
 
-     ```powershell
-     dotnet new aichatweb --help
-     ```
-
-   - You should see the help information for the *AI Chat Web App (C#)* displayed.
+> [!NOTE]
+> The AI Web Chat template (`dotnet new aichatweb`) is installed and validated later, in the module where it is first used.
 
 ## Step 2: Create a GitHub Account (if needed)
 
@@ -119,7 +114,7 @@ Ready to build your first AI application? Let's get started!
 
 In Part 2, you'll learn how to:
 
-- 🚀 Create a new AI Web Chat project using the AI Web Chat template
-- ⚙️ Configure Azure AI Foundry (Azure OpenAI) for AI services
-- 🔧 Set up the development environment
+- 🚀 Build a minimal console-based AI chat app
+- ⚙️ Configure [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) for AI services
+- 🔧 Store secrets securely with .NET user secrets
 - 🧪 Test your first AI-powered application

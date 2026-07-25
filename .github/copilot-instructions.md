@@ -29,7 +29,7 @@ This repository contains a comprehensive .NET AI workshop with 9 parts covering 
   ```
 
 ### Major Project Solutions
-1. **Part 2 AI Web Chat (Basic)**: `Part 2 - Project Creation/GenAiLab/GenAiLab.sln`
+1. **Part 4 AI Web Chat Template (Basic)**: `Part 4 - AI Web Chat Template/GenAiLab/GenAiLab.sln`
    - .NET 9.0 solution with Blazor web app, service defaults, and AppHost
    - Build time: ~11 seconds, Restore time: ~18 seconds
    
@@ -50,7 +50,7 @@ This repository contains a comprehensive .NET AI workshop with 9 parts covering 
   ```bash
   # Ensure Docker is running first
   docker --version
-  cd "Part 2 - Project Creation/GenAiLab" 
+  cd "Part 4 - AI Web Chat Template/GenAiLab" 
   dotnet run --project GenAiLab.AppHost  # Starts Aspire orchestration
   ```
 - **MCP servers** run as console applications:
@@ -65,8 +65,8 @@ This repository contains a comprehensive .NET AI workshop with 9 parts covering 
 - Always run the GitHub Actions workflow commands to ensure CI compatibility:
   ```bash
   # Test all solutions that are in CI
-  dotnet restore "Part 2 - Project Creation/GenAiLab/GenAiLab.sln"
-  dotnet build "Part 2 - Project Creation/GenAiLab/GenAiLab.sln" --no-restore --configuration Release
+  dotnet restore "Part 4 - AI Web Chat Template/GenAiLab/GenAiLab.sln"
+  dotnet build "Part 4 - AI Web Chat Template/GenAiLab/GenAiLab.sln" --no-restore --configuration Release
   
   dotnet restore "Part 6 - Deployment/GenAiLab/GenAiLab.sln"
   dotnet build "Part 6 - Deployment/GenAiLab/GenAiLab.sln" --no-restore --configuration Release
@@ -112,10 +112,10 @@ dotnet new mcpserver --help  # See all options
 
 ### Workshop Parts (Documentation + Code)
 - `Part 1 - Setup/`: Prerequisites and setup (README only)
-- `Part 2 - Project Creation/`: Fresh AI Web Chat template + documentation
-- `Part 3 - Template Exploration/`: Template exploration guide (README only)
-- `Part 4 - Azure OpenAI/`: README for switching to Azure OpenAI
-- `Part 5 - Products Page/`: Complete project with products page
+- `Part 2 - Build Chat App/`: Build the chat app by hand using Microsoft.Extensions.AI
+- `Part 3 - Add RAG/`: Add embeddings, retrieval, and prompt augmentation
+- `Part 4 - AI Web Chat Template/`: Scaffold and inspect the template-generated web app
+- `Part 5 - Providers and Fallbacks/`: Compare provider swap strategies and fallback paths
 - `Part 6 - Deployment/`: Complete project with Azure deployment configuration
 - `Part 7 - MCP Server Basics/`: Basic MCP server with weather tools
 - `Part 8 - Enhanced MCP Server/`: Business MCP server with order tools
@@ -157,7 +157,7 @@ dotnet new mcpserver --help
 - **.NET 9**: AI Web Chat applications with Blazor and .NET Aspire
 - **.NET 8**: MCP server applications  
 - **Microsoft Extensions for AI**: Core AI integration libraries
-- **GitHub Models**: Legacy dev-only provider, retiring July 30, 2026 — use Azure AI Foundry (Azure OpenAI) instead
+- **GitHub Models**: Legacy dev-only provider, retiring July 30, 2026 — use [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) instead
 - **Azure OpenAI**: Enterprise-grade AI models for production
 - **Qdrant**: Vector database for embeddings and semantic search
 - **Docker**: Container orchestration for vector databases

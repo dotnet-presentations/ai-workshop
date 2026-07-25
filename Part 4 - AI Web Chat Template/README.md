@@ -24,7 +24,7 @@ faith.
 
 - Completed [Part 2](../Part%202%20-%20Build%20Chat%20App/README.md) and [Part 3](../Part%203%20-%20Add%20RAG/README.md)
 - **Docker Desktop** (or Podman) running — the template uses a Qdrant container
-- Azure AI Foundry with `gpt-4.1-mini` + `text-embedding-3-small` (see [Part 1](../Part%201%20-%20Setup/README.md))
+- Azure AI Foundry with `gpt-5-mini` + `text-embedding-3-small` (see [Part 1](../Part%201%20-%20Setup/README.md))
 
 ## Step 1: Install the template and scaffold
 
@@ -51,7 +51,7 @@ Everything below is code the template wrote — and you now recognize all of it.
 
 ```csharp
 var openai = builder.AddAzureOpenAIClient("openai");
-openai.AddChatClient("gpt-4.1-mini")
+openai.AddChatClient("gpt-5-mini")
     .UseFunctionInvocation()
     .UseOpenTelemetry(configure: c =>
         c.EnableSensitiveData = builder.Environment.IsDevelopment());

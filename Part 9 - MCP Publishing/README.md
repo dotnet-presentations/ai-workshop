@@ -1,8 +1,8 @@
-# Part 9: MCP Publishing and Distribution
+# Part 9 (Optional / bonus): MCP Publishing and Distribution
 
 > **⏱️ Estimated Time:** 30-45 minutes
 >
-> **Prerequisites**: Complete [Part 7: MCP Server Basics](../Part%207%20-%20MCP%20Server%20Basics/README.md) and [Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md) to have working MCP servers ready for publishing.
+> **Prerequisites**: Complete [Part 7: MCP Server Basics](../Part%207%20-%20MCP%20Server%20Basics/README.md). [Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md) is recommended if you followed the optional advanced track.
 
 ## Overview
 

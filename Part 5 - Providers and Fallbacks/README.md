@@ -14,7 +14,7 @@ retirement is a configuration change, not a rewrite.
 
 | Provider | Best for | Chat | Embeddings | Runs offline | Notes |
 | --- | --- | :---: | :---: | :---: | --- |
-| **Azure AI Foundry** (Azure OpenAI) | **Primary** — the workshop default | ✅ | ✅ | ❌ | `gpt-4.1-mini` + `text-embedding-3-small` |
+| **Azure AI Foundry** (Azure OpenAI) | **Primary** — the workshop default | ✅ | ✅ | ❌ | `gpt-5-mini` + `text-embedding-3-small` |
 | **Foundry Local** | Local **chat** on your device | ✅ | ⏳ | ✅ | OpenAI-compatible local server; SLMs (Phi, Qwen, …). Embedding support is being evaluated (#496) |
 | **Ollama** | Fully **offline RAG** (chat + embeddings) | ✅ | ✅ | ✅ | e.g. `llama3.2` for chat, `all-minilm` for embeddings |
 | **GitHub Models** (legacy) | Zero-setup dev/demo | ✅ | ⚠️ | ❌ | **Retires 2026-07-30** (brownouts July 16 & 23) |
@@ -29,7 +29,7 @@ using Azure;
 using Azure.AI.OpenAI;
 
 var client = new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(key));
-IChatClient chat = client.GetChatClient("gpt-4.1-mini").AsIChatClient();
+IChatClient chat = client.GetChatClient("gpt-5-mini").AsIChatClient();
 IEmbeddingGenerator<string, Embedding<float>> embeddings =
     client.GetEmbeddingClient("text-embedding-3-small").AsIEmbeddingGenerator();
 ```

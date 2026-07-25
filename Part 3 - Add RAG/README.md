@@ -30,7 +30,7 @@ document ─▶ chunk ─▶ embed ─▶ store (in-memory list) ─────
 ## Prerequisites
 
 - Completed [Part 2](../Part%202%20-%20Build%20Chat%20App/README.md)
-- An Azure AI Foundry resource with **`gpt-4.1-mini`** *and*
+- An Azure AI Foundry resource with **`gpt-5-mini`** *and*
   **`text-embedding-3-small`** deployed (see [Part 1 - Setup](../Part%201%20-%20Setup/README.md))
 
 ## Step 1: Start from the Part 2 project

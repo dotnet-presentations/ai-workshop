@@ -1,6 +1,10 @@
 # Write a New Products Page
 
 > **⏱️ Estimated Time:** 60-90 minutes
+>
+> [!NOTE]
+> This module is now an optional enrichment and is no longer part of the primary workshop path.
+> The primary flow continues from provider strategy to deployment.
 
 ## In this workshop
 
@@ -395,8 +399,8 @@ We need to add the QuickGrid package and update our imports to include the neces
 1. Open the `GenAiLab.Web.csproj` file and add the QuickGrid package to the `<ItemGroup>` with other PackageReferences:
 
 ```xml
-<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.7" />
-<PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="9.7.0" />
+<PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.18" />
+<PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.8.0" />
 ```
 
 1. Open `Components/_Imports.razor` and add the missing using directives:
@@ -631,7 +635,7 @@ builder.AddServiceDefaults();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 var openai = builder.AddAzureOpenAIClient("openai");
-openai.AddChatClient("gpt-4.1-mini")
+openai.AddChatClient("gpt-5-mini")
     .UseFunctionInvocation()
     .UseOpenTelemetry(configure: c =>
         c.EnableSensitiveData = builder.Environment.IsDevelopment());

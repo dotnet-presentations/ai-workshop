@@ -1,4 +1,4 @@
-# Part 8: Enhanced MCP Server with Business Tools
+# Part 8 (Optional / bonus): Enhanced MCP Server with Business Tools
 
 > **⏱️ Estimated Time:** 45-60 minutes
 >
@@ -524,9 +524,9 @@ public async Task GetOrderDetails_InvalidOrder_ReturnsNotFound()
 
 ## Next Steps
 
-Congratulations! You've built a sophisticated business MCP server. You're now ready to learn about publishing and distributing your MCP servers.
+Congratulations! You've built a sophisticated business MCP server. If you're continuing the optional track, the next step is publishing and distribution.
 
-**Continue to** → [Part 9: MCP Publishing](../Part%209%20-%20MCP%20Publishing/README.md)
+**Optional next** → [Part 9: MCP Publishing](../Part%209%20-%20MCP%20Publishing/README.md)
 
 In Part 9, you'll learn how to:
 

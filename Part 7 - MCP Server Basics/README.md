@@ -52,10 +52,10 @@ Before starting this part, ensure you have:
 
 - ✅ **Completed Parts 1-6** of this workshop series:
   - [Part 1: Setup](../Part%201%20-%20Setup/README.md) - Set up your development environment
-  - [Part 2: Create Project](../Part%202%20-%20Project%20Creation/README.md) - Understanding the AI web chat template
-  - [Part 3: Template Exploration](../Part%203%20-%20Template%20Exploration/README.md) - Integrate with Azure OpenAI services
-  - [Part 4: Azure OpenAI](../Part%204%20-%20Azure%20OpenAI/README.md) - Build dynamic product pages
-  - [Part 5: Products Page](../Part%205%20-%20Products%20Page/README.md) - Deploy your application to Azure
+  - [Part 2: Build Chat App](../Part%202%20-%20Build%20Chat%20App/README.md) - Build the core chat loop by hand
+  - [Part 3: Add RAG](../Part%203%20-%20Add%20RAG/README.md) - Add embeddings and retrieval by hand
+  - [Part 4: AI Web Chat Template](../Part%204%20-%20Template%20reveal/README.md) - Map your hand-built concepts to the generated template
+  - [Part 5: Providers and Fallbacks](../Part%205%20-%20Providers%20and%20Fallbacks/README.md) - Configure provider strategy and fallback options
   - [Part 6: Deployment](../Part%206%20-%20Deployment/README.md) - Deploy your application to Azure
 - ✅ **.NET 10.0 SDK** (preview 6 or higher) - `dotnet --version`
 - ✅ **Visual Studio Code** with GitHub Copilot extension
@@ -607,9 +607,9 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 
 ## Next Steps
 
-Now that you understand MCP basics, you're ready for more advanced scenarios!
+Now that you understand MCP basics, you can continue to advanced scenarios if time allows.
 
-**Continue to** → [Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md)
+**Optional next** → [Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md)
 
 In Part 8, you'll learn how to:
 
@@ -691,8 +691,8 @@ In this part, you've learned the fundamentals of Model Context Protocol and buil
 
 🎯 **Continue your MCP journey:**
 
-- **[Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md)** - Build sophisticated business tools for order management, inventory, and customer service scenarios
-- **[Part 9: MCP Publishing](../Part%209%20-%20MCP%20Publishing/README.md)** - Learn how to package, publish, and distribute your MCP servers professionally
+- **[Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md)** *(Optional / bonus)* - Build sophisticated business tools for order management, inventory, and customer service scenarios
+- **[Part 9: MCP Publishing](../Part%209%20-%20MCP%20Publishing/README.md)** *(Optional / bonus)* - Learn how to package, publish, and distribute your MCP servers professionally
 
 ---
 

@@ -1,14 +1,12 @@
-# Part 4: AI Web Chat Template — scaffold `aichatweb` and understand the code
+# Part 4: AI Web Chat Template - scaffold `aichatweb` and understand the code
 
 You've now built a chat app (Part 2) and a RAG loop (Part 3) **by hand**. You know
 what an `IChatClient` is, what an embedding is, what a vector search does, and why
 an in-memory store doesn't scale.
 
-Now for the payoff. In this part you scaffold the **`aichatweb` template** — and
-discover it generates everything you just wrote, wired into a real web app with a
-persistent vector database and orchestration. The difference from the old workshop:
-you now read the generated code **with comprehension** instead of taking it on
-faith.
+In this part you scaffold the **`aichatweb` template** and compare its generated
+web app with what you built by hand. The template includes the same concepts,
+with production-oriented wiring for persistence and orchestration.
 
 > **Aspire enters here**, motivated by a real need: your Part 3 vectors lived in
 > memory and vanished on exit. A production app needs a persistent, orchestrated
@@ -16,14 +14,14 @@ faith.
 
 <!-- -->
 
-> RAG evaluation (the "RAG triad": groundedness, relevance, context quality) is a
-> great optional enrichment for this part — see
+> RAG evaluation (the "RAG triad": groundedness, relevance, context quality) is an
+> optional extension for this part. See
 > [Steve Sanderson's dotnet-ai-workshop, Ch 6](https://github.com/SteveSandersonMS/dotnet-ai-workshop). Reference and adapt with attribution.
 
 ## Prerequisites
 
 - Completed [Part 2](../Part%202%20-%20Build%20Chat%20App/README.md) and [Part 3](../Part%203%20-%20Add%20RAG/README.md)
-- **Docker Desktop** (or Podman) running — the template uses a Qdrant container
+- **Docker Desktop** (or Podman) running. The template uses a Qdrant container.
 - [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) with `gpt-5-mini` + `text-embedding-3-small` (see [Part 1](../Part%201%20-%20Setup/README.md))
 
 ## Step 1: Install the template and scaffold
@@ -56,7 +54,8 @@ This generates a solution with three projects:
 
 ## Step 2: Map the generated code to what you built by hand
 
-Everything below is code the template wrote — and you now recognize all of it.
+Everything below is code the template wrote, and it maps directly to the parts
+you already built.
 
 ### Chat client: your Part 2 pipeline, as DI configuration
 
@@ -77,7 +76,7 @@ openai.AddEmbeddingGenerator("text-embedding-3-small");
 | `.AsBuilder().UseLogging(...).Build()` | `.UseFunctionInvocation().UseOpenTelemetry(...)` |
 | `azureClient.GetEmbeddingClient(...).AsIEmbeddingGenerator()` | `openai.AddEmbeddingGenerator("text-embedding-3-small")` |
 
-Same abstractions — now registered in DI and wrapped with a richer middleware
+Same abstractions, now registered in DI and wrapped with a richer middleware
 pipeline (function calling + telemetry instead of your hand-added logging).
 
 ### Retrieval: your Part 3 cosine search, as a service
@@ -102,8 +101,8 @@ public class SemanticSearch(VectorStoreCollection<Guid, IngestedChunk> vectorCol
 | No filtering | `Filter` by document id |
 
 You wrote the math; the template delegates it to Qdrant through the
-`Microsoft.Extensions.VectorData` abstraction — the **same swap** idea, one more
-level up (swap the vector store).
+`Microsoft.Extensions.VectorData` abstraction. It applies the same swap idea at
+the vector-store level.
 
 ### Ingestion: your Part 3 chunk-and-embed step, as a pipeline
 
@@ -125,7 +124,7 @@ await DataIngestor.IngestDataAsync(
     new PDFDirectorySource(Path.Combine(builder.Environment.WebRootPath, "Data")));
 ```
 
-> ⚠️ Only ingest **trusted** content — ingested text is reflected back to users and
+> ⚠️ Only ingest **trusted** content. Ingested text is reflected back to users and
 > is a prompt-injection risk.
 
 ### Persistence + orchestration: the answer to "in-memory doesn't scale"
@@ -144,7 +143,7 @@ webApp.WithReference(vectorDB).WaitFor(vectorDB);
 
 This is the direct fix for Part 3's limitation: the vectors now live in a **Qdrant
 container with a persistent data volume**, and Aspire starts the database, waits
-for it to be ready, then starts the web app — wiring the connection strings between
+for it to be ready, then starts the web app and wires the connection strings between
 them automatically.
 
 ## Step 3: The Aspire dashboard
@@ -158,13 +157,13 @@ dotnet run --project GenAiLab.AppHost
 
 Aspire launches a **dashboard** (URL printed in the console) showing every service,
 its health, logs, traces, and metrics. This is why `UseOpenTelemetry(...)` was in
-`Program.cs` — the telemetry you saw registered now has somewhere to go. Open the
-web app from the dashboard and chat with your ingested documents.
+`Program.cs`: the telemetry you registered now has a destination. Open the web app
+from the dashboard and chat with your ingested documents.
 
 ## Step 4: Configure secrets
 
 The AppHost reads the Azure connection string from user-secrets (same secrets-first
-rule as Parts 2–3):
+rule as Parts 2-3):
 
 ```bash
 dotnet user-secrets --project GenAiLab.AppHost set ConnectionStrings:openai "Endpoint=https://YOUR-RESOURCE.openai.azure.com/;Key=YOUR-KEY"
@@ -181,8 +180,8 @@ concept by hand first:
 
 ## What's next
 
-In **Part 5** you'll make the provider story explicit: [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) as the
-primary, with Foundry Local / Ollama as swap-in alternatives — the payoff of everything running on `IChatClient` and
-`IEmbeddingGenerator`.
+In **Part 5** you'll compare provider options directly: [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) as the
+primary, with Foundry Local and Ollama as alternatives built on the same
+`IChatClient` and `IEmbeddingGenerator` abstractions.
 
 **Continue to** → [Part 5: Providers and Fallbacks](../Part%205%20-%20Providers%20and%20Fallbacks/README.md)

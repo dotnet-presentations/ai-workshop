@@ -22,10 +22,10 @@ document ─▶ read/chunk/embed/store (manual slice, then MEDI) ─┘
                              augment system prompt ─▶ chat model ─▶ grounded answer
 ```
 
-1. **`IEmbeddingGenerator`** — turn text into vectors
+1. **`IEmbeddingGenerator`**: turn text into vectors
 2. **Chunk** the document into retrievable pieces
 3. **Embed + store** chunks (manual in-memory first, then MEDI + vector store)
-4. **Cosine similarity search** — naive top-k retrieval, written by hand
+4. **Cosine similarity search**: naive top-k retrieval, written by hand
 5. **Augment the prompt** with the retrieved context, then answer
 
 ## Prerequisites
@@ -37,7 +37,7 @@ document ─▶ read/chunk/embed/store (manual slice, then MEDI) ─┘
 ## Step 1: Start from the Part 2 project
 
 Copy your Part 2 `ChatApp` (or the [provided project](RagChatApp)) and add one
-package for embeddings — everything else is already there.
+package for embeddings. Everything else is already there.
 
 Create a `sample-docs` folder in the same directory as your project file and copy
 the sample markdown document into it:
@@ -131,7 +131,7 @@ You: What is the warranty?
 Assistant: A 2-year limited warranty covering manufacturing defects...
 
 You: Who won the 2022 World Cup?
-Assistant: I don't know — that isn't in the provided context.
+Assistant: I don't know. That isn't in the provided context.
 ```
 
 The last answer is the point: the assistant is now **grounded**. It answers from

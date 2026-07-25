@@ -677,7 +677,7 @@ In Part 8, you'll learn how to:
 
 ## Summary
 
-In this part, you've learned the fundamentals of Model Context Protocol and built your first MCP server. You now understand how to:
+In this part, you learned the fundamentals of Model Context Protocol and built your first MCP server. You now know how to:
 
 - ✅ Create MCP servers that extend AI agents
 - ✅ Implement custom tools with proper descriptions
@@ -685,7 +685,7 @@ In this part, you've learned the fundamentals of Model Context Protocol and buil
 - ✅ Test MCP functionality with GitHub Copilot
 - ✅ Debug and troubleshoot MCP integrations
 
-**Weather tools are just the beginning!** MCP can connect AI to any system, API, or data source you can imagine. In the next part, you'll see how to apply these concepts to real business scenarios.
+These same MCP patterns apply to many APIs, systems, and data sources. In the next part, you'll apply them to business scenarios.
 
 ## Continue Your Journey
 

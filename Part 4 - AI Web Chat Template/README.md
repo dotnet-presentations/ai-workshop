@@ -182,8 +182,7 @@ concept by hand first:
 ## What's next
 
 In **Part 5** you'll make the provider story explicit: [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) as the
-primary, with Foundry Local / Ollama / GitHub Models (legacy) as swap-in
-alternatives — the payoff of everything running on `IChatClient` and
+primary, with Foundry Local / Ollama as swap-in alternatives — the payoff of everything running on `IChatClient` and
 `IEmbeddingGenerator`.
 
 **Continue to** → [Part 5: Providers and Fallbacks](../Part%205%20-%20Providers%20and%20Fallbacks/README.md)

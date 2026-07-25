@@ -15,21 +15,14 @@ This incompatibility can be addressed by upgrading to Docker Desktop 4.41.1. See
 
 # Configure the AI Model Provider
 
-## Using GitHub Models
+## Using [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)
 
-> [!WARNING]
-> **GitHub Models is [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (brownouts July 16 & 23). Use it only as a temporary legacy fallback — prefer **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)** (see the [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) section below).
-
-To use models hosted by GitHub Models, you will need to create a GitHub personal access token. The token should not have any scopes or permissions. See [Managing your personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
-
-From the command line, configure your token for this project using .NET User Secrets by running the following commands:
+From the command line, configure your Azure OpenAI connection string for this project using .NET user secrets:
 
 ```sh
 cd GenAiLab.AppHost
-dotnet user-secrets set ConnectionStrings:openai "Endpoint=https://models.inference.ai.azure.com;Key=YOUR-API-KEY"
+dotnet user-secrets set ConnectionStrings:openai "Endpoint=https://YOUR-RESOURCE-NAME.openai.azure.com/;Key=YOUR-API-KEY"
 ```
-
-Learn more about [prototyping with AI models using GitHub Models](https://docs.github.com/github-models/prototyping-with-ai-models).
 
 ## Setting up a local environment for Qdrant
 

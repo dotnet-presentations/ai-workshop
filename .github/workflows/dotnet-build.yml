@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/dotnet-build.yml"
       - "Part 2 - Build Chat App/**"
       - "Part 6 - Deployment/**"
       - "Part 7 - MCP Server Basics/**"
@@ -17,7 +18,6 @@ on:
       - "Part 2 - Build Chat App/**/*.cs"
       - "Part 2 - Build Chat App/**/*.razor"
       - "Part 2 - Build Chat App/**/*.csproj"
-      - "Part 2 - Build Chat App/**/*.sln"
       - "Part 2 - Build Chat App/**/*.props"
       - "Part 2 - Build Chat App/**/*.targets"
       - "Part 6 - Deployment/**/*.cs"
@@ -28,12 +28,10 @@ on:
       - "Part 6 - Deployment/**/*.targets"
       - "Part 7 - MCP Server Basics/**/*.cs"
       - "Part 7 - MCP Server Basics/**/*.csproj"
-      - "Part 7 - MCP Server Basics/**/*.sln"
       - "Part 7 - MCP Server Basics/**/*.props"
       - "Part 7 - MCP Server Basics/**/*.targets"
       - "Part 8 - Enhanced MCP Server/**/*.cs"
       - "Part 8 - Enhanced MCP Server/**/*.csproj"
-      - "Part 8 - Enhanced MCP Server/**/*.sln"
       - "Part 8 - Enhanced MCP Server/**/*.props"
       - "Part 8 - Enhanced MCP Server/**/*.targets"
   workflow_dispatch:
@@ -58,10 +56,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
 

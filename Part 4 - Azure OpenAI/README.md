@@ -244,13 +244,13 @@ dotnet build
 
 ## 🎯 Next Steps
 
-Fantastic! Your application is now powered by Azure OpenAI. Let's add some exciting new features!
+Fantastic! Your application is now powered by Azure OpenAI. Next, let's make your provider strategy explicit.
 
-**Continue to** → [Part 5: Write a New Products Page](../Part%205%20-%20Products%20Page/README.md)
+**Continue to** → [Part 5: Providers and Fallbacks](../Part%205%20-%20Providers%20and%20Fallbacks/README.md)
 
 In Part 5, you'll learn how to:
 
-- 🛍️ Build an AI-powered product catalog
-- 🤖 Use AI to generate product descriptions automatically
-- 🔍 Implement smart categorization and filtering
-- 📊 Work with vector databases as primary storage
+- 🔁 Configure provider swaps with minimal code changes
+- ☁️ Keep Azure AI Foundry as your primary production provider
+- 💻 Compare local/offline options like Foundry Local and Ollama
+- ⚠️ Plan for GitHub Models retirement with safe fallbacks

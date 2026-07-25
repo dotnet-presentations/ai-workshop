@@ -19,7 +19,7 @@ of this for you.
 ## Prerequisites
 
 - .NET 10 SDK
-- An Azure AI Foundry resource with a **`gpt-4.1-mini`** chat model deployed
+- An Azure AI Foundry resource with a **`gpt-5-mini`** chat model deployed
   (see [Part 1 - Setup](../Part%201%20-%20Setup/README.md))
 
 > [!CAUTION]
@@ -61,7 +61,7 @@ the Azure AI Foundry portal (**[https://ai.azure.com](https://ai.azure.com/)**).
 dotnet user-secrets init
 dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
 dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
-dotnet user-secrets set "AzureOpenAI:ChatModel" "gpt-4.1-mini"
+dotnet user-secrets set "AzureOpenAI:ChatModel" "gpt-5-mini"
 ```
 
 ## Step 4: Write the code

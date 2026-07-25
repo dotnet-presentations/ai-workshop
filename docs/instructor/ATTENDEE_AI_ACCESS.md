@@ -7,7 +7,7 @@
 ## The problem
 
 The workshop's main path assumes each attendee can provision an Azure AI Foundry
-resource and deploy `gpt-4.1-mini` + `text-embedding-3-small`. In practice, a
+resource and deploy `gpt-5-mini` + `text-embedding-3-small`. In practice, a
 handful of attendees won't be able to — no subscription, corporate policy blocks,
 quota/region issues, or they simply run out of time during setup.
 
@@ -42,7 +42,7 @@ Why it fits this workshop with no content changes:
 
 1. Deploy the proxy ahead of time (`azd up`) and create an event scoped to the
    workshop date.
-2. Assign the same models the workshop uses: `gpt-4.1-mini` and
+2. Assign the same models the workshop uses: `gpt-5-mini` and
    `text-embedding-3-small`.
 3. **Size the caps for RAG.** The manual-RAG part ingests the workshop manuals,
    which fires many embedding calls. Do one test ingestion through the proxy and

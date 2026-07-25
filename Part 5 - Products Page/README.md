@@ -2,6 +2,10 @@
 
 > **⏱️ Estimated Time:** 60-90 minutes
 
+> [!NOTE]
+> This module is now an optional enrichment and is no longer part of the primary workshop path.
+> The primary flow continues from provider strategy to deployment.
+
 ## In this workshop
 
 In this workshop, you'll enhance your application by creating a Products page that leverages AI to automatically generate product descriptions and categorize items based on their content. This workshop demonstrates several key concepts in modern AI application development:
@@ -631,7 +635,7 @@ builder.AddServiceDefaults();
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 var openai = builder.AddAzureOpenAIClient("openai");
-openai.AddChatClient("gpt-4.1-mini")
+openai.AddChatClient("gpt-5-mini")
     .UseFunctionInvocation()
     .UseOpenTelemetry(configure: c =>
         c.EnableSensitiveData = builder.Environment.IsDevelopment());

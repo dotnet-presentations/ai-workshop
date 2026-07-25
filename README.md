@@ -1,27 +1,27 @@
 # .NET AI Workshop
 
-Get up to speed quickly with AI app building in .NET! Explore the new .NET AI project templates integrated with Microsoft Extensions for AI (MEAI), Azure AI Foundry, and vector data stores. Learn how to build with Azure AI Foundry (Azure OpenAI) models for both development and production, with GitHub Models and local models (Foundry Local / Ollama) available as fallbacks. Gain hands-on experience building cutting-edge intelligent solutions with state-of-the-art frameworks and best practices.
+Get up to speed quickly with AI app building in .NET! Explore the new .NET AI project templates integrated with Microsoft Extensions for AI (MEAI), [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry), and vector data stores. Learn how to build with [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) models for both development and production, with GitHub Models and local models (Foundry Local / Ollama) available as fallbacks. Gain hands-on experience building cutting-edge intelligent solutions with state-of-the-art frameworks and best practices.
 
 > [!IMPORTANT]
-> **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (with brownouts on July 16 and 23). This workshop uses **Azure AI Foundry (Azure OpenAI)** as the primary provider; GitHub Models appears only as a legacy fallback. See [Part 5 - Providers and Fallbacks](Part%205%20-%20Providers%20and%20Fallbacks/README.md).
+> **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (with brownouts on July 16 and 23). This workshop uses **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)** as the primary provider; GitHub Models appears only as a legacy fallback. See [Part 5 - Providers and Fallbacks](Part%205%20-%20Providers%20and%20Fallbacks/README.md).
 
 ## Prerequisites
 
 ### AI Web Chat Application Requirements (Parts 1-6)
 
-- Visual Studio 2022 or Visual Studio 2026
+- Visual Studio 2026 or VS Code
 - .NET AI Web Chatbot template installed (instructions in Part 1 - Setup)
-- .NET 9.0 SDK or later
+- .NET 10.0 SDK or later
 - Docker Desktop or Podman (required for .NET Aspire orchestration)
-- Azure subscription with access to Azure AI Foundry (Azure OpenAI) — the primary AI provider
+- Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) — the primary AI provider
 - GitHub account (optional; GitHub Models is a legacy fallback [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/))
 
 ### Model Context Protocol (Parts 7-9)
 
-- .NET 10.0 SDK (preview 6 or higher) - Required for MCP development
-- Visual Studio Code with GitHub Copilot extensions
+- .NET 10.0 SDK - Required for MCP development
+- Visual Studio Code
 - GitHub Copilot subscription (required for MCP testing)
-- Microsoft.Extensions.AI.Templates package
+- `Microsoft.Extensions.AI.Templates` package
 
 ### Optional but Recommended
 
@@ -35,7 +35,7 @@ The lab consists of a series of hands-on exercises where you'll build an AI-powe
 - 🤖 **AI Chatbot**: A conversational interface that can answer questions about products
 - 📋 **Product Catalog**: AI-generated product descriptions and categories
 - 🔍 **Semantic Search**: Vector-based search using document embeddings
-- 🔌 **Integration with Azure AI Foundry**: Use Azure OpenAI models for development and production, with GitHub Models and local models (Foundry Local / Ollama) as fallbacks
+- 🔌 **Integration with [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)**: Use Azure OpenAI models for development and production, with GitHub Models and local models (Foundry Local / Ollama) as fallbacks
 
 ## What We're Building
 
@@ -48,7 +48,7 @@ flowchart TD
     User([User]) <--> WebApp[Web Application<br>Blazor UI]
     WebApp <--> VectorDB[(Vector Database<br>Qdrant)]
     WebApp <--> AIChatService[AI Chat Service<br>Microsoft.Extensions.AI]
-    AIChatService <--> AIProvider[AI Provider<br>Azure AI Foundry / GitHub Models legacy]
+    AIChatService <--> AIProvider[AI Provider<br>[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) / GitHub Models legacy]
     
     subgraph Data Flow
         PDFs[Product PDFs] --> Ingestion[Data Ingestion]
@@ -69,7 +69,7 @@ flowchart TD
     class PDFs,Ingestion,Embeddings dataflow
 ```
 
-**Architecture Overview** This diagram illustrates the component relationships in our outdoor gear application. The Blazor web application connects with three key components: a vector database for storing embeddings, an AI chat service powered by Microsoft.Extensions.AI, and a product database. The AI functionality is provided by Azure AI Foundry (Azure OpenAI models), with GitHub Models available as a legacy fallback (retiring July 30, 2026). The data flow shows how product PDFs are ingested, transformed into embeddings, and stored in the vector database to enable contextual AI responses.
+**Architecture Overview** This diagram illustrates the component relationships in our outdoor gear application. The Blazor web application connects with three key components: a vector database for storing embeddings, an AI chat service powered by Microsoft.Extensions.AI, and a product database. The AI functionality is provided by [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI models), with GitHub Models available as a legacy fallback (retiring July 30, 2026). The data flow shows how product PDFs are ingested, transformed into embeddings, and stored in the vector database to enable contextual AI responses.
 
 ### Component Interaction 🔄
 
@@ -98,7 +98,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    Dev[Development<br>Azure AI Foundry] --> Prod[Production<br>Azure AI Foundry]
+    Dev[Development<br>[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)] --> Prod[Production<br>[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)]
     Local[Local Vector DB<br>Qdrant] --> Cloud[Cloud Vector DB<br>Qdrant]
     
     subgraph Development Environment
@@ -127,11 +127,10 @@ Throughout this lab, you'll implement each part of this architecture, from setti
 
 ## Key Technologies 🛠️
 
-- 🔷 **.NET 9**: The latest version of .NET
+- 🔷 **.NET 10**: The latest version of .NET
 - 🧠 **Microsoft Extensions for AI (MEAI)**: Libraries for integrating AI capabilities into .NET applications
 - 🔥 **Blazor**: For building interactive web UIs
 - 🌐 **.NET Aspire**: For orchestrating cloud-native distributed applications
-- 🐱 **GitHub Models** (legacy — [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)): Free during development; use Azure AI Foundry instead
 - ☁️ **Azure OpenAI**: Enterprise-grade AI models for production
 - 🔮 **Qdrant Vector Database**: For storing and searching vector embeddings
 
@@ -145,7 +144,9 @@ The lab is divided into nine modules.
 
 The primary sequence below reflects the current converged workshop flow and keeps advanced modules explicitly optional for pacing.
 
-### AI Web Chat Application (Parts 1-6)
+### AI Application Build Path (Parts 1-6)
+
+This sequence starts with a minimal console chat app, then layers in RAG, template architecture, provider strategy, and deployment.
 
 1. 🏗️ [**Setup**](Part%201%20-%20Setup/README.md): Configure prerequisites and development environment for the AI workshop.
 
@@ -155,7 +156,7 @@ The primary sequence below reflects the current converged workshop flow and keep
 
 4. 🔍 [**AI Web Chat Template**](Part%204%20-%20AI%20Web%20Chat%20Template/README.md): Compare your manual implementation with the generated template architecture.
 
-5. 🔁 [**Providers and Fallbacks**](Part%205%20-%20Providers%20and%20Fallbacks/README.md): Configure provider options and fallback paths (Azure AI Foundry primary).
+5. 🔁 [**Providers and Fallbacks**](Part%205%20-%20Providers%20and%20Fallbacks/README.md): Configure provider options and fallback paths ([Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) primary).
 
 6. 🚀 [**Deployment**](Part%206%20-%20Deployment/README.md): Deploy your application to Azure using the Azure Developer CLI.
 

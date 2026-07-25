@@ -5,7 +5,6 @@
 
 .DESCRIPTION
     This script checks for and configures the required environment variables for the AI Workshop:
-    - WORKSHOP_GITHUB_TOKEN: GitHub personal access token for GitHub Models
     - WORKSHOP_AZURE_OPENAI_ENDPOINT: Azure OpenAI service endpoint URL
     - WORKSHOP_AZURE_OPENAI_KEY: Azure OpenAI service API key
     - WORKSHOP_AZURE_SUBSCRIPTION_ID: Azure subscription ID for deployment
@@ -25,27 +24,6 @@
 
 function Set-WorkshopCredentials {
     Write-Host "=== AI Workshop Credential Setup ===" -ForegroundColor Cyan
-    Write-Host ""
-    
-    # Check for GitHub Token
-    if (-not $env:WORKSHOP_GITHUB_TOKEN) {
-        Write-Host "GitHub token not found in environment variable WORKSHOP_GITHUB_TOKEN" -ForegroundColor Yellow
-        Write-Host "Create a classic token (no scopes needed) or fine-grained token with 'models:read' scope"
-        Write-Host "See: https://github.blog/changelog/2025-05-15-modelsread-now-required-for-github-models-access/"
-        Write-Host ""
-        
-        $githubToken = Read-Host -Prompt "Enter your GitHub personal access token" -AsSecureString
-        if ($githubToken.Length -gt 0) {
-            $env:WORKSHOP_GITHUB_TOKEN = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($githubToken))
-            [Environment]::SetEnvironmentVariable("WORKSHOP_GITHUB_TOKEN", $env:WORKSHOP_GITHUB_TOKEN, "User")
-            Write-Host "✓ GitHub token saved to environment variable WORKSHOP_GITHUB_TOKEN" -ForegroundColor Green
-        } else {
-            Write-Host "⚠ GitHub token was empty, skipping..." -ForegroundColor Yellow
-        }
-    } else {
-        Write-Host "✓ GitHub token found in environment variable WORKSHOP_GITHUB_TOKEN" -ForegroundColor Green
-    }
-    
     Write-Host ""
     
     # Check for Azure OpenAI Endpoint
@@ -185,7 +163,6 @@ function Set-WorkshopCredentials {
     # Show current status
     Write-Host ""
     Write-Host "Current credential status:" -ForegroundColor White
-    Write-Host "  GitHub Token: $($env:WORKSHOP_GITHUB_TOKEN -ne $null -and $env:WORKSHOP_GITHUB_TOKEN.Length -gt 0 ? 'Set' : 'Not Set')"
     Write-Host "  Azure Endpoint: $($env:WORKSHOP_AZURE_OPENAI_ENDPOINT -ne $null -and $env:WORKSHOP_AZURE_OPENAI_ENDPOINT.Length -gt 0 ? 'Set' : 'Not Set')"
     Write-Host "  Azure Key: $($env:WORKSHOP_AZURE_OPENAI_KEY -ne $null -and $env:WORKSHOP_AZURE_OPENAI_KEY.Length -gt 0 ? 'Set' : 'Not Set')"
     Write-Host "  Azure Subscription: $($env:WORKSHOP_AZURE_SUBSCRIPTION_ID -ne $null -and $env:WORKSHOP_AZURE_SUBSCRIPTION_ID.Length -gt 0 ? 'Set' : 'Not Set')"
@@ -193,7 +170,7 @@ function Set-WorkshopCredentials {
     Write-Host "  Azure AI Search Endpoint: $($env:WORKSHOP_AZURE_SEARCH_ENDPOINT -ne $null -and $env:WORKSHOP_AZURE_SEARCH_ENDPOINT.Length -gt 0 ? 'Set' : 'Not Set')" -ForegroundColor Gray
     Write-Host "  Azure AI Search Key: $($env:WORKSHOP_AZURE_SEARCH_KEY -ne $null -and $env:WORKSHOP_AZURE_SEARCH_KEY.Length -gt 0 ? 'Set' : 'Not Set')" -ForegroundColor Gray
     
-    if ($env:WORKSHOP_GITHUB_TOKEN -or $env:WORKSHOP_AZURE_OPENAI_ENDPOINT -or $env:WORKSHOP_AZURE_OPENAI_KEY) {
+    if ($env:WORKSHOP_AZURE_OPENAI_ENDPOINT -or $env:WORKSHOP_AZURE_OPENAI_KEY) {
         Write-Host ""
         Write-Host "Note: If you set new environment variables, restart your terminal/IDE to ensure they are loaded." -ForegroundColor Yellow
         Write-Host "You can now proceed with the AI Workshop!" -ForegroundColor Green

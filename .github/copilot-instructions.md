@@ -2,7 +2,7 @@
 
 Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
-This repository contains a comprehensive .NET AI workshop with 9 parts covering AI web chat applications and Model Context Protocol (MCP) servers. The workshop teaches building AI-powered applications using .NET 10, Blazor, Microsoft Extensions for AI, GitHub Models, Azure OpenAI, and vector databases.
+This repository contains a comprehensive .NET AI workshop with 9 parts covering AI web chat applications and Model Context Protocol (MCP) servers. The workshop teaches building AI-powered applications using .NET 10, Blazor, Microsoft Extensions for AI, Microsoft Foundry (Azure OpenAI), and vector databases.
 
 ## Working Effectively
 
@@ -81,7 +81,7 @@ This repository contains a comprehensive .NET AI workshop with 9 parts covering 
 ### Manual Validation Scenarios
 - **ALWAYS run through complete scenarios** after making changes:
   1. **MCP Server Validation**: Run MCP server and verify it starts with proper logging output and responds to Ctrl+C shutdown
-  2. **AI Web Chat Validation**: Requires GitHub token or Azure OpenAI credentials for full testing
+  2. **AI Web Chat Validation**: Requires Azure OpenAI credentials for full testing
   3. **Template Validation**: Test creating new projects with templates:
      ```bash
      dotnet new aichatweb --name TestApp --output /tmp/test-app
@@ -97,7 +97,7 @@ This repository contains a comprehensive .NET AI workshop with 9 parts covering 
 ```bash
 dotnet new aichatweb --help  # See all options
 # Key options:
-# --provider: githubmodels (default), azureopenai, ollama, openai
+# --provider: azureopenai, ollama, openai
 # --vector-store: local (default), azureaisearch, qdrant
 # --aspire: false (default), true for distributed applications
 ```
@@ -143,8 +143,8 @@ dotnet new mcpserver --help
 ```
 
 ### Credential Management
-- Use `.github/scripts/setup-workshop-credentials.ps1` for setting up GitHub and Azure credentials
-- Environment variables: `WORKSHOP_GITHUB_TOKEN`, `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`
+- Use `.github/scripts/setup-workshop-credentials.ps1` for setting up Azure credentials
+- Environment variables: `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`
 
 ### Timing Expectations
 - **NEVER CANCEL**: All builds complete in under 30 seconds. Set timeout to 300+ seconds minimum.
@@ -157,7 +157,7 @@ dotnet new mcpserver --help
 - **.NET 10**: AI Web Chat applications with Blazor and .NET Aspire
 - **.NET 10**: MCP server applications  
 - **Microsoft Extensions for AI**: Core AI integration libraries
-- **GitHub Models**: Legacy dev-only provider, retiring July 30, 2026 — use [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) instead
+- **Microsoft Foundry (Azure OpenAI)**: Cloud AI provider used for workshop exercises
 - **Azure OpenAI**: Enterprise-grade AI models for production
 - **Qdrant**: Vector database for embeddings and semantic search
 - **Docker**: Container orchestration for vector databases

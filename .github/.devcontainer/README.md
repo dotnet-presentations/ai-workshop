@@ -18,7 +18,6 @@ This workshop provides two development container configurations to suit differen
 
 **Use this if you:**
 
-- Have a GitHub account for GitHub Models (legacy fallback, [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/) — prefer [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry))
 - Plan to use Azure OpenAI
 - Want to follow the workshop as designed
 
@@ -33,8 +32,6 @@ This workshop provides two development container configurations to suit differen
 
 **Use this if you:**
 
-- Don't have a GitHub account
-- Hit GitHub Models token limits
 - Want to work completely offline
 - Prefer using local models for privacy/security
 - Want to experiment with different models

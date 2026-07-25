@@ -1,9 +1,6 @@
 # .NET AI Workshop
 
-Get up to speed quickly with AI app building in .NET! Explore the new .NET AI project templates integrated with Microsoft Extensions for AI (MEAI), [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry), and vector data stores. Learn how to build with [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) models for both development and production, with GitHub Models and local models (Foundry Local / Ollama) available as fallbacks. Gain hands-on experience building cutting-edge intelligent solutions with state-of-the-art frameworks and best practices.
-
-> [!IMPORTANT]
-> **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (with brownouts on July 16 and 23). This workshop uses **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)** as the primary provider; GitHub Models appears only as a legacy fallback. See [Part 5 - Providers and Fallbacks](Part%205%20-%20Providers%20and%20Fallbacks/README.md).
+Get up to speed quickly with AI app building in .NET. This workshop covers two tracks: AI application development (Parts 1-6) and MCP server development (Parts 7-9). The AI track uses [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) as the cloud provider, with local-model options covered in the provider module.
 
 ## Prerequisites
 
@@ -14,7 +11,6 @@ Get up to speed quickly with AI app building in .NET! Explore the new .NET AI pr
 - .NET 10.0 SDK or later
 - Docker Desktop or Podman (required for .NET Aspire orchestration)
 - Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) — the primary AI provider
-- GitHub account (optional; GitHub Models is a legacy fallback [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/))
 
 ### Model Context Protocol (Parts 7-9)
 
@@ -30,109 +26,12 @@ Get up to speed quickly with AI app building in .NET! Explore the new .NET AI pr
 
 ## Lab Overview 🧪
 
-The lab consists of a series of hands-on exercises where you'll build an AI-powered web application using the new .NET AI project templates. The application includes:
+The workshop is split into two tracks:
 
-- 🤖 **AI Chatbot**: A conversational interface that can answer questions about products
-- 📋 **Product Catalog**: AI-generated product descriptions and categories
-- 🔍 **Semantic Search**: Vector-based search using document embeddings
-- 🔌 **Integration with [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)**: Use Azure OpenAI models for development and production, with GitHub Models and local models (Foundry Local / Ollama) as fallbacks
+- **AI Application Build Path (Parts 1-6):** Build a minimal chat app, add retrieval, inspect the generated template architecture, configure provider strategy, and deploy.
+- **Model Context Protocol (MCP) Path (Parts 7-9):** Build MCP servers and package/publish them.
 
-## What We're Building
-
-This lab guides you through building a complete AI-powered web application for an outdoor gear company. The application enables users to chat with an AI assistant that has knowledge of the company's product catalog through document ingestion.
-
-### Application Architecture 🏢
-
-```mermaid
-flowchart TD
-    User([User]) <--> WebApp[Web Application<br>Blazor UI]
-    WebApp <--> VectorDB[(Vector Database<br>Qdrant)]
-    WebApp <--> AIChatService[AI Chat Service<br>Microsoft.Extensions.AI]
-    AIChatService <--> AIProvider[AI Provider<br>[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) / GitHub Models legacy]
-    
-    subgraph Data Flow
-        PDFs[Product PDFs] --> Ingestion[Data Ingestion]
-        Ingestion --> Embeddings[Text Embeddings]
-        Ingestion --> ProductData[Product Metadata]
-        Embeddings --> VectorDB
-        ProductData --> VectorDB
-    end
-    
-    classDef webapp fill:#2774AE,stroke:#000,color:#fff
-    classDef aiservice fill:#F58025,stroke:#000,color:#fff
-    classDef database fill:#8A2BE2,stroke:#000,color:#fff
-    classDef dataflow fill:#4CAF50,stroke:#000,color:#fff
-    
-    class WebApp webapp
-    class AIChatService,AIProvider aiservice
-    class VectorDB,ProductDB database
-    class PDFs,Ingestion,Embeddings dataflow
-```
-
-**Architecture Overview** This diagram illustrates the component relationships in our outdoor gear application. The Blazor web application connects with three key components: a vector database for storing embeddings, an AI chat service powered by Microsoft.Extensions.AI, and a product database. The AI functionality is provided by [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI models), with GitHub Models available as a legacy fallback (retiring July 30, 2026). The data flow shows how product PDFs are ingested, transformed into embeddings, and stored in the vector database to enable contextual AI responses.
-
-### Component Interaction 🔄
-
-```mermaid
-sequenceDiagram
-    actor User
-    participant UI as Blazor UI
-    participant Service as Product Service
-    participant AI as AI Model
-    participant DB as Vector Database
-    
-    User->>UI: Ask question about product
-    UI->>Service: Query product information
-    Service->>AI: Generate embeddings
-    AI-->>Service: Return embeddings
-    Service->>DB: Search similar vectors
-    DB-->>Service: Return relevant documents
-    Service->>AI: Generate response with context
-    AI-->>Service: Return AI response
-    Service-->>UI: Display response to user
-```
-
-**Sequence Overview** This diagram demonstrates the interaction flow when a user queries the system. When a customer asks about a product, their question is processed by the UI and passed to the Product Service. The AI model generates text embeddings for the query, which are then used to search the Vector Database for relevant documents. Once matching information is found, both the original question and retrieved context are sent to the AI model to generate a contextually informed response. This response is then returned through the service layer to the UI for display to the user.
-
-### Development to Production Flow 🚀
-
-```mermaid
-flowchart LR
-    Dev[Development<br>[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)] --> Prod[Production<br>[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)]
-    Local[Local Vector DB<br>Qdrant] --> Cloud[Cloud Vector DB<br>Qdrant]
-    
-    subgraph Development Environment
-        Dev
-        Local
-    end
-    
-    subgraph Production Environment
-        Prod
-        Cloud
-        ACA[Azure Container Apps]
-    end
-    
-    classDef devnode fill:#2774AE,stroke:#000,color:#fff
-    classDef prodnode fill:#F58025,stroke:#000,color:#fff
-    classDef dbnode fill:#8A2BE2,stroke:#000,color:#fff
-    
-    class Dev,ACA devnode
-    class Prod prodnode
-    class Local,Cloud dbnode
-```
-
-**Development to Production Pathway** This diagram illustrates the transition path from a local development environment to production deployment. During development, you'll use GitHub Models and a local vector database, which provides a cost-effective environment for experimentation and testing. In production, the application transitions to Azure OpenAI for enterprise-grade AI capabilities, Qdrant for scalable vector storage, and Azure Container Apps for a scalable, managed cloud hosting environment. This migration path enables seamless transition while maintaining architectural consistency.
-
-Throughout this lab, you'll implement each part of this architecture, from setting up the AI chat interface to building the product catalog and finally deploying to Azure.
-
-## Key Technologies 🛠️
-
-- 🔷 **.NET 10**: The latest version of .NET
-- 🧠 **Microsoft Extensions for AI (MEAI)**: Libraries for integrating AI capabilities into .NET applications
-- 🔥 **Blazor**: For building interactive web UIs
-- 🌐 **.NET Aspire**: For orchestrating cloud-native distributed applications
-- ☁️ **Azure OpenAI**: Enterprise-grade AI models for production
-- 🔮 **Qdrant Vector Database**: For storing and searching vector embeddings
+Detailed architecture and sequence diagrams are documented in the individual module READMEs where each concept is implemented.
 
 ## Getting Started
 
@@ -173,7 +72,7 @@ This sequence starts with a minimal console chat app, then layers in RAG, templa
 The repository is structured as follows:
 
 - 📖 `Part 1 - Setup` through `Part 9 - MCP Publishing`: Contains all the lab instructions, documentation, and working code snapshots
-- � `manuals/`: Product documentation PDFs for the AI chatbot to reference
+- 📄 `manuals/`: Product documentation PDFs for the AI chatbot exercises
 - 🧪 `docs/testing/`: Testing procedures and validation reports
 
 ## Session Resources 📚
@@ -204,11 +103,10 @@ cd ai-workshop
 
 This script will prompt you for:
 
-- **GitHub Token**: For GitHub Models access (fine-grained token with **Models: Read-only** permission)
 - **Azure OpenAI Endpoint**: Your Azure OpenAI service endpoint URL
 - **Azure OpenAI Key**: Your Azure OpenAI service API key
 
-The credentials are saved as environment variables (`WORKSHOP_GITHUB_TOKEN`, `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`) and will be available for subsequent testing sessions.
+The credentials are saved as environment variables (`WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`) and will be available for subsequent testing sessions.
 
 ### Testing Procedure
 

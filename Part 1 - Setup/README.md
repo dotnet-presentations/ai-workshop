@@ -6,9 +6,6 @@
 
 In this workshop, you will set up your development environment for building AI applications with .NET. You'll install the required tools and configure your environment to work with the workshop materials.
 
-> [!IMPORTANT]
-> **GitHub Models is [retiring on July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (brownouts July 16 & 23). Set up **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)** as your primary provider; the GitHub account below is only for the legacy fallback.
-
 ## Prerequisites
 
 Before starting, ensure you have:
@@ -18,7 +15,7 @@ Before starting, ensure you have:
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/)
 - **An Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)** — the primary AI provider for this workshop
 - GitHub Copilot subscription (recommended; used later for the MCP and GitHub Copilot SDK units)
-- (Optional) A GitHub account — GitHub Models is available only as a legacy fallback that is [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)
+- (Optional) A GitHub account (recommended for contributor workflows such as cloning, branching, and pull requests)
 
 > [!TIP]
 > **No Azure access? Local fallback:** you can run local models with **Foundry Local** or **Ollama** for the chat exercises. See the [Development Container Options](./../.github/.devcontainer/README.md). Note that the full retrieval-augmented generation (RAG) exercise also needs an embedding model.
@@ -95,9 +92,9 @@ cd ai-workshop
 > [!NOTE]
 > The AI Web Chat template (`dotnet new aichatweb`) is installed and validated later, in the module where it is first used.
 
-## Step 2: Create a GitHub Account (if needed)
+## Step 2: (Optional) Create a GitHub Account
 
-If you don't already have a GitHub account, follow these steps to create one:
+If you plan to contribute updates back to this repository, create a GitHub account:
 
 1. **Create a GitHub account:**
    - Go to [https://github.com/signup](https://github.com/signup)

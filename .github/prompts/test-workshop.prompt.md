@@ -93,7 +93,6 @@ Parts 1, 3, and 9 contain only README files as they focus on setup, exploration,
 
 Before starting the workshop, the following environment variables should be checked and configured if needed:
 
-- `WORKSHOP_GITHUB_TOKEN` - GitHub personal access token for GitHub Models access
 - `WORKSHOP_AZURE_OPENAI_ENDPOINT` - Azure OpenAI service endpoint URL
 - `WORKSHOP_AZURE_OPENAI_KEY` - Azure OpenAI service API key
 - `WORKSHOP_AZURE_SUBSCRIPTION_ID` - Azure subscription ID for deployment
@@ -112,19 +111,17 @@ The script will check for the required environment variables and prompt for any 
 
 ## Important Notes for Testing
 
-1. **GitHub Token**: Use the `WORKSHOP_GITHUB_TOKEN` environment variable. Classic token (no specific scopes needed) or fine-grained token with `models:read` scope.
+1. **Azure OpenAI Credentials**: Use the `WORKSHOP_AZURE_OPENAI_ENDPOINT` and `WORKSHOP_AZURE_OPENAI_KEY` environment variables.
 
-2. **Azure OpenAI Credentials**: Use the `WORKSHOP_AZURE_OPENAI_ENDPOINT` and `WORKSHOP_AZURE_OPENAI_KEY` environment variables.
+2. **Template Parameter Critical Requirement**: Always use `--vector-store qdrant` when generating AI Web Chat templates. Missing this parameter causes templates to use SQLite instead of Qdrant, leading to documentation misalignment.
 
-3. **Template Parameter Critical Requirement**: Always use `--vector-store qdrant` when generating AI Web Chat templates. Missing this parameter causes templates to use SQLite instead of Qdrant, leading to documentation misalignment.
+3. **JavaScript File Dependencies**: The AI Web Chat template includes essential JavaScript files (ChatInput.razor.js, ChatMessageList.razor.js) that provide auto-resize textarea and auto-scroll functionality. These files must be preserved in all code snapshots.
 
-4. **JavaScript File Dependencies**: The AI Web Chat template includes essential JavaScript files (ChatInput.razor.js, ChatMessageList.razor.js) that provide auto-resize textarea and auto-scroll functionality. These files must be preserved in all code snapshots.
+4. **Complete Implementation Requirements**: Parts 5-6 require full code implementation, not just documentation. Part 5 must include complete Products page functionality, and Part 6 must contain the complete application from Part 5 plus deployment configuration.
 
-5. **Complete Implementation Requirements**: Parts 5-6 require full code implementation, not just documentation. Part 5 must include complete Products page functionality, and Part 6 must contain the complete application from Part 5 plus deployment configuration.
+5. **MCP Prerequisites**: Parts 7-9 require .NET 10 SDK and Visual Studio Code with GitHub Copilot extension. Part 7 uses `MyMcpServer` project that includes both template-generated RandomNumberTools and custom WeatherTools.
 
-6. **MCP Prerequisites**: Parts 7-9 require .NET 10 SDK and Visual Studio Code with GitHub Copilot extension. Part 7 uses `MyMcpServer` project that includes both template-generated RandomNumberTools and custom WeatherTools.
-
-7. **MCP VS Code Integration Testing**: For Parts 7-8, VS Code integration testing involves:
+6. **MCP VS Code Integration Testing**: For Parts 7-8, VS Code integration testing involves:
    - Verifying the MCP server starts correctly when run via `dotnet run`
    - Checking that the server responds to stdio communication protocol
    - Confirming proper shutdown with Ctrl+C
@@ -151,7 +148,7 @@ The workshop uses a per-unit directory structure where each part is self-contain
 
 - **Part 1** contains no code changes and does not require a working directory.
 
-- **For Part 2**, follow the README instructions to create a new project using `dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant` in a test working directory (e.g., `test-workspace/GenAiLab/`). **CRITICAL**: You must use the `dotnet new` command to create the project - never copy snapshots or create `.csproj` files manually.
+- **For Part 2**, follow the README instructions to create a new project using `dotnet new aichatweb -n GenAiLab --provider azureopenai --aspire --vector-store qdrant` in a test working directory (e.g., `test-workspace/GenAiLab/`). **CRITICAL**: You must use the `dotnet new` command to create the project - never copy snapshots or create `.csproj` files manually.
   - **At the end of Part 2**, compare your working directory with the code snapshot in `Part 4 - AI Web Chat Template/GenAiLab/`
   - **After reconciling differences**, replace the contents of `Part 4 - AI Web Chat Template/GenAiLab/` with your working directory code as the updated snapshot
 
@@ -196,7 +193,7 @@ The workshop uses a per-unit directory structure where each part is self-contain
 1. **Part 1 - Setup**: Follow the README.md in `Part 1 - Setup/` for prerequisites and environment setup.
 
 2. **Part 2 - Build Chat App**: 
-   - Follow the README.md instructions to create a new project using `dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant` in `test-workspace/GenAiLab/`
+  - Follow the README.md instructions to create a new project using `dotnet new aichatweb -n GenAiLab --provider azureopenai --aspire --vector-store qdrant` in `test-workspace/GenAiLab/`
    - **Immediately**: Copy the generated project to `src/start/` as the initial snapshot
    - Verify it builds and runs with basic chat functionality
   - **End of Part 2**: Compare with `Part 4 - AI Web Chat Template/GenAiLab/`, document differences, then replace that snapshot with your working code
@@ -228,7 +225,7 @@ The workshop uses a per-unit directory structure where each part is self-contain
 
 **Part 1**: Environment setup and prerequisites verification.
 
-**Part 2**: Create a new project using `dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant` as instructed in the README. Test that the generated project builds and runs with basic chat functionality. At end of part, compare with `Part 4 - AI Web Chat Template/GenAiLab/`, document differences, then replace that snapshot. **CRITICAL**: You must create the project using `dotnet new` - never copy existing snapshots or create `.csproj` files manually.
+**Part 2**: Create a new project using `dotnet new aichatweb -n GenAiLab --provider azureopenai --aspire --vector-store qdrant` as instructed in the README. Test that the generated project builds and runs with basic chat functionality. At end of part, compare with `Part 4 - AI Web Chat Template/GenAiLab/`, document differences, then replace that snapshot. **CRITICAL**: You must create the project using `dotnet new` - never copy existing snapshots or create `.csproj` files manually.
 
 **Part 3**: Verify Add RAG documentation clarity using the project you created in Part 2.
 
@@ -383,7 +380,6 @@ This workshop specifically tests the template generation workflow. Manual projec
 .\.github\scripts\setup-workshop-credentials.ps1
 
 # Verify environment variables
-Write-Host "GitHub Token: $($env:WORKSHOP_GITHUB_TOKEN -ne $null ? 'Set' : 'Not Set')"
 Write-Host "Azure Endpoint: $($env:WORKSHOP_AZURE_OPENAI_ENDPOINT -ne $null ? 'Set' : 'Not Set')"
 ```
 
@@ -416,7 +412,7 @@ dotnet build --configuration Release
 # Part 2: Create AI Web Chat project using dotnet new
 New-Item -ItemType Directory -Path "test-workspace" -Force
 cd test-workspace
-dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant
+dotnet new aichatweb -n GenAiLab --provider azureopenai --aspire --vector-store qdrant
 
 # At end of Part 2, compare and update snapshot
 code --diff "GenAiLab" "../Part 4 - AI Web Chat Template/GenAiLab"

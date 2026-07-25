@@ -1,4 +1,4 @@
-# Part 5: Providers & fallbacks (Azure primary; local + legacy)
+# Part 5: Providers & Fallbacks (Azure primary + local)
 
 This is the payoff of the whole workshop theme: **swap the provider, keep the same
 `IChatClient` / `IEmbeddingGenerator`.** Everything you built in Parts 2–4 — the
@@ -6,18 +6,17 @@ chat loop, the RAG loop, the template app — runs unchanged when you point it a
 different model provider. The only thing that changes is *registration* (an
 endpoint, a key, a model name), never your app code.
 
-The real-world motivation: **GitHub Models retires July 30, 2026.** Because the app
-depends on the abstraction and not on a specific provider, surviving that
-retirement is a configuration change, not a rewrite.
+The real-world motivation: your app should be able to change providers without a
+rewrite. Because the app depends on the abstraction and not on a specific provider,
+provider changes become configuration updates.
 
-## The four providers
+## The three providers
 
 | Provider | Best for | Chat | Embeddings | Runs offline | Notes |
 | --- | --- | :---: | :---: | :---: | --- |
 | **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)** (Azure OpenAI) | **Primary** — the workshop default | ✅ | ✅ | ❌ | `gpt-5-mini` + `text-embedding-3-small` |
 | **Foundry Local** | Local **chat** on your device | ✅ | ⏳ | ✅ | OpenAI-compatible local server; SLMs (Phi, Qwen, …). Embedding support is being evaluated (#496) |
 | **Ollama** | Fully **offline RAG** (chat + embeddings) | ✅ | ✅ | ✅ | e.g. `llama3.2` for chat, `all-minilm` for embeddings |
-| **GitHub Models** (legacy) | Zero-setup dev/demo | ✅ | ⚠️ | ❌ | **Retires 2026-07-30** (brownouts July 16 & 23) |
 
 ## Provider 1: [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (primary)
 
@@ -36,9 +35,9 @@ IEmbeddingGenerator<string, Embedding<float>> embeddings =
 
 ## The universal pattern for everything else
 
-Foundry Local, Ollama, and GitHub Models **all** expose an **OpenAI-compatible**
-endpoint. That means all three use the *same* client — `OpenAIClient` — pointed at
-a different base URL and key:
+Foundry Local and Ollama both expose an **OpenAI-compatible** endpoint. That means
+both use the *same* client — `OpenAIClient` — pointed at a different base URL and
+key:
 
 ```csharp
 using OpenAI;
@@ -116,25 +115,6 @@ IEmbeddingGenerator<string, Embedding<float>> embeddings =
 Swap these two into your Part 3 project and the entire embed → store → search →
 augment loop runs with no cloud at all.
 
-## Provider 4: GitHub Models (legacy)
-
-GitHub Models gave free, zero-setup access during development. It uses the same
-universal pattern with a GitHub token as the key:
-
-```csharp
-var client = new OpenAIClient(
-    new ApiKeyCredential(githubToken),
-    new OpenAIClientOptions { Endpoint = new Uri("https://models.inference.ai.azure.com") });
-IChatClient chat = client.GetChatClient("gpt-4o-mini").AsIChatClient();
-```
-
-> [!WARNING]
-> **GitHub Models retires on July 30, 2026** (with brownouts on July 16 and 23).
-> Do not build new work on it. It's shown here only because you may see it in older
-> samples — and as the concrete reason this whole "swap the provider" design
-> matters. Move to **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)** (cloud) or **Foundry Local / Ollama**
-> (local).
-
 ## The takeaway
 
 | What changed between providers | Where it lives |
@@ -146,8 +126,7 @@ IChatClient chat = client.GetChatClient("gpt-4o-mini").AsIChatClient();
 
 That's the entire point of `Microsoft.Extensions.AI`: your chat loop, your RAG
 pipeline, and the template app are all written against `IChatClient` and
-`IEmbeddingGenerator`, so the provider becomes a deployment decision — including
-when a provider you relied on goes away.
+`IEmbeddingGenerator`, so the provider becomes a deployment decision.
 
 ## What's next
 

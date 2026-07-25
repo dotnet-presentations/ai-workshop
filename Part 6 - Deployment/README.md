@@ -278,7 +278,7 @@ Congratulations! You've completed the AI Web Chat application series (Parts 1-6)
 
 1. ✅ Create AI applications using the AI Web Chat template
 2. ✅ Understand and customize the template code structure
-3. ✅ Migrate from GitHub Models to Azure OpenAI
+3. ✅ Configure Microsoft Foundry (Azure OpenAI) for cloud AI workloads
 4. ✅ Configure provider and fallback strategies for real-world deployments
 5. ✅ Deploy your application to production environments using Azure
 

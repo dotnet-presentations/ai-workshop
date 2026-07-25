@@ -24,7 +24,7 @@ faith.
 
 - Completed [Part 2](../Part%202%20-%20Build%20Chat%20App/README.md) and [Part 3](../Part%203%20-%20Add%20RAG/README.md)
 - **Docker Desktop** (or Podman) running — the template uses a Qdrant container
-- Azure AI Foundry with `gpt-5-mini` + `text-embedding-3-small` (see [Part 1](../Part%201%20-%20Setup/README.md))
+- [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) with `gpt-5-mini` + `text-embedding-3-small` (see [Part 1](../Part%201%20-%20Setup/README.md))
 
 ## Step 1: Install the template and scaffold
 
@@ -32,6 +32,19 @@ faith.
 dotnet new install Microsoft.Extensions.AI.Templates
 dotnet new aichatweb --provider azureopenai --vector-store qdrant --aspire --name GenAiLab
 ```
+
+### Alternative: scaffold in Visual Studio 2026
+
+If you prefer Visual Studio instead of the CLI:
+
+1. Open Visual Studio 2026 and select Create a new project.
+1. Search for and choose AI Chat Web App.
+1. Use GenAiLab as the project name.
+1. In Additional information, set:
+    - AI service provider: Azure OpenAI
+    - Vector store: Qdrant
+    - Use Aspire orchestration: enabled
+1. Create the project and let package restore complete.
 
 This generates a solution with three projects:
 
@@ -168,7 +181,7 @@ concept by hand first:
 
 ## What's next
 
-In **Part 5** you'll make the provider story explicit: Azure AI Foundry as the
+In **Part 5** you'll make the provider story explicit: [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) as the
 primary, with Foundry Local / Ollama / GitHub Models (legacy) as swap-in
 alternatives — the payoff of everything running on `IChatClient` and
 `IEmbeddingGenerator`.

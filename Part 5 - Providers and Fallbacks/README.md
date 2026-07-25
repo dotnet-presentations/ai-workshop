@@ -14,12 +14,12 @@ retirement is a configuration change, not a rewrite.
 
 | Provider | Best for | Chat | Embeddings | Runs offline | Notes |
 | --- | --- | :---: | :---: | :---: | --- |
-| **Azure AI Foundry** (Azure OpenAI) | **Primary** — the workshop default | ✅ | ✅ | ❌ | `gpt-5-mini` + `text-embedding-3-small` |
+| **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)** (Azure OpenAI) | **Primary** — the workshop default | ✅ | ✅ | ❌ | `gpt-5-mini` + `text-embedding-3-small` |
 | **Foundry Local** | Local **chat** on your device | ✅ | ⏳ | ✅ | OpenAI-compatible local server; SLMs (Phi, Qwen, …). Embedding support is being evaluated (#496) |
 | **Ollama** | Fully **offline RAG** (chat + embeddings) | ✅ | ✅ | ✅ | e.g. `llama3.2` for chat, `all-minilm` for embeddings |
 | **GitHub Models** (legacy) | Zero-setup dev/demo | ✅ | ⚠️ | ❌ | **Retires 2026-07-30** (brownouts July 16 & 23) |
 
-## Provider 1: Azure AI Foundry (primary)
+## Provider 1: [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (primary)
 
 This is what Parts 2–4 already use — the Azure-specific client, adapted to
 `IChatClient`:
@@ -132,7 +132,7 @@ IChatClient chat = client.GetChatClient("gpt-4o-mini").AsIChatClient();
 > **GitHub Models retires on July 30, 2026** (with brownouts on July 16 and 23).
 > Do not build new work on it. It's shown here only because you may see it in older
 > samples — and as the concrete reason this whole "swap the provider" design
-> matters. Move to **Azure AI Foundry** (cloud) or **Foundry Local / Ollama**
+> matters. Move to **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)** (cloud) or **Foundry Local / Ollama**
 > (local).
 
 ## The takeaway

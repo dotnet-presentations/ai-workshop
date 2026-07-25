@@ -5,32 +5,33 @@ trained on. Ask it about *your* product, *your* policies, or anything private an
 it will guess. **Retrieval-Augmented Generation (RAG)** fixes that by retrieving
 relevant text and injecting it into the prompt.
 
-In this part you build a complete RAG loop **by hand** — no vector database, no
-framework magic. When you meet the template in Part 4, you'll recognize every
-piece because you wrote it yourself.
+In this part you build a **minimal** RAG loop by hand first, then replace the
+ingestion plumbing with [`Microsoft.Extensions.DataIngestion` (MEDI)](https://learn.microsoft.com/en-us/dotnet/ai/conceptual/data-ingestion). This gives
+you the conceptual understanding without spending most of your time on
+boilerplate.
 
 > Adapted with thanks from [Steve Sanderson's dotnet-ai-workshop](https://github.com/SteveSandersonMS/dotnet-ai-workshop) (chapters 2, 3, and 6).
 
 ## What you will build
 
 ```text
-question ─▶ embed ─▶ cosine search over stored chunks ─▶ top-k context
-                                                              │
-document ─▶ chunk ─▶ embed ─▶ store (in-memory list) ─────────┘
-                                                              ▼
-                              augment system prompt ─▶ chat model ─▶ grounded answer
+question ─▶ embed ─▶ semantic search over ingested chunks ─▶ top-k context
+                                                             │
+document ─▶ read/chunk/embed/store (manual slice, then MEDI) ─┘
+                                                             ▼
+                             augment system prompt ─▶ chat model ─▶ grounded answer
 ```
 
 1. **`IEmbeddingGenerator`** — turn text into vectors
 2. **Chunk** the document into retrievable pieces
-3. **Embed + store** the chunks in an in-memory list
+3. **Embed + store** chunks (manual in-memory first, then MEDI + vector store)
 4. **Cosine similarity search** — naive top-k retrieval, written by hand
 5. **Augment the prompt** with the retrieved context, then answer
 
 ## Prerequisites
 
 - Completed [Part 2](../Part%202%20-%20Build%20Chat%20App/README.md)
-- An Azure AI Foundry resource with **`gpt-5-mini`** *and*
+- A [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) resource with **`gpt-5-mini`** *and*
   **`text-embedding-3-small`** deployed (see [Part 1 - Setup](../Part%201%20-%20Setup/README.md))
 
 ## Step 1: Start from the Part 2 project
@@ -38,76 +39,82 @@ document ─▶ chunk ─▶ embed ─▶ store (in-memory list) ─────
 Copy your Part 2 `ChatApp` (or the [provided project](RagChatApp)) and add one
 package for embeddings — everything else is already there.
 
-The embedding model needs one extra secret:
+Create a `sample-docs` folder in the same directory as your project file and copy
+the sample markdown document into it:
 
 ```bash
-dotnet user-secrets set "AzureOpenAI:EmbeddingModel" "text-embedding-3-small"
+mkdir sample-docs
+copy "..\Part 3 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md" "sample-docs\"
 ```
 
-## Step 2: Create an embedding generator
+> [!TIP]
+> Keep model names in code/config (not secrets). In this part, use a normal
+> code default for embeddings: `text-embedding-3-small`.
 
-The **same** `AzureOpenAIClient` gives you both a chat client and an embedding
-generator — two abstractions over one resource:
+## Step 2: Minimal manual slice (instructional)
 
-```csharp
-IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator =
-    azureClient.GetEmbeddingClient(embeddingModel).AsIEmbeddingGenerator();
+Build only the smallest manual ingestion slice so students learn the mechanics:
+
+1. Chunk a markdown document into paragraph-sized chunks.
+1. Generate embeddings for chunks using `IEmbeddingGenerator`.
+1. Rank chunks with cosine similarity and take top-k.
+1. Inject retrieved context into a grounded system prompt.
+
+For portability, resolve the doc path from the current working directory first,
+then fall back to the output directory if needed.
+
+This keeps the conceptual value while avoiding unnecessary boilerplate.
+
+### Checkpoint A: Complete manual implementation
+
+Use this as the full manual reference checkpoint:
+
+- [RagChatApp/Program.cs](RagChatApp/Program.cs)
+- [checkpoints/manual-program.cs](checkpoints/manual-program.cs)
+
+At this checkpoint, your manual `Program.cs` should match
+[RagChatApp/Program.cs](RagChatApp/Program.cs).
+
+## Step 3: Replace ingestion plumbing with MEDI (recommended)
+
+Now swap your hand-written ingestion pipeline for
+`Microsoft.Extensions.DataIngestion` so class time can focus on retrieval quality
+and prompting strategy instead of ingestion boilerplate.
+
+### 3.1 Add MEDI packages
+
+```bash
+dotnet add package Microsoft.Extensions.DataIngestion --prerelease
+dotnet add package Microsoft.Extensions.DataIngestion.Markdig --prerelease
+dotnet add package Microsoft.Extensions.Logging.Console
+dotnet add package Microsoft.ML.Tokenizers.Data.O200kBase
+dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
 ```
 
-An embedding is just an array of floats. Texts with **similar meaning** produce
-vectors pointing in **similar directions** — that's what lets us search by meaning
-instead of by keyword.
+### 3.2 Compose the ingestion pipeline
 
-## Step 3: Chunk, embed, and store
+Use MEDI components for reader + chunker + writer:
 
-Split the document into paragraph-sized chunks, embed them all in one call, and
-keep the `(text, vector)` pairs in a plain `List`:
+1. `MarkdownReader` reads source docs.
+1. `SemanticSimilarityChunker` creates semantically coherent chunks.
+1. `VectorStoreWriter<string>` stores chunks + embeddings in `SqliteVectorStore`.
+1. `IngestionPipeline<string>` orchestrates ingestion end-to-end.
 
-```csharp
-GeneratedEmbeddings<Embedding<float>> embeddings =
-    await embeddingGenerator.GenerateAsync(chunks);
+### 3.3 Keep retrieval and grounded answering
 
-var store = new List<(string Text, ReadOnlyMemory<float> Vector)>();
-for (int i = 0; i < chunks.Length; i++)
-    store.Add((chunks[i], embeddings[i].Vector));
-```
+After ingestion completes, query the vector collection for top matches and use
+that context in the same grounded chat pattern from the manual approach.
 
-> This is deliberately naive. The list doesn't persist between runs and it won't
-> scale past a few thousand chunks — which is exactly the motivation for the real
-> vector store in Part 4.
+### Checkpoint B: Complete MEDI implementation
 
-## Step 4: Cosine similarity search (by hand)
+Use this as the complete MEDI reference checkpoint:
 
-For each question, embed it with the **same** generator, then rank every stored
-chunk and take the top matches:
+- [checkpoints/medi-program.cs](checkpoints/medi-program.cs)
 
-```csharp
-var topChunks = store
-    .Select(item => (item.Text, Score: CosineSimilarity(questionVector.Span, item.Vector.Span)))
-    .OrderByDescending(x => x.Score)
-    .Take(topK)
-    .Select(x => x.Text)
-    .ToArray();
-```
+At this checkpoint, your MEDI-based program should match
+[checkpoints/medi-program.cs](checkpoints/medi-program.cs).
 
-Cosine similarity is just `dot(a, b) / (|a| * |b|)` — a value from -1 to 1. See
-`CosineSimilarity` in [RagChatApp/Program.cs](RagChatApp/Program.cs).
-
-## Step 5: Augment the prompt, then answer
-
-Rebuild the system message each turn with the retrieved context, and tell the
-model to answer **only** from it:
-
-```csharp
-var systemPrompt = new ChatMessage(ChatRole.System,
-    "Answer using ONLY the context below. If the answer isn't in the context, say you don't know.\n\n" +
-    $"Context:\n{context}");
-```
-
-Then send `systemPrompt + history + question` to the same streaming chat loop from
-Part 2.
-
-## Step 6: See the difference
+## Step 4: See the difference
 
 Run it and ask something only the document knows:
 
@@ -132,8 +139,6 @@ your document and declines when the answer isn't there.
 
 ## What's next
 
-Your knowledge base lives in memory, so it's rebuilt on every run and can't scale.
-In **Part 4** you'll scaffold the **aichatweb template** and see how it solves
-exactly these problems — a real vector store (Qdrant), a document ingestion
-pipeline, and semantic search — using the same `IChatClient` and
-`IEmbeddingGenerator` abstractions you just used by hand.
+In **Part 4** you'll scaffold the **aichatweb template** and see this same flow
+applied in an app architecture with Qdrant, ingestion services, and semantic
+search — using the same `IChatClient` and `IEmbeddingGenerator` abstractions.

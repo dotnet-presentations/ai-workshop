@@ -28,7 +28,6 @@ using Microsoft.Extensions.Logging;
 //
 //   dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
 //   dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
-//   dotnet user-secrets set "AzureOpenAI:ChatModel" "gpt-5-mini"
 //
 var config = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
@@ -40,7 +39,7 @@ string endpoint = config["AzureOpenAI:Endpoint"]
 string key = config["AzureOpenAI:Key"]
     ?? throw new InvalidOperationException(
         "Missing 'AzureOpenAI:Key'. Run: dotnet user-secrets set \"AzureOpenAI:Key\" \"YOUR-KEY\"");
-string chatModel = config["AzureOpenAI:ChatModel"] ?? "gpt-5-mini";
+const string chatModel = "gpt-5-mini";
 
 // -----------------------------------------------------------------------------
 // 2. Create an IChatClient

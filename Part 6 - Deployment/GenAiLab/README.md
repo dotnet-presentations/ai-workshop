@@ -18,7 +18,7 @@ This incompatibility can be addressed by upgrading to Docker Desktop 4.41.1. See
 ## Using GitHub Models
 
 > [!WARNING]
-> **GitHub Models is [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (brownouts July 16 & 23). Use it only as a temporary legacy fallback — prefer **Azure OpenAI** (see the Azure OpenAI section below).
+> **GitHub Models is [retiring July 30, 2026](https://github.blog/changelog/2026-07-01-github-models-is-being-fully-retired-on-july-30-2026/)** (brownouts July 16 & 23). Use it only as a temporary legacy fallback — prefer **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)** (see the [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) section below).
 
 To use models hosted by GitHub Models, you will need to create a GitHub personal access token. The token should not have any scopes or permissions. See [Managing your personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 
@@ -32,6 +32,7 @@ dotnet user-secrets set ConnectionStrings:openai "Endpoint=https://models.infere
 Learn more about [prototyping with AI models using GitHub Models](https://docs.github.com/github-models/prototyping-with-ai-models).
 
 ## Setting up a local environment for Qdrant
+
 This project is configured to run Qdrant in a Docker container. Docker Desktop must be installed and running for the project to run successfully. A Qdrant container will automatically start when running the application.
 
 Download, install, and run Docker Desktop from the [official website](https://www.docker.com/). Follow the installation instructions specific to your operating system.
@@ -63,6 +64,7 @@ See [Troubleshoot untrusted localhost certificate in Aspire](https://learn.micro
 This template leverages JavaScript libraries to provide essential functionality. These libraries are located in the wwwroot/lib folder of the GenAiLab.Web project. For instructions on updating each dependency, please refer to the README.md file in each respective folder.
 
 # Learn More
+
 To learn more about development with .NET and AI, check out the following links:
 
-* [AI for .NET Developers](https://learn.microsoft.com/dotnet/ai/)
+- [AI for .NET Developers](https://learn.microsoft.com/dotnet/ai/)

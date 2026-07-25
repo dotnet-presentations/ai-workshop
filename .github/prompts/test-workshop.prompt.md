@@ -28,7 +28,7 @@ Create a test report markdown file named `workshop-test-report-[DATE].md` in the
 - Notes: [observations, issues, time taken]
 - Documentation Clarity: [rating and comments]
 
-### Part 2 - Project Creation
+### Part 2 - Build Chat App
 - Status: ✅ Pass / ❌ Fail / ⚠️ Issues
 - Notes: [observations, issues, time taken]
 - Documentation Clarity: [rating and comments]
@@ -38,9 +38,8 @@ Create a test report markdown file named `workshop-test-report-[DATE].md` in the
 [Repeat snapshot comparison section for Parts 4, 5, 6, 7, 8...]
 
 ## Snapshot Reconciliation Summary
-- **Part 2 - Project Creation/GenAiLab/**: [differences found and resolved]
-- **Part 4 - Azure OpenAI/GenAiLab/**: [differences found and resolved]
-- **Part 5 - Products Page/GenAiLab/**: [differences found and resolved]
+- **Part 4 - AI Web Chat Template/GenAiLab/**: [differences found and resolved]
+- **Part 6 - Deployment/GenAiLab/**: [differences found and resolved]
 - **Part 6 - Deployment/GenAiLab/**: [differences found and resolved]
 
 ## Issues Encountered
@@ -71,10 +70,10 @@ The workshop is organized into 9 parts using a per-unit directory structure:
 
 **Core AI Web Chat Application (Parts 1-6):**
 - Part 1 - Setup: Prerequisites and setup
-- Part 2 - Project Creation: Create AI Web Chat project using `dotnet new aichatweb`
-- Part 3 - Template Exploration: Explore the generated template code (README only)
-- Part 4 - Azure OpenAI: Convert from GitHub Models to Azure OpenAI
-- Part 5 - Products Page: Implement products page with vector search
+- Part 2 - Build Chat App: Create AI Web Chat project using `dotnet new aichatweb`
+- Part 3 - Add RAG: Add retrieval-augmented generation with embeddings and semantic search
+- Part 4 - AI Web Chat Template: Scaffold and inspect the generated template architecture
+- Part 5 - Providers and Fallbacks: Configure provider options and fallback paths
 - Part 6 - Deployment: Deploy to Azure (includes complete project with .azure directory)
 
 **Model Context Protocol Extension (Parts 7-9):**
@@ -83,7 +82,7 @@ The workshop is organized into 9 parts using a per-unit directory structure:
 - Part 9 - MCP Publishing: Publish and Share MCP Servers (README only)
 
 **Code Snapshots Structure:**
-- `Part 2 - Project Creation/GenAiLab/` - Fresh AI Web Chat template (starter code)
+- `Part 4 - AI Web Chat Template/GenAiLab/` - Fresh AI Web Chat template (starter code)
 - `Part 6 - Deployment/GenAiLab/` - Complete project with deployment configuration
 - `Part 7 - MCP Server Basics/MyMcpServer/` - Generic MCP server with RandomNumberTools and WeatherTools
 - `Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/` - Business MCP server implementation
@@ -153,18 +152,18 @@ The workshop uses a per-unit directory structure where each part is self-contain
 - **Part 1** contains no code changes and does not require a working directory.
 
 - **For Part 2**, follow the README instructions to create a new project using `dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant` in a test working directory (e.g., `test-workspace/GenAiLab/`). **CRITICAL**: You must use the `dotnet new` command to create the project - never copy snapshots or create `.csproj` files manually.
-  - **At the end of Part 2**, compare your working directory with the code snapshot in `Part 2 - Project Creation/GenAiLab/`
-  - **After reconciling differences**, replace the contents of `Part 2 - Project Creation/GenAiLab/` with your working directory code as the updated snapshot
+  - **At the end of Part 2**, compare your working directory with the code snapshot in `Part 4 - AI Web Chat Template/GenAiLab/`
+  - **After reconciling differences**, replace the contents of `Part 4 - AI Web Chat Template/GenAiLab/` with your working directory code as the updated snapshot
 
 - **For Part 3**, follow README documentation only (no code changes, just exploration of the Part 2 code).
 
 - **For Part 4**, continue from your Part 2 working directory and apply the README instructions. **IMPORTANT**: Follow the README instructions exactly - if any step requires creating a new project or component, use the `dotnet new` commands specified in the documentation, never create `.csproj` files manually.
-  - **At the end of Part 4**, compare your working directory with the code snapshot in `Part 4 - Azure OpenAI/GenAiLab/` (if it exists)
-  - **After reconciling differences**, replace/create the contents of `Part 4 - Azure OpenAI/GenAiLab/` with your working directory code as the snapshot
+  - **At the end of Part 4**, compare your working directory with the code snapshot in `Part 4 - AI Web Chat Template/GenAiLab/`
+  - **After reconciling differences**, replace/create the contents of `Part 4 - AI Web Chat Template/GenAiLab/` with your working directory code as the snapshot
 
 - **For Part 5**, continue from your Part 4 working directory and apply the README instructions.
-  - **At the end of Part 5**, compare your working directory with the code snapshot in `Part 5 - Products Page/GenAiLab/`
-  - **After reconciling differences**, replace the contents of `Part 5 - Products Page/GenAiLab/` with your working directory code as the updated snapshot
+  - **At the end of Part 5**, compare your working directory with the code snapshot in `Part 6 - Deployment/GenAiLab/`
+  - **After reconciling differences**, replace the contents of `Part 6 - Deployment/GenAiLab/` with your working directory code as the updated snapshot
 
 - **For Part 6**, test the provided complete code snapshot in `Part 6 - Deployment/GenAiLab/` which includes the `.azure` directory and deployment configuration.
   - **Deployment Testing Decision**: Choose configuration-only testing (recommended) or full Azure deployment test
@@ -196,24 +195,24 @@ The workshop uses a per-unit directory structure where each part is self-contain
 
 1. **Part 1 - Setup**: Follow the README.md in `Part 1 - Setup/` for prerequisites and environment setup.
 
-2. **Part 2 - Project Creation**: 
+2. **Part 2 - Build Chat App**: 
    - Follow the README.md instructions to create a new project using `dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant` in `test-workspace/GenAiLab/`
    - **Immediately**: Copy the generated project to `src/start/` as the initial snapshot
    - Verify it builds and runs with basic chat functionality
-   - **End of Part 2**: Compare with `Part 2 - Project Creation/GenAiLab/`, document differences, then replace that snapshot with your working code
+  - **End of Part 2**: Compare with `Part 4 - AI Web Chat Template/GenAiLab/`, document differences, then replace that snapshot with your working code
 
-3. **Part 3 - Template Exploration**: Follow the README.md in `Part 3 - Template Exploration/` to understand the generated template structure from Part 2.
+3. **Part 3 - Add RAG**: Follow the README.md in `Part 3 - Add RAG/` to build retrieval-augmented generation on top of Part 2.
 
-4. **Part 4 - Azure OpenAI**: 
-   - Continue from your Part 2 working directory and follow the README.md instructions to convert from GitHub Models to Azure OpenAI
+4. **Part 4 - AI Web Chat Template**: 
+  - Continue from your Part 2 working directory and follow the README.md instructions to scaffold and explore the template app
    - **CRITICAL**: If the README instructs you to create any new projects or components, use the `dotnet new` commands exactly as specified - never create `.csproj` files manually
-   - **End of Part 4**: Compare with `Part 4 - Azure OpenAI/GenAiLab/` (if exists), document differences, then replace/create that snapshot with your working code
+  - **End of Part 4**: Compare with `Part 4 - AI Web Chat Template/GenAiLab/`, document differences, then replace/create that snapshot with your working code
 
-5. **Part 5 - Products Page**: 
-   - Continue from your Part 4 working directory and follow the README.md instructions to implement the products page
+5. **Part 5 - Providers and Fallbacks**: 
+  - Continue from your Part 4 working directory and follow the README.md instructions to configure provider options and fallbacks
    - **CRITICAL**: Follow all `dotnet new` commands in the README exactly - never create `.csproj` files manually
    - **End of Part 5**: 
-     - Compare with `Part 5 - Products Page/GenAiLab/`, document differences, then replace that snapshot
+    - Compare with `Part 6 - Deployment/GenAiLab/`, document differences, then replace that snapshot
      - **Then compare with `src/complete/`**, document any unexpected differences
      - Replace `src/complete/` with your working code as the master reference snapshot
 
@@ -229,13 +228,13 @@ The workshop uses a per-unit directory structure where each part is self-contain
 
 **Part 1**: Environment setup and prerequisites verification.
 
-**Part 2**: Create a new project using `dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant` as instructed in the README. Test that the generated project builds and runs with basic chat functionality. At end of part, compare with `Part 2 - Project Creation/GenAiLab/`, document differences, then replace that snapshot. **CRITICAL**: You must create the project using `dotnet new` - never copy existing snapshots or create `.csproj` files manually.
+**Part 2**: Create a new project using `dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant` as instructed in the README. Test that the generated project builds and runs with basic chat functionality. At end of part, compare with `Part 4 - AI Web Chat Template/GenAiLab/`, document differences, then replace that snapshot. **CRITICAL**: You must create the project using `dotnet new` - never copy existing snapshots or create `.csproj` files manually.
 
-**Part 3**: Verify template exploration documentation clarity using the project you created in Part 2.
+**Part 3**: Verify Add RAG documentation clarity using the project you created in Part 2.
 
-**Part 4**: Continue from your Part 2 working directory and apply Azure OpenAI conversion instructions. At end of part, compare with `Part 4 - Azure OpenAI/GenAiLab/`, document differences, then replace/create that snapshot. **CRITICAL**: If the README instructions involve creating any new projects or components, you must use the `dotnet new` commands exactly as specified - never create `.csproj` files manually.
+**Part 4**: Continue from your Part 2 working directory and scaffold/explore the template app. At end of part, compare with `Part 4 - AI Web Chat Template/GenAiLab/`, document differences, then replace/create that snapshot. **CRITICAL**: If the README instructions involve creating any new projects or components, you must use the `dotnet new` commands exactly as specified - never create `.csproj` files manually.
 
-**Part 5**: Continue from Part 4 working directory and apply Products page implementation instructions. At end of part, compare with `Part 5 - Products Page/GenAiLab/`, document differences, then replace that snapshot. **CRITICAL**: Follow all `dotnet new` commands in the README exactly - never create `.csproj` files manually.
+**Part 5**: Continue from Part 4 working directory and apply provider/fallback instructions. At end of part, compare with `Part 6 - Deployment/GenAiLab/`, document differences, then replace that snapshot. **CRITICAL**: Follow all `dotnet new` commands in the README exactly - never create `.csproj` files manually.
 
 **Part 6**: Test the complete code snapshot which includes all functionality from Parts 2-5 plus deployment configuration. Verify the `.azure/` directory and `azure.yaml` exist. 
 
@@ -323,9 +322,9 @@ This workshop specifically tests the template generation workflow. Manual projec
    - Errors in following instructions (fix and retry)
    - Missing steps in documentation (document for improvement)
 4. **Update snapshots** after reconciliation:
-   - End of Part 2: Update `Part 2 - Project Creation/GenAiLab/`
-   - End of Part 4: Update `Part 4 - Azure OpenAI/GenAiLab/`
-   - End of Part 5: Update `Part 5 - Products Page/GenAiLab/`
+  - End of Part 2: Update `Part 4 - AI Web Chat Template/GenAiLab/`
+  - End of Part 4: Update `Part 4 - AI Web Chat Template/GenAiLab/`
+  - End of Part 5: Update `Part 6 - Deployment/GenAiLab/`
    - End of Part 6: Update `Part 6 - Deployment/GenAiLab/`
    - End of Part 7: Update `Part 7 - MCP Server Basics/MyMcpServer/`
    - End of Part 8: Update `Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/`
@@ -391,7 +390,7 @@ Write-Host "Azure Endpoint: $($env:WORKSHOP_AZURE_OPENAI_ENDPOINT -ne $null ? 'S
 ### Build Testing
 ```powershell
 # Test each code snapshot builds successfully
-cd "Part 2 - Project Creation/GenAiLab"
+cd "Part 4 - AI Web Chat Template/GenAiLab"
 dotnet build --verbosity minimal
 
 cd "Part 6 - Deployment/GenAiLab"
@@ -420,9 +419,9 @@ cd test-workspace
 dotnet new aichatweb -n GenAiLab --provider githubmodels --aspire --vector-store qdrant
 
 # At end of Part 2, compare and update snapshot
-code --diff "GenAiLab" "../Part 2 - Project Creation/GenAiLab"
+code --diff "GenAiLab" "../Part 4 - AI Web Chat Template/GenAiLab"
 # After reviewing differences:
-Copy-Item -Path "GenAiLab/*" -Destination "../Part 2 - Project Creation/GenAiLab/" -Recurse -Force
+Copy-Item -Path "GenAiLab/*" -Destination "../Part 4 - AI Web Chat Template/GenAiLab/" -Recurse -Force
 
 # Part 7: Create MCP Server using dotnet new
 dotnet new mcpserver -n MyMcpServer

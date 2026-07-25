@@ -524,7 +524,7 @@ public async Task GetOrderDetails_InvalidOrder_ReturnsNotFound()
 
 ## Next Steps
 
-Congratulations! You've built a sophisticated business MCP server. If you're continuing the optional track, the next step is publishing and distribution.
+You've built a business-focused MCP server. If you're continuing the optional track, the next step is publishing and distribution.
 
 **Optional next** → [Part 9: MCP Publishing](../Part%209%20-%20MCP%20Publishing/README.md)
 
@@ -564,7 +564,7 @@ In Part 9, you'll learn how to:
 
 ## Summary
 
-In Part 8, you've mastered advanced MCP concepts and built a business-ready MCP server. You now understand how to:
+In Part 8, you applied advanced MCP concepts and built a business-ready MCP server. You now know how to:
 
 - ✅ Design MCP tools that solve real business problems
 - ✅ Handle complex business data and operations
@@ -572,7 +572,7 @@ In Part 8, you've mastered advanced MCP concepts and built a business-ready MCP 
 - ✅ Apply performance optimization and monitoring
 - ✅ Test business logic in MCP tools
 
-**Your MCP server can now power AI-driven business applications!** The skills you've learned enable you to connect any AI agent to any business system, unlocking powerful automation and insights.
+These patterns can be used to connect AI agents to business systems for automation and operational workflows.
 
 ## Continue Your Journey
 

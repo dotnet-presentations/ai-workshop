@@ -261,7 +261,7 @@ Once deployed, you can manage your deployment using various Azure Developer CLI 
 
 ## 🎯 Next Steps
 
-Congratulations! Your AI application is now running in production. Ready to explore the cutting edge of AI extensibility?
+Your AI application is now running in production.
 
 **Continue to** → [Part 7: MCP Server Basics](../Part%207%20-%20MCP%20Server%20Basics/README.md)
 
@@ -274,7 +274,7 @@ In Part 7, you'll learn about Model Context Protocol (MCP) and how to:
 
 ## Conclusion
 
-Congratulations! You've completed the AI Web Chat application series (Parts 1-6). You now have the knowledge to:
+You have completed the AI Web Chat application series (Parts 1-6). You can now:
 
 1. ✅ Create AI applications using the AI Web Chat template
 2. ✅ Understand and customize the template code structure
@@ -282,4 +282,4 @@ Congratulations! You've completed the AI Web Chat application series (Parts 1-6)
 4. ✅ Configure provider and fallback strategies for real-world deployments
 5. ✅ Deploy your application to production environments using Azure
 
-Continue exploring the possibilities of AI with .NET and build amazing AI-powered applications!
+Continue to the MCP track or use this app as a baseline for your own AI application experiments.

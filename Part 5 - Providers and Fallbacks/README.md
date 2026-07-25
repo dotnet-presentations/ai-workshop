@@ -1,10 +1,9 @@
 # Part 5: Providers & Fallbacks (Azure primary + local)
 
-This is the payoff of the whole workshop theme: **swap the provider, keep the same
-`IChatClient` / `IEmbeddingGenerator`.** Everything you built in Parts 2–4 — the
-chat loop, the RAG loop, the template app — runs unchanged when you point it at a
-different model provider. The only thing that changes is *registration* (an
-endpoint, a key, a model name), never your app code.
+This part demonstrates a core workshop pattern: **swap the provider, keep the same
+`IChatClient` / `IEmbeddingGenerator`.** Everything you built in Parts 2-4, from
+the chat loop to the template app, runs with different providers. The only thing
+that changes is *registration* (an endpoint, a key, a model name), not app logic.
 
 The real-world motivation: your app should be able to change providers without a
 rewrite. Because the app depends on the abstraction and not on a specific provider,
@@ -14,13 +13,13 @@ provider changes become configuration updates.
 
 | Provider | Best for | Chat | Embeddings | Runs offline | Notes |
 | --- | --- | :---: | :---: | :---: | --- |
-| **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)** (Azure OpenAI) | **Primary** — the workshop default | ✅ | ✅ | ❌ | `gpt-5-mini` + `text-embedding-3-small` |
+| **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)** (Azure OpenAI) | **Primary**, the workshop default | ✅ | ✅ | ❌ | `gpt-5-mini` + `text-embedding-3-small` |
 | **Foundry Local** | Local **chat** on your device | ✅ | ⏳ | ✅ | OpenAI-compatible local server; SLMs (Phi, Qwen, …). Embedding support is being evaluated (#496) |
 | **Ollama** | Fully **offline RAG** (chat + embeddings) | ✅ | ✅ | ✅ | e.g. `llama3.2` for chat, `all-minilm` for embeddings |
 
 ## Provider 1: [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (primary)
 
-This is what Parts 2–4 already use — the Azure-specific client, adapted to
+This is what Parts 2-4 already use, the Azure-specific client adapted to
 `IChatClient`:
 
 ```csharp
@@ -36,7 +35,7 @@ IEmbeddingGenerator<string, Embedding<float>> embeddings =
 ## The universal pattern for everything else
 
 Foundry Local and Ollama both expose an **OpenAI-compatible** endpoint. That means
-both use the *same* client — `OpenAIClient` — pointed at a different base URL and
+both use the *same* client, `OpenAIClient`, pointed at a different base URL and
 key:
 
 ```csharp
@@ -51,12 +50,12 @@ IChatClient chat = client.GetChatClient(modelId).AsIChatClient();
 ```
 
 Notice: this is the **same three lines** regardless of provider. Only `key`,
-`baseUrl`, and `modelId` change — and they live in configuration, not code.
+`baseUrl`, and `modelId` change, and they live in configuration, not code.
 
 ## Provider 2: Foundry Local (offline chat)
 
 [Foundry Local](https://learn.microsoft.com/azure/foundry-local/) runs
-Microsoft-curated small language models entirely on-device — no Azure
+Microsoft-curated small language models entirely on-device, with no Azure
 subscription, no network, no per-token cost.
 
 ```bash
@@ -84,11 +83,11 @@ var client = new OpenAIClient(
 IChatClient chat = client.GetChatClient(model.Id).AsIChatClient();
 ```
 
-Drop this `chat` into your Part 2 loop and it just works — offline. See the
+Drop this `chat` into your Part 2 loop to run it offline. See the
 [Foundry Local + inference SDK guide](https://learn.microsoft.com/azure/foundry-local/how-to/how-to-integrate-with-inference-sdks) for the full manager setup.
 
 > Foundry Local's curated catalog is currently focused on chat/SLMs. Whether it
-> serves **embeddings** for a fully-local RAG path is being evaluated (#496); for
+> serves **embeddings** for a fully-local RAG path is being evaluated (#496). For
 > guaranteed offline RAG today, use Ollama below.
 
 ## Provider 3: Ollama (fully-offline RAG)
@@ -112,10 +111,10 @@ IEmbeddingGenerator<string, Embedding<float>> embeddings =
     client.GetEmbeddingClient("all-minilm").AsIEmbeddingGenerator();
 ```
 
-Swap these two into your Part 3 project and the entire embed → store → search →
-augment loop runs with no cloud at all.
+Swap these two into your Part 3 project and the entire embed -> store -> search ->
+augment loop runs with no cloud dependency.
 
-## The takeaway
+## Takeaway
 
 | What changed between providers | Where it lives |
 | --- | --- |
@@ -124,13 +123,14 @@ augment loop runs with no cloud at all.
 | Model name | configuration (user-secrets) |
 | **Your app code** | **unchanged** |
 
-That's the entire point of `Microsoft.Extensions.AI`: your chat loop, your RAG
+That is the main point of `Microsoft.Extensions.AI`: your chat loop, your RAG
 pipeline, and the template app are all written against `IChatClient` and
 `IEmbeddingGenerator`, so the provider becomes a deployment decision.
 
 ## What's next
 
-You've now covered the AI half end-to-end: build by hand, meet the template,
-swap providers. Next you'll deploy your app in **Part 6**. After that, the workshop moves to **tools and agents** with the **Model Context Protocol (MCP)** in Part 7.
+You have now covered the AI half end-to-end: build by hand, compare the template,
+and swap providers. Next you'll deploy your app in **Part 6**. After that, the
+workshop moves to **tools and agents** with the **Model Context Protocol (MCP)** in Part 7.
 
 **Continue to** → [Part 6: Deployment](../Part%206%20-%20Deployment/README.md)

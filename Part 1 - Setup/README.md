@@ -13,7 +13,7 @@ Before starting, ensure you have:
 - **.NET 10 SDK** or later
 - **Visual Studio 2026** (with the Web & Cloud workload) **or** Visual Studio Code with the **C# Dev Kit** extension
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/)
-- **An Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)** — the primary AI provider for this workshop
+- **An Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)**, the primary AI provider for this workshop
 - GitHub Copilot subscription (recommended; used later for the MCP and GitHub Copilot SDK units)
 - (Optional) A GitHub account (recommended for contributor workflows such as cloning, branching, and pull requests)
 
@@ -46,7 +46,7 @@ You'll need an **[Microsoft Foundry](https://learn.microsoft.com/azure/foundry/w
    - Keep these handy for Part 2. If your instructor provided a pre-provisioned resource, use the endpoint and key they gave you.
 
 > [!CAUTION]
-> **Never hardcode your key or connection string in source code.** In Part 2 you'll store it with .NET **user secrets** *before* wiring the AI provider. Treat the key like a password — don't paste it into files you might commit.
+> **Never hardcode your key or connection string in source code.** In Part 2 you'll store it with .NET **user secrets** *before* wiring the AI provider. Treat the key like a password, and do not paste it into files you might commit.
 
 ### Verify your setup
 

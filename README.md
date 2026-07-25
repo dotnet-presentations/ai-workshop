@@ -10,7 +10,7 @@ Get up to speed quickly with AI app building in .NET. This workshop covers two t
 - .NET AI Web Chatbot template installed (instructions in Part 1 - Setup)
 - .NET 10.0 SDK or later
 - Docker Desktop or Podman (required for .NET Aspire orchestration)
-- Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) — the primary AI provider
+- Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI), the primary AI provider
 
 ### Model Context Protocol (Parts 7-9)
 

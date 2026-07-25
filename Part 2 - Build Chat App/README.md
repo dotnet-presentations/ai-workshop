@@ -10,11 +10,11 @@ of this for you.
 
 ## What you will learn
 
-1. **Secrets-first configuration** – keep API keys out of source code
-2. **`IChatClient`** – the core Microsoft.Extensions.AI abstraction
-3. **A chat loop with history** – multi-turn conversations
-4. **Streaming responses** – token-by-token output
-5. **A middleware pipeline** – add logging without touching your app code
+1. **Secrets-first configuration**: keep API keys out of source code
+2. **`IChatClient`**: the core Microsoft.Extensions.AI abstraction
+3. **A chat loop with history**: multi-turn conversations
+4. **Streaming responses**: token-by-token output
+5. **A middleware pipeline**: add logging without touching your app code
 
 ## Prerequisites
 
@@ -201,8 +201,8 @@ Goodbye!
 ## What's next
 
 In **Part 3** you'll extend this app with **retrieval-augmented generation
-(RAG)** — by hand — so you understand how embeddings and vector search feed
-context to the model. Only after that do you meet the template that wires it all
-up for you.
+(RAG)** by hand so you understand how embeddings and vector search feed
+context to the model. After that, you'll compare your code with the template-based
+version.
 
 **Continue to** → [Part 3: Add RAG](../Part%203%20-%20Add%20RAG/README.md)

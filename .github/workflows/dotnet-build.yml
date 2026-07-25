@@ -5,18 +5,37 @@ on:
     branches:
       - main
     paths:
-      - 'Part 2 - Build Chat App/**'
-      - 'Part 6 - Deployment/**'
-      - 'Part 7 - MCP Server Basics/**'
-      - 'Part 8 - Enhanced MCP Server/**'
+      - "Part 2 - Build Chat App/**"
+      - "Part 6 - Deployment/**"
+      - "Part 7 - MCP Server Basics/**"
+      - "Part 8 - Enhanced MCP Server/**"
   pull_request:
     branches:
       - main
     paths:
-      - 'Part 2 - Build Chat App/**'
-      - 'Part 6 - Deployment/**'
-      - 'Part 7 - MCP Server Basics/**'
-      - 'Part 8 - Enhanced MCP Server/**'
+      - ".github/workflows/dotnet-build.yml"
+      - "Part 2 - Build Chat App/**/*.cs"
+      - "Part 2 - Build Chat App/**/*.razor"
+      - "Part 2 - Build Chat App/**/*.csproj"
+      - "Part 2 - Build Chat App/**/*.sln"
+      - "Part 2 - Build Chat App/**/*.props"
+      - "Part 2 - Build Chat App/**/*.targets"
+      - "Part 6 - Deployment/**/*.cs"
+      - "Part 6 - Deployment/**/*.razor"
+      - "Part 6 - Deployment/**/*.csproj"
+      - "Part 6 - Deployment/**/*.sln"
+      - "Part 6 - Deployment/**/*.props"
+      - "Part 6 - Deployment/**/*.targets"
+      - "Part 7 - MCP Server Basics/**/*.cs"
+      - "Part 7 - MCP Server Basics/**/*.csproj"
+      - "Part 7 - MCP Server Basics/**/*.sln"
+      - "Part 7 - MCP Server Basics/**/*.props"
+      - "Part 7 - MCP Server Basics/**/*.targets"
+      - "Part 8 - Enhanced MCP Server/**/*.cs"
+      - "Part 8 - Enhanced MCP Server/**/*.csproj"
+      - "Part 8 - Enhanced MCP Server/**/*.sln"
+      - "Part 8 - Enhanced MCP Server/**/*.props"
+      - "Part 8 - Enhanced MCP Server/**/*.targets"
   workflow_dispatch:
 
 jobs:
@@ -27,27 +46,27 @@ jobs:
       matrix:
         include:
           - solution: "Part 2 - Build Chat App/ChatApp/ChatApp.csproj"
-            dotnet-version: '10.0.x'
+            dotnet-version: "10.0.x"
           - solution: "Part 6 - Deployment/GenAiLab/GenAiLab.sln"
-            dotnet-version: '10.0.x'
+            dotnet-version: "10.0.x"
           # No solution file exists for MyMcpServer; using project file directly
           - solution: "Part 7 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj"
-            dotnet-version: '10.0.x'
+            dotnet-version: "10.0.x"
           # No solution file exists for ContosoOrdersMcpServer; using project file directly
           - solution: "Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj"
-            dotnet-version: '10.0.x'
+            dotnet-version: "10.0.x"
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
 
-    - name: Restore dependencies
-      run: dotnet restore "${{ matrix.solution }}"
+      - name: Restore dependencies
+        run: dotnet restore "${{ matrix.solution }}"
 
-    - name: Build solution
-      run: dotnet build "${{ matrix.solution }}" --no-restore --configuration Release
+      - name: Build solution
+        run: dotnet build "${{ matrix.solution }}" --no-restore --configuration Release

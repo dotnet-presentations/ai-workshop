@@ -155,7 +155,7 @@ Key components in the Web Program.cs:
 1. **Service Registration**: Setting up Razor components, service defaults, etc.
 1. **Azure OpenAI Setup**:
    - Adding Azure OpenAI client with connection string reference
-    - Configuring a chat client with the "gpt-5-mini" model
+   - Configuring a chat client with the "gpt-5-mini" model
    - Setting up an embedding generator with "text-embedding-3-small" model
 1. **Qdrant Client**: Connecting to the Qdrant vector database
 1. **Vector Collection Services**: Registering collections for ingested chunks and documents directly in the vector database

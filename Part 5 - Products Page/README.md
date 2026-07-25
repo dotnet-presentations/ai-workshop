@@ -1,7 +1,7 @@
 # Write a New Products Page
 
 > **⏱️ Estimated Time:** 60-90 minutes
-
+>
 > [!NOTE]
 > This module is now an optional enrichment and is no longer part of the primary workshop path.
 > The primary flow continues from provider strategy to deployment.

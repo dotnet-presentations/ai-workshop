@@ -1,5 +1,9 @@
 # Workshop Test Report - October 2, 2025
 
+> [!WARNING]
+> Historical artifact: this test report is archived and does not represent the current workshop structure.
+> Use current testing guidance in active docs.
+
 ## Test Environment
 
 - .NET SDK Version(s):

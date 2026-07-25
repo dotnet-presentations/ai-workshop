@@ -1,5 +1,9 @@
 # AI Workshop Test Report
 
+> [!WARNING]
+> Historical artifact: this test report is archived and does not represent the current workshop structure.
+> Use current testing guidance in active docs.
+
 **Date**: August 2, 2025  
 **Tester**: GitHub Copilot  
 **Environment**: Windows PowerShell  

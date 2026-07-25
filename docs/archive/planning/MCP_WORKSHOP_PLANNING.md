@@ -1,5 +1,9 @@
 # MCP Workshop Implementation Plan
 
+> [!WARNING]
+> Historical artifact: this document is archived and does not reflect the current workshop structure.
+> Use active docs under `docs/` and the root `README.md` for current guidance.
+
 ## Overview
 
 This document outlines the implementation plan for adding Model Context Protocol (MCP) units to the existing .NET AI Workshop. The MCP units complement the existing AI Web Chat application by teaching users how to build and publish custom MCP servers that can be consumed by AI agents like GitHub Copilot.

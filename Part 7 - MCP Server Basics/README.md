@@ -366,7 +366,7 @@ If you prefer to use **Visual Studio 2022** instead of VS Code, you can configur
 1. **Navigate to your solution directory** (where the `.sln` file is located):
 
    ```powershell
-   cd "Part 4 - AI Web Chat Template\GenAiLab"  # or your main solution directory
+   cd "Part 6 - Deployment\GenAiLab"  # or your main solution directory
    ```
 
 2. **Create the MCP configuration file** `.mcp.json` in your solution directory:

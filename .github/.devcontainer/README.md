@@ -10,7 +10,7 @@ This workshop provides two development container configurations to suit differen
 
 **Includes:**
 
-- .NET 9.0 with Aspire workload
+- .NET 10.0 with Aspire workload
 - Docker-in-Docker (for Qdrant vector database)
 - Azure CLI and Azure Developer CLI
 - GitHub CLI

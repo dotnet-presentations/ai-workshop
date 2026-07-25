@@ -122,7 +122,7 @@ The script will check for the required environment variables and prompt for any 
 
 5. **Complete Implementation Requirements**: Parts 5-6 require full code implementation, not just documentation. Part 5 must include complete Products page functionality, and Part 6 must contain the complete application from Part 5 plus deployment configuration.
 
-6. **MCP Prerequisites**: Parts 7-9 require .NET 10 SDK preview and Visual Studio Code with GitHub Copilot extension. Part 7 uses `MyMcpServer` project that includes both template-generated RandomNumberTools and custom WeatherTools. **Note**: A partial test run covering only Parts 1-6 can be performed with .NET 9 SDK alone.
+6. **MCP Prerequisites**: Parts 7-9 require .NET 10 SDK and Visual Studio Code with GitHub Copilot extension. Part 7 uses `MyMcpServer` project that includes both template-generated RandomNumberTools and custom WeatherTools.
 
 7. **MCP VS Code Integration Testing**: For Parts 7-8, VS Code integration testing involves:
    - Verifying the MCP server starts correctly when run via `dotnet run`
@@ -269,7 +269,7 @@ Compare with reference code snapshot in `Part 7 - MCP Server Basics/MyMcpServer/
 
 **Important Considerations**:
 - **Approach**: Build and run existing snapshot rather than creating new project
-- **Target Framework**: .NET 8.0 (different from Part 7's .NET 9/10)
+- **Target Framework**: .NET 10.0 (aligned with Part 7)
 - **Expected Warnings**: 3 CS1998 warnings about async methods without await - these are acceptable
   - ContosoOrdersTools.cs lines 13, 61, 93
   - Methods return synchronous data but use async signature for API consistency
@@ -346,8 +346,8 @@ This workshop specifically tests the template generation workflow. Manual projec
 - **Recommendation**: Update generated code to match reference snapshot pattern for consistency, or update snapshots to match current template output
 
 **Issue**: MCP servers target different .NET framework versions
-- **Part 7 MyMcpServer**: Template generates for .NET 9.0 (using .NET 10 SDK)
-- **Part 8 ContosoOrdersMcpServer**: Targets .NET 8.0
+- **Part 7 MyMcpServer**: Targets .NET 10.0
+- **Part 8 ContosoOrdersMcpServer**: Targets .NET 10.0
 - **Impact**: Build requires appropriate SDK version available
 - **Resolution**: Verify SDK version with `dotnet --list-sdks` before building
 

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>233010f4-eff2-4b12-922a-edeabb53bbdc</UserSecretsId>
@@ -16,7 +16,7 @@
     <PackageReference Include="PdfPig" Version="0.1.15" />
     <PackageReference Include="Aspire.Qdrant.Client" Version="13.4.6" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.61.0-preview" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="9.0.18" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="10.8.0" />
   </ItemGroup>
 

@@ -66,7 +66,7 @@ For this example, we'll publish the **MyMcpServer** from Part 7. First, update t
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     
     <!-- NuGet Package Information -->
@@ -267,7 +267,7 @@ Can you give me a 5-day forecast for London?
 
 ## Requirements
 
-- .NET 8.0 or higher
+- .NET 10.0 or higher
 - MCP-compatible client (VS Code with Copilot, Visual Studio, etc.)
 
 ## License

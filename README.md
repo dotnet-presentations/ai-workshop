@@ -62,7 +62,6 @@ The workshop is designed as a **two-part, roughly 8-hour hands-on lab** (8:30-5:
 
 > [!IMPORTANT]
 > **If you fall behind, cut Part 11 (Deployment) — not Part 10 (the capstone).** Deployment is placed last deliberately: nothing depends on it, and it is the most environment-fragile section (Azure login, subscription and quota checks, provisioning time). The capstone is where the whole workshop comes together, so protect that time first. A short `azd up` walkthrough by the instructor is a reasonable substitute for a room that has run out of clock.
-
 > [!TIP]
 > The morning is the tighter half. Ask attendees to complete [Part 1 - Setup](Part%201%20-%20Setup/README.md) **before** the session — it is prerequisite installation rather than lab content, and moving it to pre-work buys back 15-20 minutes at exactly the point in the day where the schedule has the least slack.
 

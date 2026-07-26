@@ -38,11 +38,11 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 ### ✅ Workshop Prerequisites
 
-- [ ] **Completed Parts 1-5** of the AI Workshop
-- [ ] **Working AI Web Chat application** (from Parts 1-5)
+- [ ] **Completed Parts 1-4** of the AI Workshop
+- [ ] **Working AI Web Chat application** (from Parts 1-4)
 - [ ] **Basic understanding** of .NET development
 
-## Part 6 Testing: MCP Server Basics (WeatherMcpServer)
+## Part 5 Testing: MCP Server Basics (WeatherMcpServer)
 
 ### Test 1: Project Build Verification
 
@@ -50,10 +50,10 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 **Steps**:
 
-1. Navigate to the Part 6 project directory:
+1. Navigate to the Part 5 project directory:
 
    ```powershell
-   cd "Part 6 - MCP Server Basics\WeatherMcpServer"
+   cd "Part 05 - MCP Server Basics\WeatherMcpServer"
    ```
 
 2. Build the project:
@@ -87,7 +87,7 @@ Before testing MCP functionality, verify all prerequisites are met:
      "servers": {
        "weather-server": {
          "command": "dnx",
-         "args": ["run", "--project", "./Part 6 - MCP Server Basics/WeatherMcpServer"]
+         "args": ["run", "--project", "./Part 05 - MCP Server Basics/WeatherMcpServer"]
        }
      }
    }
@@ -158,7 +158,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - ✅ Tool descriptions are clear and helpful
 - ✅ Parameter requirements are properly documented
 
-## Part 7 Testing: Enhanced MCP Server (ContosoOrdersMcpServer)
+## Part 6 Testing: Enhanced MCP Server (ContosoOrdersMcpServer)
 
 ### Test 5: Business Tools Build Verification
 
@@ -166,10 +166,10 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 **Steps**:
 
-1. Navigate to Part 7 directory:
+1. Navigate to Part 6 directory:
 
    ```powershell
-   cd "Part 7 - Enhanced MCP Server\ContosoOrdersMcpServer"
+   cd "Part 06 - Enhanced MCP Server\ContosoOrdersMcpServer"
    ```
 
 2. Build the project:
@@ -197,11 +197,11 @@ Before testing MCP functionality, verify all prerequisites are met:
      "servers": {
        "weather-server": {
          "command": "dnx",
-         "args": ["run", "--project", "./Part 6 - MCP Server Basics/WeatherMcpServer"]
+         "args": ["run", "--project", "./Part 05 - MCP Server Basics/WeatherMcpServer"]
        },
        "contoso-orders": {
          "command": "dnx",
-         "args": ["run", "--project", "./Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer"]
+         "args": ["run", "--project", "./Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer"]
        }
      }
    }
@@ -373,7 +373,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 ```powershell
 # Verify server can start manually
-cd "Part 6 - MCP Server Basics\WeatherMcpServer"
+cd "Part 05 - MCP Server Basics\WeatherMcpServer"
 dnx run
 ```
 
@@ -392,7 +392,7 @@ dnx run
 
 ## Success Criteria
 
-### Part 6 (Weather MCP Server)
+### Part 5 (Weather MCP Server)
 
 - ✅ Project builds without errors
 - ✅ VS Code discovers MCP server
@@ -400,7 +400,7 @@ dnx run
 - ✅ Error handling works for invalid inputs
 - ✅ Tool descriptions are clear and accurate
 
-### Part 7 (Business MCP Server)
+### Part 6 (Business MCP Server)
 
 - ✅ Project builds without errors
 - ✅ Business tools integrate with Copilot
@@ -413,7 +413,7 @@ dnx run
 - ✅ Both MCP servers can run concurrently
 - ✅ GitHub Copilot can access all tools
 - ✅ Performance remains stable under normal use
-- ✅ Workshop progression flows smoothly from Part 6 to Part 7
+- ✅ Workshop progression flows smoothly from Part 5 to Part 6
 
 ## Validation Checklist
 
@@ -426,7 +426,7 @@ Use this checklist to verify complete MCP functionality:
 - [x] MCP template available ✅ **mcpserver template working**
 - [x] Workshop prerequisites completed ✅ **All parts validated**
 
-### Part 6 - Weather MCP Server
+### Part 5 - Weather MCP Server
 
 - [x] Project builds successfully ✅ **Verified with expected warnings**
 - [x] MCP server starts and connects ✅ **Configuration files present and properly structured**
@@ -435,7 +435,7 @@ Use this checklist to verify complete MCP functionality:
 - [x] Error handling for invalid locations ✅ **Graceful error handling implemented**
 - [x] Tool descriptions are clear and accurate ✅ **Proper MCP attributes and descriptions**
 
-### Part 7 - Business MCP Server
+### Part 6 - Business MCP Server
 
 - [x] Project builds successfully ✅ **Verified with expected warnings**
 - [x] Business MCP server starts and connects ✅ **Configuration files present and properly structured**
@@ -454,7 +454,7 @@ Use this checklist to verify complete MCP functionality:
 
 ## Enhanced Testing Prompts (Updated for Phase 5)
 
-### Part 6 - Weather MCP Testing Prompts
+### Part 5 - Weather MCP Testing Prompts
 
 **Basic Weather Query**:
 
@@ -476,7 +476,7 @@ Use this checklist to verify complete MCP functionality:
 - "What's the weather in FakeCity123?"
 - Expected: Graceful error handling, user-friendly message
 
-### Part 7 - Business MCP Testing Prompts
+### Part 6 - Business MCP Testing Prompts
 
 **Order Lookup**:
 
@@ -522,6 +522,6 @@ After completing this testing guide:
 
 For issues not covered in this guide, refer to:
 
-- [Part 6 README](../../Part%206%20-%20MCP%20Server%20Basics/README.md)
-- [Part 7 README](../../Part%207%20-%20Enhanced%20MCP%20Server/README.md)
+- [Part 5 README](../../Part%2005%20-%20MCP%20Server%20Basics/README.md)
+- [Part 6 README](../../Part%2006%20-%20Enhanced%20MCP%20Server/README.md)
 - [MCP Instructor Guide](../instructor/MCP_INSTRUCTOR_GUIDE.md)

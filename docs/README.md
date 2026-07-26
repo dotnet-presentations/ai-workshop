@@ -21,7 +21,7 @@ New test reports are written here using the template and skill at [`.github/skil
 ### 👨‍🏫 Instructor Resources (`/instructor`)
 
 - **[ATTENDEE_AI_ACCESS.md](instructor/ATTENDEE_AI_ACCESS.md)** - Instructor-only note on providing an AI access fallback (azure-ai-proxy-lite) for attendees who can't provision their own [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) resource
-- **[MCP_INSTRUCTOR_GUIDE.md](instructor/MCP_INSTRUCTOR_GUIDE.md)** - Complete instructor guide for teaching Parts 6-8 (MCP components) of the workshop
+- **[MCP_INSTRUCTOR_GUIDE.md](instructor/MCP_INSTRUCTOR_GUIDE.md)** - Complete instructor guide for teaching Parts 5-7 (MCP components) of the workshop
 - **[END_OF_WORKSHOP_RESOURCES_SLIDE.md](instructor/END_OF_WORKSHOP_RESOURCES_SLIDE.md)** - Closing slide content for end-of-workshop resource handoff
 
 ## Quick Navigation
@@ -40,24 +40,24 @@ New test reports are written here using the template and skill at [`.github/skil
 
 The workshop is structured as 11 parts:
 
-**Core AI application development (Parts 1-5):**
+**Core AI application development (Parts 1-4):**
 
 - Part 1: Setup and Prerequisites
 - Part 2: Build Chat App
 - Part 3: Add RAG
 - Part 4: AI Web Chat Template
-- Part 5: Providers and Fallbacks
 
-**Model Context Protocol Extension (Parts 6-8):**
+**Model Context Protocol Extension (Parts 5-7):**
 
-- Part 6: MCP Server Basics
-- Part 7: Enhanced MCP Server *(optional / bonus)*
-- Part 8: MCP Publishing *(optional / bonus)*
+- Part 5: MCP Server Basics
+- Part 6: Enhanced MCP Server *(optional / bonus)*
+- Part 7: MCP Publishing *(optional / bonus)*
 
-**Agents, capstone, and deployment (Parts 9-11):**
+**Agents, capstone, and deployment (Parts 8-11):**
 
-- Part 9: Agent Framework Essentials
-- Part 10: Adding AI to an Existing App
+- Part 8: Agent Framework Essentials
+- Part 9: Adding AI to an Existing App
+- Part 10: Choosing Providers and Services
 - Part 11: Azure Deployment
 
 ## Contributing

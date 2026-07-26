@@ -4,10 +4,10 @@
 
 ## In this workshop
 
-In this final part, you will learn how to deploy the AI Web Chat application you scaffolded in [Part 4](../Part%204%20-%20AI%20Web%20Chat%20Template/README.md) to Azure using the Azure Developer CLI (`azd`). You'll deploy your Qdrant-backed application to Azure Container Apps for production use.
+In this final part, you will learn how to deploy the AI Web Chat application you scaffolded in [Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) to Azure using the Azure Developer CLI (`azd`). You'll deploy your Qdrant-backed application to Azure Container Apps for production use.
 
 > [!NOTE]
-> This part deliberately returns to the **Part 4 web application** rather than the console samples from Parts 6-10. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship — it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the capstone `StoreApp` are console applications you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
+> This part deliberately returns to the **Part 4 web application** rather than the console samples from Parts 5-9. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship — it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the capstone `StoreApp` are console applications you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
 > [!TIP]
 > If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the working code snapshot provided in this `Part 11 - Deployment` folder. The complete code has already been updated with the necessary configuration for external HTTP endpoints and deployment. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
 
@@ -133,7 +133,7 @@ often wants a managed vector store instead, and on Azure that usually means
 [Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview).
 
 That swap is smaller than you might expect, for the same reason provider swaps
-were small in [Part 5](../Part%205%20-%20Providers%20and%20Fallbacks/README.md).
+were small in [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md).
 Your search code depends on an abstraction rather than on Qdrant:
 
 ```csharp
@@ -150,7 +150,7 @@ Only registration changes, in two files: the `AddQdrantClient` and
 
 Rather than editing by hand, scaffold the template a second time with the Azure AI
 Search vector store option (the same `dotnet new aichatweb` command from
-[Part 4](../Part%204%20-%20AI%20Web%20Chat%20Template/README.md), with a different
+[Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md), with a different
 `--vector-store` value) and diff the two projects. That shows you the exact
 registration and Aspire wiring the template generates.
 
@@ -258,8 +258,8 @@ Use the end-of-workshop resource handoff page:
 
 If you skipped the optional MCP track, this is a good moment to come back to it:
 
-- 🏢 [Part 7: Enhanced MCP Server](../Part%207%20-%20Enhanced%20MCP%20Server/README.md) *(Optional / bonus)*
-- 📦 [Part 8: MCP Publishing](../Part%208%20-%20MCP%20Publishing/README.md) *(Optional / bonus)*
+- 🏢 [Part 6: Enhanced MCP Server](../Part%2006%20-%20Enhanced%20MCP%20Server/README.md) *(Optional / bonus)*
+- 📦 [Part 7: MCP Publishing](../Part%2007%20-%20MCP%20Publishing/README.md) *(Optional / bonus)*
 
 ## Conclusion
 
@@ -268,11 +268,11 @@ You have completed the workshop (Parts 1-11). You can now:
 1. ✅ Create AI applications using the AI Web Chat template
 2. ✅ Understand and customize the template code structure
 3. ✅ Configure Microsoft Foundry (Azure OpenAI) for cloud AI workloads
-4. ✅ Configure provider and fallback strategies for real-world deployments
+4. ✅ Choose between cloud and local providers, and between vector store services, for real-world deployments
 5. ✅ Deploy your application to production environments using Azure
 
 Use this app as a baseline for your own AI application experiments.
 
 ---
 
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 10: Adding AI to an Existing App](../Part%2010%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md)

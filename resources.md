@@ -18,9 +18,9 @@ Use this page at the end of the workshop as a single handoff list for continued 
 
 ## Workshop follow-up exercises
 
-- Re-run [Part 7: Enhanced MCP Server](Part%207%20-%20Enhanced%20MCP%20Server/README.md) *(Optional / bonus)*
-- Re-run [Part 8: MCP Publishing](Part%208%20-%20MCP%20Publishing/README.md) *(Optional / bonus)*
-- Pick one existing app and apply one pattern from [Part 10](Part%2010%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md)
+- Re-run [Part 6: Enhanced MCP Server](Part%2006%20-%20Enhanced%20MCP%20Server/README.md) *(Optional / bonus)*
+- Re-run [Part 7: MCP Publishing](Part%2007%20-%20MCP%20Publishing/README.md) *(Optional / bonus)*
+- Pick one existing app and apply one pattern from [Part 9](Part%2009%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md)
 
 ## Related repositories and specs
 

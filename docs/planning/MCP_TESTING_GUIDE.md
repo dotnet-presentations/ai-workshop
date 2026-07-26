@@ -42,7 +42,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - [ ] **Working AI Web Chat application** (from Parts 1-4)
 - [ ] **Basic understanding** of .NET development
 
-## Part 5 Testing: MCP Server Basics (WeatherMcpServer)
+## Part 5 Testing: MCP Server Basics (MyMcpServer)
 
 ### Test 1: Project Build Verification
 

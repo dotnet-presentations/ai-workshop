@@ -19,7 +19,7 @@ flowchart LR
   Q[question] --> E[embed]
   E --> S[semantic search over ingested chunks]
   S --> T[top-k context]
-  D[document] --> I[read/chunk/embed/store<br/>(manual slice, then MEDI)]
+  D[document] --> I["read/chunk/embed/store<br/>(manual slice, then MEDI)"]
   I --> T
   T --> A[augment system prompt]
   A --> C[chat model]

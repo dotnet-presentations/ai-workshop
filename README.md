@@ -26,7 +26,7 @@ Docker Desktop or Podman is required when you run the workshop's **Qdrant contai
 | Part 10 | Not required. The `StoreApp` sample in this repo is a Docker-free console app. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
 | Part 11 | Required to run the supplied Qdrant + Aspire application locally. The Azure deployment itself runs the containers in Azure. |
 
-Without Docker, you can still complete Parts 1-3 and Parts 5-10, including the main chat, RAG, template, provider, MCP, agent, and capstone concepts. In Part 4 you will miss the hands-on Qdrant, Aspire dashboard, service orchestration, and container persistence experience. Part 11 uses the full Qdrant + Aspire application, so local execution of that snapshot requires Docker or Podman.
+Without Docker, you can still complete Parts 1-10, including the main chat, RAG, template, provider, MCP, agent, and capstone concepts. In Part 4 you will miss the hands-on Qdrant, Aspire dashboard, service orchestration, and container persistence experience. Part 11 uses the full Qdrant + Aspire application, so local execution of that snapshot requires Docker or Podman.
 
 ### Model Context Protocol (Parts 6-8)
 

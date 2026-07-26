@@ -22,6 +22,7 @@ New test reports are written here using the template and skill at [`.github/skil
 
 - **[ATTENDEE_AI_ACCESS.md](instructor/ATTENDEE_AI_ACCESS.md)** - Instructor-only note on providing an AI access fallback (azure-ai-proxy-lite) for attendees who can't provision their own [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) resource
 - **[MCP_INSTRUCTOR_GUIDE.md](instructor/MCP_INSTRUCTOR_GUIDE.md)** - Complete instructor guide for teaching Parts 6-8 (MCP components) of the workshop
+- **[END_OF_WORKSHOP_RESOURCES_SLIDE.md](instructor/END_OF_WORKSHOP_RESOURCES_SLIDE.md)** - Closing slide content for end-of-workshop resource handoff
 
 ## Quick Navigation
 

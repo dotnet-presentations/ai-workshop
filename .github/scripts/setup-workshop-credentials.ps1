@@ -14,8 +14,6 @@
       WORKSHOP_AZURE_LOCATION             Region for the Part 11 azd deployment
       WORKSHOP_LOCAL_MODEL_ENDPOINT       Optional. OpenAI-compatible local endpoint for Part 10
       WORKSHOP_LOCAL_MODEL_NAME           Optional. Local model name for Part 10
-      WORKSHOP_AZURE_SEARCH_ENDPOINT      Optional. Azure AI Search alternative to Qdrant in Part 11
-      WORKSHOP_AZURE_SEARCH_KEY           Optional. Azure AI Search admin key
 
     The workshop projects themselves do not read these variables - the console
     samples read user secrets and the Aspire app reads a connection string. Use
@@ -30,7 +28,7 @@
     projects (Parts 2, 3, 9, 10) and the Part 11 AppHost connection string.
 
 .PARAMETER SkipOptional
-    Do not prompt for the local model or Azure AI Search values.
+    Do not prompt for the optional local model values.
 
 .EXAMPLE
     ./setup-workshop-credentials.ps1
@@ -45,8 +43,7 @@
     survive across terminal sessions. Do not run this on a shared machine. To
     remove them afterwards, run:
 
-        'WORKSHOP_AZURE_OPENAI_KEY','WORKSHOP_AZURE_SEARCH_KEY' |
-            ForEach-Object { [Environment]::SetEnvironmentVariable($_, $null, 'User') }
+        [Environment]::SetEnvironmentVariable('WORKSHOP_AZURE_OPENAI_KEY', $null, 'User')
 #>
 
 [CmdletBinding()]
@@ -221,12 +218,6 @@ if (-not $SkipOptional) {
         -Help 'Ollama: http://localhost:11434/v1   Foundry Local: http://localhost:5273/v1'
     Request-WorkshopVariable -Name 'WORKSHOP_LOCAL_MODEL_NAME' -Prompt 'Local model name' -Optional `
         -Help 'Ollama: llama3.2   Foundry Local: phi-4-mini'
-
-    Write-Host ''
-    Write-Host 'Azure AI Search - optional, only if you swap it in for Qdrant in Part 11' -ForegroundColor White
-    Request-WorkshopVariable -Name 'WORKSHOP_AZURE_SEARCH_ENDPOINT' -Prompt 'Search endpoint' -Optional `
-        -Help 'For example https://your-search-service.search.windows.net'
-    Request-WorkshopVariable -Name 'WORKSHOP_AZURE_SEARCH_KEY' -Prompt 'Search admin key' -Optional -Secret
 }
 
 Write-Host ''
@@ -241,8 +232,6 @@ $status = [ordered]@{
     'Azure location'        = $env:WORKSHOP_AZURE_LOCATION
     'Local model endpoint'  = $env:WORKSHOP_LOCAL_MODEL_ENDPOINT
     'Local model name'      = $env:WORKSHOP_LOCAL_MODEL_NAME
-    'AI Search endpoint'    = $env:WORKSHOP_AZURE_SEARCH_ENDPOINT
-    'AI Search key'         = $env:WORKSHOP_AZURE_SEARCH_KEY
 }
 
 foreach ($item in $status.GetEnumerator()) {

@@ -56,7 +56,7 @@ Markdown is linted by `.github/workflows/markdownlint.yml` using `.markdownlint.
 
 Use the **workshop-testing** skill (`.github/skills/workshop-testing/`) when asked to walk through the workshop as an attendee, validate a part, or reconcile snapshots against the READMEs.
 
-Credentials for testing come from `.github/scripts/setup-workshop-credentials.ps1`, which sets `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`, `WORKSHOP_AZURE_SUBSCRIPTION_ID`, `WORKSHOP_AZURE_LOCATION`, and optional Azure AI Search values.
+Credentials for testing come from `.github/scripts/setup-workshop-credentials.ps1`, which sets `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`, `WORKSHOP_AZURE_OPENAI_CHAT`, `WORKSHOP_AZURE_OPENAI_EMBEDDING`, `WORKSHOP_AZURE_SUBSCRIPTION_ID`, `WORKSHOP_AZURE_LOCATION`, and optional local model values.
 
 ## Writing style
 

@@ -51,7 +51,7 @@ In this final part, you will learn how to deploy the AI Web Chat application you
 > [!IMPORTANT]
 > **Vector Database Configuration**: This deployment uses **Qdrant** as the vector database, which runs as a containerized service in Azure Container Apps. No additional vector database setup is required.
 >
-> If you prefer to use **Azure AI Search** instead, see the "Alternative: Azure AI Search Deployment" section below.
+> For a note on using a managed vector store in production, see [Optional: using a managed vector store](#optional-using-a-managed-vector-store) at the end of this part.
 
 1. Ensure you are in the root directory which contains the solution file.
 
@@ -125,55 +125,39 @@ In this final part, you will learn how to deploy the AI Web Chat application you
    azd show
    ```
 
-## Alternative: Azure AI Search Deployment
+## Optional: using a managed vector store
 
-If you prefer to use Azure AI Search instead of Qdrant for vector storage, follow these steps:
+This workshop deploys Qdrant because it needs no setup, behaves the same locally
+and in Azure, and costs nothing beyond the container it runs in. A production app
+often wants a managed vector store instead, and on Azure that usually means
+[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview).
 
-> [!NOTE]
-> Azure AI Search provides a managed vector database service but requires additional Azure resources and configuration.
+That swap is smaller than you might expect, for the same reason provider swaps
+were small in [Part 5](../Part%205%20-%20Providers%20and%20Fallbacks/README.md).
+Your search code depends on an abstraction rather than on Qdrant:
 
-### Prerequisites for Azure AI Search
+```csharp
+// GenAiLab.Web/Services/SemanticSearch.cs
+public class SemanticSearch(VectorStoreCollection<Guid, IngestedChunk> vectorCollection)
+```
 
-1. **Create an Azure AI Search service** in the Azure portal:
-   - Go to Azure portal → Create a resource → Azure AI Search
-   - Choose a pricing tier (Basic or higher for vector search)
-   - Note the endpoint URL and admin key
+`VectorStoreCollection<TKey, TRecord>` comes from `Microsoft.Extensions.VectorData`,
+so `SemanticSearch`, `DataIngestor`, and the Blazor components stay as they are.
+Only registration changes, in two files: the `AddQdrantClient` and
+`AddQdrantCollection<...>` calls in `GenAiLab.Web/Program.cs`, and the
+`builder.AddQdrant("vectordb")` resource in `GenAiLab.AppHost/AppHost.cs` that tells
+`azd` what to provision.
 
-1. **Update your application configuration**:
-   - Modify `Program.cs` to use Azure AI Search instead of Qdrant
-   - Update connection strings and service registrations
-   - Install Azure AI Search NuGet packages
+Rather than editing by hand, scaffold the template a second time with the Azure AI
+Search vector store option (the same `dotnet new aichatweb` command from
+[Part 4](../Part%204%20-%20AI%20Web%20Chat%20Template/README.md), with a different
+`--vector-store` value) and diff the two projects. That shows you the exact
+registration and Aspire wiring the template generates.
 
-### Azure AI Search Deployment Steps
-
-1. **Add Azure AI Search credentials to the credential setup script**:
-
-   Add to `.github/scripts/setup-workshop-credentials.ps1`:
-
-   ```powershell
-   $env:WORKSHOP_AZURE_SEARCH_ENDPOINT = "https://your-search-service.search.windows.net"
-   $env:WORKSHOP_AZURE_SEARCH_KEY = "your-admin-key"
-   ```
-
-1. **Follow the same azd deployment steps** as above, but when prompted for infrastructure parameters:
-   - Provide your Azure AI Search connection string when prompted for 'azureAISearch'
-   - Format: `Endpoint=https://your-search-service.search.windows.net;Key=your-admin-key`
-
-### Benefits of Azure AI Search vs Qdrant
-
-**Azure AI Search advantages:**
-
-- Fully managed service (no container management)
-- Built-in security and compliance features
-- Integration with other Azure AI services
-- Advanced filtering and faceting capabilities
-
-**Qdrant advantages:**
-
-- Simpler deployment (runs as container)
-- Open source and vendor-neutral
-- Lower cost for development scenarios
-- Faster setup and testing
+The trade-off is the usual one. Qdrant is cheaper and portable, and you own the
+container and its data volume. Azure AI Search is billed per service hour even
+when idle, but it is managed, has an SLA, and adds keyword and hybrid search
+alongside vector search.
 
 ## Manage Your Deployment
 

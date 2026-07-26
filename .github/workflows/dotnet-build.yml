@@ -7,10 +7,12 @@ on:
     paths:
       - ".github/workflows/dotnet-build.yml"
       - "Part 2 - Build Chat App/**"
-      - "Part 11 - Deployment/**"
+      - "Part 3 - Add RAG/RagChatApp/**"
       - "Part 6 - MCP Server Basics/**"
       - "Part 7 - Enhanced MCP Server/**"
+      - "Part 9 - Agent Framework Basics/**"
       - "Part 10 - Adding AI to an Existing App/**"
+      - "Part 11 - Deployment/**"
   pull_request:
     branches:
       - main
@@ -21,12 +23,10 @@ on:
       - "Part 2 - Build Chat App/**/*.csproj"
       - "Part 2 - Build Chat App/**/*.props"
       - "Part 2 - Build Chat App/**/*.targets"
-      - "Part 11 - Deployment/**/*.cs"
-      - "Part 11 - Deployment/**/*.razor"
-      - "Part 11 - Deployment/**/*.csproj"
-      - "Part 11 - Deployment/**/*.sln"
-      - "Part 11 - Deployment/**/*.props"
-      - "Part 11 - Deployment/**/*.targets"
+      - "Part 3 - Add RAG/RagChatApp/**/*.cs"
+      - "Part 3 - Add RAG/RagChatApp/**/*.csproj"
+      - "Part 3 - Add RAG/RagChatApp/**/*.props"
+      - "Part 3 - Add RAG/RagChatApp/**/*.targets"
       - "Part 6 - MCP Server Basics/**/*.cs"
       - "Part 6 - MCP Server Basics/**/*.csproj"
       - "Part 6 - MCP Server Basics/**/*.props"
@@ -35,10 +35,20 @@ on:
       - "Part 7 - Enhanced MCP Server/**/*.csproj"
       - "Part 7 - Enhanced MCP Server/**/*.props"
       - "Part 7 - Enhanced MCP Server/**/*.targets"
+      - "Part 9 - Agent Framework Basics/**/*.cs"
+      - "Part 9 - Agent Framework Basics/**/*.csproj"
+      - "Part 9 - Agent Framework Basics/**/*.props"
+      - "Part 9 - Agent Framework Basics/**/*.targets"
       - "Part 10 - Adding AI to an Existing App/**/*.cs"
       - "Part 10 - Adding AI to an Existing App/**/*.csproj"
       - "Part 10 - Adding AI to an Existing App/**/*.props"
       - "Part 10 - Adding AI to an Existing App/**/*.targets"
+      - "Part 11 - Deployment/**/*.cs"
+      - "Part 11 - Deployment/**/*.razor"
+      - "Part 11 - Deployment/**/*.csproj"
+      - "Part 11 - Deployment/**/*.sln"
+      - "Part 11 - Deployment/**/*.props"
+      - "Part 11 - Deployment/**/*.targets"
   workflow_dispatch:
 
 jobs:
@@ -50,6 +60,9 @@ jobs:
         include:
           - solution: "Part 2 - Build Chat App/ChatApp/ChatApp.csproj"
             dotnet-version: "10.0.x"
+          # No solution file exists for RagChatApp; using project file directly
+          - solution: "Part 3 - Add RAG/RagChatApp/RagChatApp.csproj"
+            dotnet-version: "10.0.x"
           - solution: "Part 11 - Deployment/GenAiLab/GenAiLab.sln"
             dotnet-version: "10.0.x"
           # No solution file exists for MyMcpServer; using project file directly
@@ -57,6 +70,9 @@ jobs:
             dotnet-version: "10.0.x"
           # No solution file exists for ContosoOrdersMcpServer; using project file directly
           - solution: "Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj"
+            dotnet-version: "10.0.x"
+          # No solution file exists for AgentApp; using project file directly
+          - solution: "Part 9 - Agent Framework Basics/AgentApp/AgentApp.csproj"
             dotnet-version: "10.0.x"
           # No solution file exists for StoreApp; using project file directly
           - solution: "Part 10 - Adding AI to an Existing App/StoreApp/StoreApp.csproj"

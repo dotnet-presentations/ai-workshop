@@ -8,7 +8,8 @@
 //   2. Creating an IChatClient        (the core Microsoft.Extensions.AI abstraction)
 //   3. A chat loop with history       (multi-turn conversations)
 //   4. Streaming responses            (token-by-token output)
-//   5. A middleware pipeline          (add logging without touching your app code)
+//   5. Structured output              (AI answers as typed .NET objects)
+//   6. A middleware pipeline          (add logging without touching your app code)
 //
 // Adapted with thanks from Steve Sanderson's dotnet-ai-workshop
 // (https://github.com/SteveSandersonMS/dotnet-ai-workshop).
@@ -49,7 +50,7 @@ const string chatModel = "gpt-5-mini";
 // Every provider (Azure OpenAI, OpenAI, Ollama, Foundry Local, ...) gives you the
 // same IChatClient, so the rest of your app never changes when you switch models.
 //
-// 5. A middleware pipeline
+// 6. A middleware pipeline
 //    .AsBuilder() lets us wrap the client with cross-cutting behavior. Here we add
 //    logging - every request/response is logged without changing our app code.
 using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
@@ -72,7 +73,7 @@ var history = new List<ChatMessage>
     new(ChatRole.System, "You are a helpful, concise assistant for a .NET workshop.")
 };
 
-Console.WriteLine("Chat app ready. Type a message (or 'exit' to quit).");
+Console.WriteLine("Chat app ready. Type a message ('summary' for a typed summary, 'exit' to quit).");
 Console.WriteLine();
 
 while (true)
@@ -84,6 +85,38 @@ while (true)
         input.Equals("exit", StringComparison.OrdinalIgnoreCase))
     {
         break;
+    }
+
+    // ---------------------------------------------------------------------
+    // 5. Structured output
+    // ---------------------------------------------------------------------
+    // Sometimes you want data, not prose. GetResponseAsync<T> asks the model for
+    // JSON that matches T's schema and deserializes it for you, so the rest of
+    // your app works with an ordinary .NET object instead of parsing text.
+    if (input.Equals("summary", StringComparison.OrdinalIgnoreCase))
+    {
+        List<ChatMessage> summaryPrompt =
+        [
+            .. history,
+            new ChatMessage(ChatRole.User, "Summarize this conversation so far.")
+        ];
+
+        ChatResponse<ConversationSummary> response =
+            await chatClient.GetResponseAsync<ConversationSummary>(summaryPrompt);
+
+        if (response.TryGetResult(out ConversationSummary? summary))
+        {
+            Console.WriteLine($"Topic:      {summary.Topic}");
+            Console.WriteLine($"Sentiment:  {summary.Sentiment}");
+            Console.WriteLine($"Follow-ups: {string.Join(", ", summary.FollowUpQuestions)}");
+        }
+        else
+        {
+            Console.WriteLine("The model did not return a valid summary object.");
+        }
+
+        Console.WriteLine();
+        continue;
     }
 
     history.Add(new ChatMessage(ChatRole.User, input));
@@ -109,3 +142,14 @@ while (true)
 }
 
 Console.WriteLine("Goodbye!");
+
+// -----------------------------------------------------------------------------
+// The shape of the structured output
+// -----------------------------------------------------------------------------
+// The model is given this type's JSON schema and must answer with matching JSON.
+// Keep the type small and the property names descriptive: the names are part of
+// the instructions the model sees.
+record ConversationSummary(
+    string Topic,
+    string Sentiment,
+    string[] FollowUpQuestions);

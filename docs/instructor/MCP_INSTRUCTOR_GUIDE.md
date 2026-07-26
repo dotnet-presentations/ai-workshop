@@ -2,40 +2,46 @@
 
 ## Overview
 
-This guide provides instructors with comprehensive information for teaching Parts 7-9 of the AI Workshop, focused on Model Context Protocol (MCP) server development. These parts build upon the AI Web Chat application (Parts 1-6) by introducing custom tools that extend AI agents like GitHub Copilot.
+This guide provides instructors with comprehensive information for teaching Parts 6-8 of the AI Workshop, focused on Model Context Protocol (MCP) server development. These parts build upon the AI application work (Parts 1-5) by introducing custom tools that extend AI agents like GitHub Copilot.
 
 ## Workshop Structure and Timing
 
-### Complete 9-Part Workshop Flow
+### Complete 11-Part Workshop Flow
 
-**AI Web Chat Foundation (Parts 1-6)** - *3-4 hours*
+**AI application foundation (Parts 1-5)** - *3-4 hours*
 
-- Parts 1-6: Build AI-powered web application with Azure OpenAI integration
+- Parts 1-5: Build the chat app by hand, add RAG, compare the template, and configure providers
 
-**MCP Extension (Parts 7-9)** - *2-3 hours*  
+**MCP Extension (Parts 6-8)** - *45-60 minutes required, 2-3 hours with the optional track*
 
-- Part 7: MCP Server Basics (45-60 minutes)
-- Part 8: Enhanced MCP Server (45-60 minutes)
-- Part 9: MCP Publishing (30-45 minutes)
+- Part 6: MCP Server Basics (45-60 minutes) - **required**
+- Part 7: Enhanced MCP Server (45-60 minutes) - *optional / bonus*
+- Part 8: MCP Publishing (30-45 minutes) - *optional / bonus*
+
+**Agents, capstone, and deployment (Parts 9-11)** - *1.5-2 hours*
+
+- Part 9: Agent Framework Essentials (30-45 minutes)
+- Part 10: Adding AI to an Existing App (30-45 minutes)
+- Part 11: Deploy to Azure (30-45 minutes)
 
 ### Teaching Options
 
-#### **Option 1: Complete Workshop (6-7 hours)**
+#### **Option 1: Complete Workshop (~8 hours, two-part HOL)**
 
-- Teach all 9 parts in sequence
+- Teach the required parts (1-6 and 9-11) in sequence, keeping Parts 7-8 as bonus material
 - Ideal for full-day workshops or multi-session courses
 - Provides complete AI development experience
 
 #### **Option 2: MCP-Focused Session (2-3 hours)**
 
 - Start with completed AI Web Chat (use `/src/complete`)
-- Focus exclusively on Parts 7-9
+- Focus exclusively on Parts 6-8
 - Ideal for workshops focused on AI extensibility
 
 #### **Option 3: Modular Teaching**
 
-- Parts 1-6: AI Web Chat development
-- Parts 7-9: AI agent extensibility (separate session)
+- Parts 1-5: AI application development
+- Parts 6-8: AI agent extensibility (separate session)
 - Allows flexible scheduling and different skill levels
 
 ## Prerequisites for MCP Parts
@@ -51,7 +57,7 @@ This guide provides instructors with comprehensive information for teaching Part
 
 **Recommended Prerequisites:**
 
-- ✅ **Completed Parts 1-6** - Understanding of AI chat applications
+- ✅ **Completed Parts 1-5** - Understanding of AI chat applications
 - ✅ **Git knowledge** - For version control and collaboration
 - ✅ **REST API familiarity** - Helps with understanding tool concepts
 
@@ -71,11 +77,11 @@ This guide provides instructors with comprehensive information for teaching Part
 - **GitHub Copilot Access**: Verify subscription is active and extensions installed
 - **Template Installation**: May require clearing NuGet cache if templates don't appear
 
-## Part 7: MCP Server Basics
+## Part 6: MCP Server Basics
 
 ### Learning Objectives (Communicate to Students)
 
-By the end of Part 7, students will:
+By the end of Part 6, students will:
 
 - ✅ Understand what MCP is and why it extends AI capabilities
 - ✅ Create their first MCP server using .NET templates
@@ -107,7 +113,7 @@ flowchart TD
 - Error handling for invalid inputs
 - JSON serialization for structured responses
 
-### Teaching Flow - Part 7 (45-60 minutes)
+### Teaching Flow - Part 6 (45-60 minutes)
 
 #### **Introduction (10 minutes)**
 
@@ -118,7 +124,7 @@ flowchart TD
 #### **Hands-On Development (25 minutes)**
 
 1. **Project Creation** (5 minutes)
-   - Navigate to Part 7 directory
+   - Navigate to Part 6 directory
    - Examine WeatherMcpServer project structure
    - Discuss project template and dependencies
 
@@ -150,7 +156,7 @@ flowchart TD
 A: MCP makes tools reusable across any AI agent (Copilot, Claude, etc.) and provides standard protocols for tool discovery and execution.
 
 **Q: "Do I need real weather APIs?"**
-A: No, Part 7 uses simulated data to focus on MCP concepts. Real APIs can be added later.
+A: No, Part 6 uses simulated data to focus on MCP concepts. Real APIs can be added later.
 
 **Q: "What if my tools don't appear in Copilot?"**
 A: Check tool descriptions are clear, VS Code MCP configuration is correct, and GitHub Copilot extensions are active.
@@ -169,9 +175,9 @@ A: Check tool descriptions are clear, VS Code MCP configuration is correct, and 
 - Verify `.vscode/mcp.json` syntax and paths
 - Check VS Code Output panel for MCP-specific errors
 
-## Part 8: Enhanced MCP Server with Business Tools
+## Part 7: Enhanced MCP Server with Business Tools
 
-### Learning Objectives - Part 8
+### Learning Objectives - Part 7
 
 - ✅ Design MCP tools that solve real business problems
 - ✅ Implement complex data structures and business logic
@@ -179,7 +185,7 @@ A: Check tool descriptions are clear, VS Code MCP configuration is correct, and 
 - ✅ Apply data validation and error handling principles
 - ✅ Test multi-server MCP configurations
 
-### Key Concepts to Emphasize - Part 8
+### Key Concepts to Emphasize - Part 7
 
 - ContosoOrders as realistic e-commerce scenario
 - Business tools: Orders, Customers, Inventory
@@ -197,7 +203,7 @@ A: Check tool descriptions are clear, VS Code MCP configuration is correct, and 
 - Rich data structures in responses
 - Error handling for business scenarios
 
-### Teaching Flow - Part 8 (45-60 minutes)
+### Teaching Flow - Part 7 (45-60 minutes)
 
 #### **Business Context Introduction (10 minutes)**
 
@@ -248,11 +254,11 @@ A: Check tool descriptions are clear, VS Code MCP configuration is correct, and 
 - Tool versioning and backwards compatibility
 - Enterprise deployment strategies
 
-## Part 9: MCP Publishing and Distribution
+## Part 8: MCP Publishing and Distribution
 
-### Learning Objectives - Part 9
+### Learning Objectives - Part 8
 
-By the end of Part 9, students will:
+By the end of Part 8, students will:
 
 - ✅ Understand MCP packaging and distribution strategies
 - ✅ Configure professional metadata for MCP servers
@@ -260,7 +266,7 @@ By the end of Part 9, students will:
 - ✅ Apply versioning and security best practices
 - ✅ Plan enterprise distribution scenarios
 
-### Key Concepts to Emphasize - Part 9
+### Key Concepts to Emphasize - Part 8
 
 - NuGet vs. source code vs. container distribution
 - Trade-offs between accessibility and control
@@ -308,19 +314,19 @@ By the end of Part 9, students will:
 
 ### Knowledge Check Questions
 
-**Part 7 Validation:**
+**Part 6 Validation:**
 
 1. What attributes are required for MCP tool methods?
 2. How do you handle errors in MCP tools?
 3. What is the purpose of the `.vscode/mcp.json` file?
 
-**Part 8 Validation:**
+**Part 7 Validation:**
 
 1. How do multiple MCP servers coexist?
 2. What makes business tools different from simple tools?
 3. How would you secure business data in MCP tools?
 
-**Part 9 Validation:**
+**Part 8 Validation:**
 
 1. What are the trade-offs between different distribution methods?
 2. How do you version MCP servers for backwards compatibility?
@@ -366,15 +372,15 @@ By the end of Part 9, students will:
 
 **Minimum Time Requirements:**
 
-- Part 7: 45 minutes (basic understanding)
-- Part 8: 45 minutes (business concepts)
-- Part 9: 30 minutes (publishing overview)
+- Part 6: 45 minutes (basic understanding)
+- Part 7: 45 minutes (business concepts)
+- Part 8: 30 minutes (publishing overview)
 
 **Recommended Time Allocation:**
 
-- Part 7: 60 minutes (thorough understanding)
-- Part 8: 60 minutes (hands-on practice)
-- Part 9: 45 minutes (real-world planning)
+- Part 6: 60 minutes (thorough understanding)
+- Part 7: 60 minutes (hands-on practice)
+- Part 8: 45 minutes (real-world planning)
 
 ### Extension Activities
 
@@ -394,9 +400,9 @@ By the end of Part 9, students will:
 
 **During Workshop:**
 
-- [MCP Testing Guide](MCP_TESTING_GUIDE.md) for troubleshooting
-- [Part 7 README](Part%207%20-%20MCP%20Server%20Basics/README.md) for detailed instructions
-- [Part 8 README](Part%208%20-%20Enhanced%20MCP%20Server/README.md) for business scenarios
+- [MCP Testing Guide](../planning/MCP_TESTING_GUIDE.md) for troubleshooting
+- [Part 6 README](../../Part%206%20-%20MCP%20Server%20Basics/README.md) for detailed instructions
+- [Part 7 README](../../Part%207%20-%20Enhanced%20MCP%20Server/README.md) for business scenarios
 
 **Post-Workshop:**
 
@@ -431,4 +437,4 @@ By the end of Part 9, students will:
 
 ---
 
-*This instructor guide is designed to support successful delivery of the MCP workshop components. For questions or improvements, refer to the [Workshop Planning Document](MCP_WORKSHOP_PLANNING.md).*
+*This instructor guide is designed to support successful delivery of the MCP workshop components. For questions or improvements, refer to the [Workshop Planning Document](../archive/planning/MCP_WORKSHOP_PLANNING.md).*

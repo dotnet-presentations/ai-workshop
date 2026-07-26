@@ -70,7 +70,7 @@ function Set-WorkshopCredentials {
     # Check for Azure Subscription ID
     if (-not $env:WORKSHOP_AZURE_SUBSCRIPTION_ID) {
         Write-Host "Azure Subscription ID not found in environment variable WORKSHOP_AZURE_SUBSCRIPTION_ID" -ForegroundColor Yellow
-        Write-Host "This is needed for Azure deployment in Part 6" -ForegroundColor Gray
+        Write-Host "This is needed for Azure deployment in Part 11" -ForegroundColor Gray
         Write-Host ""
         
         $azureSubscriptionId = Read-Host -Prompt "Enter your Azure Subscription ID (or press Enter to skip)"
@@ -90,7 +90,7 @@ function Set-WorkshopCredentials {
     # Check for Azure Location
     if (-not $env:WORKSHOP_AZURE_LOCATION) {
         Write-Host "Azure Location not found in environment variable WORKSHOP_AZURE_LOCATION" -ForegroundColor Yellow
-        Write-Host "This is needed for Azure deployment in Part 6" -ForegroundColor Gray
+        Write-Host "This is needed for Azure deployment in Part 11" -ForegroundColor Gray
         Write-Host "Common options: eastus, westus2, centralus, westeurope, eastasia" -ForegroundColor Gray
         Write-Host ""
         
@@ -110,7 +110,7 @@ function Set-WorkshopCredentials {
     
     # Check for Azure AI Search credentials (optional)
     Write-Host "=== Optional: Azure AI Search Credentials ===" -ForegroundColor Cyan
-    Write-Host "Azure AI Search is an alternative to Qdrant for vector storage in Part 6 deployment." -ForegroundColor Yellow
+    Write-Host "Azure AI Search is an alternative to Qdrant for vector storage in Part 11 deployment." -ForegroundColor Yellow
     Write-Host "These credentials are optional and only needed if you want to use Azure AI Search instead of Qdrant." -ForegroundColor Yellow
     Write-Host ""
     

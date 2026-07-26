@@ -7,10 +7,10 @@ on:
     paths:
       - ".github/workflows/dotnet-build.yml"
       - "Part 2 - Build Chat App/**"
-      - "Part 6 - Deployment/**"
-      - "Part 7 - MCP Server Basics/**"
-      - "Part 8 - Enhanced MCP Server/**"
-      - "Part 11 - Adding AI to an Existing App/**"
+      - "Part 11 - Deployment/**"
+      - "Part 6 - MCP Server Basics/**"
+      - "Part 7 - Enhanced MCP Server/**"
+      - "Part 10 - Adding AI to an Existing App/**"
   pull_request:
     branches:
       - main
@@ -21,24 +21,24 @@ on:
       - "Part 2 - Build Chat App/**/*.csproj"
       - "Part 2 - Build Chat App/**/*.props"
       - "Part 2 - Build Chat App/**/*.targets"
-      - "Part 6 - Deployment/**/*.cs"
-      - "Part 6 - Deployment/**/*.razor"
-      - "Part 6 - Deployment/**/*.csproj"
-      - "Part 6 - Deployment/**/*.sln"
-      - "Part 6 - Deployment/**/*.props"
-      - "Part 6 - Deployment/**/*.targets"
-      - "Part 7 - MCP Server Basics/**/*.cs"
-      - "Part 7 - MCP Server Basics/**/*.csproj"
-      - "Part 7 - MCP Server Basics/**/*.props"
-      - "Part 7 - MCP Server Basics/**/*.targets"
-      - "Part 8 - Enhanced MCP Server/**/*.cs"
-      - "Part 8 - Enhanced MCP Server/**/*.csproj"
-      - "Part 8 - Enhanced MCP Server/**/*.props"
-      - "Part 8 - Enhanced MCP Server/**/*.targets"
-      - "Part 11 - Adding AI to an Existing App/**/*.cs"
-      - "Part 11 - Adding AI to an Existing App/**/*.csproj"
-      - "Part 11 - Adding AI to an Existing App/**/*.props"
-      - "Part 11 - Adding AI to an Existing App/**/*.targets"
+      - "Part 11 - Deployment/**/*.cs"
+      - "Part 11 - Deployment/**/*.razor"
+      - "Part 11 - Deployment/**/*.csproj"
+      - "Part 11 - Deployment/**/*.sln"
+      - "Part 11 - Deployment/**/*.props"
+      - "Part 11 - Deployment/**/*.targets"
+      - "Part 6 - MCP Server Basics/**/*.cs"
+      - "Part 6 - MCP Server Basics/**/*.csproj"
+      - "Part 6 - MCP Server Basics/**/*.props"
+      - "Part 6 - MCP Server Basics/**/*.targets"
+      - "Part 7 - Enhanced MCP Server/**/*.cs"
+      - "Part 7 - Enhanced MCP Server/**/*.csproj"
+      - "Part 7 - Enhanced MCP Server/**/*.props"
+      - "Part 7 - Enhanced MCP Server/**/*.targets"
+      - "Part 10 - Adding AI to an Existing App/**/*.cs"
+      - "Part 10 - Adding AI to an Existing App/**/*.csproj"
+      - "Part 10 - Adding AI to an Existing App/**/*.props"
+      - "Part 10 - Adding AI to an Existing App/**/*.targets"
   workflow_dispatch:
 
 jobs:
@@ -50,16 +50,16 @@ jobs:
         include:
           - solution: "Part 2 - Build Chat App/ChatApp/ChatApp.csproj"
             dotnet-version: "10.0.x"
-          - solution: "Part 6 - Deployment/GenAiLab/GenAiLab.sln"
+          - solution: "Part 11 - Deployment/GenAiLab/GenAiLab.sln"
             dotnet-version: "10.0.x"
           # No solution file exists for MyMcpServer; using project file directly
-          - solution: "Part 7 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj"
+          - solution: "Part 6 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj"
             dotnet-version: "10.0.x"
           # No solution file exists for ContosoOrdersMcpServer; using project file directly
-          - solution: "Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj"
+          - solution: "Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj"
             dotnet-version: "10.0.x"
           # No solution file exists for StoreApp; using project file directly
-          - solution: "Part 11 - Adding AI to an Existing App/StoreApp/StoreApp.csproj"
+          - solution: "Part 10 - Adding AI to an Existing App/StoreApp/StoreApp.csproj"
             dotnet-version: "10.0.x"
 
     steps:

@@ -1,5 +1,7 @@
 # Part 4: AI Web Chat Template - scaffold `aichatweb` and understand the code
 
+> **⏱️ Estimated Time:** 30-45 minutes
+
 You've now built a chat app (Part 2) and a RAG loop (Part 3) **by hand**. You know
 what an `IChatClient` is, what an embedding is, what a vector search does, and why
 an in-memory store doesn't scale.

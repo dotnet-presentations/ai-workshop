@@ -24,7 +24,7 @@ dotnet new install Microsoft.Extensions.AI.Templates
 docker --version                                    # only needed for Parts 4 and 11
 ```
 
-The script collects the `WORKSHOP_*` variables and, with `-ApplyUserSecrets`, writes them into the snapshot projects. Add `-Force` if a key has been rotated since the last run.
+The script collects the `WORKSHOP_*` variables and, with `-ApplyUserSecrets`, writes the Foundry endpoint and key into the snapshot console projects (as `AzureOpenAI:Endpoint` / `AzureOpenAI:Key`), the local model settings into Part 10 if configured, and the composed `ConnectionStrings:openai` into the Part 11 AppHost. Add `-Force` if a key has been rotated since the last run.
 
 Nothing in the workshop reads `WORKSHOP_*` directly. The console samples read user secrets (`AzureOpenAI:Endpoint`, `AzureOpenAI:Key`) and the Aspire app reads `ConnectionStrings:openai`. **Projects you scaffold yourself during a test run still need their secrets set by hand** — the script only knows about the committed snapshots.
 

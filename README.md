@@ -151,7 +151,7 @@ The script prompts for your Microsoft Foundry (Azure OpenAI) endpoint and key, t
 
 Values are saved as `WORKSHOP_*` environment variables so they persist across testing sessions. Useful switches:
 
-- `-ApplyUserSecrets` also writes the values into the user secrets of Parts 2, 3, 9, and 10, and into the Part 11 AppHost connection string, so you don't have to set them by hand in each project.
+- `-ApplyUserSecrets` writes the Foundry endpoint and key into the user secrets of Parts 2, 3, 9, and 10 (as `AzureOpenAI:Endpoint` / `AzureOpenAI:Key`), the local model settings into Part 10 if configured, and the composed `ConnectionStrings:openai` into the Part 11 AppHost.
 - `-Force` re-prompts for values that are already set, which is how you replace a rotated key.
 - `-SkipOptional` skips the local model and Azure AI Search prompts.
 

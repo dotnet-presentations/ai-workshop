@@ -10,6 +10,7 @@ on:
       - "Part 6 - Deployment/**"
       - "Part 7 - MCP Server Basics/**"
       - "Part 8 - Enhanced MCP Server/**"
+      - "Part 11 - Adding AI to an Existing App/**"
   pull_request:
     branches:
       - main
@@ -34,6 +35,10 @@ on:
       - "Part 8 - Enhanced MCP Server/**/*.csproj"
       - "Part 8 - Enhanced MCP Server/**/*.props"
       - "Part 8 - Enhanced MCP Server/**/*.targets"
+      - "Part 11 - Adding AI to an Existing App/**/*.cs"
+      - "Part 11 - Adding AI to an Existing App/**/*.csproj"
+      - "Part 11 - Adding AI to an Existing App/**/*.props"
+      - "Part 11 - Adding AI to an Existing App/**/*.targets"
   workflow_dispatch:
 
 jobs:
@@ -52,6 +57,9 @@ jobs:
             dotnet-version: "10.0.x"
           # No solution file exists for ContosoOrdersMcpServer; using project file directly
           - solution: "Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj"
+            dotnet-version: "10.0.x"
+          # No solution file exists for StoreApp; using project file directly
+          - solution: "Part 11 - Adding AI to an Existing App/StoreApp/StoreApp.csproj"
             dotnet-version: "10.0.x"
 
     steps:

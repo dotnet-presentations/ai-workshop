@@ -1,6 +1,6 @@
 # .NET AI Workshop
 
-Get up to speed quickly with AI app building in .NET. This workshop covers AI application development (Parts 1-6), MCP server development (Parts 7-9), and a short agent bridge module (Part 10). The AI track uses [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) as the cloud provider, with local-model options covered in the provider module.
+Get up to speed quickly with AI app building in .NET. This workshop covers AI application development (Parts 1-6), MCP server development (Parts 7-9), a short agent bridge module (Part 10), and an applied capstone that adds AI to an existing app (Part 11). The AI track uses [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) as the cloud provider, with local-model options covered in the provider module.
 
 ## Prerequisites
 
@@ -24,6 +24,7 @@ Docker Desktop or Podman is required when you run the workshop's **Qdrant contai
 | Part 6 | Required to run the supplied Qdrant + Aspire application locally. The Azure deployment itself runs the containers in Azure. |
 | Parts 7-9 | Not required for the MCP exercises. Containerizing an MCP server in Part 9 is optional. |
 | Part 10 | Not required. This module includes a standalone `AgentApp` sample and remains Docker-free. |
+| Part 11 | Not required. The `StoreApp` sample in this repo is a Docker-free console app. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
 
 Without Docker, you can still complete Parts 1-5 and Parts 7-9, including the main chat, RAG, template, provider, and MCP concepts. In Part 4 you will miss the hands-on Qdrant, Aspire dashboard, service orchestration, and container persistence experience. Part 6 uses the full Qdrant + Aspire application, so local execution of that snapshot requires Docker or Podman.
 
@@ -41,11 +42,12 @@ Without Docker, you can still complete Parts 1-5 and Parts 7-9, including the ma
 
 ## Lab Overview 🧪
 
-The workshop is split into three sections:
+The workshop is split into four sections:
 
 - **AI Application Build Path (Parts 1-6):** Build a minimal chat app, add retrieval, inspect the generated template architecture, configure provider strategy, and deploy.
 - **Model Context Protocol (MCP) Path (Parts 7-9):** Build MCP servers and package/publish them.
 - **Agents (Part 10):** A short bridge module that connects chat, retrieval, and MCP tools into the agent abstraction.
+- **Capstone (Part 11):** An applied module on adding targeted AI to an existing application, using eShopLite as the maintained companion implementation.
 
 Detailed architecture and sequence diagrams are documented in the individual module READMEs where each concept is implemented.
 
@@ -55,7 +57,7 @@ Follow the [setup instructions](Part%201%20-%20Setup/README.md) to get started w
 
 ## Lab Modules 📚
 
-The lab is divided into ten modules.
+The lab is divided into eleven modules.
 
 The primary sequence below reflects the current converged workshop flow and keeps advanced modules explicitly optional for pacing.
 
@@ -87,11 +89,15 @@ This sequence starts with a minimal console chat app, then layers in RAG, templa
 
 1. 🤖 [**Agent Framework Essentials**](Part%2010%20-%20Agent%20Framework%20Basics/README.md): A short bridge module covering how chat, tools, and memory become an agent with Microsoft Agent Framework, and how MCP tools fit in.
 
+### Capstone (Part 11)
+
+1. 🛒 [**Adding AI to an Existing App with eShopLite**](Part%2011%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md): Apply everything you have learned to an application that already exists. Work through a completed `StoreApp` sample that adds targeted AI for discovery, operations, business signals, tools, and collaborating agents, then explore the maintained eShopLite scenarios.
+
 ## Lab Structure 📁
 
 The repository is structured as follows:
 
-- 📖 `Part 1 - Setup` through `Part 10 - Agent Framework Essentials`: Contains all the lab instructions, documentation, and working code snapshots
+- 📖 `Part 1 - Setup` through `Part 11 - Adding AI to an Existing App`: Contains all the lab instructions, documentation, and working code snapshots
 - 📄 `manuals/`: Product documentation PDFs for the AI chatbot exercises
 - 🧪 `docs/testing/`: Testing procedures and validation reports
 
@@ -132,7 +138,7 @@ The credentials are saved as environment variables (`WORKSHOP_AZURE_OPENAI_ENDPO
 
 The complete testing procedure and validation scripts are available in `.github/prompts/test-workshop.prompt.md`. This includes:
 
-- Step-by-step testing instructions for all 10 workshop parts
+- Step-by-step testing instructions for all 11 workshop parts
 - Automated build validation commands
 - Common troubleshooting scenarios
 - Documentation improvement tracking

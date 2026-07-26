@@ -14,7 +14,7 @@ This is a short bridge module focused on the mental model. You should leave with
 - Where do my MCP tools fit?
 - What does it mean for several agents to work together?
 
-That mental model is what the next module needs, where the job is adding AI to an *existing* application rather than building a new one.
+That mental model is what Part 11 needs, where the job is adding AI to an *existing* application rather than building a new one.
 
 ## Learning Objectives
 
@@ -217,7 +217,7 @@ string key = config["AzureOpenAI:Key"]
 // --- Create the chat client ---
 IChatClient chatClient = new AzureOpenAIClient(
         new Uri(endpoint), new AzureKeyCredential(key))
-    .GetChatClient("gpt-4o-mini")
+    .GetChatClient("gpt-5-mini")
     .AsIChatClient();
 
 // --- Define a tool ---
@@ -345,7 +345,7 @@ In this part you learned the agent abstraction that sits on top of everything yo
 
 ## What's next
 
-Up to this point the workshop built new applications. The next step is the more common real-world situation: an **existing** application that needs AI added to it, with targeted agents and tools placed where the app already has signals and actions, instead of one large chatbot bolted onto the side. That module is coming soon.
+Up to this point the workshop built new applications. The next step is the more common real-world situation: an **existing** application that needs AI added to it, with targeted agents and tools placed where the app already has signals and actions, instead of one large chatbot bolted onto the side. That is [Part 11: Adding AI to an Existing App with eShopLite](../Part%2011%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md).
 
 ## Additional resources
 
@@ -360,4 +360,4 @@ Up to this point the workshop built new applications. The next step is the more 
 
 ---
 
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 9: MCP Publishing](../Part%209%20-%20MCP%20Publishing/README.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 9: MCP Publishing](../Part%209%20-%20MCP%20Publishing/README.md) | ➡️ **Next**: [Part 11: Adding AI to an Existing App](../Part%2011%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md)

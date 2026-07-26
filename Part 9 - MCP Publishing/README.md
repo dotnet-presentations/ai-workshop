@@ -785,11 +785,11 @@ You now have a complete path for building, publishing, and maintaining MCP serve
 
 ## Continue Your Journey
 
-🎯 **Next**: [Part 10: Agent Framework Essentials](../Part%2010%20-%20Agent%20Framework%20Essentials/README.md) - a short bridge module on how chat, tools, and memory come together as an agent, and how the MCP servers you just built get consumed by your own agents.
+🎯 **Next**: [Part 10: Agent Framework Basics](../Part%2010%20-%20Agent%20Framework%20Basics/README.md) - a short bridge module on how chat, tools, and memory come together as an agent, and how the MCP servers you just built get consumed by your own agents.
 
 ---
 
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md) | ➡️ **Next**: [Part 10: Agent Framework Essentials](../Part%2010%20-%20Agent%20Framework%20Essentials/README.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md) | ➡️ **Next**: [Part 10: Agent Framework Basics](../Part%2010%20-%20Agent%20Framework%20Basics/README.md)
 
 ### Share Your Success
 

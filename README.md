@@ -85,13 +85,13 @@ This sequence starts with a minimal console chat app, then layers in RAG, templa
 
 ### Agents (Part 10)
 
-1. 🤖 [**Agent Framework Essentials**](Part%2010%20-%20Agent%20Framework%20Essentials/README.md): A short bridge module covering how chat, tools, and memory become an agent with Microsoft Agent Framework, and how MCP tools fit in.
+1. 🤖 [**Agent Framework Basics**](Part%2010%20-%20Agent%20Framework%20Basics/README.md): A short bridge module covering how chat, tools, and memory become an agent with Microsoft Agent Framework, and how MCP tools fit in.
 
 ## Lab Structure 📁
 
 The repository is structured as follows:
 
-- 📖 `Part 1 - Setup` through `Part 10 - Agent Framework Essentials`: Contains all the lab instructions, documentation, and working code snapshots
+- 📖 `Part 1 - Setup` through `Part 10 - Agent Framework Basics`: Contains all the lab instructions, documentation, and working code snapshots
 - 📄 `manuals/`: Product documentation PDFs for the AI chatbot exercises
 - 🧪 `docs/testing/`: Testing procedures and validation reports
 
@@ -132,7 +132,7 @@ The credentials are saved as environment variables (`WORKSHOP_AZURE_OPENAI_ENDPO
 
 The complete testing procedure and validation scripts are available in `.github/prompts/test-workshop.prompt.md`. This includes:
 
-- Step-by-step testing instructions for all 10 workshop parts
+- Step-by-step testing instructions for all 9 workshop parts
 - Automated build validation commands
 - Common troubleshooting scenarios
 - Documentation improvement tracking

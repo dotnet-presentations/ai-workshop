@@ -12,28 +12,34 @@ with production-oriented wiring for persistence and orchestration.
 > memory and vanished on exit. A production app needs a persistent, orchestrated
 > vector database.
 
-<!-- -->
-
-> RAG evaluation (the "RAG triad": groundedness, relevance, context quality) is an
-> optional extension for this part. See
-> [Steve Sanderson's dotnet-ai-workshop, Ch 6](https://github.com/SteveSandersonMS/dotnet-ai-workshop). Reference and adapt with attribution.
-
 ## Prerequisites
 
-- Completed [Part 2](../Part%202%20-%20Build%20Chat%20App/README.md) and [Part 3](../Part%203%20-%20Add%20RAG/README.md)
-- **Docker Desktop** (or Podman) running. The template uses a Qdrant container.
+- Familiarity with the concepts introduced in [Part 2](../Part%202%20-%20Build%20Chat%20App/README.md) and [Part 3](../Part%203%20-%20Add%20RAG/README.md) is helpful, but not required.
+- **Docker Desktop** (or Podman) running for the recommended Qdrant + Aspire path.
 - [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) with `gpt-5-mini` + `text-embedding-3-small` (see [Part 1](../Part%201%20-%20Setup/README.md))
+
+> [!NOTE]
+> Docker is not required to learn the core template concepts. If you cannot run containers, use the Docker-free path below. You will still work with the Blazor chat app, dependency injection, ingestion, embeddings, semantic search, and RAG.
 
 ## Step 1: Install the template and scaffold
 
 ```bash
 dotnet new install Microsoft.Extensions.AI.Templates
-dotnet new aichatweb --provider azureopenai --vector-store qdrant --aspire --name GenAiLab
+dotnet new aichatweb --provider azureopenai --vector-store qdrant --aspire --name GenAiLab --output GenAiLab
 ```
 
 ### Alternative: scaffold in Visual Studio 2026
 
 If you prefer Visual Studio instead of the CLI:
+
+> [!NOTE]
+> If **AI Chat Web App** does not appear in the **Create a new project** dialog, install the template first from a terminal:
+>
+> ```bash
+> dotnet new install Microsoft.Extensions.AI.Templates
+> ```
+>
+> Then restart Visual Studio 2026 and search again.
 
 1. Open Visual Studio 2026 and select Create a new project.
 1. Search for and choose AI Chat Web App.
@@ -49,8 +55,35 @@ This generates a solution with three projects:
 | Project | Role |
 | --- | --- |
 | `GenAiLab.Web` | The Blazor chat web app |
-| `GenAiLab.AppHost` | The **.NET Aspire** orchestrator (starts the app + Qdrant) |
+| `GenAiLab.AppHost` | The **Aspire** orchestrator (starts the app + Qdrant) |
 | `GenAiLab.ServiceDefaults` | Shared telemetry, health checks, resilience |
+
+### Docker-free path: local vector store without Aspire
+
+The template also supports a local JSON vector store and a standalone web project. Scaffold that variant with:
+
+```bash
+dotnet new aichatweb --provider azureopenai --vector-store local --name GenAiLab --output GenAiLab
+```
+
+In Visual Studio, choose **Local** for the vector store and leave **Use Aspire orchestration** disabled. The standalone Azure OpenAI template uses keyless authentication. Sign in to Visual Studio or the Azure CLI with an account assigned the **Azure AI Developer** role on the Azure OpenAI resource, then set the endpoint and run the generated project directly:
+
+```bash
+dotnet user-secrets --project GenAiLab set AzureOpenAI:Endpoint "https://YOUR-RESOURCE.openai.azure.com/"
+dotnet run --project GenAiLab
+```
+
+For more about the local template and keyless authentication, see the [official .NET AI template quickstart](https://learn.microsoft.com/dotnet/ai/quickstarts/ai-templates).
+
+Use the rest of this part to inspect the same chat, embedding, ingestion, and retrieval abstractions. The generated local-store implementation differs from the Qdrant snippets shown below, but it plays the same role behind `Microsoft.Extensions.VectorData`.
+
+| You can still complete | This path omits |
+| --- | --- |
+| Blazor chat UI and AI client configuration | Qdrant and its persistent container volume |
+| Document ingestion, embeddings, and semantic search | The Aspire AppHost and service orchestration |
+| RAG and the vector-store abstraction | The Aspire dashboard, distributed health checks, logs, traces, and metrics |
+
+The local JSON store is intended for prototyping and learning; it is not the production-oriented vector database used by the recommended path. Skip Step 3, and interpret the Qdrant/AppHost sections as an architecture comparison rather than files that exist in your generated project.
 
 ## Step 2: Map the generated code to what you built by hand
 
@@ -146,9 +179,21 @@ container with a persistent data volume**, and Aspire starts the database, waits
 for it to be ready, then starts the web app and wires the connection strings between
 them automatically.
 
-## Step 3: The Aspire dashboard
+## Step 3: Configure secrets
+
+The AppHost reads the Azure connection string from user-secrets (same secrets-first
+rule as Parts 2-3):
+
+```bash
+dotnet user-secrets --project GenAiLab.AppHost set ConnectionStrings:openai "Endpoint=https://YOUR-RESOURCE.openai.azure.com/;Key=YOUR-KEY"
+```
+
+## Step 4: Run the app
 
 Run the AppHost:
+
+> [!IMPORTANT]
+> For Aspire solutions, launch the `GenAiLab.AppHost` project. AppHost bootstraps the other projects and supporting services (such as Qdrant). If you run only `GenAiLab.Web`, you skip the full orchestrated experience.
 
 ```bash
 cd GenAiLab
@@ -157,17 +202,18 @@ dotnet run --project GenAiLab.AppHost
 
 Aspire launches a **dashboard** (URL printed in the console) showing every service,
 its health, logs, traces, and metrics. This is why `UseOpenTelemetry(...)` was in
-`Program.cs`: the telemetry you registered now has a destination. Open the web app
-from the dashboard and chat with your ingested documents.
+`Program.cs`: the telemetry you registered now has a destination.
 
-## Step 4: Configure secrets
+## Step 5: Test the app end to end
 
-The AppHost reads the Azure connection string from user-secrets (same secrets-first
-rule as Parts 2-3):
+1. In the Aspire dashboard, wait until both `aichatweb-app` and `vectordb` are healthy.
+1. Open the `aichatweb-app` URL from the dashboard.
+1. Ask a question grounded in your sample data (for example: "What does the document say about warranty terms?").
+1. Confirm the answer cites or reflects content from ingested documents rather than a generic model response.
+1. In the dashboard, open logs/traces for `aichatweb-app` to confirm request flow and model calls.
 
-```bash
-dotnet user-secrets --project GenAiLab.AppHost set ConnectionStrings:openai "Endpoint=https://YOUR-RESOURCE.openai.azure.com/;Key=YOUR-KEY"
-```
+If you want the official step-by-step quickstart for scaffold + config + first run, see:
+[.NET AI templates quickstart](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/ai-templates?tabs=visual-studio%2Cconfigure-visual-studio&pivots=azure-openai).
 
 ## What you learned
 

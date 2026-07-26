@@ -12,13 +12,18 @@ Before starting, ensure you have:
 
 - **.NET 10 SDK** or later
 - **Visual Studio 2026** (with the Web & Cloud workload) **or** Visual Studio Code with the **C# Dev Kit** extension
-- [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/) for the recommended Qdrant + Aspire path in Part 4
 - **An Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)**, the primary AI provider for this workshop
 - GitHub Copilot subscription (recommended; used later for the MCP and GitHub Copilot SDK units)
 - (Optional) A GitHub account (recommended for contributor workflows such as cloning, branching, and pull requests)
 
 > [!TIP]
 > **No Azure access? Local fallback:** you can run local models with **Foundry Local** or **Ollama** for the chat exercises. See the [Development Container Options](./../.github/.devcontainer/README.md). Note that the full retrieval-augmented generation (RAG) exercise also needs an embedding model.
+
+<!-- -->
+
+> [!NOTE]
+> **No Docker or Podman?** You can complete Parts 1-3, use the local JSON vector-store option in Part 4, and continue with Parts 5 and 7-9. Docker or Podman is only required to run the workshop's Qdrant container locally; see the [workshop overview](../README.md#when-docker-is-required) for details.
 
 ## Before the workshop: provision [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) ⏳
 
@@ -84,10 +89,10 @@ cd ai-workshop
 
        ```powershell
        dotnet --version
-       docker --version
        ```
 
-    - You should see a `.NET 10.x` SDK version and a Docker version.
+      - You should see a `.NET 10.x` SDK version.
+      - If you plan to use Qdrant + Aspire in Part 4, also run `docker --version` or `podman --version` and confirm the container runtime is available.
 
 > [!NOTE]
 > The AI Web Chat template (`dotnet new aichatweb`) is installed and validated later, in the module where it is first used.

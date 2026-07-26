@@ -5,15 +5,15 @@ This project is an AI chat application that demonstrates how to chat with custom
 >[!NOTE]
 > Before running this project you need to configure the API keys or endpoints for the providers you have chosen. See below for details specific to your choices.
 
-### Known Issues
+## Known Issues
 
-#### Errors running Ollama or Docker
+### Errors running Ollama or Docker
 
 A recent incompatibility was found between Ollama and Docker Desktop. This issue results in runtime errors when connecting to Ollama, and the workaround for that can lead to Docker not working for Aspire projects.
 
 This incompatibility can be addressed by upgrading to Docker Desktop 4.41.1. See [ollama/ollama#9509](https://github.com/ollama/ollama/issues/9509#issuecomment-2842461831) for more information and a link to install the version of Docker Desktop with the fix.
 
-# Configure the AI Model Provider
+## Configure the AI Model Provider
 
 ## Using [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)
 
@@ -32,19 +32,21 @@ Download, install, and run Docker Desktop from the [official website](https://ww
 
 Note: Qdrant and Docker are excellent open source products, but are not maintained by Microsoft.
 
-# Running the application
+## Running the application
 
 ## Using Visual Studio
 
 1. Open the `.sln` file in Visual Studio.
-2. Press `Ctrl+F5` or click the "Start" button in the toolbar to run the project.
+2. Set `GenAiLab.AppHost` as the startup project.
+3. Press `Ctrl+F5` or click the "Start" button in the toolbar to run the project.
 
 ## Using Visual Studio Code
 
 1. Open the project folder in Visual Studio Code.
 2. Install the [C# Dev Kit extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit) for Visual Studio Code.
-3. Once installed, Open the `Program.cs` file in the GenAiLab.AppHost project.
-4. Run the project by clicking the "Run" button in the Debug view.
+3. Launch the `GenAiLab.AppHost` project (not just `GenAiLab.Web`) so Aspire starts all dependent services.
+4. Once installed, open the `Program.cs` file in the `GenAiLab.AppHost` project.
+5. Run the project by clicking the "Run" button in the Debug view.
 
 ## Trust the localhost certificate
 
@@ -52,11 +54,11 @@ Several Aspire templates include ASP.NET Core projects that are configured to us
 
 See [Troubleshoot untrusted localhost certificate in Aspire](https://learn.microsoft.com/dotnet/aspire/troubleshooting/untrusted-localhost-certificate) for more information.
 
-# Updating JavaScript dependencies
+## Updating JavaScript dependencies
 
 This template leverages JavaScript libraries to provide essential functionality. These libraries are located in the wwwroot/lib folder of the GenAiLab.Web project. For instructions on updating each dependency, please refer to the README.md file in each respective folder.
 
-# Learn More
+## Learn More
 
 To learn more about development with .NET and AI, check out the following links:
 

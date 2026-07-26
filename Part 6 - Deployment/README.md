@@ -17,6 +17,9 @@ In this workshop, you will learn how to deploy your AI application to Azure usin
   webApp.WithExternalHttpEndpoints();
   ```
 
+> [!IMPORTANT]
+> This is an Aspire solution. Always launch the `GenAiLab.AppHost` project when running locally because AppHost bootstraps the full distributed app (web app + supporting services).
+
 ## Set Up the Azure Developer CLI
 
 1. **Install the Azure Developer CLI (azd)**:
@@ -59,7 +62,7 @@ In this workshop, you will learn how to deploy your AI application to Azure usin
 
 1. When prompted with "How do you want to initialize your app?", select the default: "Use code in the current directory"
 
-1. After scanning the directory, `azd` prompts you to confirm that it found the correct .NET Aspire *AppHost* project. Select the **Confirm and continue initializing my app** option.
+1. After scanning the directory, `azd` prompts you to confirm that it found the correct Aspire *AppHost* project. Select the **Confirm and continue initializing my app** option.
 
 1. When prompted to "Enter a unique environment name", enter "mygenaiapp" or choose something else if you would like.
 

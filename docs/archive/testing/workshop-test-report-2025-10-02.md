@@ -319,7 +319,7 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 
 #### 3. Multi-Framework Support
 
-- **AI Web Chat Apps** (Parts 2-6): Target .NET 9.0 with .NET Aspire
+- **AI Web Chat Apps** (Parts 2-6): Target .NET 9.0 with Aspire
 - **MCP Servers**: Support multiple frameworks (.NET 8.0 for Part 8, .NET 9/10 for Part 7)
 - **Recommendation**: Clearly document SDK version requirements per part
 - **Impact**: Testers need multiple SDK versions installed for complete workshop testing
@@ -338,7 +338,7 @@ All Model Context Protocol (MCP) server parts (7-9) have been successfully teste
 - ✅ .NET 9.0 SDK for AI Web Chat applications
 - ✅ .NET 10.0 RC SDK for MCP server template generation
 - ✅ .NET 8.0 SDK for legacy MCP servers
-- ✅ Docker Desktop for .NET Aspire and Qdrant vector database
+- ✅ Docker Desktop for Aspire and Qdrant vector database
 - ✅ Template installation and usage (`dotnet new aichatweb`, `dotnet new mcpserver`)
 - ✅ Build and run verification for all project types
 - ✅ Credential management via environment variables

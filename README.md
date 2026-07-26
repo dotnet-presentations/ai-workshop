@@ -9,8 +9,22 @@ Get up to speed quickly with AI app building in .NET. This workshop covers two t
 - Visual Studio 2026 or VS Code
 - .NET AI Web Chatbot template installed (instructions in Part 1 - Setup)
 - .NET 10.0 SDK or later
-- Docker Desktop or Podman (required for .NET Aspire orchestration)
+- Docker Desktop or Podman (recommended for the full Qdrant + Aspire path in Part 4)
 - Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI), the primary AI provider
+
+### When Docker is required
+
+Docker Desktop or Podman is required when you run the workshop's **Qdrant container locally**. This is the recommended path in Part 4 because it demonstrates a persistent vector database, Aspire orchestration, the Aspire dashboard, and service telemetry.
+
+| Parts | Docker requirement |
+| --- | --- |
+| Parts 1-3 | Not required. These use console applications and an in-memory vector store. |
+| Part 4 | Required for the recommended Qdrant + Aspire path. A supported Docker-free path uses the template's local JSON vector store without Aspire; see the [Part 4 instructions](Part%204%20-%20AI%20Web%20Chat%20Template/README.md#docker-free-path-local-vector-store-without-aspire). |
+| Part 5 | Not required. Provider comparisons can use Microsoft Foundry, Foundry Local, or a native Ollama installation. |
+| Part 6 | Required to run the supplied Qdrant + Aspire application locally. The Azure deployment itself runs the containers in Azure. |
+| Parts 7-9 | Not required for the MCP exercises. Containerizing an MCP server in Part 9 is optional. |
+
+Without Docker, you can still complete Parts 1-5 and Parts 7-9, including the main chat, RAG, template, provider, and MCP concepts. In Part 4 you will miss the hands-on Qdrant, Aspire dashboard, service orchestration, and container persistence experience. Part 6 uses the full Qdrant + Aspire application, so local execution of that snapshot requires Docker or Podman.
 
 ### Model Context Protocol (Parts 7-9)
 
@@ -81,7 +95,7 @@ The repository is structured as follows:
 |:-------------------|:----------------------------------|:-------------------|
 |Microsoft Learn|<https://aka.ms/build25/plan/ADAI_DevStartPlan>|AI developer resources|
 |Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/machine-learning/ai-overview>|.NET AI Documentation|
-|Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview>|.NET Aspire Documentation|
+|Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview>|Aspire Documentation|
 |Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/machine-learning/extensions-ai/>|Extensions for AI Documentation|
 |Microsoft Learn|<https://learn.microsoft.com/en-us/azure/ai-services/openai/>|Azure OpenAI Documentation|
 

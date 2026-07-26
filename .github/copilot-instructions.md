@@ -13,7 +13,7 @@ This repository contains a comprehensive .NET AI workshop with 9 parts covering 
   export PATH="$HOME/.dotnet:$PATH"
   ```
 - Install .NET 10.0 SDK for MCP servers (Parts 7-9)
-- Install Docker Desktop or Podman (required for .NET Aspire orchestration and Qdrant vector database)
+- Install Docker Desktop or Podman (required for Aspire orchestration and Qdrant vector database)
 - Install Microsoft Extensions AI templates:
   ```bash
   dotnet new install Microsoft.Extensions.AI.Templates
@@ -154,14 +154,14 @@ dotnet new mcpserver --help
 
 ## Key Technologies Used
 
-- **.NET 10**: AI Web Chat applications with Blazor and .NET Aspire
+- **.NET 10**: AI Web Chat applications with Blazor and Aspire
 - **.NET 10**: MCP server applications  
 - **Microsoft Extensions for AI**: Core AI integration libraries
 - **Microsoft Foundry (Azure OpenAI)**: Cloud AI provider used for workshop exercises
 - **Azure OpenAI**: Enterprise-grade AI models for production
 - **Qdrant**: Vector database for embeddings and semantic search
 - **Docker**: Container orchestration for vector databases
-- **.NET Aspire**: Cloud-native application orchestration
+- **Aspire**: Cloud-native application orchestration
 
 ## Troubleshooting
 

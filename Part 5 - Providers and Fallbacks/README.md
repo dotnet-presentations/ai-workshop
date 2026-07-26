@@ -51,6 +51,9 @@ IChatClient chat = client.GetChatClient(modelId).AsIChatClient();
 Notice: this is the **same three lines** regardless of provider. Only `key`,
 `baseUrl`, and `modelId` change, and they live in configuration, not code.
 
+> [!NOTE]
+> This pattern is not limited to the three providers in this workshop. Any provider that exposes an `IChatClient` implementation, or can be adapted to one, can fit the same application code. For example, [Microsoft.Extensions.AI.OpenAI](https://www.nuget.org/packages/Microsoft.Extensions.AI.OpenAI) provides adapters such as `AsIChatClient(...)` for OpenAI clients, and you can browse community-supported implementations through the [NuGet `IChatClient` tag search](https://www.nuget.org/packages?q=Tags%3A%22ichatclient%22).
+
 ## Provider 2: Foundry Local (offline chat)
 
 [Foundry Local](https://learn.microsoft.com/azure/foundry-local/) runs

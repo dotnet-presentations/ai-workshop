@@ -18,13 +18,17 @@ Complete the workshop the way an attendee would — follow each `Part N - */READ
 ## Setup
 
 ```pwsh
-.\.github\scripts\setup-workshop-credentials.ps1   # sets WORKSHOP_AZURE_OPENAI_* etc.
+.\.github\scripts\setup-workshop-credentials.ps1 -ApplyUserSecrets
 dotnet --list-sdks                                  # expect 10.0.x
 dotnet new install Microsoft.Extensions.AI.Templates
 docker --version                                    # only needed for Parts 4 and 11
 ```
 
-Console samples read credentials from user secrets (`AzureOpenAI:Endpoint`, `AzureOpenAI:Key`), not from the `WORKSHOP_*` variables directly — copy the values across when a README asks you to run `dotnet user-secrets set`.
+The script collects the `WORKSHOP_*` variables and, with `-ApplyUserSecrets`, writes the Foundry endpoint and key into the snapshot console projects (as `AzureOpenAI:Endpoint` / `AzureOpenAI:Key`), the local model settings into Part 10 if configured, and the composed `ConnectionStrings:openai` into the Part 11 AppHost. Add `-Force` if a key has been rotated since the last run.
+
+Nothing in the workshop reads `WORKSHOP_*` directly. The console samples read user secrets (`AzureOpenAI:Endpoint`, `AzureOpenAI:Key`) and the Aspire app reads `ConnectionStrings:openai`. **Projects you scaffold yourself during a test run still need their secrets set by hand** — the script only knows about the committed snapshots.
+
+The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-small`. If the test resource uses different names, that is a source edit in every part, not a config change.
 
 ## Part-by-part
 

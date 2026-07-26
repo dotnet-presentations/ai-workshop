@@ -14,4 +14,4 @@ Use this single slide at the end of the workshop deck.
 
 - Part 7 and Part 8 (optional MCP modules)
 - Part 10 patterns applied to your own app
-- Full handoff page: `resources.md`
+- Full handoff page: [resources.md](../../resources.md)

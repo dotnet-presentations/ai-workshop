@@ -1,6 +1,6 @@
 # .NET AI Workshop
 
-Teaching repository for a one-day .NET AI workshop. Content is **11 self-contained parts**, each a top-level `Part N - <Name>/` folder containing a `README.md` (the lab instructions) and, where applicable, a working code snapshot.
+Teaching repository for a one-day .NET AI workshop. Content is **11 self-contained parts**, each a top-level `Part NN - <Name>/` folder containing a `README.md` (the lab instructions) and, where applicable, a working code snapshot. Folder names are zero-padded so they sort correctly in the GitHub web UI; prose and headings use the unpadded "Part N" form.
 
 Everything targets **.NET 10** and uses **Microsoft Foundry (Azure OpenAI)** as the default provider.
 
@@ -8,16 +8,16 @@ Everything targets **.NET 10** and uses **Microsoft Foundry (Azure OpenAI)** as 
 
 | Part | Snapshot project | Notes |
 | --- | --- | --- |
-| 1 - Setup | — | README only |
-| 2 - Build Chat App | `ChatApp/` | Console app built by hand (`dotnet new console`) |
-| 3 - Add RAG | `RagChatApp/` | Continues from Part 2; `checkpoints/` holds two alternate `Program.cs` paths (manual cosine similarity, and MEDI + SqliteVec) |
-| 4 - AI Web Chat Template | — | README only; scaffolds `GenAiLab` with `dotnet new aichatweb` |
-| 5 - Providers and Fallbacks | — | README only |
-| 6 - MCP Server Basics | `MyMcpServer/` | `dotnet new mcpserver`; `RandomNumberTools` + `WeatherTools` |
-| 7 - Enhanced MCP Server | `ContosoOrdersMcpServer/` | Optional/bonus. Exploration of an existing snapshot — the README does **not** ask the user to scaffold it |
-| 8 - MCP Publishing | — | Optional/bonus, README only |
-| 9 - Agent Framework Basics | `AgentApp/` | `dotnet new console` + `Microsoft.Agents.AI` |
-| 10 - Adding AI to an Existing App | `StoreApp/` | Capstone. `Store/` = pre-existing app, `Ai/` = the additions |
+| 01 - Setup | — | README only |
+| 02 - Build Chat App | `ChatApp/` | Console app built by hand (`dotnet new console`) |
+| 03 - Add RAG | `RagChatApp/` | Continues from Part 2; `checkpoints/` holds two alternate `Program.cs` paths (manual cosine similarity, and MEDI + SqliteVec) |
+| 04 - AI Web Chat Template | — | README only; scaffolds `GenAiLab` with `dotnet new aichatweb` |
+| 05 - MCP Server Basics | `MyMcpServer/` | `dotnet new mcpserver`; `RandomNumberTools` + `WeatherTools` |
+| 06 - Enhanced MCP Server | `ContosoOrdersMcpServer/` | Optional/bonus. Exploration of an existing snapshot — the README does **not** ask the user to scaffold it |
+| 07 - MCP Publishing | — | Optional/bonus, README only |
+| 08 - Agent Framework Basics | `AgentApp/` | `dotnet new console` + `Microsoft.Agents.AI` |
+| 09 - Adding AI to an Existing App | `StoreApp/` | Capstone. `Store/` = pre-existing app, `Ai/` = the additions |
+| 10 - Choosing Providers and Services | — | README only. Sits immediately before deployment because provider and service selection is a deployment prerequisite |
 | 11 - Deployment | `GenAiLab/` (3-project Aspire solution) | Same app as Part 4 plus `WithExternalHttpEndpoints()` in `AppHost.cs` |
 
 Other folders: `docs/` (instructor guides, planning, archived test reports), `manuals/` (PDFs used as RAG source data), `images/`.
@@ -27,12 +27,12 @@ Other folders: `docs/` (instructor guides, planning, archived test reports), `ma
 CI (`.github/workflows/dotnet-build.yml`) restores and builds these seven targets on the .NET `10.0.x` SDK with `--configuration Release`. Run the same set when validating a change:
 
 ```pwsh
-"Part 2 - Build Chat App/ChatApp/ChatApp.csproj",
-"Part 3 - Add RAG/RagChatApp/RagChatApp.csproj",
-"Part 6 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj",
-"Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj",
-"Part 9 - Agent Framework Basics/AgentApp/AgentApp.csproj",
-"Part 10 - Adding AI to an Existing App/StoreApp/StoreApp.csproj",
+"Part 02 - Build Chat App/ChatApp/ChatApp.csproj",
+"Part 03 - Add RAG/RagChatApp/RagChatApp.csproj",
+"Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj",
+"Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj",
+"Part 08 - Agent Framework Basics/AgentApp/AgentApp.csproj",
+"Part 09 - Adding AI to an Existing App/StoreApp/StoreApp.csproj",
 "Part 11 - Deployment/GenAiLab/GenAiLab.sln" | ForEach-Object { dotnet build $_ -c Release }
 ```
 
@@ -47,7 +47,7 @@ Markdown is linted by `.github/workflows/markdownlint.yml` using `.markdownlint.
 - The Part 4 scaffold command is fixed and load-bearing for later parts:
   `dotnet new aichatweb --provider azureopenai --vector-store qdrant --aspire --name GenAiLab --output GenAiLab`
   (a Docker-free `--vector-store local` variant is documented as an alternative).
-- Console samples (Parts 2, 3, 9, 10) read credentials from **user secrets**: `AzureOpenAI:Endpoint` and `AzureOpenAI:Key`. Part 10 also uses `LocalModel:Endpoint` / `LocalModel:Model` for its local-inference module. Part 11 uses the Aspire connection string `ConnectionStrings:openai`.
+- Console samples (Parts 2, 3, 8, 9) read credentials from **user secrets**: `AzureOpenAI:Endpoint` and `AzureOpenAI:Key`. Part 9 also uses `LocalModel:Endpoint` / `LocalModel:Model` for its local-inference module. Part 11 uses the Aspire connection string `ConnectionStrings:openai`.
 - Never commit secrets. `.azure/` is gitignored, and `azure.yaml` is generated by `azd init` at deploy time rather than checked in.
 - Don't commit `bin/`, `obj/`, or `.vs/` into snapshots.
 - Docker/Podman is only needed for the Qdrant + Aspire path (Parts 4 and 11).
@@ -56,7 +56,7 @@ Markdown is linted by `.github/workflows/markdownlint.yml` using `.markdownlint.
 
 Use the **workshop-testing** skill (`.github/skills/workshop-testing/`) when asked to walk through the workshop as an attendee, validate a part, or reconcile snapshots against the READMEs.
 
-Credentials for testing come from `.github/scripts/setup-workshop-credentials.ps1`, which sets `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`, `WORKSHOP_AZURE_SUBSCRIPTION_ID`, `WORKSHOP_AZURE_LOCATION`, and optional Azure AI Search values.
+Credentials for testing come from `.github/scripts/setup-workshop-credentials.ps1`, which sets `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`, `WORKSHOP_AZURE_OPENAI_CHAT`, `WORKSHOP_AZURE_OPENAI_EMBEDDING`, `WORKSHOP_AZURE_SUBSCRIPTION_ID`, `WORKSHOP_AZURE_LOCATION`, and optional local model values.
 
 ## Writing style
 

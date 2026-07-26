@@ -2,7 +2,7 @@
 
 > **Audience:** Workshop leaders only. This is **not** part of the attendee-facing
 > content. Attendees are expected to bring their own [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) access (see
-> [Part 1 - Setup](../../Part%201%20-%20Setup/README.md)).
+> [Part 1 - Setup](../../Part%2001%20-%20Setup/README.md)).
 
 ## The problem
 

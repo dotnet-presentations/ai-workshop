@@ -24,7 +24,7 @@ dotnet new install Microsoft.Extensions.AI.Templates
 docker --version                                    # only needed for Parts 4 and 11
 ```
 
-The script collects the `WORKSHOP_*` variables and, with `-ApplyUserSecrets`, writes the Foundry endpoint and key into the snapshot console projects (as `AzureOpenAI:Endpoint` / `AzureOpenAI:Key`), the local model settings into Part 10 if configured, and the composed `ConnectionStrings:openai` into the Part 11 AppHost. Add `-Force` if a key has been rotated since the last run.
+The script collects the `WORKSHOP_*` variables and, with `-ApplyUserSecrets`, writes the Foundry endpoint and key into the snapshot console projects (as `AzureOpenAI:Endpoint` / `AzureOpenAI:Key`), the local model settings into Part 9 if configured, and the composed `ConnectionStrings:openai` into the Part 11 AppHost. Add `-Force` if a key has been rotated since the last run.
 
 Nothing in the workshop reads `WORKSHOP_*` directly. The console samples read user secrets (`AzureOpenAI:Endpoint`, `AzureOpenAI:Key`) and the Aspire app reads `ConnectionStrings:openai`. **Projects you scaffold yourself during a test run still need their secrets set by hand** — the script only knows about the committed snapshots.
 
@@ -35,18 +35,18 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 | Part | What to do | Snapshot to reconcile |
 | --- | --- | --- |
 | 1 - Setup | Verify prerequisites and install steps actually work | — |
-| 2 - Build Chat App | `dotnet new console -n ChatApp`, add packages and code per README. Run it: chat, streaming, structured output | `Part 2 - Build Chat App/ChatApp/` |
-| 3 - Add RAG | Continue from your Part 2 app (README says copy it). Verify retrieval answers from `manuals/`. Also check the two `checkpoints/*.cs` variants still compile against the described packages | `Part 3 - Add RAG/RagChatApp/` |
+| 2 - Build Chat App | `dotnet new console -n ChatApp`, add packages and code per README. Run it: chat, streaming, structured output | `Part 02 - Build Chat App/ChatApp/` |
+| 3 - Add RAG | Continue from your Part 2 app (README says copy it). Verify retrieval answers from `manuals/`. Also check the two `checkpoints/*.cs` variants still compile against the described packages | `Part 03 - Add RAG/RagChatApp/` |
 | 4 - AI Web Chat Template | Scaffold with the exact command in the README (`--provider azureopenai --vector-store qdrant --aspire --name GenAiLab`). Run via `GenAiLab.AppHost`. Also sanity-check the documented Docker-free `--vector-store local` path | Compare against `Part 11 - Deployment/GenAiLab/` |
-| 5 - Providers and Fallbacks | Documentation only — read for accuracy of provider names, packages, and config keys | — |
-| 6 - MCP Server Basics | `dotnet new mcpserver -n MyMcpServer`, add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 6 - MCP Server Basics/MyMcpServer/` |
-| 7 - Enhanced MCP Server *(bonus)* | Exploration only — build and run the existing snapshot, review the README's business-integration guidance | `Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
-| 8 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | — |
-| 9 - Agent Framework Basics | `dotnet new console` → `AgentApp`, add `Microsoft.Agents.AI` per README. Verify the agent runs and can call the Part 6 weather tool if the README wires that up | `Part 9 - Agent Framework Basics/AgentApp/` |
-| 10 - Adding AI to an Existing App | Run the completed `StoreApp` snapshot. The local-inference module needs `LocalModel:Endpoint` / `LocalModel:Model` (Ollama or Foundry Local) — note it as skipped if unavailable | `Part 10 - Adding AI to an Existing App/StoreApp/` |
+| 5 - MCP Server Basics | `dotnet new mcpserver -n MyMcpServer`, add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 05 - MCP Server Basics/MyMcpServer/` |
+| 6 - Enhanced MCP Server *(bonus)* | Exploration only — build and run the existing snapshot, review the README's business-integration guidance | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
+| 7 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | — |
+| 8 - Agent Framework Basics | `dotnet new console` → `AgentApp`, add `Microsoft.Agents.AI` per README. Verify the agent runs and can call the Part 5 weather tool if the README wires that up | `Part 08 - Agent Framework Basics/AgentApp/` |
+| 9 - Adding AI to an Existing App | Run the completed `StoreApp` snapshot. The local-inference module needs `LocalModel:Endpoint` / `LocalModel:Model` (Ollama or Foundry Local) — note it as skipped if unavailable | `Part 09 - Adding AI to an Existing App/StoreApp/` |
+| 10 - Choosing Providers and Services | Documentation only — read for accuracy of provider names, packages, and config keys | — |
 | 11 - Deployment | See below | `Part 11 - Deployment/GenAiLab/` |
 
-### MCP server verification (Parts 6-7)
+### MCP server verification (Parts 5-6)
 
 An MCP server is a stdio process — it starts and waits. Check:
 

@@ -4,10 +4,10 @@
 
 ## In this workshop
 
-In this final part, you will learn how to deploy the AI Web Chat application you scaffolded in [Part 4](../Part%204%20-%20AI%20Web%20Chat%20Template/README.md) to Azure using the Azure Developer CLI (`azd`). You'll deploy your Qdrant-backed application to Azure Container Apps for production use.
+In this final part, you will learn how to deploy the AI Web Chat application you scaffolded in [Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) to Azure using the Azure Developer CLI (`azd`). You'll deploy your Qdrant-backed application to Azure Container Apps for production use.
 
 > [!NOTE]
-> This part deliberately returns to the **Part 4 web application** rather than the console samples from Parts 6-10. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship — it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the capstone `StoreApp` are console applications you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
+> This part deliberately returns to the **Part 4 web application** rather than the console samples from Parts 5-9. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship — it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the capstone `StoreApp` are console applications you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
 > [!TIP]
 > If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the working code snapshot provided in this `Part 11 - Deployment` folder. The complete code has already been updated with the necessary configuration for external HTTP endpoints and deployment. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
 
@@ -51,7 +51,7 @@ In this final part, you will learn how to deploy the AI Web Chat application you
 > [!IMPORTANT]
 > **Vector Database Configuration**: This deployment uses **Qdrant** as the vector database, which runs as a containerized service in Azure Container Apps. No additional vector database setup is required.
 >
-> If you prefer to use **Azure AI Search** instead, see the "Alternative: Azure AI Search Deployment" section below.
+> For a note on using a managed vector store in production, see [Optional: using a managed vector store](#optional-using-a-managed-vector-store) at the end of this part.
 
 1. Ensure you are in the root directory which contains the solution file.
 
@@ -125,55 +125,39 @@ In this final part, you will learn how to deploy the AI Web Chat application you
    azd show
    ```
 
-## Alternative: Azure AI Search Deployment
+## Optional: using a managed vector store
 
-If you prefer to use Azure AI Search instead of Qdrant for vector storage, follow these steps:
+This workshop deploys Qdrant because it needs no setup, behaves the same locally
+and in Azure, and costs nothing beyond the container it runs in. A production app
+often wants a managed vector store instead, and on Azure that usually means
+[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview).
 
-> [!NOTE]
-> Azure AI Search provides a managed vector database service but requires additional Azure resources and configuration.
+That swap is smaller than you might expect, for the same reason provider swaps
+were small in [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md).
+Your search code depends on an abstraction rather than on Qdrant:
 
-### Prerequisites for Azure AI Search
+```csharp
+// GenAiLab.Web/Services/SemanticSearch.cs
+public class SemanticSearch(VectorStoreCollection<Guid, IngestedChunk> vectorCollection)
+```
 
-1. **Create an Azure AI Search service** in the Azure portal:
-   - Go to Azure portal → Create a resource → Azure AI Search
-   - Choose a pricing tier (Basic or higher for vector search)
-   - Note the endpoint URL and admin key
+`VectorStoreCollection<TKey, TRecord>` comes from `Microsoft.Extensions.VectorData`,
+so `SemanticSearch`, `DataIngestor`, and the Blazor components stay as they are.
+Only registration changes, in two files: the `AddQdrantClient` and
+`AddQdrantCollection<...>` calls in `GenAiLab.Web/Program.cs`, and the
+`builder.AddQdrant("vectordb")` resource in `GenAiLab.AppHost/AppHost.cs` that tells
+`azd` what to provision.
 
-1. **Update your application configuration**:
-   - Modify `Program.cs` to use Azure AI Search instead of Qdrant
-   - Update connection strings and service registrations
-   - Install Azure AI Search NuGet packages
+Rather than editing by hand, scaffold the template a second time with the Azure AI
+Search vector store option (the same `dotnet new aichatweb` command from
+[Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md), with a different
+`--vector-store` value) and diff the two projects. That shows you the exact
+registration and Aspire wiring the template generates.
 
-### Azure AI Search Deployment Steps
-
-1. **Add Azure AI Search credentials to the credential setup script**:
-
-   Add to `.github/scripts/setup-workshop-credentials.ps1`:
-
-   ```powershell
-   $env:WORKSHOP_AZURE_SEARCH_ENDPOINT = "https://your-search-service.search.windows.net"
-   $env:WORKSHOP_AZURE_SEARCH_KEY = "your-admin-key"
-   ```
-
-1. **Follow the same azd deployment steps** as above, but when prompted for infrastructure parameters:
-   - Provide your Azure AI Search connection string when prompted for 'azureAISearch'
-   - Format: `Endpoint=https://your-search-service.search.windows.net;Key=your-admin-key`
-
-### Benefits of Azure AI Search vs Qdrant
-
-**Azure AI Search advantages:**
-
-- Fully managed service (no container management)
-- Built-in security and compliance features
-- Integration with other Azure AI services
-- Advanced filtering and faceting capabilities
-
-**Qdrant advantages:**
-
-- Simpler deployment (runs as container)
-- Open source and vendor-neutral
-- Lower cost for development scenarios
-- Faster setup and testing
+The trade-off is the usual one. Qdrant is cheaper and portable, and you own the
+container and its data volume. Azure AI Search is billed per service hour even
+when idle, but it is managed, has an SLA, and adds keyword and hybrid search
+alongside vector search.
 
 ## Manage Your Deployment
 
@@ -274,8 +258,8 @@ Use the end-of-workshop resource handoff page:
 
 If you skipped the optional MCP track, this is a good moment to come back to it:
 
-- 🏢 [Part 7: Enhanced MCP Server](../Part%207%20-%20Enhanced%20MCP%20Server/README.md) *(Optional / bonus)*
-- 📦 [Part 8: MCP Publishing](../Part%208%20-%20MCP%20Publishing/README.md) *(Optional / bonus)*
+- 🏢 [Part 6: Enhanced MCP Server](../Part%2006%20-%20Enhanced%20MCP%20Server/README.md) *(Optional / bonus)*
+- 📦 [Part 7: MCP Publishing](../Part%2007%20-%20MCP%20Publishing/README.md) *(Optional / bonus)*
 
 ## Conclusion
 
@@ -284,11 +268,11 @@ You have completed the workshop (Parts 1-11). You can now:
 1. ✅ Create AI applications using the AI Web Chat template
 2. ✅ Understand and customize the template code structure
 3. ✅ Configure Microsoft Foundry (Azure OpenAI) for cloud AI workloads
-4. ✅ Configure provider and fallback strategies for real-world deployments
+4. ✅ Choose between cloud and local providers, and between vector store services, for real-world deployments
 5. ✅ Deploy your application to production environments using Azure
 
 Use this app as a baseline for your own AI application experiments.
 
 ---
 
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 10: Adding AI to an Existing App](../Part%2010%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md)

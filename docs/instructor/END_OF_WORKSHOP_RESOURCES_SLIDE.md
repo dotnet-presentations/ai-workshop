@@ -12,6 +12,6 @@ Use this single slide at the end of the workshop deck.
 
 ## Workshop follow-up
 
-- Part 7 and Part 8 (optional MCP modules)
-- Part 10 patterns applied to your own app
+- Part 6 and Part 7 (optional MCP modules)
+- Part 9 patterns applied to your own app
 - Full handoff page: [resources.md](../../resources.md)

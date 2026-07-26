@@ -12,10 +12,8 @@
       WORKSHOP_AZURE_OPENAI_EMBEDDING     Embedding deployment name  (samples expect text-embedding-3-small)
       WORKSHOP_AZURE_SUBSCRIPTION_ID      Subscription for the Part 11 azd deployment
       WORKSHOP_AZURE_LOCATION             Region for the Part 11 azd deployment
-      WORKSHOP_LOCAL_MODEL_ENDPOINT       Optional. OpenAI-compatible local endpoint for Part 10
-      WORKSHOP_LOCAL_MODEL_NAME           Optional. Local model name for Part 10
-      WORKSHOP_AZURE_SEARCH_ENDPOINT      Optional. Azure AI Search alternative to Qdrant in Part 11
-      WORKSHOP_AZURE_SEARCH_KEY           Optional. Azure AI Search admin key
+      WORKSHOP_LOCAL_MODEL_ENDPOINT       Optional. OpenAI-compatible local endpoint for Part 9
+      WORKSHOP_LOCAL_MODEL_NAME           Optional. Local model name for Part 9
 
     The workshop projects themselves do not read these variables - the console
     samples read user secrets and the Aspire app reads a connection string. Use
@@ -27,10 +25,10 @@
 
 .PARAMETER ApplyUserSecrets
     After collecting values, write them into the user secrets of the workshop
-    projects (Parts 2, 3, 9, 10) and the Part 11 AppHost connection string.
+    projects (Parts 2, 3, 8, 9) and the Part 11 AppHost connection string.
 
 .PARAMETER SkipOptional
-    Do not prompt for the local model or Azure AI Search values.
+    Do not prompt for the optional local model values.
 
 .EXAMPLE
     ./setup-workshop-credentials.ps1
@@ -45,8 +43,7 @@
     survive across terminal sessions. Do not run this on a shared machine. To
     remove them afterwards, run:
 
-        'WORKSHOP_AZURE_OPENAI_KEY','WORKSHOP_AZURE_SEARCH_KEY' |
-            ForEach-Object { [Environment]::SetEnvironmentVariable($_, $null, 'User') }
+        [Environment]::SetEnvironmentVariable('WORKSHOP_AZURE_OPENAI_KEY', $null, 'User')
 #>
 
 [CmdletBinding()]
@@ -146,12 +143,12 @@ function Write-WorkshopUserSecrets {
         return
     }
 
-    # Console samples: Parts 2, 3, 9, 10 all read AzureOpenAI:Endpoint / AzureOpenAI:Key.
+    # Console samples: Parts 2, 3, 8, 9 all read AzureOpenAI:Endpoint / AzureOpenAI:Key.
     $consoleProjects = @(
-        'Part 2 - Build Chat App/ChatApp'
-        'Part 3 - Add RAG/RagChatApp'
-        'Part 9 - Agent Framework Basics/AgentApp'
-        'Part 10 - Adding AI to an Existing App/StoreApp'
+        'Part 02 - Build Chat App/ChatApp'
+        'Part 03 - Add RAG/RagChatApp'
+        'Part 08 - Agent Framework Basics/AgentApp'
+        'Part 09 - Adding AI to an Existing App/StoreApp'
     )
 
     foreach ($relative in $consoleProjects) {
@@ -166,7 +163,7 @@ function Write-WorkshopUserSecrets {
         $ok = Set-ProjectSecret $project 'AzureOpenAI:Endpoint' $env:WORKSHOP_AZURE_OPENAI_ENDPOINT
         $ok = (Set-ProjectSecret $project 'AzureOpenAI:Key' $env:WORKSHOP_AZURE_OPENAI_KEY) -and $ok
 
-        # Part 10's operations assistant runs against a local model when configured.
+        # Part 9's operations assistant runs against a local model when configured.
         if ($relative -like '*StoreApp' -and $env:WORKSHOP_LOCAL_MODEL_ENDPOINT -and $env:WORKSHOP_LOCAL_MODEL_NAME) {
             $ok = (Set-ProjectSecret $project 'LocalModel:Endpoint' $env:WORKSHOP_LOCAL_MODEL_ENDPOINT) -and $ok
             $ok = (Set-ProjectSecret $project 'LocalModel:Model' $env:WORKSHOP_LOCAL_MODEL_NAME) -and $ok
@@ -194,7 +191,7 @@ Write-Host '=== AI Workshop credential setup ===' -ForegroundColor Cyan
 if ($Force) { Write-Host 'Force enabled: re-prompting for every value.' -ForegroundColor Yellow }
 Write-Host ''
 
-Write-Host 'Microsoft Foundry (Azure OpenAI) - required for Parts 2, 3, 4, 9, 10, 11' -ForegroundColor White
+Write-Host 'Microsoft Foundry (Azure OpenAI) - required for Parts 2, 3, 4, 8, 9, 11' -ForegroundColor White
 Request-WorkshopVariable -Name 'WORKSHOP_AZURE_OPENAI_ENDPOINT' `
     -Prompt 'Endpoint' `
     -Help 'Resource endpoint, for example https://your-resource.openai.azure.com/'
@@ -216,17 +213,11 @@ Request-WorkshopVariable -Name 'WORKSHOP_AZURE_LOCATION' -Prompt 'Location' -Opt
 
 if (-not $SkipOptional) {
     Write-Host ''
-    Write-Host 'Local model - optional, used by the operations module in Part 10 and by Part 5' -ForegroundColor White
+    Write-Host 'Local model - optional, used by the operations module in Part 9 and by Part 10' -ForegroundColor White
     Request-WorkshopVariable -Name 'WORKSHOP_LOCAL_MODEL_ENDPOINT' -Prompt 'Local endpoint' -Optional `
         -Help 'Ollama: http://localhost:11434/v1   Foundry Local: http://localhost:5273/v1'
     Request-WorkshopVariable -Name 'WORKSHOP_LOCAL_MODEL_NAME' -Prompt 'Local model name' -Optional `
         -Help 'Ollama: llama3.2   Foundry Local: phi-4-mini'
-
-    Write-Host ''
-    Write-Host 'Azure AI Search - optional, only if you swap it in for Qdrant in Part 11' -ForegroundColor White
-    Request-WorkshopVariable -Name 'WORKSHOP_AZURE_SEARCH_ENDPOINT' -Prompt 'Search endpoint' -Optional `
-        -Help 'For example https://your-search-service.search.windows.net'
-    Request-WorkshopVariable -Name 'WORKSHOP_AZURE_SEARCH_KEY' -Prompt 'Search admin key' -Optional -Secret
 }
 
 Write-Host ''
@@ -241,8 +232,6 @@ $status = [ordered]@{
     'Azure location'        = $env:WORKSHOP_AZURE_LOCATION
     'Local model endpoint'  = $env:WORKSHOP_LOCAL_MODEL_ENDPOINT
     'Local model name'      = $env:WORKSHOP_LOCAL_MODEL_NAME
-    'AI Search endpoint'    = $env:WORKSHOP_AZURE_SEARCH_ENDPOINT
-    'AI Search key'         = $env:WORKSHOP_AZURE_SEARCH_KEY
 }
 
 foreach ($item in $status.GetEnumerator()) {
@@ -266,10 +255,10 @@ if ($mismatched.Count -gt 0) {
     Write-Host 'Warning: deployment names differ from the ones the samples hardcode:' -ForegroundColor Yellow
     $mismatched | ForEach-Object { Write-Host "  - $_" -ForegroundColor Yellow }
     Write-Host '  Update the model constants in these files before running the samples:' -ForegroundColor Yellow
-    Write-Host '    Part 2 - Build Chat App/ChatApp/Program.cs' -ForegroundColor DarkGray
-    Write-Host '    Part 3 - Add RAG/RagChatApp/Program.cs (and checkpoints/*.cs)' -ForegroundColor DarkGray
-    Write-Host '    Part 9 - Agent Framework Basics/AgentApp/Program.cs' -ForegroundColor DarkGray
-    Write-Host '    Part 10 - Adding AI to an Existing App/StoreApp/Program.cs' -ForegroundColor DarkGray
+    Write-Host '    Part 02 - Build Chat App/ChatApp/Program.cs' -ForegroundColor DarkGray
+    Write-Host '    Part 03 - Add RAG/RagChatApp/Program.cs (and checkpoints/*.cs)' -ForegroundColor DarkGray
+    Write-Host '    Part 08 - Agent Framework Basics/AgentApp/Program.cs' -ForegroundColor DarkGray
+    Write-Host '    Part 09 - Adding AI to an Existing App/StoreApp/Program.cs' -ForegroundColor DarkGray
     Write-Host '    Part 11 - Deployment/GenAiLab/GenAiLab.Web/Program.cs' -ForegroundColor DarkGray
 }
 
@@ -281,7 +270,7 @@ if ($ApplyUserSecrets) {
 else {
     Write-Host ''
     Write-Host 'These variables are not read by the workshop projects themselves.' -ForegroundColor Yellow
-    Write-Host 'Re-run with -ApplyUserSecrets to write them into Parts 2, 3, 9, 10 and the Part 11 AppHost.' -ForegroundColor Yellow
+    Write-Host 'Re-run with -ApplyUserSecrets to write them into Parts 2, 3, 8, 9 and the Part 11 AppHost.' -ForegroundColor Yellow
 }
 
 Write-Host ''

@@ -23,7 +23,7 @@ Before starting, ensure you have:
 <!-- -->
 
 > [!NOTE]
-> **No Docker or Podman?** You can complete Parts 1-3, use the local JSON vector-store option in Part 4, and continue with Parts 5 and 7-9. Docker or Podman is only required to run the workshop's Qdrant container locally; see the [workshop overview](../README.md#when-docker-is-required) for details.
+> **No Docker or Podman?** You can complete Parts 1-3, use the local JSON vector-store option in Part 4, and continue with Parts 5-10. Docker or Podman is only required to run the workshop's Qdrant container locally; see the [workshop overview](../README.md#when-docker-is-required) for details.
 
 ## Before the workshop: provision [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) ⏳
 

@@ -4,9 +4,9 @@ updates:
   - package-ecosystem: "nuget"
     directories:
       - "/Part 2 - Project Creation/GenAiLab/"
-      - "/Part 6 - Deployment/GenAiLab/"
-      - "/Part 7 - MCP Server Basics/MyMcpServer/"
-      - "/Part 8 - Enhanced MCP Server/ContosoOrdersMcpServer/"
+      - "/Part 11 - Deployment/GenAiLab/"
+      - "/Part 6 - MCP Server Basics/MyMcpServer/"
+      - "/Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer/"
     schedule:
       interval: "weekly"
       day: "monday"

@@ -17,7 +17,7 @@ This directory contains all documentation related to the .NET AI Workshop develo
 ### 👨‍🏫 Instructor Resources (`/instructor`)
 
 - **[ATTENDEE_AI_ACCESS.md](instructor/ATTENDEE_AI_ACCESS.md)** - Instructor-only note on providing an AI access fallback (azure-ai-proxy-lite) for attendees who can't provision their own [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) resource
-- **[MCP_INSTRUCTOR_GUIDE.md](instructor/MCP_INSTRUCTOR_GUIDE.md)** - Complete instructor guide for teaching Parts 7-9 (MCP components) of the workshop
+- **[MCP_INSTRUCTOR_GUIDE.md](instructor/MCP_INSTRUCTOR_GUIDE.md)** - Complete instructor guide for teaching Parts 6-8 (MCP components) of the workshop
 
 ## Quick Navigation
 
@@ -33,22 +33,27 @@ This directory contains all documentation related to the .NET AI Workshop develo
 
 ## Workshop Overview
 
-The workshop is structured as 9 parts:
+The workshop is structured as 11 parts:
 
-**Core AI Web Chat Application (Parts 1-6):**
+**Core AI application development (Parts 1-5):**
 
 - Part 1: Setup and Prerequisites
 - Part 2: Build Chat App
 - Part 3: Add RAG
 - Part 4: AI Web Chat Template
 - Part 5: Providers and Fallbacks
-- Part 6: Azure Deployment
 
-**Model Context Protocol Extension (Parts 7-9):**
+**Model Context Protocol Extension (Parts 6-8):**
 
-- Part 7: MCP Server Basics
-- Part 8: Enhanced MCP Server
-- Part 9: MCP Publishing
+- Part 6: MCP Server Basics
+- Part 7: Enhanced MCP Server *(optional / bonus)*
+- Part 8: MCP Publishing *(optional / bonus)*
+
+**Agents, capstone, and deployment (Parts 9-11):**
+
+- Part 9: Agent Framework Essentials
+- Part 10: Adding AI to an Existing App
+- Part 11: Azure Deployment
 
 ## Contributing
 

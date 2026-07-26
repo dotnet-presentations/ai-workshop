@@ -132,7 +132,8 @@ pipeline, and the template app are all written against `IChatClient` and
 ## What's next
 
 You have now covered the AI half end-to-end: build by hand, compare the template,
-and swap providers. Next you'll deploy your app in **Part 6**. After that, the
-workshop moves to **tools and agents** with the **Model Context Protocol (MCP)** in Part 7.
+and swap providers. Next the workshop moves to **tools and agents**, starting with
+the **Model Context Protocol (MCP)** in Part 6. You'll deploy the finished
+application to Azure at the end of the workshop in **Part 11**.
 
-**Continue to** → [Part 6: Deployment](../Part%206%20-%20Deployment/README.md)
+**Continue to** → [Part 6: MCP Server Basics](../Part%206%20-%20MCP%20Server%20Basics/README.md)

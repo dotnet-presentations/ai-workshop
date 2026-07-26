@@ -24,7 +24,7 @@ Docker Desktop or Podman is required when you run the workshop's **Qdrant contai
 | Part 6 | Required to run the supplied Qdrant + Aspire application locally. The Azure deployment itself runs the containers in Azure. |
 | Parts 7-9 | Not required for the MCP exercises. Containerizing an MCP server in Part 9 is optional. |
 | Part 10 | Not required. This module includes a standalone `AgentApp` sample and remains Docker-free. |
-| Part 11 | Not required in this repo. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
+| Part 11 | Not required. The `StoreApp` sample in this repo is a Docker-free console app. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
 
 Without Docker, you can still complete Parts 1-5 and Parts 7-9, including the main chat, RAG, template, provider, and MCP concepts. In Part 4 you will miss the hands-on Qdrant, Aspire dashboard, service orchestration, and container persistence experience. Part 6 uses the full Qdrant + Aspire application, so local execution of that snapshot requires Docker or Podman.
 
@@ -91,7 +91,7 @@ This sequence starts with a minimal console chat app, then layers in RAG, templa
 
 ### Capstone (Part 11)
 
-1. 🛒 [**Adding AI to an Existing App with eShopLite**](Part%2011%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md): Apply everything you have learned to an application that already exists, using targeted AI for discovery, operations, business signals, MCP tools, and collaborating agents.
+1. 🛒 [**Adding AI to an Existing App with eShopLite**](Part%2011%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md): Apply everything you have learned to an application that already exists. Work through a completed `StoreApp` sample that adds targeted AI for discovery, operations, business signals, tools, and collaborating agents, then explore the maintained eShopLite scenarios.
 
 ## Lab Structure 📁
 

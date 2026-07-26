@@ -8,7 +8,10 @@
 
 Every earlier part of this workshop built something new: a console chat app, a RAG loop, a template-generated web app, MCP servers, an agent. Real work rarely looks like that. Most teams already have an application in production, and the question is not "how do I build an AI app?" but **"where does AI actually belong in the app I already have?"**
 
-This is the capstone. It uses [eShopLite](https://github.com/Azure-Samples/eShopLite), a maintained .NET reference application, as the companion implementation. eShopLite is an ordinary e-commerce app — catalog, store front, Aspire orchestration, telemetry — with a set of scenarios that each add one AI capability to that same app.
+This is the capstone, and it comes in two halves:
+
+- **`StoreApp/` in this folder** is a completed, runnable project you work through hands-on. It is a small existing store application — catalog, search log, operational telemetry — with five targeted AI capabilities added on top of it.
+- **[eShopLite](https://github.com/Azure-Samples/eShopLite)** is the maintained, full-size version of the same story: a real e-commerce app with Aspire orchestration and a scenario per capability. Each section below links to the scenario that implements it at production scale.
 
 The point of the unit is the *placement decision*, not one more sample. You already know how to call a model. Here you decide **which places in an existing app are worth making smarter**, and why each one uses a different technique.
 
@@ -18,6 +21,7 @@ The point of the unit is the *placement decision*, not one more sample. You alre
 
 By the end of this part, you will:
 
+- ✅ Add five targeted AI capabilities to a working store application and run them
 - ✅ Explain why targeted AI beats "one big chatbot" bolted onto an existing app
 - ✅ Identify the surfaces in a typical enterprise app where AI earns its place
 - ✅ Describe the retrieval + score-gate ("honesty gate") pattern for grounded product answers
@@ -93,6 +97,8 @@ Step 4 is the one people skip, and it is the one that matters. Call it the **hon
 
 Step 5 is the other half of the same idea. The model never sees the whole catalog, so it cannot invent from it; it composes an answer from retrieved facts. That combination — retrieve, gate, ground — is what makes discovery safe enough to put in front of customers.
 
+**In this project:** `StoreApp/Ai/ProductDiscovery.cs` (the gate is the `Where(x => x.Score >= relevanceThreshold)` line).
+
 **Try it in eShopLite:**
 
 - [01-SemanticSearch](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/01-SemanticSearch) — the baseline: semantic search over the existing catalog
@@ -114,6 +120,8 @@ The interesting decision here is not the prompt, it is **which model runs it**. 
 
 This is the **cloud-for-users, local-for-operations** split, and it is a concrete payoff from Part 5: because provider selection was configuration, running one feature locally and another in the cloud is a wiring change, not a rewrite.
 
+**In this project:** `StoreApp/Ai/OperationsAssistant.cs`, with the provider choice made in `Program.cs`.
+
 **Try it in eShopLite:**
 
 - [13-ObservabilityAssistantFoundryLocal](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/13-ObservabilityAssistantFoundryLocal)
@@ -130,6 +138,8 @@ Two things keep this honest:
 - **The output is a recommendation, not an action.** A human decides whether to stock the thing nobody could find.
 
 This is the shortest distance between "we added AI" and "someone outside engineering noticed."
+
+**In this project:** `StoreApp/Ai/StoreIntelligenceReport.cs` — `BuildFacts()` computes, the model only writes.
 
 **Try it in eShopLite:**
 
@@ -149,6 +159,8 @@ Practical guidance for a first tool surface:
 - **Keep tools narrow and well described.** The description is the model's only documentation.
 - **Return grounded data, not prose.** Let the calling model do the wording.
 - **Treat the tool list as an API surface.** It gets reviewed, versioned, and tested like one.
+
+**In this project:** `StoreApp/Ai/StoreTools.cs`. Every tool calls a service in `StoreApp/Store/`; nothing touches a data store directly. These are in-process `AIFunction` tools, which is the same shape you would publish over MCP.
 
 **Try it in eShopLite:**
 
@@ -181,6 +193,8 @@ flowchart TD
 
 The orchestrator routes the parts of the question, each specialist answers only from its own tools, and the findings are combined. Because each agent stays small, each one stays debuggable — and each one is just the single agent you already built in Part 10.
 
+**In this project:** `StoreApp/Ai/StoreAgentNetwork.cs` — the fan-out and synthesis are written out explicitly so you can see there is no magic in them.
+
 **Try it in eShopLite:**
 
 - [17-A2AStoreOperationsNetwork](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/17-A2AStoreOperationsNetwork)
@@ -195,9 +209,119 @@ There is no hands-on hosted-agent lab here by design. See [hosted agents](https:
 
 ---
 
-## How to use the eShopLite scenarios
+## Hands-on: run the completed project
 
-eShopLite is actively maintained and each scenario has its own README with current prerequisites and run steps. Rather than duplicating those here — where they would go stale — use them directly:
+`StoreApp/` in this folder is the finished application. Read it in the order the sections above introduce the ideas — the code is commented to match.
+
+```text
+StoreApp/
+├── Store/                      THE EXISTING APP - no AI packages referenced
+│   ├── Catalog.cs              products + the keyword search the app always had
+│   ├── SearchLog.cs            what customers searched for, and what found nothing
+│   └── OperationsLog.cs        the structured logs the app already emits
+├── Ai/                         THE ADDITIONS - one file per capability
+│   ├── ProductDiscovery.cs     1. semantic search + honesty gate + grounding
+│   ├── OperationsAssistant.cs  2. plain-language answers over the logs
+│   ├── StoreIntelligenceReport.cs  3. a briefing built from existing signals
+│   ├── StoreTools.cs           4. app capabilities exposed as read-only tools
+│   └── StoreAgentNetwork.cs    5. three specialists + an orchestrator
+└── Program.cs                  wiring and a menu for the five capabilities
+```
+
+Delete `Ai/` and you still have a working store. That is the shape you want when you add AI to something real.
+
+### Step 1: Configure and run
+
+The same Microsoft Foundry (Azure OpenAI) credentials you used in Part 2. From this folder:
+
+```bash
+cd StoreApp
+dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
+dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
+dotnet run
+```
+
+The app needs a chat deployment (`gpt-4o-mini`) and an embedding deployment (`text-embedding-3-small`). If your deployment names differ, edit the two constants at the top of `Program.cs`.
+
+### Step 2: See why keyword search is not enough (menu option 4)
+
+Option 4 runs the same three queries through both search paths and prints the scores:
+
+```text
+Query: "something warm for a rainy hike"
+  Keyword search: 0 result(s)
+  Semantic search: 0.48  Cascade Rain Shell
+  Semantic search: 0.41  Riverbend Fleece Pullover
+```
+
+The customer described a *need*; the catalog contains *nouns*. Then watch the last query:
+
+```text
+Query: "scuba tank"
+  Keyword search: 0 result(s)
+  Semantic search: 0 results above the relevance threshold (honesty gate held)
+```
+
+Vector search always returns *something* — the nearest neighbours exist no matter how bad they are. The threshold is what turns "here is the closest thing I have" into "we do not carry that." Try lowering `relevanceThreshold` in `Program.cs` to `0.0f` and running option 1 with "scuba tank" to see what the gate was protecting you from.
+
+### Step 3: Discovery, grounded (menu option 1)
+
+Ask for what you need rather than what you want:
+
+```text
+Customer: something warm for a rainy hike
+Customer: how do I carry water on a long walk
+Customer: scuba tank
+```
+
+The third one never reaches the model. When retrieval returns nothing, there is nothing to ground an answer in, so the app answers itself. That is a deliberate design choice, not a limitation.
+
+### Step 4: Operations, locally (menu option 2)
+
+```text
+Operator: what is failing right now and who is affected?
+```
+
+The seeded log contains a payment gateway degrading into timeouts, failing three orders, and finally opening a circuit breaker. The assistant should name the dependency, cite trace IDs, and describe the customer impact.
+
+To run this feature against a local model while discovery stays on the cloud — the **cloud-for-users, local-for-operations** split — add either of these and restart:
+
+```bash
+# Ollama
+dotnet user-secrets set "LocalModel:Endpoint" "http://localhost:11434/v1"
+dotnet user-secrets set "LocalModel:Model" "llama3.2"
+
+# Foundry Local
+dotnet user-secrets set "LocalModel:Endpoint" "http://localhost:5273/v1"
+dotnet user-secrets set "LocalModel:Model" "phi-4-mini"
+```
+
+Nothing in `OperationsAssistant.cs` changes. That is the Part 5 provider abstraction paying off in a scenario that actually motivates it: log data never leaves the machine, and there is no per-token cost for reading telemetry.
+
+### Step 5: Business signals (menu option 3)
+
+Option 3 prints the facts the app computed *first*, then the briefing the model wrote from them. Compare the two. Every number in the briefing should appear in the facts above it; if one does not, the prompt is not constraining the model tightly enough.
+
+Notice that the searches you typed in step 3 are already in the report. The AI-powered search kept writing to the same `SearchLog` the app always had, so a query that found nothing became a demand signal without any new instrumentation.
+
+### Step 6: Agents collaborating (menu option 5)
+
+```text
+Ops lead: Rain shells are selling badly this week. Is that demand or a bug?
+```
+
+Each specialist prints as it reports, then the orchestrator synthesizes. Watch what each one *refuses* to answer: the catalog agent has no access to logs, and the observability agent has no access to demand data. That narrowness is what keeps each agent reliable, and it is why the orchestrator exists.
+
+> [!TIP]
+> Try asking something only one specialist can answer, such as "what is running low?". The other two should say it is outside their area, and the orchestrator should not invent agreement between them.
+
+### Optional: check your understanding
+
+- Move the honesty gate *after* the model call instead of before it. What breaks, and why is "no model call at all" the better design?
+- Add a `GetOrderStatus` tool to `StoreTools.cs` backed by a new service in `Store/`. Notice that you never had to give the agent a connection string.
+- Point the orchestrator at only two of the three specialists. Does the synthesis still admit what it does not know?
+
+`StoreApp/` is deliberately small: one console app, no containers, everything visible in a single read. eShopLite is the same ideas at production scale — real services, Aspire orchestration, and a UI. It is actively maintained and each scenario has its own README with current prerequisites and run steps, so rather than duplicating those here — where they would go stale — use them directly:
 
 1. Clone [Azure-Samples/eShopLite](https://github.com/Azure-Samples/eShopLite).
 2. Pick the scenario for the capability area you want, from the table below.
@@ -215,7 +339,7 @@ eShopLite is actively maintained and each scenario has its own README with curre
 > [!TIP]
 > If you are running this unit as a timed instructor-led session, demo scenarios 14 and 13 and discuss the rest. The contrast between a cloud-backed customer experience and a local-model operations assistant is the moment that lands.
 
-**Taught here:** which surfaces are worth making smarter, why each one uses a different technique, and how the earlier parts of the workshop combine into an existing-app story.
+**Taught here:** which surfaces are worth making smarter, why each one uses a different technique, how the earlier parts of the workshop combine into an existing-app story, and a small end-to-end implementation you can read in one sitting.
 
 **Explore in eShopLite:** the working code, the Aspire wiring, the deployment details, and the scenario-specific architecture docs. A [supporting session package](https://github.com/Azure-Samples/eShopLite/tree/main/docs/26%2006%2016%20NET%20Agentic%20Modernization) with slides and demo notes is also maintained there.
 
@@ -229,10 +353,11 @@ eShopLite is actively maintained and each scenario has its own README with curre
 - ✅ MCP keeps the agent on your app's rules instead of your database
 - ✅ Specialist agents plus an orchestrator handle questions that cross domains
 - ✅ Hosted agents are a deployment path to evaluate after a scenario proves itself locally
+- ✅ The additions stay additive: delete `Ai/` from the sample and the store still works
 
 ## What's next
 
-You now have the full arc: build a chat app, ground it, choose a provider, expose tools, compose agents, and place all of it into an application that already exists. The most useful next step is to run one of the eShopLite scenarios end to end, then pick the single highest-value surface in **your** application and add exactly one of these capabilities to it.
+You now have the full arc: build a chat app, ground it, choose a provider, expose tools, compose agents, and place all of it into an application that already exists. Next, run one of the eShopLite scenarios end to end to see these patterns at production scale — then pick the single highest-value surface in **your** application and add exactly one of these capabilities to it.
 
 ## Additional resources
 

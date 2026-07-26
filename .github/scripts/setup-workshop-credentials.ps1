@@ -74,6 +74,9 @@ function Request-WorkshopVariable {
     )
 
     $current = [Environment]::GetEnvironmentVariable($Name, 'Process')
+    if (-not $current) {
+        $current = [Environment]::GetEnvironmentVariable($Name, 'User')
+    }
 
     if ($current -and -not $Force) {
         Write-Host "  [set] $Name" -ForegroundColor Green

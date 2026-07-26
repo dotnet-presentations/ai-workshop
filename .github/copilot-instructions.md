@@ -36,7 +36,7 @@ CI (`.github/workflows/dotnet-build.yml`) restores and builds these seven target
 "Part 11 - Deployment/GenAiLab/GenAiLab.sln" | ForEach-Object { dotnet build $_ -c Release }
 ```
 
-Expected warnings: Part 7 emits 3 × CS1998 (async tool methods with no `await`). These are intentional — the async signature is kept for API consistency.
+All seven targets build clean — zero warnings. Treat any new warning as a regression.
 
 Markdown is linted by `.github/workflows/markdownlint.yml` using `.markdownlint.json`.
 

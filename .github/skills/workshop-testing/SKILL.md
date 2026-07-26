@@ -50,7 +50,7 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 
 An MCP server is a stdio process — it starts and waits. Check:
 
-1. `dotnet build` succeeds (Part 7 legitimately emits 3 × CS1998).
+1. `dotnet build` succeeds with no warnings.
 2. `dotnet run` logs `Server (stream) (<Name>) transport reading messages`.
 3. Ctrl+C shuts it down cleanly.
 4. *Optional:* register it in `.vscode/mcp.json` and confirm the tools appear in Copilot Chat.

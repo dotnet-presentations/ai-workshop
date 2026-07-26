@@ -2,6 +2,8 @@ using System.ComponentModel;
 using System.Text.Json;
 using ModelContextProtocol.Server;
 
+namespace ContosoOrdersMcpServer.Tools;
+
 /// <summary>
 /// ContosoOrders business tools for demonstration purposes.
 /// These tools can be invoked by MCP clients to interact with the Contoso business system.

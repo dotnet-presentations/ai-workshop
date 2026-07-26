@@ -1,5 +1,7 @@
 # Part 2: Build a Chat App (hands-on, code-first)
 
+> **⏱️ Estimated Time:** 45-60 minutes
+
 In this part you build a console chat application **from scratch**. Instead of
 starting with a template that hides the details, you write the code yourself so
 you understand exactly how a .NET app talks to an AI model. In later parts you

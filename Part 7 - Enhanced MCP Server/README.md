@@ -582,4 +582,4 @@ These patterns can be used to connect AI agents to business systems for automati
 
 ---
 
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 6: MCP Server Basics](../Part%206%20-%20MCP%20Server%20Basics/README.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 6: MCP Server Basics](../Part%206%20-%20MCP%20Server%20Basics/README.md) | ➡️ **Next**: [Part 8: MCP Publishing](../Part%208%20-%20MCP%20Publishing/README.md)

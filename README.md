@@ -52,13 +52,19 @@ The workshop is split into five sections:
 
 ### Pacing
 
-The workshop is designed as a **two-part, roughly 8-hour hands-on lab** (8:30-5:30 less an hour for lunch). The required path is Parts 1-6 and 9-11; the sections badged *(Optional / bonus)* exist so groups that move quickly have somewhere to go, and so the schedule keeps slack for everyone else.
+The workshop is designed as a **two-part, roughly 8-hour hands-on lab** (8:30-5:30 less an hour for lunch). The core path is Parts 1-6 and 9-11; the sections badged *(Optional / bonus)* exist so groups that move quickly have somewhere to go, and so the schedule keeps slack for everyone else.
 
-| Session | Parts | Focus |
-| --- | --- | --- |
-| Morning | Parts 1-5 | Setup, console chat, manual RAG, template reveal, provider strategy |
-| Afternoon | Parts 6, 9, 10, 11 | MCP basics, agents, capstone, deployment |
-| Bonus (any time) | Parts 7-8 | Enhanced MCP server and MCP publishing |
+| Session | Parts | Budget | Focus |
+| --- | --- | --- | --- |
+| Morning | Parts 1-5 | ~2h50m-3h50m | Setup, console chat, manual RAG, template reveal, provider strategy |
+| Afternoon | Parts 6, 9, 10, 11 | ~2h30m-3h40m | MCP basics, agents, capstone, deployment |
+| Bonus (any time) | Parts 7-8 | ~1h15m-1h45m | Enhanced MCP server and MCP publishing |
+
+> [!IMPORTANT]
+> **If you fall behind, cut Part 11 (Deployment) — not Part 10 (the capstone).** Deployment is placed last deliberately: nothing depends on it, and it is the most environment-fragile section (Azure login, subscription and quota checks, provisioning time). The capstone is where the whole workshop comes together, so protect that time first. A short `azd up` walkthrough by the instructor is a reasonable substitute for a room that has run out of clock.
+
+> [!TIP]
+> The morning is the tighter half. Ask attendees to complete [Part 1 - Setup](Part%201%20-%20Setup/README.md) **before** the session — it is prerequisite installation rather than lab content, and moving it to pre-work buys back 15-20 minutes at exactly the point in the day where the schedule has the least slack.
 
 Detailed architecture and sequence diagrams are documented in the individual module READMEs where each concept is implemented.
 

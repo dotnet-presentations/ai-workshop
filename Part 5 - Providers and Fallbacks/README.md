@@ -1,5 +1,7 @@
 # Part 5: Providers & Fallbacks (Azure primary + local)
 
+> **⏱️ Estimated Time:** 20-30 minutes
+
 This part demonstrates a core workshop pattern: **swap the provider, keep the same
 `IChatClient` / `IEmbeddingGenerator`.** Everything you built in Parts 2-4, from
 the chat loop to the template app, runs with different providers. The only thing

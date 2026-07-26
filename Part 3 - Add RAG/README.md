@@ -1,5 +1,7 @@
 # Part 3: Add RAG by hand (console)
 
+> **⏱️ Estimated Time:** 60-75 minutes
+
 In Part 2 you built a chat app. The problem: the model only knows what it was
 trained on. Ask it about *your* product, *your* policies, or anything private and
 it will guess. **Retrieval-Augmented Generation (RAG)** fixes that by retrieving

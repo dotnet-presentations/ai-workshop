@@ -767,9 +767,9 @@ In Part 9, you covered the MCP server lifecycle from development to production. 
 
 You now have a complete path for building, publishing, and maintaining MCP servers that extend AI agents with custom capabilities.
 
-## Workshop Complete! 🎉
+## MCP Track Complete! 🎉
 
-🏆 **Completed all 9 parts** of the AI Workshop series:
+🏆 **Completed the MCP track** of the AI Workshop series:
 
 **AI Web Chat Application (Parts 1-6)**:
 
@@ -783,9 +783,13 @@ You now have a complete path for building, publishing, and maintaining MCP serve
 - Implemented both basic and advanced business tools
 - Learned professional publishing and distribution
 
+## Continue Your Journey
+
+🎯 **Next**: [Part 10: Agent Framework Essentials](../Part%2010%20-%20Agent%20Framework%20Essentials/README.md) - a short bridge module on how chat, tools, and memory come together as an agent, and how the MCP servers you just built get consumed by your own agents.
+
 ---
 
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 8: Enhanced MCP Server](../Part%208%20-%20Enhanced%20MCP%20Server/README.md) | ➡️ **Next**: [Part 10: Agent Framework Essentials](../Part%2010%20-%20Agent%20Framework%20Essentials/README.md)
 
 ### Share Your Success
 

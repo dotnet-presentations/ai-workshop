@@ -107,6 +107,13 @@ public class ProductDiscovery(
     /// <summary>Cosine similarity, same helper you wrote by hand in Part 3.</summary>
     private static float CosineSimilarity(ReadOnlySpan<float> a, ReadOnlySpan<float> b)
     {
+        if (a.Length != b.Length)
+        {
+            throw new ArgumentException(
+                $"Embedding dimensions do not match ({a.Length} vs {b.Length}). " +
+                "Check that the same embedding model generated both vectors.", nameof(b));
+        }
+
         float dot = 0f, magA = 0f, magB = 0f;
         for (int i = 0; i < a.Length; i++)
         {

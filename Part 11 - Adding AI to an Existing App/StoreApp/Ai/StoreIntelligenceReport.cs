@@ -75,8 +75,9 @@ public class StoreIntelligenceReport(
         }
 
         sb.AppendLine();
-        sb.AppendLine($"OPERATIONAL ERRORS IN THE LOG WINDOW: {operationsLog.Errors().Count}");
-        foreach (LogEntry entry in operationsLog.Errors().Take(5))
+        IReadOnlyList<LogEntry> errors = operationsLog.Errors();
+        sb.AppendLine($"OPERATIONAL ERRORS IN THE LOG WINDOW: {errors.Count}");
+        foreach (LogEntry entry in errors.Take(5))
         {
             sb.AppendLine($"- {entry.Service}: {entry.Message}");
         }

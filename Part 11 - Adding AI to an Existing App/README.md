@@ -262,7 +262,7 @@ Query: "scuba tank"
   Semantic search: 0 results above the relevance threshold (honesty gate held)
 ```
 
-Vector search always returns *something* — the nearest neighbours exist no matter how bad they are. The threshold is what turns "here is the closest thing I have" into "we do not carry that." Try lowering `relevanceThreshold` in `Program.cs` to `0.0f` and running option 1 with "scuba tank" to see what the gate was protecting you from.
+Vector search always returns *something* — the nearest neighbours exist no matter how bad they are. The threshold is what turns "here is the closest thing I have" into "we do not carry that." Try lowering the `relevanceThreshold` default in the `ProductDiscovery` constructor (`StoreApp/Ai/ProductDiscovery.cs`) to `0.0f` and running option 1 with "scuba tank" to see what the gate was protecting you from.
 
 ### Step 3: Discovery, grounded (menu option 1)
 

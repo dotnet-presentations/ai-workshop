@@ -4,7 +4,7 @@
 
 ## In this workshop
 
-In this workshop, you will learn how to deploy your AI application to Azure using the Azure Developer CLI (`azd`). You'll deploy your PostgreSQL-based application to Azure Container Apps for production use.
+In this final part, you will learn how to deploy the AI Web Chat application you scaffolded in [Part 4](../Part%204%20-%20AI%20Web%20Chat%20Template/README.md) to Azure using the Azure Developer CLI (`azd`). You'll deploy your PostgreSQL-based application to Azure Container Apps for production use.
 
 > [!TIP]
 > If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the working code snapshot provided in this `Part 11 - Deployment` folder. The complete code has already been updated with the necessary configuration for external HTTP endpoints and deployment. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
@@ -44,7 +44,7 @@ In this workshop, you will learn how to deploy your AI application to Azure usin
    azd auth login
    ```
 
-## Part 11: Deploy to Azure Container Apps
+## Deploy to Azure Container Apps
 
 > [!IMPORTANT]
 > **Vector Database Configuration**: This deployment uses **Qdrant** as the vector database, which runs as a containerized service in Azure Container Apps. No additional vector database setup is required.

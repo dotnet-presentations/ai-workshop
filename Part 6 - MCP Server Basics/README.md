@@ -62,7 +62,7 @@ Before starting this part, ensure you have:
 
 ## Step 1: Verify the MCP Server Template
 
-The MCP server template is included in the `Microsoft.Extensions.AI.Templates` package that you installed in Part 2. Let's verify it's available:
+The MCP server template is included in the `Microsoft.Extensions.AI.Templates` package that you installed in Part 4. Let's verify it's available:
 
 1. **Verify the template is available and see its options**:
 

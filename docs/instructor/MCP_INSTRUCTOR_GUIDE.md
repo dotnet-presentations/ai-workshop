@@ -400,9 +400,9 @@ By the end of Part 8, students will:
 
 **During Workshop:**
 
-- [MCP Testing Guide](MCP_TESTING_GUIDE.md) for troubleshooting
-- [Part 6 README](Part%206%20-%20MCP%20Server%20Basics/README.md) for detailed instructions
-- [Part 7 README](Part%207%20-%20Enhanced%20MCP%20Server/README.md) for business scenarios
+- [MCP Testing Guide](../planning/MCP_TESTING_GUIDE.md) for troubleshooting
+- [Part 6 README](../../Part%206%20-%20MCP%20Server%20Basics/README.md) for detailed instructions
+- [Part 7 README](../../Part%207%20-%20Enhanced%20MCP%20Server/README.md) for business scenarios
 
 **Post-Workshop:**
 
@@ -437,4 +437,4 @@ By the end of Part 8, students will:
 
 ---
 
-*This instructor guide is designed to support successful delivery of the MCP workshop components. For questions or improvements, refer to the [Workshop Planning Document](MCP_WORKSHOP_PLANNING.md).*
+*This instructor guide is designed to support successful delivery of the MCP workshop components. For questions or improvements, refer to the [Workshop Planning Document](../archive/planning/MCP_WORKSHOP_PLANNING.md).*

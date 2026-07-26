@@ -14,7 +14,8 @@ of this for you.
 2. **`IChatClient`**: the core Microsoft.Extensions.AI abstraction
 3. **A chat loop with history**: multi-turn conversations
 4. **Streaming responses**: token-by-token output
-5. **A middleware pipeline**: add logging without touching your app code
+5. **Structured output**: get typed .NET objects back instead of prose
+6. **A middleware pipeline**: add logging without touching your app code
 
 ## Prerequisites
 
@@ -178,7 +179,66 @@ Console.WriteLine("Goodbye!");
 `GetStreamingResponseAsync` yields tokens as they arrive, so users see output
 immediately instead of waiting for the full completion.
 
-### 4.5 Final check
+### 4.5 Add structured output
+
+A chat loop returns prose. Applications usually need *data*: something you can
+store, display in a grid, or branch on. `GetResponseAsync<T>` sends `T`'s JSON
+schema along with the request and deserializes the reply into a real .NET object,
+so no string parsing is involved.
+
+First, describe the shape you want. Add this at the **end** of `Program.cs`
+(after the `Console.WriteLine("Goodbye!");` line):
+
+```csharp
+record ConversationSummary(
+    string Topic,
+    string Sentiment,
+    string[] FollowUpQuestions);
+```
+
+Property names are part of the instructions the model sees, so make them
+descriptive. Now add a `summary` command inside the chat loop, immediately
+**before** the `history.Add(new ChatMessage(ChatRole.User, input));` line:
+
+```csharp
+if (input.Equals("summary", StringComparison.OrdinalIgnoreCase))
+{
+    List<ChatMessage> summaryPrompt =
+    [
+        .. history,
+        new ChatMessage(ChatRole.User, "Summarize this conversation so far.")
+    ];
+
+    ChatResponse<ConversationSummary> response =
+        await chatClient.GetResponseAsync<ConversationSummary>(summaryPrompt);
+
+    if (response.TryGetResult(out ConversationSummary? summary))
+    {
+        Console.WriteLine($"Topic:      {summary.Topic}");
+        Console.WriteLine($"Sentiment:  {summary.Sentiment}");
+        Console.WriteLine($"Follow-ups: {string.Join(", ", summary.FollowUpQuestions)}");
+    }
+    else
+    {
+        Console.WriteLine("The model did not return a valid summary object.");
+    }
+
+    Console.WriteLine();
+    continue;
+}
+```
+
+`TryGetResult` matters: the model can still return something that doesn't fit the
+schema, and structured output is a strong request, not a guarantee. Handle the
+failure case rather than assuming a value.
+
+While you're here, update the startup message so the new command is discoverable:
+
+```csharp
+Console.WriteLine("Chat app ready. Type a message ('summary' for a typed summary, 'exit' to quit).");
+```
+
+### 4.6 Final check
 
 Your completed file should now match [ChatApp/Program.cs](ChatApp/Program.cs).
 
@@ -189,10 +249,15 @@ dotnet run
 ```
 
 ```text
-Chat app ready. Type a message (or 'exit' to quit).
+Chat app ready. Type a message ('summary' for a typed summary, 'exit' to quit).
 
 You: Give me one tip for learning .NET
 Assistant: Build small projects end-to-end...
+
+You: summary
+Topic:      Learning .NET
+Sentiment:  Positive
+Follow-ups: Which project should I build first?, How do I practice consistently?
 
 You: exit
 Goodbye!

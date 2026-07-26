@@ -522,6 +522,6 @@ After completing this testing guide:
 
 For issues not covered in this guide, refer to:
 
-- [Part 6 README](Part%206%20-%20MCP%20Server%20Basics/README.md)
-- [Part 7 README](Part%207%20-%20Enhanced%20MCP%20Server/README.md)
-- [MCP Instructor Guide](MCP_INSTRUCTOR_GUIDE.md)
+- [Part 6 README](../../Part%206%20-%20MCP%20Server%20Basics/README.md)
+- [Part 7 README](../../Part%207%20-%20Enhanced%20MCP%20Server/README.md)
+- [MCP Instructor Guide](../instructor/MCP_INSTRUCTOR_GUIDE.md)

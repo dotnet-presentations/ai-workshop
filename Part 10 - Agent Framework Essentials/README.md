@@ -94,6 +94,7 @@ Console.WriteLine(response.Text);
 The agent version wraps the same client:
 
 ```csharp
+using Microsoft.Extensions.AI;
 using Microsoft.Agents.AI;
 
 AIAgent agent = chatClient.AsAIAgent(
@@ -193,6 +194,7 @@ The coordination patterns you will hear about:
 MAF expresses these as workflows, for example:
 
 ```csharp
+using Microsoft.Extensions.AI;
 using Microsoft.Agents.AI.Workflows;
 
 Workflow workflow = AgentWorkflowBuilder.BuildSequential(researcher, writer, editor);

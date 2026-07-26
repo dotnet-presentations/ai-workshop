@@ -5,7 +5,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <UserSecretsId>agentapp-part10-workshop</UserSecretsId>
+    <UserSecretsId>9d58ad43-2f4e-4f7e-bc15-cc2f36dd4040</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

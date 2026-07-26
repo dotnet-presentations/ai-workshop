@@ -23,7 +23,7 @@ Docker Desktop or Podman is required when you run the workshop's **Qdrant contai
 | Part 5 | Not required. Provider comparisons can use Microsoft Foundry, Foundry Local, or a native Ollama installation. |
 | Part 6 | Required to run the supplied Qdrant + Aspire application locally. The Azure deployment itself runs the containers in Azure. |
 | Parts 7-9 | Not required for the MCP exercises. Containerizing an MCP server in Part 9 is optional. |
-| Part 10 | Not required. This module is conceptual, with optional code you can add to your Part 2 console app. |
+| Part 10 | Not required. This module includes a standalone `AgentApp` sample and remains Docker-free. |
 
 Without Docker, you can still complete Parts 1-5 and Parts 7-9, including the main chat, RAG, template, provider, and MCP concepts. In Part 4 you will miss the hands-on Qdrant, Aspire dashboard, service orchestration, and container persistence experience. Part 6 uses the full Qdrant + Aspire application, so local execution of that snapshot requires Docker or Podman.
 
@@ -85,13 +85,13 @@ This sequence starts with a minimal console chat app, then layers in RAG, templa
 
 ### Agents (Part 10)
 
-1. 🤖 [**Agent Framework Basics**](Part%2010%20-%20Agent%20Framework%20Basics/README.md): A short bridge module covering how chat, tools, and memory become an agent with Microsoft Agent Framework, and how MCP tools fit in.
+1. 🤖 [**Agent Framework Essentials**](Part%2010%20-%20Agent%20Framework%20Basics/README.md): A short bridge module covering how chat, tools, and memory become an agent with Microsoft Agent Framework, and how MCP tools fit in.
 
 ## Lab Structure 📁
 
 The repository is structured as follows:
 
-- 📖 `Part 1 - Setup` through `Part 10 - Agent Framework Basics`: Contains all the lab instructions, documentation, and working code snapshots
+- 📖 `Part 1 - Setup` through `Part 10 - Agent Framework Essentials`: Contains all the lab instructions, documentation, and working code snapshots
 - 📄 `manuals/`: Product documentation PDFs for the AI chatbot exercises
 - 🧪 `docs/testing/`: Testing procedures and validation reports
 
@@ -132,7 +132,7 @@ The credentials are saved as environment variables (`WORKSHOP_AZURE_OPENAI_ENDPO
 
 The complete testing procedure and validation scripts are available in `.github/prompts/test-workshop.prompt.md`. This includes:
 
-- Step-by-step testing instructions for all 9 workshop parts
+- Step-by-step testing instructions for all 10 workshop parts
 - Automated build validation commands
 - Common troubleshooting scenarios
 - Documentation improvement tracking

@@ -11,9 +11,11 @@ var config = new ConfigurationBuilder()
     .Build();
 
 string endpoint = config["AzureOpenAI:Endpoint"]
-    ?? throw new InvalidOperationException("Missing AzureOpenAI:Endpoint");
+    ?? throw new InvalidOperationException(
+        "Missing 'AzureOpenAI:Endpoint'. Run: dotnet user-secrets set \"AzureOpenAI:Endpoint\" \"https://YOUR-RESOURCE.openai.azure.com/\"");
 string key = config["AzureOpenAI:Key"]
-    ?? throw new InvalidOperationException("Missing AzureOpenAI:Key");
+    ?? throw new InvalidOperationException(
+        "Missing 'AzureOpenAI:Key'. Run: dotnet user-secrets set \"AzureOpenAI:Key\" \"YOUR-KEY\"");
 
 // --- Create the chat client ---
 IChatClient chatClient = new AzureOpenAIClient(
@@ -29,7 +31,7 @@ static string GetOrderStatus(
     // In a real app this would call your order service or database
     return orderId switch
     {
-        "ORD-1001" => $"Shipped on {DateTime.Now.AddDays(-3):yyyy-MM-dd}, arriving {DateTime.Now.AddDays(3):MMMM d}",
+        "ORD-1001" => $"Shipped on {DateTime.UtcNow.AddDays(-3):yyyy-MM-dd}, arriving {DateTime.UtcNow.AddDays(3):MMMM d}",
         "ORD-1002" => "Processing, expected to ship tomorrow",
         _ => $"No order found with ID {orderId}"
     };

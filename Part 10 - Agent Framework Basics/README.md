@@ -1,4 +1,4 @@
-# Part 10: Agent Framework Basics
+# Part 10: Agent Framework Essentials
 
 > **⏱️ Estimated Time:** 30-45 minutes
 >
@@ -95,6 +95,7 @@ The agent version wraps the same client:
 
 ```csharp
 using Microsoft.Agents.AI;
+using Microsoft.Extensions.AI;
 
 AIAgent agent = chatClient.AsAIAgent(
     name: "OrdersAssistant",
@@ -150,6 +151,7 @@ In Parts 7-8 the consumer happened to be GitHub Copilot. Here the consumer is yo
 
 ```csharp
 using ModelContextProtocol.Client;
+using Microsoft.Extensions.AI;
 
 await using var mcpClient = await McpClient.CreateAsync(clientTransport);
 var mcpTools = await mcpClient.ListToolsAsync();
@@ -206,9 +208,11 @@ var config = new ConfigurationBuilder()
     .Build();
 
 string endpoint = config["AzureOpenAI:Endpoint"]
-    ?? throw new InvalidOperationException("Missing AzureOpenAI:Endpoint");
+    ?? throw new InvalidOperationException(
+        "Missing 'AzureOpenAI:Endpoint'. Run: dotnet user-secrets set \"AzureOpenAI:Endpoint\" \"https://YOUR-RESOURCE.openai.azure.com/\"");
 string key = config["AzureOpenAI:Key"]
-    ?? throw new InvalidOperationException("Missing AzureOpenAI:Key");
+    ?? throw new InvalidOperationException(
+        "Missing 'AzureOpenAI:Key'. Run: dotnet user-secrets set \"AzureOpenAI:Key\" \"YOUR-KEY\"");
 
 // --- Create the chat client ---
 IChatClient chatClient = new AzureOpenAIClient(
@@ -224,7 +228,7 @@ static string GetOrderStatus(
     // In a real app this would call your order service or database
     return orderId switch
     {
-        "ORD-1001" => $"Shipped on {DateTime.Now.AddDays(-3):yyyy-MM-dd}, arriving {DateTime.Now.AddDays(3):MMMM d}",
+        "ORD-1001" => $"Shipped on {DateTime.UtcNow.AddDays(-3):yyyy-MM-dd}, arriving {DateTime.UtcNow.AddDays(3):MMMM d}",
         "ORD-1002" => "Processing, expected to ship tomorrow",
         _ => $"No order found with ID {orderId}"
     };
@@ -317,6 +321,7 @@ MAF expresses these as workflows. The API is still evolving, but the shape looks
 ```csharp
 // Conceptual — API subject to change
 using Microsoft.Agents.AI.Workflows;
+using Microsoft.Extensions.AI;
 
 Workflow workflow = AgentWorkflowBuilder.BuildSequential(researcher, writer, editor);
 var response = await workflow.AsAIAgent().RunAsync("Draft the release notes.");

@@ -219,6 +219,9 @@ rcf/
 # Azure Developer CLI (azd) environment files
 .azure/
 
+# Scratch directory used when testing the workshop end to end
+test-workspace/
+
 # Windows Store app package directories and files
 AppPackages/
 BundleArtifacts/

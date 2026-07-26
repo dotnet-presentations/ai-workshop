@@ -8,6 +8,10 @@ This directory contains all documentation related to the .NET AI Workshop develo
 
 - **[MCP_TESTING_GUIDE.md](planning/MCP_TESTING_GUIDE.md)** - Comprehensive testing procedures and validation guidelines for MCP functionality
 
+### 🧪 Workshop Test Reports (`/testing`)
+
+New test reports are written here using the template and skill at [`.github/skills/workshop-testing/`](../.github/skills/workshop-testing/SKILL.md). Name files `workshop-test-report-<YYYY-MM-DD>.md`.
+
 ### 🗄️ Archived Historical Artifacts (`/archive`)
 
 - **[MCP_WORKSHOP_PLANNING.md](archive/planning/MCP_WORKSHOP_PLANNING.md)** - Legacy implementation plan retained for historical context
@@ -61,6 +65,7 @@ When adding new documentation:
 
 - Place planning and development docs in `/planning`
 - Place instructor and teaching materials in `/instructor`
+- Place new workshop test reports in `/testing` (use the [skill + template](../.github/skills/workshop-testing/SKILL.md))
 - Place historical/obsolete docs in `/archive`
 - Update this README.md to include new documents
 - Use descriptive filenames and maintain consistent formatting

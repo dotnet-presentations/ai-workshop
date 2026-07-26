@@ -156,12 +156,12 @@ The credentials are saved as environment variables (`WORKSHOP_AZURE_OPENAI_ENDPO
 
 ### Testing Procedure
 
-The complete testing procedure and validation scripts are available in `.github/prompts/test-workshop.prompt.md`. This includes:
+The complete testing procedure is in the [workshop-testing skill](.github/skills/workshop-testing/SKILL.md). This includes:
 
-- Step-by-step testing instructions for all 11 workshop parts
-- Automated build validation commands
+- Part-by-part testing instructions for all 11 workshop parts
+- Snapshot reconciliation guidance
+- Report template (`.github/skills/workshop-testing/report-template.md`)
 - Common troubleshooting scenarios
-- Documentation improvement tracking
 
 ## License
 

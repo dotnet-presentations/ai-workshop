@@ -1,187 +1,63 @@
-# .NET AI Workshop Repository
+# .NET AI Workshop
 
-Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
+Teaching repository for a one-day .NET AI workshop. Content is **11 self-contained parts**, each a top-level `Part N - <Name>/` folder containing a `README.md` (the lab instructions) and, where applicable, a working code snapshot.
 
-This repository contains a comprehensive .NET AI workshop with 11 parts covering AI application development (Parts 1-5), Model Context Protocol (MCP) servers (Parts 6-8, where Parts 7-8 are optional/bonus), agents (Part 9), an applied capstone (Part 10), and Azure deployment (Part 11). The workshop teaches building AI-powered applications using .NET 10, Blazor, Microsoft Extensions for AI, Microsoft Foundry (Azure OpenAI), and vector databases.
+Everything targets **.NET 10** and uses **Microsoft Foundry (Azure OpenAI)** as the default provider.
 
-## Working Effectively
+## Parts and code snapshots
 
-### Prerequisites and Environment Setup
-- Install .NET 10.0 SDK for AI Web Chat applications (Parts 1-5 and 11):
-  ```bash
-  curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0
-  export PATH="$HOME/.dotnet:$PATH"
-  ```
-- Install .NET 10.0 SDK for MCP servers (Parts 6-8)
-- Install Docker Desktop or Podman (required for Aspire orchestration and Qdrant vector database)
-- Install Microsoft Extensions AI templates:
-  ```bash
-  dotnet new install Microsoft.Extensions.AI.Templates
-  ```
+| Part | Snapshot project | Notes |
+| --- | --- | --- |
+| 1 - Setup | — | README only |
+| 2 - Build Chat App | `ChatApp/` | Console app built by hand (`dotnet new console`) |
+| 3 - Add RAG | `RagChatApp/` | Continues from Part 2; `checkpoints/` holds two alternate `Program.cs` paths (manual cosine similarity, and MEDI + SqliteVec) |
+| 4 - AI Web Chat Template | — | README only; scaffolds `GenAiLab` with `dotnet new aichatweb` |
+| 5 - Providers and Fallbacks | — | README only |
+| 6 - MCP Server Basics | `MyMcpServer/` | `dotnet new mcpserver`; `RandomNumberTools` + `WeatherTools` |
+| 7 - Enhanced MCP Server | `ContosoOrdersMcpServer/` | Optional/bonus. Exploration of an existing snapshot — the README does **not** ask the user to scaffold it |
+| 8 - MCP Publishing | — | Optional/bonus, README only |
+| 9 - Agent Framework Basics | `AgentApp/` | `dotnet new console` + `Microsoft.Agents.AI` |
+| 10 - Adding AI to an Existing App | `StoreApp/` | Capstone. `Store/` = pre-existing app, `Ai/` = the additions |
+| 11 - Deployment | `GenAiLab/` (3-project Aspire solution) | Same app as Part 4 plus `WithExternalHttpEndpoints()` in `AppHost.cs` |
 
-### Build and Restore Commands
-- **CRITICAL TIMING**: Set timeout to 300+ seconds for all build commands. NEVER CANCEL builds.
-- Bootstrap any solution/project:
-  ```bash
-  export PATH="$HOME/.dotnet:$PATH"
-  dotnet restore [solution-or-project-path]  # Takes 5-20 seconds typically
-  dotnet build [solution-or-project-path] --configuration Release  # Takes 2-15 seconds typically
-  ```
+Other folders: `docs/` (instructor guides, planning, archived test reports), `manuals/` (PDFs used as RAG source data), `images/`.
 
-### Major Project Solutions
+## Build
 
-1. **Part 2 Chat App (console)**: `Part 2 - Build Chat App/ChatApp/ChatApp.csproj`
-   - .NET 10.0 console chat app built by hand
+CI (`.github/workflows/dotnet-build.yml`) restores and builds these seven targets on the .NET `10.0.x` SDK with `--configuration Release`. Run the same set when validating a change:
 
-2. **Part 6 MCP Server (Basic)**: `Part 6 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj`
-   - .NET 10.0 MCP server with weather tools
-   - Build time: ~2 seconds, Restore time: ~5 seconds
-
-3. **Part 7 MCP Server (Enhanced)**: `Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj`
-   - .NET 10.0 business MCP server with order management tools
-   - Build time: ~4 seconds with 3 warnings (expected)
-
-4. **Part 10 Store App (capstone)**: `Part 10 - Adding AI to an Existing App/StoreApp/StoreApp.csproj`
-   - .NET 10.0 console app that adds AI to an existing store application
-
-5. **Part 11 AI Web Chat (Full)**: `Part 11 - Deployment/GenAiLab/GenAiLab.sln`
-   - Complete AI Web Chat with deployment configuration
-
-### Running Applications
-- **AI Web Chat applications** require Docker for Qdrant vector database:
-  ```bash
-  # Ensure Docker is running first
-  docker --version
-  cd "Part 11 - Deployment/GenAiLab" 
-  dotnet run --project GenAiLab.AppHost  # Starts Aspire orchestration
-  ```
-- **MCP servers** run as console applications:
-  ```bash
-  dotnet run --project "Part 6 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj"
-  # Starts stdio server transport, use Ctrl+C to stop
-  ```
-
-## Validation and Testing
-
-### Build Validation
-- Always run the GitHub Actions workflow commands to ensure CI compatibility:
-  ```bash
-  # Test all solutions that are in CI
-  dotnet restore "Part 2 - Build Chat App/ChatApp/ChatApp.csproj"
-  dotnet build "Part 2 - Build Chat App/ChatApp/ChatApp.csproj" --no-restore --configuration Release
-  
-  dotnet restore "Part 11 - Deployment/GenAiLab/GenAiLab.sln"
-  dotnet build "Part 11 - Deployment/GenAiLab/GenAiLab.sln" --no-restore --configuration Release
-  
-  dotnet restore "Part 6 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj"
-  dotnet build "Part 6 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj" --no-restore --configuration Release
-  
-  dotnet restore "Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj"
-  dotnet build "Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj" --no-restore --configuration Release
-
-  dotnet restore "Part 10 - Adding AI to an Existing App/StoreApp/StoreApp.csproj"
-  dotnet build "Part 10 - Adding AI to an Existing App/StoreApp/StoreApp.csproj" --no-restore --configuration Release
-  ```
-
-### Manual Validation Scenarios
-- **ALWAYS run through complete scenarios** after making changes:
-  1. **MCP Server Validation**: Run MCP server and verify it starts with proper logging output and responds to Ctrl+C shutdown
-  2. **AI Web Chat Validation**: Requires Azure OpenAI credentials for full testing
-  3. **Template Validation**: Test creating new projects with templates:
-     ```bash
-     dotnet new aichatweb --name TestApp --output /tmp/test-app
-     dotnet new mcpserver --name TestMcp --output /tmp/test-mcp
-     ```
-
-### Expected Build Warnings
-- Part 7 Enhanced MCP Server produces 3 expected CS1998 warnings about async methods without await - this is normal
-
-## Template Usage
-
-### AI Chat Web App Template
-```bash
-dotnet new aichatweb --help  # See all options
-# Key options:
-# --provider: azureopenai, ollama, openai
-# --vector-store: local (default), azureaisearch, qdrant
-# --aspire: false (default), true for distributed applications
+```pwsh
+"Part 2 - Build Chat App/ChatApp/ChatApp.csproj",
+"Part 3 - Add RAG/RagChatApp/RagChatApp.csproj",
+"Part 6 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj",
+"Part 7 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj",
+"Part 9 - Agent Framework Basics/AgentApp/AgentApp.csproj",
+"Part 10 - Adding AI to an Existing App/StoreApp/StoreApp.csproj",
+"Part 11 - Deployment/GenAiLab/GenAiLab.sln" | ForEach-Object { dotnet build $_ -c Release }
 ```
 
-### MCP Server Template
-```bash
-dotnet new mcpserver --help  # See all options
-# Creates basic MCP server with console application structure
-```
+Expected warnings: Part 7 emits 3 × CS1998 (async tool methods with no `await`). These are intentional — the async signature is kept for API consistency.
 
-## Repository Structure
+Markdown is linted by `.github/workflows/markdownlint.yml` using `.markdownlint.json`.
 
-### Workshop Parts (Documentation + Code)
-- `Part 1 - Setup/`: Prerequisites and setup (README only)
-- `Part 2 - Build Chat App/`: Build the chat app by hand using Microsoft.Extensions.AI
-- `Part 3 - Add RAG/`: Add embeddings, retrieval, and prompt augmentation
-- `Part 4 - AI Web Chat Template/`: Scaffold and inspect the template-generated web app
-- `Part 5 - Providers and Fallbacks/`: Compare provider swap strategies and fallback paths
-- `Part 6 - MCP Server Basics/`: Basic MCP server with weather tools
-- `Part 7 - Enhanced MCP Server/`: Business MCP server with order tools (optional/bonus)
-- `Part 8 - MCP Publishing/`: Publishing and distribution guide, README only (optional/bonus)
-- `Part 9 - Agent Framework Basics/`: Agent essentials with a standalone `AgentApp` sample
-- `Part 10 - Adding AI to an Existing App/`: Capstone `StoreApp` sample that adds AI to an existing app
-- `Part 11 - Deployment/`: Complete project with Azure deployment configuration
+## Conventions
 
-### Infrastructure
-- `.github/workflows/`: CI/CD workflows for automated building
-- `.github/scripts/`: PowerShell credential setup scripts
-- `docs/`: Testing procedures and instructor guides
-- `manuals/`: Product documentation PDFs for AI chatbot reference
+- **Snapshots must match the README.** If you change instructions in a `README.md`, update that part's snapshot code in the same change, and vice versa.
+- **Projects are created with `dotnet new`,** never by hand-authoring a `.csproj`. Templates come from `Microsoft.Extensions.AI.Templates`.
+- The Part 4 scaffold command is fixed and load-bearing for later parts:
+  `dotnet new aichatweb --provider azureopenai --vector-store qdrant --aspire --name GenAiLab --output GenAiLab`
+  (a Docker-free `--vector-store local` variant is documented as an alternative).
+- Console samples (Parts 2, 3, 9, 10) read credentials from **user secrets**: `AzureOpenAI:Endpoint` and `AzureOpenAI:Key`. Part 10 also uses `LocalModel:Endpoint` / `LocalModel:Model` for its local-inference module. Part 11 uses the Aspire connection string `ConnectionStrings:openai`.
+- Never commit secrets. `.azure/` is gitignored, and `azure.yaml` is generated by `azd init` at deploy time rather than checked in.
+- Don't commit `bin/`, `obj/`, or `.vs/` into snapshots.
+- Docker/Podman is only needed for the Qdrant + Aspire path (Parts 4 and 11).
 
-## Common Tasks
+## Testing the workshop end to end
 
-### Check Prerequisites
-```bash
-# Verify .NET SDKs
-dotnet --list-sdks
+Use the **workshop-testing** skill (`.github/skills/workshop-testing/`) when asked to walk through the workshop as an attendee, validate a part, or reconcile snapshots against the READMEs.
 
-# Verify Docker
-docker --version && docker info | head -5
+Credentials for testing come from `.github/scripts/setup-workshop-credentials.ps1`, which sets `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`, `WORKSHOP_AZURE_SUBSCRIPTION_ID`, `WORKSHOP_AZURE_LOCATION`, and optional Azure AI Search values.
 
-# Verify templates
-dotnet new aichatweb --help
-dotnet new mcpserver --help
-```
+## Writing style
 
-### Credential Management
-- Use `.github/scripts/setup-workshop-credentials.ps1` for setting up Azure credentials
-- Environment variables: `WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`
-
-### Timing Expectations
-- **NEVER CANCEL**: All builds complete in under 30 seconds. Set timeout to 300+ seconds minimum.
-- **Package restore**: 5-20 seconds depending on cache
-- **Build**: 2-15 seconds for most projects
-- **Application startup**: MCP servers start immediately, AI Web Chat requires Docker Qdrant container
-
-## Key Technologies Used
-
-- **.NET 10**: AI Web Chat applications with Blazor and Aspire
-- **.NET 10**: MCP server applications  
-- **Microsoft Extensions for AI**: Core AI integration libraries
-- **Microsoft Foundry (Azure OpenAI)**: Cloud AI provider used for workshop exercises
-- **Azure OpenAI**: Enterprise-grade AI models for production
-- **Qdrant**: Vector database for embeddings and semantic search
-- **Docker**: Container orchestration for vector databases
-- **Aspire**: Cloud-native application orchestration
-
-## Troubleshooting
-
-### Build Issues
-- Ensure correct .NET SDK version is installed and in PATH
-- For .NET 10 issues, verify SDK installation: `dotnet --list-sdks | grep 10.0`
-- For Docker issues with AI Web Chat, ensure Docker Desktop is running
-
-### Template Issues  
-- Reinstall templates if missing: `dotnet new install Microsoft.Extensions.AI.Templates`
-- Verify template installation: `dotnet new aichatweb --help`
-
-### MCP Server Issues
-- MCP servers expect stdio communication protocol - they will start and wait for input
-- Use Ctrl+C to gracefully shutdown MCP servers
-- Check for proper logging output indicating successful startup
+This is attendee-facing teaching material. Prefer plain, direct prose. Keep time estimates and pacing tables in sync with the root `README.md` schedule when you change the length of a part.

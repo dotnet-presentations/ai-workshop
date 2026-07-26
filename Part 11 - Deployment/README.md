@@ -268,6 +268,10 @@ Once deployed, you can manage your deployment using various Azure Developer CLI 
 
 Your AI application is now running in production, and you have reached the end of the workshop.
 
+Use the end-of-workshop resource handoff page:
+
+- 📚 [End-of-Workshop Resources](../resources.md)
+
 If you skipped the optional MCP track, this is a good moment to come back to it:
 
 - 🏢 [Part 7: Enhanced MCP Server](../Part%207%20-%20Enhanced%20MCP%20Server/README.md) *(Optional / bonus)*

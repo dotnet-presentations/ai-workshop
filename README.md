@@ -123,13 +123,7 @@ The repository is structured as follows:
 
 ## Session Resources 📚
 
-|Resources|Links|Description|
-|:-------------------|:----------------------------------|:-------------------|
-|Microsoft Learn|<https://aka.ms/build25/plan/ADAI_DevStartPlan>|AI developer resources|
-|Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/machine-learning/ai-overview>|.NET AI Documentation|
-|Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview>|Aspire Documentation|
-|Microsoft Learn|<https://learn.microsoft.com/en-us/dotnet/machine-learning/extensions-ai/>|Extensions for AI Documentation|
-|Microsoft Learn|<https://learn.microsoft.com/en-us/azure/ai-services/openai/>|Azure OpenAI Documentation|
+For the end-of-workshop handoff links, see [End-of-Workshop Resources](resources.md).
 
 ## Testing the Workshop 🧪
 

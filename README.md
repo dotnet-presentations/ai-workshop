@@ -147,12 +147,16 @@ cd ai-workshop
 .\.github\scripts\setup-workshop-credentials.ps1
 ```
 
-This script will prompt you for:
+The script prompts for your Microsoft Foundry (Azure OpenAI) endpoint and key, the chat and embedding deployment names, and — optionally — an Azure subscription and region for Part 11, a local model endpoint for Part 10, and Azure AI Search credentials.
 
-- **Azure OpenAI Endpoint**: Your Azure OpenAI service endpoint URL
-- **Azure OpenAI Key**: Your Azure OpenAI service API key
+Values are saved as `WORKSHOP_*` environment variables so they persist across testing sessions. Useful switches:
 
-The credentials are saved as environment variables (`WORKSHOP_AZURE_OPENAI_ENDPOINT`, `WORKSHOP_AZURE_OPENAI_KEY`) and will be available for subsequent testing sessions.
+- `-ApplyUserSecrets` also writes the values into the user secrets of Parts 2, 3, 9, and 10, and into the Part 11 AppHost connection string, so you don't have to set them by hand in each project.
+- `-Force` re-prompts for values that are already set, which is how you replace a rotated key.
+- `-SkipOptional` skips the local model and Azure AI Search prompts.
+
+> [!WARNING]
+> API keys are stored in plaintext in User-scoped environment variables. Don't run this on a shared machine.
 
 ### Testing Procedure
 

@@ -20,7 +20,7 @@ string key = config["AzureOpenAI:Key"]
 // --- Create the chat client ---
 IChatClient chatClient = new AzureOpenAIClient(
         new Uri(endpoint), new AzureKeyCredential(key))
-    .GetChatClient("gpt-4o-mini")
+    .GetChatClient("gpt-5-mini")
     .AsIChatClient();
 
 // --- Define a tool ---

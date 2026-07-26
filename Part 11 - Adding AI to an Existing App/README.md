@@ -11,7 +11,7 @@ Every earlier part of this workshop built something new: a console chat app, a R
 This is the capstone, and it comes in two halves:
 
 - **`StoreApp/` in this folder** is a completed, runnable project you work through hands-on. It is a small existing store application — catalog, search log, operational telemetry — with five targeted AI capabilities added on top of it.
-- **[eShopLite](https://github.com/Azure-Samples/eShopLite)** is the maintained, full-size version of the same story: a real e-commerce app with Aspire orchestration and a scenario per capability. Each section below links to the scenario that implements it at production scale.
+- **[eShopLite](https://github.com/Azure-Samples/eShopLite)** is the maintained, full-size version of the same story: a real e-commerce app with Aspire orchestration and a scenario per capability. Where a scenario shows one of the ideas below running at production scale, that section links to it.
 
 The point of the unit is the *placement decision*, not one more sample. You already know how to call a model. Here you decide **which places in an existing app are worth making smarter**, and why each one uses a different technique.
 
@@ -101,8 +101,7 @@ Step 5 is the other half of the same idea. The model never sees the whole catalo
 
 **Try it in eShopLite:**
 
-- [01-SemanticSearch](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/01-SemanticSearch) — the baseline: semantic search over the existing catalog
-- [14-ProductDiscoveryCopilot](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/14-ProductDiscoveryCopilot) — the capstone expression, with grounded conversational discovery
+- [01-SemanticSearch](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/01-SemanticSearch) — semantic search over the existing catalog, wired into a real storefront with Aspire
 
 ## 2. Smarter operations
 
@@ -120,11 +119,7 @@ The interesting decision here is not the prompt, it is **which model runs it**. 
 
 This is the **cloud-for-users, local-for-operations** split, and it is a concrete payoff from Part 5: because provider selection was configuration, running one feature locally and another in the cloud is a wiring change, not a rewrite.
 
-**In this project:** `StoreApp/Ai/OperationsAssistant.cs`, with the provider choice made in `Program.cs`.
-
-**Try it in eShopLite:**
-
-- [13-ObservabilityAssistantFoundryLocal](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/13-ObservabilityAssistantFoundryLocal)
+**In this project:** `StoreApp/Ai/OperationsAssistant.cs`, with the provider choice made in `Program.cs`. Step 4 of the hands-on section below runs this feature against a local model while discovery stays on the cloud.
 
 ## 3. Smarter business signals
 
@@ -139,17 +134,13 @@ Two things keep this honest:
 
 This is the shortest distance between "we added AI" and "someone outside engineering noticed."
 
-**In this project:** `StoreApp/Ai/StoreIntelligenceReport.cs` — `BuildFacts()` computes, the model only writes.
-
-**Try it in eShopLite:**
-
-- [15-StoreIntelligenceReport](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/15-StoreIntelligenceReport)
+**In this project:** `StoreApp/Ai/StoreIntelligenceReport.cs` — `BuildFacts()` computes, the model only writes. Step 5 of the hands-on section below prints the facts and the briefing side by side.
 
 ## 4. App capabilities as tools
 
 **Problem:** once an assistant needs live data, the fastest path is to hand it database access. That path gives away every business rule the application enforces.
 
-**Technique:** expose a small set of reviewed capabilities as MCP tools — the servers you built in Parts 7 and 8, now pointed at a real app.
+**Technique:** expose a small set of reviewed capabilities as MCP tools — the same server shape you built in [Part 7](../Part%207%20-%20MCP%20Server%20Basics/README.md), now pointed at a real app.
 
 **The agent uses the app, not the database.** A `GetOrderStatus` tool runs your service code, so validation, authorization, pricing rules, and auditing all still apply. A SQL connection bypasses all of it and re-implements your domain inside a prompt.
 
@@ -164,13 +155,13 @@ Practical guidance for a first tool surface:
 
 **Try it in eShopLite:**
 
-- [16-MCPStoreOperationsTools](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/16-MCPStoreOperationsTools)
+- [06-mcp](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/06-mcp) — an MCP server exposing store capabilities as tools across service boundaries
 
 ## 5. Agents collaborate
 
 **Problem:** "sales of rain jackets dropped this week — is that demand or a bug?" spans the catalog, the telemetry, and the business data. One agent holding every tool for all three becomes unreliable, exactly as described in Part 10.
 
-**Technique:** specialist agents plus coordination. eShopLite uses three roles that map directly onto the sections above:
+**Technique:** specialist agents plus coordination. This unit uses three roles that map directly onto the sections above:
 
 | Agent | Owns | Backed by |
 | --- | --- | --- |
@@ -197,7 +188,8 @@ The orchestrator routes the parts of the question, each specialist answers only 
 
 **Try it in eShopLite:**
 
-- [17-A2AStoreOperationsNetwork](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/17-A2AStoreOperationsNetwork)
+- [07-AgentsConcurrent](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/07-AgentsConcurrent) — specialist agents answering concurrently, then combined
+- [10-A2ANet](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/10-A2ANet) — the same idea across service boundaries with A2A
 
 ## 6. Hosted agents: the next step, not the lab
 
@@ -241,7 +233,7 @@ dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
 dotnet run
 ```
 
-The app needs a chat deployment (`gpt-4o-mini`) and an embedding deployment (`text-embedding-3-small`). If your deployment names differ, edit the two constants at the top of `Program.cs`.
+The app needs a chat deployment (`gpt-5-mini`) and an embedding deployment (`text-embedding-3-small`) — the same two you deployed in [Part 1](../Part%201%20-%20Setup/README.md). If your deployment names differ, edit the two constants near the top of `Program.cs`.
 
 ### Step 2: See why keyword search is not enough (menu option 4)
 
@@ -313,13 +305,15 @@ Ops lead: Rain shells are selling badly this week. Is that demand or a bug?
 Each specialist prints as it reports, then the orchestrator synthesizes. Watch what each one *refuses* to answer: the catalog agent has no access to logs, and the observability agent has no access to demand data. That narrowness is what keeps each agent reliable, and it is why the orchestrator exists.
 
 > [!TIP]
-> Try asking something only one specialist can answer, such as "what is running low?". The other two should say it is outside their area, and the orchestrator should not invent agreement between them.
+> Try asking something only one specialist can answer, such as "how much is the Cascade Rain Shell?". The other two should say it is outside their area, and the orchestrator should not invent agreement between them.
 
 ### Optional: check your understanding
 
 - Move the honesty gate *after* the model call instead of before it. What breaks, and why is "no model call at all" the better design?
 - Add a `GetOrderStatus` tool to `StoreTools.cs` backed by a new service in `Store/`. Notice that you never had to give the agent a connection string.
 - Point the orchestrator at only two of the three specialists. Does the synthesis still admit what it does not know?
+
+## Going further: eShopLite at production scale
 
 `StoreApp/` is deliberately small: one console app, no containers, everything visible in a single read. eShopLite is the same ideas at production scale — real services, Aspire orchestration, and a UI. It is actively maintained and each scenario has its own README with current prerequisites and run steps, so rather than duplicating those here — where they would go stale — use them directly:
 
@@ -329,19 +323,19 @@ Each specialist prints as it reports, then the orchestrator synthesizes. Watch w
 
 | Capability area | Scenario |
 | --- | --- |
-| Search foundation | [01-SemanticSearch](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/01-SemanticSearch) |
-| Product discovery | [14-ProductDiscoveryCopilot](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/14-ProductDiscoveryCopilot) |
-| Observability assistant | [13-ObservabilityAssistantFoundryLocal](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/13-ObservabilityAssistantFoundryLocal) |
-| Store intelligence report | [15-StoreIntelligenceReport](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/15-StoreIntelligenceReport) |
-| MCP store tools | [16-MCPStoreOperationsTools](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/16-MCPStoreOperationsTools) |
-| Agent collaboration | [17-A2AStoreOperationsNetwork](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/17-A2AStoreOperationsNetwork) |
+| Semantic search over the catalog | [01-SemanticSearch](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/01-SemanticSearch) |
+| App capabilities as MCP tools | [06-mcp](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/06-mcp) |
+| Specialist agents answering concurrently | [07-AgentsConcurrent](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/07-AgentsConcurrent) |
+| Agents collaborating across services with A2A | [10-A2ANet](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/10-A2ANet) |
+
+The [full scenario list](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios) covers more ground — Azure AI Search, realtime audio, SQL 2025, GitHub Models, Azure Functions, and App Service deployment among them.
 
 > [!TIP]
-> If you are running this unit as a timed instructor-led session, demo scenarios 14 and 13 and discuss the rest. The contrast between a cloud-backed customer experience and a local-model operations assistant is the moment that lands.
+> If you are running this unit as a timed instructor-led session, demo `StoreApp` menu option 4 (keyword vs. semantic, including the honesty gate holding on "scuba tank") and then option 2 pointed at a local model, and discuss the rest. The contrast between a cloud-backed customer experience and a local-model operations assistant is the moment that lands.
 
 **Taught here:** which surfaces are worth making smarter, why each one uses a different technique, how the earlier parts of the workshop combine into an existing-app story, and a small end-to-end implementation you can read in one sitting.
 
-**Explore in eShopLite:** the working code, the Aspire wiring, the deployment details, and the scenario-specific architecture docs. A [supporting session package](https://github.com/Azure-Samples/eShopLite/tree/main/docs/26%2006%2016%20NET%20Agentic%20Modernization) with slides and demo notes is also maintained there.
+**Explore in eShopLite:** the working code, the Aspire wiring, the deployment details, and the scenario-specific architecture docs.
 
 ## Summary
 

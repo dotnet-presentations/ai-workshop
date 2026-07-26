@@ -43,7 +43,7 @@ string key = config["AzureOpenAI:Key"]
     ?? throw new InvalidOperationException(
         "Missing 'AzureOpenAI:Key'. Run: dotnet user-secrets set \"AzureOpenAI:Key\" \"YOUR-KEY\"");
 
-const string chatModel = "gpt-4o-mini";
+const string chatModel = "gpt-5-mini";
 const string embeddingModel = "text-embedding-3-small";
 
 // -----------------------------------------------------------------------------

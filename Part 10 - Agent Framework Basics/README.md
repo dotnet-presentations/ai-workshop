@@ -264,7 +264,7 @@ dotnet run
 
 Try these prompts to see the agent use the tool:
 
-```
+```text
 You: What's the status of order ORD-1001?
 You: How about ORD-1002?
 You: When will ORD-1001 arrive?

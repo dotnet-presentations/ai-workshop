@@ -81,7 +81,7 @@ The MCP server template is included in the `Microsoft.Extensions.AI.Templates` p
      -o, --output <output>       Location to place the generated output...
    ```
 
-   > **Note**: If you get an error that the template is not found, make sure you have .NET 10.0 SDK (preview 6 or higher) installed and the templates were installed correctly in Part 2. You can reinstall with: `dotnet new install Microsoft.Extensions.AI.Templates`
+   > **Note**: If you get an error that the template is not found, make sure you have .NET 10.0 SDK (preview 6 or higher) installed and the templates were installed correctly in Part 4. You can reinstall with: `dotnet new install Microsoft.Extensions.AI.Templates`
 
 ## Step 2: Create Your First MCP Server
 

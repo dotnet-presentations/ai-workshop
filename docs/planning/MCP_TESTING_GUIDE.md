@@ -46,14 +46,14 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 ### Test 1: Project Build Verification
 
-**Objective**: Verify the WeatherMcpServer project builds successfully
+**Objective**: Verify the MyMcpServer project builds successfully
 
 **Steps**:
 
 1. Navigate to the Part 5 project directory:
 
    ```powershell
-   cd "Part 05 - MCP Server Basics\WeatherMcpServer"
+   cd "Part 05 - MCP Server Basics\MyMcpServer"
    ```
 
 2. Build the project:
@@ -87,7 +87,7 @@ Before testing MCP functionality, verify all prerequisites are met:
      "servers": {
        "weather-server": {
          "command": "dnx",
-         "args": ["run", "--project", "./Part 05 - MCP Server Basics/WeatherMcpServer"]
+         "args": ["run", "--project", "./Part 05 - MCP Server Basics/MyMcpServer"]
        }
      }
    }
@@ -197,7 +197,7 @@ Before testing MCP functionality, verify all prerequisites are met:
      "servers": {
        "weather-server": {
          "command": "dnx",
-         "args": ["run", "--project", "./Part 05 - MCP Server Basics/WeatherMcpServer"]
+         "args": ["run", "--project", "./Part 05 - MCP Server Basics/MyMcpServer"]
        },
        "contoso-orders": {
          "command": "dnx",
@@ -373,7 +373,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 ```powershell
 # Verify server can start manually
-cd "Part 05 - MCP Server Basics\WeatherMcpServer"
+cd "Part 05 - MCP Server Basics\MyMcpServer"
 dnx run
 ```
 

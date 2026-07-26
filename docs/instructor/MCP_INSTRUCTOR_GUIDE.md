@@ -126,7 +126,7 @@ flowchart TD
 
 1. **Project Creation** (5 minutes)
    - Navigate to Part 5 directory
-   - Examine WeatherMcpServer project structure
+   - Examine MyMcpServer project structure
    - Discuss project template and dependencies
 
 2. **Code Exploration** (15 minutes)
@@ -142,7 +142,7 @@ flowchart TD
 #### **VS Code Integration (10 minutes)**
 
 1. **MCP Configuration** - Create `.vscode/mcp.json`
-2. **Server Registration** - Add WeatherMcpServer configuration
+2. **Server Registration** - Add MyMcpServer configuration
 3. **VS Code Restart** - Refresh MCP server discovery
 
 #### **Testing and Validation (10 minutes)**

@@ -7,7 +7,7 @@ Get up to speed quickly with AI app building in .NET. This workshop covers AI ap
 ### AI Web Chat Application Requirements (Parts 1-4, 10, and 11)
 
 - Visual Studio 2026 or VS Code
-- .NET AI Web Chatbot template installed (instructions in Part 1 - Setup)
+- .NET AI Web Chatbot template installed (`dotnet new install Microsoft.Extensions.AI.Templates`; walked through in Part 4)
 - .NET 10.0 SDK or later
 - Docker Desktop or Podman (recommended for the full Qdrant + Aspire path in Part 4)
 - Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI), the primary AI provider
@@ -63,6 +63,9 @@ The workshop is designed as a **two-part, roughly 8-hour hands-on lab** (8:30-5:
 
 > [!IMPORTANT]
 > **If you fall behind, cut Parts 10-11 (deployment preparation and deployment) — not Part 9 (the capstone).** Deployment is placed last deliberately: nothing depends on it, and it is the most environment-fragile section (Azure login, subscription and quota checks, provisioning time). Part 10 exists to set up the deployment, so if there is no time to deploy there is little reason to spend time choosing what to deploy to. The capstone is where the whole workshop comes together, so protect that time first. A short `azd up` walkthrough by the instructor is a reasonable substitute for a room that has run out of clock.
+
+<!-- -->
+
 > [!TIP]
 > The morning is the tighter half. Ask attendees to complete [Part 1 - Setup](Part%2001%20-%20Setup/README.md) **before** the session — it is prerequisite installation rather than lab content, and moving it to pre-work buys back 15-20 minutes at exactly the point in the day where the schedule has the least slack.
 
@@ -120,7 +123,7 @@ The repository is structured as follows:
 
 - 📖 `Part 01 - Setup` through `Part 11 - Deployment`: Contains all the lab instructions, documentation, and working code snapshots
 - 📄 `manuals/`: Product documentation PDFs for the AI chatbot exercises
-- 🧪 `docs/testing/`: Testing procedures and validation reports
+- 🧪 `docs/`: Instructor guides, testing procedures, and archived reports
 
 ## Session Resources 📚
 

@@ -35,7 +35,7 @@ This guide provides instructors with comprehensive information for teaching Part
 
 #### **Option 2: MCP-Focused Session (2-3 hours)**
 
-- Start with completed AI Web Chat (use `/src/complete`)
+- Start with completed AI Web Chat (use `Part 11 - Deployment/GenAiLab/`)
 - Focus exclusively on Parts 5-7
 - Ideal for workshops focused on AI extensibility
 

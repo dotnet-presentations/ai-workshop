@@ -8,6 +8,7 @@ on:
       - ".github/workflows/dotnet-build.yml"
       - "Part 02 - Build Chat App/**"
       - "Part 03 - Add RAG/RagChatApp/**"
+      - "Part 03 - Add RAG/checkpoints/**"
       - "Part 05 - MCP Server Basics/**"
       - "Part 06 - Enhanced MCP Server/**"
       - "Part 08 - Agent Framework Basics/**"
@@ -27,6 +28,9 @@ on:
       - "Part 03 - Add RAG/RagChatApp/**/*.csproj"
       - "Part 03 - Add RAG/RagChatApp/**/*.props"
       - "Part 03 - Add RAG/RagChatApp/**/*.targets"
+      - "Part 03 - Add RAG/checkpoints/**/*.cs"
+      - "Part 03 - Add RAG/checkpoints/**/*.csproj"
+      - "Part 03 - Add RAG/checkpoints/**/*.slnx"
       - "Part 05 - MCP Server Basics/**/*.cs"
       - "Part 05 - MCP Server Basics/**/*.csproj"
       - "Part 05 - MCP Server Basics/**/*.props"
@@ -62,6 +66,9 @@ jobs:
             dotnet-version: "10.0.x"
           # No solution file exists for RagChatApp; using project file directly
           - solution: "Part 03 - Add RAG/RagChatApp/RagChatApp.csproj"
+            dotnet-version: "10.0.x"
+          # Compile-only coverage for the Part 3 checkpoint reference files
+          - solution: "Part 03 - Add RAG/checkpoints/verify/Checkpoints.slnx"
             dotnet-version: "10.0.x"
           - solution: "Part 11 - Deployment/GenAiLab/GenAiLab.sln"
             dotnet-version: "10.0.x"

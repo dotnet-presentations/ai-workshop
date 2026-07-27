@@ -522,19 +522,6 @@ public async Task GetOrderDetails_InvalidOrder_ReturnsNotFound()
 - **Business Analytics**: AI-powered analysis of business data
 - **Process Automation**: Streamlining business operations through AI
 
-## Next Steps
-
-You've built a business-focused MCP server. If you're continuing the optional track, the next step is publishing and distribution.
-
-**Optional next** → [Part 7: MCP Publishing](../Part%2007%20-%20MCP%20Publishing/README.md)
-
-In Part 7, you'll learn how to:
-
-- 📦 Package MCP servers for distribution
-- 🚀 Publish to NuGet for easy consumption
-- 🔧 Configure production-ready MCP servers
-- 📚 Document MCP servers for other developers
-
 ## Real-World Applications
 
 ### Industry Examples
@@ -574,11 +561,14 @@ In Part 6, you applied advanced MCP concepts and built a business-ready MCP serv
 
 These patterns can be used to connect AI agents to business systems for automation and operational workflows.
 
-## Continue Your Journey
+## What's next
 
-🎯 **Complete your MCP mastery:**
+You've built a business-focused MCP server. If you're continuing the optional
+track, **Part 7** covers the rest of the lifecycle: packaging the server,
+publishing it to NuGet with proper metadata, and documenting it for other
+developers.
 
-- **[Part 7: MCP Publishing](../Part%2007%20-%20MCP%20Publishing/README.md)** - Learn how to package, publish, and distribute your MCP servers professionally through NuGet and enterprise channels
+**Optional next** → [Part 7: MCP Publishing](../Part%2007%20-%20MCP%20Publishing/README.md)
 
 ---
 

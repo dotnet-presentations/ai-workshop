@@ -511,8 +511,12 @@ these problems with a real vector store (Qdrant), ingestion services, and
 semantic search, using the same `IChatClient` and `IEmbeddingGenerator`
 abstractions you just used by hand.
 
-**Continue to** -> [Part 4: AI Web Chat Template](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md)
+**Continue to** → [Part 4: AI Web Chat Template](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md)
 
 ---
 
 Adapted with permission from [Steve Sanderson's dotnet-ai-workshop](https://github.com/SteveSandersonMS/dotnet-ai-workshop) (chapters 2, 3, and 6).
+
+---
+
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 2: Build Chat App](../Part%2002%20-%20Build%20Chat%20App/README.md) | ➡️ **Next**: [Part 4: AI Web Chat Template](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md)

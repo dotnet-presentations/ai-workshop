@@ -616,24 +616,6 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 
 > **🚀 Advanced Challenge**: If you're moving quickly and want an extra challenge, check out the [official Microsoft quickstart guide](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/build-mcp-server) which shows how to publish your MCP server to NuGet for others to use. This is covered in more detail in Part 7, but the quickstart provides a streamlined approach if you want to try it now!
 
-## Next Steps
-
-Now that you understand MCP basics, continue to **Part 8**, where the tool you just
-built becomes an agent's tool.
-
-**Continue to** → [Part 8: Agent Framework Essentials](../Part%2008%20-%20Agent%20Framework%20Basics/README.md)
-
-If you're ahead of schedule, the optional MCP track goes deeper first.
-
-**Optional / bonus** → [Part 6: Enhanced MCP Server](../Part%2006%20-%20Enhanced%20MCP%20Server/README.md)
-
-In Part 6, you'll learn how to:
-
-- 🏢 Build business-focused MCP tools
-- 📊 Access real business data and systems  
-- 🔧 Implement more sophisticated tool interactions
-- 🛡️ Handle security and validation in MCP tools
-
 ## Additional Resources
 
 - 📖 [Official MCP Documentation](https://modelcontextprotocol.io/)
@@ -703,12 +685,18 @@ In this part, you learned the fundamentals of Model Context Protocol and built y
 
 These same MCP patterns apply to many APIs, systems, and data sources. In the next part, you'll apply them to business scenarios.
 
-## Continue Your Journey
+## What's next
 
-🎯 **Continue your MCP journey:**
+In **Part 8** the tool you just built becomes an agent's tool. You'll see how an
+agent decides to call it, and what that adds on top of the chat loop from Part 2.
 
-- **[Part 6: Enhanced MCP Server](../Part%2006%20-%20Enhanced%20MCP%20Server/README.md)** *(Optional / bonus)* - Build sophisticated business tools for order management, inventory, and customer service scenarios
-- **[Part 7: MCP Publishing](../Part%2007%20-%20MCP%20Publishing/README.md)** *(Optional / bonus)* - Learn how to package, publish, and distribute your MCP servers professionally
+If you're ahead of schedule, the optional MCP track goes deeper first. Part 6
+builds business-focused tools for order management, inventory, and customer
+service, and Part 7 covers packaging and publishing a server to NuGet.
+
+**Continue to** → [Part 8: Agent Framework Essentials](../Part%2008%20-%20Agent%20Framework%20Basics/README.md)
+
+**Optional / bonus** → [Part 6: Enhanced MCP Server](../Part%2006%20-%20Enhanced%20MCP%20Server/README.md) and [Part 7: MCP Publishing](../Part%2007%20-%20MCP%20Publishing/README.md)
 
 ---
 

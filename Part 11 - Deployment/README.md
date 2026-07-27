@@ -248,7 +248,7 @@ Once deployed, you can manage your deployment using various Azure Developer CLI 
 - How to manage and monitor your deployed application
 - Best practices for security, scaling, and cost management in production
 
-## 🎯 Next Steps
+## What's next
 
 Your AI application is now running in production, and you have reached the end of the workshop.
 

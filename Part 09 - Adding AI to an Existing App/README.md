@@ -362,9 +362,9 @@ The [full scenario list](https://github.com/Azure-Samples/eShopLite/tree/main/sc
 
 You now have the full arc: build a chat app, ground it, expose tools, compose agents, and place all of it into an application that already exists. What remains is getting an AI application into production — first the decisions in **Part 10**, then the deployment itself in **Part 11**.
 
-**Continue to** → [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md)
-
 After that, run one of the eShopLite scenarios end to end to see these patterns at production scale — then pick the single highest-value surface in **your** application and add exactly one of these capabilities to it.
+
+**Continue to** → [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md)
 
 ## Additional resources
 

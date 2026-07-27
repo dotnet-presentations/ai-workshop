@@ -376,7 +376,9 @@ In this part you learned the agent abstraction that sits on top of everything yo
 
 ## What's next
 
-Up to this point the workshop built new applications. The next step is the more common real-world situation: an **existing** application that needs AI added to it, with targeted agents and tools placed where the app already has signals and actions, instead of one large chatbot bolted onto the side. That is [Part 9: Adding AI to an Existing App with eShopLite](../Part%2009%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md).
+Up to this point the workshop built new applications. The next step is the more common real-world situation: an **existing** application that needs AI added to it, with targeted agents and tools placed where the app already has signals and actions, instead of one large chatbot bolted onto the side.
+
+**Continue to** → [Part 9: Adding AI to an Existing App](../Part%2009%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md)
 
 ## Additional resources
 

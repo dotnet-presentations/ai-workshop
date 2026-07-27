@@ -1,0 +1,5 @@
+* text=auto
+
+# The Part 3 lab splits this document on "\n\n". Force LF on checkout so the
+# chunking step behaves the same on Windows as it does on macOS and Linux.
+**/sample-docs/*.md text eol=lf

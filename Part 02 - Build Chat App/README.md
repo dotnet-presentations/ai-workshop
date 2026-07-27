@@ -207,12 +207,57 @@ Console.WriteLine("Goodbye!");
 `GetStreamingResponseAsync` yields tokens as they arrive, so users see output
 immediately instead of waiting for the full completion.
 
-### 4.5 Add structured output
+## Step 5: Run it
 
-A chat loop returns prose. Applications usually need *data*: something you can
-store, display in a grid, or branch on. `GetResponseAsync<T>` sends `T`'s JSON
-schema along with the request and deserializes the reply into a real .NET object,
-so no string parsing is involved.
+```bash
+dotnet run
+```
+
+In Visual Studio 2026, press **Ctrl+F5** to run without the debugger attached, or
+**F5** to debug.
+
+```text
+Chat app ready. Type a message (or 'exit' to quit).
+
+You: Give me one tip for learning .NET
+Assistant: Build small projects end-to-end...
+
+You: What should I build first?
+Assistant: A console app that calls an API you already use...
+
+You: exit
+Goodbye!
+```
+
+Ask a couple of follow-up questions before you exit. The model answers them in
+context, which confirms the history list is doing its job.
+
+## Step 6: Add structured output
+
+Everything you just built returns prose. That is fine when a human reads the
+answer, but an application usually needs *data*: something to store in a
+database, bind to a grid, render as a row of buttons, or branch on in an `if`.
+Getting that out of the text you just streamed would mean parsing English, and
+that breaks the moment the model rephrases itself.
+
+This is where a lot of real AI features live. The model does the language work,
+and your code gets back something it can `switch` on, save, or pass to a query:
+
+| Feature | The type you ask for |
+| --- | --- |
+| Triage an incoming support email | `record Ticket(string Category, int Priority, bool NeedsHuman)` |
+| Pull fields off a scanned invoice | `record Invoice(string Vendor, decimal Total, DateOnly DueDate)` |
+| Classify a product review | `record Review(int Stars, string[] Complaints)` |
+| Turn "cheap red running shoes" into a filter | `record SearchFilter(string? Color, decimal? MaxPrice, string[] Tags)` |
+| Suggest next steps in a UI | `record Suggestions(string[] Actions)` |
+
+None of these are chatbots. The AI call is one step inside an ordinary feature,
+and the model's answer has to survive being handed to the next line of C#.
+
+`GetResponseAsync<T>` sends `T`'s JSON schema along with the request and
+deserializes the reply into a real .NET object, so there is no string parsing at
+all. The schema also constrains the model while it generates, which makes a
+missing or invented field much less likely than asking for JSON in the prompt.
 
 First, describe the shape you want. Add this at the **end** of `Program.cs`
 (after the `Console.WriteLine("Goodbye!");` line):
@@ -225,7 +270,9 @@ record ConversationSummary(
 ```
 
 Property names are part of the instructions the model sees, so make them
-descriptive. Now add a `summary` command inside the chat loop, immediately
+descriptive. `FollowUpQuestions` is the interesting one: it comes back as a real
+`string[]`, so a UI could turn each element into a suggestion chip without any
+extra work. Now add a `summary` command inside the chat loop, immediately
 **before** the `history.Add(new ChatMessage(ChatRole.User, input));` line:
 
 ```csharp
@@ -266,18 +313,15 @@ While you're here, update the startup message so the new command is discoverable
 Console.WriteLine("Chat app ready. Type a message ('summary' for a typed summary, 'exit' to quit).");
 ```
 
-### 4.6 Final check
-
 Your completed file should now match [ChatApp/Program.cs](ChatApp/Program.cs).
 
-## Step 5: Run it
+## Step 7: Run it again
 
 ```bash
 dotnet run
 ```
 
-In Visual Studio 2026, press **Ctrl+F5** to run without the debugger attached, or
-**F5** to debug.
+Chat for a turn or two, then type `summary`:
 
 ```text
 Chat app ready. Type a message ('summary' for a typed summary, 'exit' to quit).
@@ -293,6 +337,10 @@ Follow-ups: Which project should I build first?, How do I practice consistently?
 You: exit
 Goodbye!
 ```
+
+The two runs are the contrast worth remembering: the same model and the same
+conversation, but one call gives you text to show a person and the other gives
+you an object your code can use.
 
 ## What's next
 

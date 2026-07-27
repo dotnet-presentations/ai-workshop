@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "MyMcpServer": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "MyMcpServer.csproj"
+      ]
+    }
+  }
+}

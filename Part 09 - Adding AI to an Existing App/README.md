@@ -69,22 +69,6 @@ group.MapGet("/search/{search}", async (string search, ProductDataContext db) =>
 
 **`Products/Data/SeedData.cs`** — twelve outdoor products that seed on first run.
 
-### Configure credentials
-
-Both projects read the same two user secrets you have used since Part 2. Set them in `Products` and in `Store`:
-
-```bash
-cd Products
-dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
-dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
-
-cd ../Store
-dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
-dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
-```
-
-> If you ran the workshop credential script, use `-ApplyUserSecrets` and it will do this for you.
-
 ### Run it and watch keyword search fail
 
 ```bash
@@ -225,7 +209,23 @@ public class ProductSemanticSearch(
 
 The `maxDistance` check is the part people leave out. **Vector search always returns its nearest neighbours, whether or not anything is actually relevant.** Ask an outdoor store for a socket wrench and, without a ceiling, it will confidently hand you a sleeping bag. The threshold is what lets the app say "we do not stock that."
 
-### 1.4 Register the services
+### 1.4 Configure credentials
+
+The services you are about to register read two user secrets. Set them in `Products` and in `Store` before running:
+
+```bash
+cd Products
+dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
+dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
+
+cd ../Store
+dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
+dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
+```
+
+> If you ran the workshop credential script, use `-ApplyUserSecrets` and it will do this for you.
+
+### 1.5 Register the services
 
 In `Products/Program.cs`, add the usings:
 
@@ -283,7 +283,7 @@ using (var scope = app.Services.CreateScope())
 
 Indexing at startup is fine for twelve products. A real catalog would index on write and backfill in a background job.
 
-### 1.5 Expose it
+### 1.6 Expose it
 
 In `Products/Endpoints/ProductEndpoints.cs`, add `using Products.Ai;` and a second endpoint next to the keyword one:
 
@@ -314,7 +314,7 @@ group.MapGet("/aisearch/{search}", async (
 
 The reordering step is easy to miss. `WHERE Id IN (...)` returns rows in whatever order the database likes, which throws away the ranking you just paid an embedding model to compute.
 
-### 1.6 Try it
+### 1.7 Try it
 
 ```bash
 cd ..

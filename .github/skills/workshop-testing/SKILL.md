@@ -21,6 +21,7 @@ Complete the workshop the way an attendee would — follow each `Part N - */READ
 .\.github\scripts\setup-workshop-credentials.ps1 -ApplyUserSecrets
 dotnet --list-sdks                                  # expect 10.0.x
 dotnet new install Microsoft.Extensions.AI.Templates
+dotnet new install Microsoft.McpServer.ProjectTemplates
 docker --version                                    # only needed for Parts 4 and 11
 ```
 
@@ -38,7 +39,7 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 | 2 - Build Chat App | `dotnet new console -n ChatApp`, add packages and code per README. Run it: chat, streaming, structured output | `Part 02 - Build Chat App/ChatApp/` |
 | 3 - Add RAG | Continue from your Part 2 app (README says copy it). Verify retrieval answers from `manuals/`. Also check the two `checkpoints/*.cs` variants still compile against the described packages | `Part 03 - Add RAG/RagChatApp/` |
 | 4 - AI Web Chat Template | Scaffold with the exact command in the README (`--provider azureopenai --vector-store qdrant --aspire --name GenAiLab`). Run via `GenAiLab.AppHost`. Also sanity-check the documented Docker-free `--vector-store local` path | Compare against `Part 11 - Deployment/GenAiLab/` |
-| 5 - MCP Server Basics | `dotnet new mcpserver -n MyMcpServer`, add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 05 - MCP Server Basics/MyMcpServer/` |
+| 5 - MCP Server Basics | `dotnet new install Microsoft.McpServer.ProjectTemplates`, then `dotnet new mcpserver -n MyMcpServer`, add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 05 - MCP Server Basics/MyMcpServer/` |
 | 6 - Enhanced MCP Server *(bonus)* | Exploration only — build and run the existing snapshot, review the README's business-integration guidance | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
 | 7 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | — |
 | 8 - Agent Framework Basics | `dotnet new console` → `AgentApp`, add `Microsoft.Agents.AI` per README. Verify the agent runs and can call the Part 5 weather tool if the README wires that up | `Part 08 - Agent Framework Basics/AgentApp/` |

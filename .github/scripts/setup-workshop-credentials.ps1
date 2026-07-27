@@ -146,7 +146,7 @@ function Write-WorkshopUserSecrets {
     # Projects that read AzureOpenAI:Endpoint / AzureOpenAI:Key directly.
     # Parts 2, 3 and 8 are console samples; Part 9 is the eShopLite Aspire solution,
     # whose Products and Store projects each talk to Azure OpenAI.
-    $consoleProjects = @(
+    $openAiProjects = @(
         'Part 02 - Build Chat App/ChatApp'
         'Part 03 - Add RAG/RagChatApp'
         'Part 08 - Agent Framework Basics/AgentApp'
@@ -154,7 +154,7 @@ function Write-WorkshopUserSecrets {
         'Part 09 - Adding AI to an Existing App/eShopLite/Store'
     )
 
-    foreach ($relative in $consoleProjects) {
+    foreach ($relative in $openAiProjects) {
         $project = Join-Path $repoRoot $relative
         if (-not (Test-Path $project)) {
             Write-Host "  [missing] $relative" -ForegroundColor Yellow

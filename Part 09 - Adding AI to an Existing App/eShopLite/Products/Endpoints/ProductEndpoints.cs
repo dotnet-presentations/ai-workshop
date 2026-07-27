@@ -45,8 +45,11 @@ public static class ProductEndpoints
             var products = await db.Product.Where(p => ids.Contains(p.Id)).ToListAsync();
 
             // Preserve the ranking the vector search gave us.
+            // Use FirstOrDefault + OfType to skip ids that are no longer in the
+            // database (e.g., stale entries in the vector index).
             var ordered = ids
-                .Select(id => products.First(p => p.Id == id))
+                .Select(id => products.FirstOrDefault(p => p.Id == id))
+                .OfType<Product>()
                 .ToList();
 
             return Results.Ok(ordered);

@@ -13,7 +13,7 @@ GET {{Products_HostAddress}}/api/product/search/water
 Accept: application/json
 
 ### Keyword search - returns nothing, even though the sleeping bag is the obvious answer
-GET {{Products_HostAddress}}/api/product/search/warm at night
+GET {{Products_HostAddress}}/api/product/search/warm%20at%20night
 Accept: application/json
 
 ###

@@ -109,6 +109,8 @@ dotnet add package Azure.AI.OpenAI
 dotnet add package Microsoft.Extensions.AI
 dotnet add package Microsoft.Extensions.AI.OpenAI
 dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
+dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
+dotnet add package Microsoft.OpenApi --version 2.7.5
 ```
 
 `SqliteVec` gives you a vector store in a local file. No container, no service to run.

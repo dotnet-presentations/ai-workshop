@@ -683,7 +683,7 @@ In this part, you learned the fundamentals of Model Context Protocol and built y
 - ✅ Test MCP functionality with GitHub Copilot
 - ✅ Debug and troubleshoot MCP integrations
 
-These same MCP patterns apply to many APIs, systems, and data sources. In the next part, you'll apply them to business scenarios.
+These same MCP patterns apply to many APIs, systems, and data sources. In Part 8, you'll see how these tools plug into an agent framework.
 
 ## What's next
 

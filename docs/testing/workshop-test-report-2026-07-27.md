@@ -16,7 +16,7 @@ retest; both are recorded below.
 
 - .NET SDK: `10.0.400-preview.0.26322.102` (default; 10.0.110, 9.0.316 and 9.0.200 also
   installed, no `global.json`)
-- OS: Windows, PowerShell, `core.autocrlf=true`, no `.gitattributes` in the repo
+- OS: Windows, PowerShell, `core.autocrlf=true`
 - Docker: 29.6.2, running
 - Template versions: `Microsoft.Extensions.AI.Templates` 10.7.0-preview.3.26309.5,
   `Aspire.ProjectTemplates` 9.4.2 (repo pins Aspire 13.4.6)

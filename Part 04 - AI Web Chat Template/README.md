@@ -501,9 +501,9 @@ connection strings and endpoints between them automatically.
 The template also supports a single-project variant that stores vectors in a local
 SQLite file and skips containers entirely. Use this if you cannot run Docker.
 
-Everything in Steps 1-4 applies, but the configuration is different enough that
-the whole path is given here. Read Step 5 as an architecture comparison rather
-than a description of files in your project.
+The same configuration concepts from Steps 1-4 apply, but this scaffold uses
+different files and settings, so the whole path is given here. Read Step 5 as
+an architecture comparison rather than a description of files in your project.
 
 ### Scaffold it
 

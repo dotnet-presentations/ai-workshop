@@ -122,36 +122,30 @@ with placeholders, so you are filling those in rather than rewriting the file.
 
 ```json
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "$schema": "https://modelcontextprotocol.io/schemas/draft/2025-07-09/server.json",
   "description": "An MCP server that provides weather information tools for AI agents.",
   "name": "io.github.your-username/weather-mcp-server",
-  "version": "1.0.0",
   "packages": [
     {
-      "registryType": "nuget",
-      "identifier": "YourName.MyMcpServer",
+      "registry_name": "nuget",
+      "name": "YourName.MyMcpServer",
       "version": "1.0.0",
-      "transport": {
-        "type": "stdio"
-      },
-      "packageArguments": [],
-      "environmentVariables": []
+      "package_arguments": [],
+      "environment_variables": []
     }
   ],
   "repository": {
     "url": "https://github.com/your-username/weather-mcp-server",
     "source": "github"
+  },
+  "version_detail": {
+    "version": "1.0.0"
   }
 }
 ```
 
 The `version` values here and `<PackageVersion>` in the `.csproj` have to match,
 or the manifest describes a package that doesn't exist.
-
-> [!NOTE]
-> This schema is versioned and it moves. If your template scaffolded a different
-> `$schema` URL, keep the one the template gave you and edit its fields instead
-> of pasting this block wholesale.
 
 ## Step 2: Create Professional Documentation
 
@@ -293,9 +287,10 @@ MIT License - see LICENSE file for details.
 
    That fan-out is what `<RuntimeIdentifiers>` and `<SelfContained>` buy you. The
    base package carries the metadata and the server manifest; each RID package
-   carries a self-contained executable for one platform. A consumer's `dnx`
-   resolves the right one for their machine, which is why an MCP server can run
-   without the consumer installing a matching .NET runtime first.
+   carries a self-contained executable for one platform. When a consumer runs
+   `dotnet tool install`, NuGet selects the right RID package for their machine,
+   which is why an MCP server can run without the consumer installing a matching
+   .NET runtime first.
 
 2. **Install it as a local tool**:
 
@@ -374,7 +369,7 @@ in the `.csproj` was overwritten. Go back to Step 1.
 
 2. **Verify publication**:
    - Check [nuget.org](https://nuget.org) for your package
-   - Test installation: `dnx YourName.MyMcpServer`
+   - Test installation: `dotnet tool install --global YourName.MyMcpServer --version 1.0.0`
 
 ### Publication Checklist
 

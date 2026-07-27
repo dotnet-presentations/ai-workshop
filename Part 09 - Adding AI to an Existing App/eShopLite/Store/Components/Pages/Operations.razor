@@ -1,0 +1,67 @@
+@page "/operations"
+@using Store.Ai
+@inject IServiceProvider Services
+@inject SearchTelemetry Telemetry
+
+<PageTitle>Operations</PageTitle>
+
+<h1>Operations</h1>
+
+@if (assistant is null)
+{
+    <div class="alert alert-warning">
+        No local model is configured. Start Foundry Local, then set
+        <code>LocalModel:Endpoint</code> and <code>LocalModel:Model</code> in user secrets
+        and restart the app.
+    </div>
+}
+else
+{
+    <p>Summarize recent shopper searches using a model running on this machine.</p>
+
+    <button class="btn btn-primary mb-4" @onclick="Summarize" disabled="@busy">
+        Summarize @Telemetry.Recent().Count recent searches
+    </button>
+
+    @if (busy)
+    {
+        <p><em>Thinking locally...</em></p>
+    }
+    else if (summary is not null)
+    {
+        <div class="alert alert-info" style="white-space: pre-wrap">@summary</div>
+    }
+}
+
+@code {
+    private OperationsAssistant? assistant;
+    private string? summary;
+    private bool busy;
+
+    protected override void OnInitialized()
+    {
+        assistant = Services.GetService<OperationsAssistant>();
+    }
+
+    private async Task Summarize()
+    {
+        if (assistant is null)
+        {
+            return;
+        }
+
+        busy = true;
+        try
+        {
+            summary = await assistant.SummarizeAsync();
+        }
+        catch (Exception ex)
+        {
+            summary = $"The local model could not be reached: {ex.Message}";
+        }
+        finally
+        {
+            busy = false;
+        }
+    }
+}

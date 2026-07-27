@@ -23,7 +23,7 @@ Docker Desktop or Podman is required when you run the workshop's **Qdrant contai
 | Part 5 | Not required for the MCP exercises. |
 | Parts 6-7 | Not required. Containerizing an MCP server in Part 7 is optional. |
 | Part 8 | Not required. This module includes a standalone `AgentApp` sample and remains Docker-free. |
-| Part 9 | Not required. The `StoreApp` sample in this repo is a Docker-free console app. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
+| Part 9 | Not required. The `eShopLite` sample in this repo is an Aspire solution that deliberately avoids containers — it uses SQLite for both the catalog and the vector store. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
 | Part 10 | Not required. Provider comparisons can use Microsoft Foundry, Foundry Local, or a native Ollama installation. |
 | Part 11 | Required to run the supplied Qdrant + Aspire application locally. The Azure deployment itself runs the containers in Azure. |
 
@@ -109,7 +109,7 @@ Part 5 is required: its weather tool is the tool you hand to an agent in Part 8.
 
 ### Capstone (Part 9)
 
-1. 🛒 [**Adding AI to an Existing App with eShopLite**](Part%2009%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md): Apply everything you have learned to an application that already exists. Work through a completed `StoreApp` sample that adds targeted AI for discovery, operations, business signals, tools, and collaborating agents, then explore the maintained eShopLite scenarios.
+1. 🛒 [**Adding AI to an Existing App with eShopLite**](Part%2009%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md): Apply everything you have learned to an application that already exists. Start from a cut-down eShopLite with no AI in it, then add semantic search to the catalog API, grounded product discovery to the storefront, and an operations assistant running on a local model — before exploring the maintained eShopLite scenarios.
 
 ### Deployment (Parts 10-11)
 

@@ -15,8 +15,8 @@ public static class SeedData
             new Product
             {
                 Name = "Solar Powered Flashlight",
-                Description = "A fantastic product for outdoor enthusiasts. Charges in daylight and " +
-                              "runs for eight hours on a full charge, so you never need spare batteries.",
+                Description = "Charges in daylight and runs for eight hours on a full charge, " +
+                              "so you never need spare batteries.",
                 Price = 19.99m
             },
             new Product

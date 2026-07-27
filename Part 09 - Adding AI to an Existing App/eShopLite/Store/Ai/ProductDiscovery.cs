@@ -13,6 +13,7 @@ namespace Store.Ai;
 public class ProductDiscovery(
     IChatClient chatClient,
     ProductService productService,
+    SearchTelemetry telemetry,
     ILogger<ProductDiscovery> logger)
 {
     private const string SystemPrompt = """
@@ -26,7 +27,11 @@ public class ProductDiscovery(
 
     public async Task<DiscoveryResult> AskAsync(string question, CancellationToken ct = default)
     {
+        var started = System.Diagnostics.Stopwatch.GetTimestamp();
         var products = await productService.AiSearchProducts(question);
+        var elapsedMs = (long)System.Diagnostics.Stopwatch.GetElapsedTime(started).TotalMilliseconds;
+
+        telemetry.Record(question, products.Count, elapsedMs);
 
         if (products.Count == 0)
         {

@@ -21,6 +21,7 @@ New test reports are written here using the template and skill at [`.github/skil
 ### 👨‍🏫 Instructor Resources (`/instructor`)
 
 - **[ATTENDEE_AI_ACCESS.md](instructor/ATTENDEE_AI_ACCESS.md)** - Instructor-only note on providing an AI access fallback (azure-ai-proxy-lite) for attendees who can't provision their own [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) resource
+- **[AICHATWEB_TEMPLATE_NOTES.md](instructor/AICHATWEB_TEMPLATE_NOTES.md)** - Background for Parts 4 and 11: why the workshop replaces the template's Azure provisioning code, what the template switches do, and the failure modes that show up in the room
 - **[MCP_INSTRUCTOR_GUIDE.md](instructor/MCP_INSTRUCTOR_GUIDE.md)** - Complete instructor guide for teaching Parts 5-7 (MCP components) of the workshop
 - **[END_OF_WORKSHOP_RESOURCES_SLIDE.md](instructor/END_OF_WORKSHOP_RESOURCES_SLIDE.md)** - Closing slide content for end-of-workshop resource handoff
 

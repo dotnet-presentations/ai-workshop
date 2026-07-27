@@ -20,7 +20,7 @@ Everything targets **.NET 10** and uses **Microsoft Foundry (Azure OpenAI)** as 
 | 10 - Choosing Providers and Services | — | README only. Sits immediately before deployment because provider and service selection is a deployment prerequisite |
 | 11 - Deployment | `GenAiLab/` (3-project Aspire solution) | Same app as Part 4 plus `WithExternalHttpEndpoints()` in `AppHost.cs` |
 
-Other folders: `docs/` (instructor guides, planning, archived test reports), `manuals/` (PDFs used as RAG source data), `images/`.
+Other folders: `docs/` (instructor guides, planning, archived test reports), `images/` (screenshots used by workshop instructions), `manuals/` (PDFs used as RAG source data).
 
 ## Build
 

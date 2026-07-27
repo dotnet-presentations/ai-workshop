@@ -52,7 +52,7 @@ cd ChatApp
 
 ```bash
 dotnet add package Microsoft.Extensions.AI
-dotnet add package Microsoft.Extensions.AI.OpenAI --prerelease
+dotnet add package Microsoft.Extensions.AI.OpenAI
 dotnet add package Azure.AI.OpenAI
 dotnet add package Microsoft.Extensions.Configuration.UserSecrets
 dotnet add package Microsoft.Extensions.Logging.Console
@@ -64,15 +64,14 @@ Open **Tools > NuGet Package Manager > Package Manager Console** and run:
 
 ```powershell
 Install-Package Microsoft.Extensions.AI
-Install-Package Microsoft.Extensions.AI.OpenAI -IncludePrerelease
+Install-Package Microsoft.Extensions.AI.OpenAI
 Install-Package Azure.AI.OpenAI
 Install-Package Microsoft.Extensions.Configuration.UserSecrets
 Install-Package Microsoft.Extensions.Logging.Console
 ```
 
-You can also right-click the project and select **Manage NuGet Packages**, then
-search for each package on the **Browse** tab. `Microsoft.Extensions.AI.OpenAI`
-only appears once you check **Include prerelease**.
+You can also right-click the project and select **Manage NuGet Packages** and
+search for each package on the **Browse** tab.
 
 | Package | Why |
 | --- | --- |

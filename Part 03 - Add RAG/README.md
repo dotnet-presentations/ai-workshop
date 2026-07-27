@@ -49,7 +49,7 @@ markdown document into it.
 
 ### Option A: Copy from the command line
 
-```bash
+```powershell
 mkdir sample-docs
 copy "..\Part 03 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md" "sample-docs\"
 ```

@@ -56,7 +56,7 @@ Before starting this part, ensure you have:
   - [Part 3: Add RAG](../Part%2003%20-%20Add%20RAG/README.md) - Add embeddings and retrieval by hand
   - [Part 4: AI Web Chat Template](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) - Map your hand-built concepts to the generated template
 - ✅ **.NET 10.0 SDK** (preview 6 or higher) - `dotnet --version`
-- ✅ **Visual Studio Code** with GitHub Copilot extension
+- ✅ **Visual Studio Code** with GitHub Copilot extension, or **Visual Studio 2026** (see Step 7)
 - ✅ **Active GitHub Copilot subscription**
 
 ## Step 1: Verify the MCP Server Template
@@ -109,6 +109,19 @@ Now let's create a new MCP server project using the template:
    ```powershell
    cd MyMcpServer
    ```
+
+### Alternative: create the project in Visual Studio 2026
+
+1. Select **File > New > Project**.
+1. Search for **MCP Server** and select the C# template.
+1. Name the project `MyMcpServer`, set the location to the
+   `Part 05 - MCP Server Basics` folder, and select **Create**.
+
+> [!NOTE]
+> If **MCP Server** does not appear in the **Create a new project** dialog,
+> install the templates from a terminal with
+> `dotnet new install Microsoft.Extensions.AI.Templates`, then restart Visual
+> Studio 2026 and search again.
 
 ## Step 3: Understanding the Generated Project Structure
 
@@ -349,15 +362,15 @@ Now you'll configure VS Code to use your custom MCP server alongside GitHub Copi
    - Reopen VS Code in your workshop directory
    - VS Code will automatically detect and load your MCP server
 
-## Step 7: Alternative - Configure Visual Studio 2022 to Use Your MCP Server
+## Step 7: Alternative - Configure Visual Studio 2026 to Use Your MCP Server
 
-If you prefer to use **Visual Studio 2022** instead of VS Code, you can configure it to use your MCP server as well.
+If you prefer to use **Visual Studio 2026** instead of VS Code, you can configure it to use your MCP server as well.
 
-### Prerequisites for Visual Studio 2022
+### Prerequisites for Visual Studio 2026
 
-- **Visual Studio 2022 version 17.14** or later
+- **Visual Studio 2026**
 - **GitHub Copilot** extension installed and active subscription
-- **Agent mode** enabled (preview feature)
+- **Agent mode** enabled in GitHub Copilot Chat
 
 ### Configuration Steps
 
@@ -408,7 +421,7 @@ Visual Studio checks for MCP configurations in several locations, in this order:
 4. `<SOLUTIONDIR>\.vscode\mcp.json` - Shared with VS Code
 5. `<SOLUTIONDIR>\.cursor\mcp.json` - Shared with Cursor
 
-### Testing in Visual Studio 2022
+### Testing in Visual Studio 2026
 
 1. **Open GitHub Copilot Chat**
 2. **Ensure Agent mode is selected** (from the Ask dropdown)
@@ -588,7 +601,7 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 ### Integration Points
 
 - **VS Code configuration** in `.vscode/mcp.json`
-- **Visual Studio 2022 configuration** in `.mcp.json` (solution directory)
+- **Visual Studio 2026 configuration** in `.mcp.json` (solution directory)
 - **GitHub Copilot** automatically discovers and uses MCP tools
 - **Real-time execution** - tools run when AI needs them
 - **Logging and debugging** through VS Code Output panel
@@ -597,7 +610,7 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 
 1. **Create** MCP server project with `dotnet new mcpserver`
 2. **Implement** custom tools with proper attributes
-3. **Configure** VS Code or Visual Studio 2022 to use your server
+3. **Configure** VS Code or Visual Studio 2026 to use your server
 4. **Test** with GitHub Copilot conversations
 5. **Iterate** and improve based on AI usage patterns
 

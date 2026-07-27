@@ -32,20 +32,46 @@ of this for you.
 
 ## Step 1: Create the console project
 
+### Option A: Create from the command line
+
 ```bash
 dotnet new console -n ChatApp
 cd ChatApp
 ```
 
+### Option B: Create in Visual Studio 2026
+
+1. Select **File > New > Project**.
+1. Search for **Console App**, pick the C# entry, and select **Next**.
+1. Name the project `ChatApp`, choose a location, and select **Next**.
+1. Set **Framework** to **.NET 10.0**, then select **Create**.
+
 ## Step 2: Add the packages
+
+### Option A: Add packages from the command line
 
 ```bash
 dotnet add package Microsoft.Extensions.AI
-dotnet add package Microsoft.Extensions.AI.OpenAI --prerelease
+dotnet add package Microsoft.Extensions.AI.OpenAI
 dotnet add package Azure.AI.OpenAI
 dotnet add package Microsoft.Extensions.Configuration.UserSecrets
 dotnet add package Microsoft.Extensions.Logging.Console
 ```
+
+### Option B: Add packages in Visual Studio 2026
+
+Open **Tools > NuGet Package Manager > Package Manager Console** and run:
+
+```powershell
+Install-Package Microsoft.Extensions.AI
+Install-Package Microsoft.Extensions.AI.OpenAI
+Install-Package Azure.AI.OpenAI
+Install-Package Microsoft.Extensions.Configuration.UserSecrets
+Install-Package Microsoft.Extensions.Logging.Console
+```
+
+You can also right-click the project and select **Manage NuGet Packages** and
+search for each package on the **Browse** tab.
 
 | Package | Why |
 | --- | --- |
@@ -249,6 +275,9 @@ Your completed file should now match [ChatApp/Program.cs](ChatApp/Program.cs).
 ```bash
 dotnet run
 ```
+
+In Visual Studio 2026, press **Ctrl+F5** to run without the debugger attached, or
+**F5** to debug.
 
 ```text
 Chat app ready. Type a message ('summary' for a typed summary, 'exit' to quit).

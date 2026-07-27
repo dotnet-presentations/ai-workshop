@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ManualCheckpoint/ManualCheckpoint.csproj" />
+  <Project Path="MediCheckpoint/MediCheckpoint.csproj" />
+</Solution>

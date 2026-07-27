@@ -1,4 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<!--
+  Compile-only coverage for checkpoints/manual-program.cs.
+
+  The checkpoint files are reference implementations that attendees compare
+  against, but they live outside RagChatApp/ and so nothing built them. Two
+  defects (#567, #568) reached the repo through that gap. This project exists
+  purely so CI type-checks the checkpoint; it is not something attendees run.
+
+  Package versions must stay in sync with Part 3 Step 2's instructions.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,7 +16,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UserSecretsId>3f5950d7-15fc-4315-bc97-8223d81cf9fc</UserSecretsId>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\manual-program.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
@@ -14,11 +29,6 @@
     <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.8.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.10" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.10" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Copy the sample document to the output directory so the app can read it at runtime. -->
-    <None Include="sample-docs\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

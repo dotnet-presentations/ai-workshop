@@ -93,6 +93,57 @@ Use the rest of this part to inspect the same chat, embedding, ingestion, and re
 
 The local JSON store is intended for prototyping and learning; it is not the production-oriented vector database used by the recommended path. Skip Step 3, and interpret the Qdrant/AppHost sections as an architecture comparison rather than files that exist in your generated project.
 
+### Bring the packages up to date
+
+Templates ship on their own release cadence, so a freshly scaffolded project is
+usually a few versions behind the current packages. Update it before you go any
+further — this is what you would do on any real project, and it keeps your code
+matching the snapshot in this repo.
+
+In `GenAiLab.AppHost/GenAiLab.AppHost.csproj`, change the SDK version to `13.4.6`:
+
+```xml
+<Sdk Name="Aspire.AppHost.Sdk" Version="13.4.6" />
+```
+
+The `<Sdk>` element has to be edited by hand — `dotnet add package` only manages
+`<PackageReference>` items. For the rest, run these from the `GenAiLab` folder:
+
+```bash
+dotnet add GenAiLab.AppHost package Aspire.Hosting.AppHost
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Qdrant
+dotnet add GenAiLab.Web package Aspire.Qdrant.Client
+dotnet add GenAiLab.Web package Aspire.Azure.AI.OpenAI --prerelease
+dotnet add GenAiLab.Web package Azure.AI.OpenAI --prerelease
+```
+
+Without a `--version`, `dotnet add package` takes the newest **stable** release,
+which is what you want for the three Aspire packages.
+
+The two OpenAI packages need `--prerelease` for different reasons.
+`Aspire.Azure.AI.OpenAI` has never shipped a stable build, so the command fails
+without it. `Azure.AI.OpenAI` has a stable 2.1.0, but it is from December 2024
+and is *older* than the version the template already referenced — taking it would
+downgrade you.
+
+> [!IMPORTANT]
+> The last two go together. `Aspire.Azure.AI.OpenAI` 13.4.6 requires
+> `Azure.AI.OpenAI` 2.8.0-beta.1 or later, so bumping only the first one fails
+> the build with `NU1605: Detected package downgrade`. This is normal when a
+> package raises its minimum dependency, and the error message names the version
+> you need.
+
+Then confirm everything still restores and compiles:
+
+```bash
+dotnet build
+```
+
+> [!NOTE]
+> The snapshot in this repo pins exact versions, so if a newer prerelease has
+> shipped since this was written you may end up slightly ahead of it. That is
+> fine — the code in this part does not depend on anything that changed.
+
 ## Step 2: Map the generated code to what you built by hand
 
 Everything below is code the template wrote, and it maps directly to the parts

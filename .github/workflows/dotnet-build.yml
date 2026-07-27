@@ -74,8 +74,7 @@ jobs:
           # No solution file exists for AgentApp; using project file directly
           - solution: "Part 08 - Agent Framework Basics/AgentApp/AgentApp.csproj"
             dotnet-version: "10.0.x"
-          # No solution file exists for StoreApp; using project file directly
-          - solution: "Part 09 - Adding AI to an Existing App/StoreApp/StoreApp.csproj"
+          - solution: "Part 09 - Adding AI to an Existing App/eShopLite/eShopLite.slnx"
             dotnet-version: "10.0.x"
 
     steps:

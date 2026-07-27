@@ -1,0 +1,81 @@
+@page "/discovery"
+@using DataEntities
+@using Store.Ai
+@inject ProductDiscovery Assistant
+
+<PageTitle>Ask</PageTitle>
+
+<h1>Ask</h1>
+
+<p>Describe what you need in your own words. Try "something to keep me warm at night".</p>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="input-group">
+            <input @bind="question" @bind:event="oninput" @onkeyup="HandleKeyUp"
+                   class="form-control" placeholder="What are you looking for?"
+                   aria-label="What are you looking for?" disabled="@busy" />
+            <button class="btn btn-primary" @onclick="Ask" disabled="@busy">Ask</button>
+        </div>
+    </div>
+</div>
+
+@if (busy)
+{
+    <p><em>Thinking...</em></p>
+}
+else if (result is not null)
+{
+    <div class="alert alert-info">@result.Answer</div>
+
+    @if (result.Products.Count > 0)
+    {
+        <h2 class="h5">Products used to answer</h2>
+        <div class="row">
+            @foreach (var product in result.Products)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Description</p>
+                            <p class="card-text"><strong>@product.Price.ToString("C")</strong></p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+
+@code {
+    private string question = string.Empty;
+    private DiscoveryResult? result;
+    private bool busy;
+
+    private async Task Ask()
+    {
+        if (string.IsNullOrWhiteSpace(question))
+        {
+            return;
+        }
+
+        busy = true;
+        try
+        {
+            result = await Assistant.AskAsync(question);
+        }
+        finally
+        {
+            busy = false;
+        }
+    }
+
+    private async Task HandleKeyUp(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await Ask();
+        }
+    }
+}

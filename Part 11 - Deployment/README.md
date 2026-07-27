@@ -7,7 +7,7 @@
 In this final part, you will learn how to deploy the AI Web Chat application you scaffolded in [Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) to Azure using the Azure Developer CLI (`azd`). You'll deploy your Qdrant-backed application to Azure Container Apps for production use.
 
 > [!NOTE]
-> This part deliberately returns to the **Part 4 web application** rather than the console samples from Parts 5-9. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship — it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the capstone `StoreApp` are console applications you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
+> This part deliberately returns to the **Part 4 web application** rather than the samples from Parts 5-9. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship — it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the Part 9 capstone are things you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
 > [!TIP]
 > If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the working code snapshot provided in this `Part 11 - Deployment` folder. The complete code has already been updated with the necessary configuration for external HTTP endpoints and deployment. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
 

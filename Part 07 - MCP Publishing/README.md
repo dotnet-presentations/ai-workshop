@@ -708,7 +708,7 @@ What you expected to happen.
 - **Container Distribution**: Consistent deployment environments
 - **Source Distribution**: Maximum transparency and customization
 
-## Next Steps
+## Taking this further
 
 You have completed the MCP workshop series. You now have the foundation to:
 
@@ -783,14 +783,18 @@ You now have a complete path for building, publishing, and maintaining MCP serve
 - Implemented both basic and advanced business tools
 - Learned professional publishing and distribution
 
-## Continue Your Journey
+## What's next
 
-🎯 **Next**: [Part 8: Agent Framework Essentials](../Part%2008%20-%20Agent%20Framework%20Basics/README.md) - a short bridge module on how chat, tools, and memory come together as an agent, and how the MCP servers you just built get consumed by your own agents.
+**Part 8** is a short bridge module on how chat, tools, and memory come together
+as an agent, and how the MCP servers you just built get consumed by your own
+agents.
 
----
-
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 6: Enhanced MCP Server](../Part%2006%20-%20Enhanced%20MCP%20Server/README.md) | ➡️ **Next**: [Part 8: Agent Framework Essentials](../Part%2008%20-%20Agent%20Framework%20Basics/README.md)
+**Continue to** → [Part 8: Agent Framework Essentials](../Part%2008%20-%20Agent%20Framework%20Basics/README.md)
 
 ### Share Your Success
 
 🌟 **Built something amazing?** Share your MCP servers and AI applications with the community!
+
+---
+
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 6: Enhanced MCP Server](../Part%2006%20-%20Enhanced%20MCP%20Server/README.md) | ➡️ **Next**: [Part 8: Agent Framework Essentials](../Part%2008%20-%20Agent%20Framework%20Basics/README.md)

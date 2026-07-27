@@ -350,3 +350,7 @@ context to the model. After that, you'll compare your code with the template-bas
 version.
 
 **Continue to** → [Part 3: Add RAG](../Part%2003%20-%20Add%20RAG/README.md)
+
+---
+
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 1: Setup](../Part%2001%20-%20Setup/README.md) | ➡️ **Next**: [Part 3: Add RAG](../Part%2003%20-%20Add%20RAG/README.md)

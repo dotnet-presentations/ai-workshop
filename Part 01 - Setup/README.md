@@ -108,15 +108,18 @@ If you plan to contribute updates back to this repository, create a GitHub accou
    - Complete the account creation process by following the on-screen instructions
    - Verify your email address (GitHub will send you a verification email)
 
-## 🎯 Next Steps
+## What's next
 
-Ready to build your first AI application? Let's get started!
-
-**Continue to** → [Part 2: Build Chat App](../Part%2002%20-%20Build%20Chat%20App/README.md)
-
-In Part 2, you'll learn how to:
+In **Part 2** you'll build a minimal console chat app by hand and see exactly how
+a .NET app talks to a model:
 
 - 🚀 Build a minimal console-based AI chat app
 - ⚙️ Configure [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI) for AI services
 - 🔧 Store secrets securely with .NET user secrets
 - 🧪 Test your first AI-powered application
+
+**Continue to** → [Part 2: Build Chat App](../Part%2002%20-%20Build%20Chat%20App/README.md)
+
+---
+
+📖 **Return to**: [Workshop Overview](../README.md) | ➡️ **Next**: [Part 2: Build Chat App](../Part%2002%20-%20Build%20Chat%20App/README.md)

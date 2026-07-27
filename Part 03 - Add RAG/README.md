@@ -306,6 +306,8 @@ dotnet add package Microsoft.Extensions.DataIngestion.Markdig --prerelease
 dotnet add package Microsoft.Extensions.Logging.Console
 dotnet add package Microsoft.ML.Tokenizers.Data.O200kBase
 dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
+dotnet add package Microsoft.Bcl.Memory --version 10.0.10
+dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
 ```
 
 Or, in Visual Studio 2026, from **Tools > NuGet Package Manager > Package Manager
@@ -317,11 +319,22 @@ Install-Package Microsoft.Extensions.DataIngestion.Markdig -IncludePrerelease
 Install-Package Microsoft.Extensions.Logging.Console
 Install-Package Microsoft.ML.Tokenizers.Data.O200kBase
 Install-Package Microsoft.SemanticKernel.Connectors.SqliteVec -IncludePrerelease
+Install-Package Microsoft.Bcl.Memory -Version 10.0.10
+Install-Package SQLitePCLRaw.bundle_e_sqlite3 -Version 3.0.4
 ```
 
 Three of these are prerelease. If you use **Manage NuGet Packages** instead of
 the console, check **Include prerelease** or they won't show up in search
 results.
+
+> **Why the last two are pinned**
+>
+> They are not used by your code. `Microsoft.ML.Tokenizers.Data.O200kBase` and
+> `SqliteVec` each drag in a transitive dependency with an open high-severity
+> advisory, and without these two lines `dotnet build` reports four `NU1903`
+> warnings. Pinning the patched versions directly promotes them out of the way.
+> Everything else in this workshop builds warning-free, so this keeps Part 3
+> consistent with it.
 
 ### 3.2 Add MEDI usings, logger, config, and AI clients
 
@@ -539,11 +552,13 @@ declines when the answer is not there.
 
 ## What's next
 
-Your knowledge base lives in memory, so it's rebuilt on every run and can't scale.
-In **Part 4** you'll scaffold the **aichatweb template** and see how it solves
-these problems with a real vector store (Qdrant), ingestion services, and
-semantic search, using the same `IChatClient` and `IEmbeddingGenerator`
-abstractions you just used by hand.
+Step 3 already persists your knowledge base to `vectors.db`, so it survives a
+restart — but everything still runs in one console app, ingestion happens on
+startup, and there is no UI. In **Part 4** you'll scaffold the **aichatweb
+template** and see the same ideas assembled as a web application, with a
+server-based vector store (Qdrant), a background ingestion service, and citation
+rendering, using the same `IChatClient` and `IEmbeddingGenerator` abstractions
+you just used by hand.
 
 **Continue to** → [Part 4: AI Web Chat Template](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md)
 

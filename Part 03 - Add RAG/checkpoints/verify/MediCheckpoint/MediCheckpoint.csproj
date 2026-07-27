@@ -1,0 +1,42 @@
+<!--
+  Compile-only coverage for checkpoints/medi-program.cs.
+
+  The checkpoint files are reference implementations that attendees compare
+  against, but they live outside RagChatApp/ and so nothing built them. Two
+  defects (#567, #568) reached the repo through that gap. This project exists
+  purely so CI type-checks the checkpoint; it is not something attendees run.
+
+  Package versions must stay in sync with Part 3 Step 3.1's instructions,
+  including the two security pins.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>3f5950d7-15fc-4315-bc97-8223d81cf9fc</UserSecretsId>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\medi-program.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.AI" Version="10.8.1" />
+    <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.8.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.DataIngestion" Version="10.8.0-preview.1.26364.2" />
+    <PackageReference Include="Microsoft.Extensions.DataIngestion.Markdig" Version="10.8.0-preview.1.26364.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.10" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.O200kBase" Version="2.0.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" Version="1.74.0-preview" />
+    <!-- Pinned to clear NU1903 on transitive dependencies. See Part 3 Step 3.1. -->
+    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.10" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.4" />
+  </ItemGroup>
+
+</Project>

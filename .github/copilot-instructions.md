@@ -10,7 +10,7 @@ Everything targets **.NET 10** and uses **Microsoft Foundry (Azure OpenAI)** as 
 | --- | --- | --- |
 | 01 - Setup | — | README only |
 | 02 - Build Chat App | `ChatApp/` | Console app built by hand (`dotnet new console`) |
-| 03 - Add RAG | `RagChatApp/` | Continues from Part 2; `checkpoints/` holds two alternate `Program.cs` paths (manual cosine similarity, and MEDI + SqliteVec) |
+| 03 - Add RAG | `RagChatApp/` | Continues from Part 2; `checkpoints/` holds two alternate `Program.cs` paths (manual cosine similarity, and MEDI + SqliteVec). `checkpoints/verify/` holds compile-only projects so CI type-checks both checkpoints — the snapshot itself is the Step 2 manual path |
 | 04 - AI Web Chat Template | — | README only; scaffolds `GenAiLab` with `dotnet new aichatweb` |
 | 05 - MCP Server Basics | `MyMcpServer/` | `dotnet new mcpserver`; `RandomNumberTools` + `WeatherTools` |
 | 06 - Enhanced MCP Server | `ContosoOrdersMcpServer/` | Optional/bonus. Exploration of an existing snapshot — the README does **not** ask the user to scaffold it |
@@ -24,11 +24,12 @@ Other folders: `docs/` (instructor guides, planning, archived test reports), `im
 
 ## Build
 
-CI (`.github/workflows/dotnet-build.yml`) restores and builds these eight targets on the .NET `10.0.x` SDK with `--configuration Release`. Run the same set when validating a change:
+CI (`.github/workflows/dotnet-build.yml`) restores and builds these nine targets on the .NET `10.0.x` SDK with `--configuration Release`. Run the same set when validating a change:
 
 ```pwsh
 "Part 02 - Build Chat App/ChatApp/ChatApp.csproj",
 "Part 03 - Add RAG/RagChatApp/RagChatApp.csproj",
+"Part 03 - Add RAG/checkpoints/verify/Checkpoints.slnx",
 "Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj",
 "Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj",
 "Part 08 - Agent Framework Basics/AgentApp/AgentApp.csproj",
@@ -37,7 +38,7 @@ CI (`.github/workflows/dotnet-build.yml`) restores and builds these eight target
 "Part 11 - Deployment/GenAiLab/GenAiLab.sln" | ForEach-Object { dotnet build $_ -c Release }
 ```
 
-All eight targets build clean — zero warnings. Treat any new warning as a regression.
+All nine targets build clean — zero warnings. Treat any new warning as a regression.
 
 Markdown is linted by `.github/workflows/markdownlint.yml` using `.markdownlint.json`.
 

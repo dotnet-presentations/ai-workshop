@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="DataEntities/DataEntities.csproj" />
+  <Project Path="eShopLite.AppHost/eShopLite.AppHost.csproj" />
+  <Project Path="eShopLite.ServiceDefaults/eShopLite.ServiceDefaults.csproj" />
+  <Project Path="Products/Products.csproj" />
+  <Project Path="Store/Store.csproj" />
+</Solution>

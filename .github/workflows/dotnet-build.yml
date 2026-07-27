@@ -76,6 +76,8 @@ jobs:
             dotnet-version: "10.0.x"
           - solution: "Part 09 - Adding AI to an Existing App/eShopLite/eShopLite.slnx"
             dotnet-version: "10.0.x"
+          - solution: "Part 09 - Adding AI to an Existing App/eShopLite-start/eShopLite.slnx"
+            dotnet-version: "10.0.x"
 
     steps:
       - name: Checkout code

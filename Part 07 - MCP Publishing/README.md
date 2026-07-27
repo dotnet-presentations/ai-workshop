@@ -246,10 +246,10 @@ Can you give me a 5-day forecast for London?
 ```json
 {
   "servers": {
-    "WeatherMcpServer": {
+    "MyMcpServer": {
       "type": "stdio", 
       "command": "dnx",
-      "args": ["YourName.WeatherMcpServer", "--version", "1.0.0"],
+      "args": ["YourName.MyMcpServer", "--version", "1.0.0"],
       "env": {
         "WEATHER_UNITS": "fahrenheit"
       }
@@ -407,11 +407,11 @@ Expected contents:
 ```json
 {
   "servers": {
-    "WeatherMcpServer": {
+    "MyMcpServer": {
       "type": "stdio",
       "command": "dnx",
       "args": [
-        "CompanyName.WeatherMcpServer",
+        "CompanyName.MyMcpServer",
         "--source",
         "https://pkgs.dev.azure.com/company/_packaging/mcp-servers/nuget/v3/index.json",
         "--version", 
@@ -506,10 +506,10 @@ public class WeatherTools
 ```json
 {
   "servers": {
-    "WeatherMcpServer": {
+    "MyMcpServer": {
       "type": "stdio",
       "command": "dnx",
-      "args": ["YourName.WeatherMcpServer"],
+      "args": ["YourName.MyMcpServer"],
       "env": {
         "WEATHER_API_KEY": "${env:WEATHER_API_KEY}"
       }
@@ -607,7 +607,7 @@ steps:
   displayName: 'Build Package'
   inputs:
     command: 'pack'
-    packagesToPack: '**/WeatherMcpServer.csproj'
+    packagesToPack: '**/MyMcpServer.csproj'
     configuration: 'Release'
 
 - task: NuGetCommand@2
@@ -623,23 +623,23 @@ steps:
 
 ```dockerfile
 # Dockerfile for containerized MCP server
-FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+FROM mcr.microsoft.com/dotnet/runtime:10.0 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY ["WeatherMcpServer.csproj", "."]
-RUN dotnet restore "WeatherMcpServer.csproj"
+COPY ["MyMcpServer.csproj", "."]
+RUN dotnet restore "MyMcpServer.csproj"
 COPY . .
-RUN dotnet build "WeatherMcpServer.csproj" -c Release -o /app/build
+RUN dotnet build "MyMcpServer.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "WeatherMcpServer.csproj" -c Release -o /app/publish
+RUN dotnet publish "MyMcpServer.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WeatherMcpServer.dll"]
+ENTRYPOINT ["dotnet", "MyMcpServer.dll"]
 ```
 
 ## Step 10: Documentation and Support

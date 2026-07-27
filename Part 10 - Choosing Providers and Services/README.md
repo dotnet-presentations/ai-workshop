@@ -164,7 +164,7 @@ specific store.
 
 Part 11 deploys the Qdrant path, because it is the one you have been running all
 day and it needs no extra provisioning. If you want the managed option instead,
-the swap is a registration change in two files rather than a rewrite \u2014 see
+the swap is a registration change in two files rather than a rewrite — see
 [Optional: using a managed vector store](../Part%2011%20-%20Deployment/README.md#optional-using-a-managed-vector-store)
 in the next part.
 
@@ -173,8 +173,8 @@ in the next part.
 You have made the two decisions that deployment depends on: which provider serves
 the model, and which service stores the vectors. Now put it in Azure.
 
-**Continue to** \u2192 [Part 11: Deploy to Azure](../Part%2011%20-%20Deployment/README.md)
+**Continue to** → [Part 11: Deploy to Azure](../Part%2011%20-%20Deployment/README.md)
 
 ---
 
-\ud83d\udcd6 **Return to**: [Workshop Overview](../README.md) | \ud83d\udd04 **Previous**: [Part 9: Adding AI to an Existing App](../Part%2009%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md) | \u27a1\ufe0f **Next**: [Part 11: Deploy to Azure](../Part%2011%20-%20Deployment/README.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 9: Adding AI to an Existing App](../Part%2009%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md) | ➡️ **Next**: [Part 11: Deploy to Azure](../Part%2011%20-%20Deployment/README.md)

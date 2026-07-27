@@ -63,27 +63,45 @@ This generates a solution with three projects:
 | Project | Role |
 | --- | --- |
 | `GenAiLab.Web` | The Blazor chat web app |
-| `GenAiLab.AppHost` | The **Aspire** orchestrator (starts the app + Qdrant) |
+| `GenAiLab.AppHost` | The **Aspire** orchestrator (starts the app, Qdrant, and a document reader) |
 | `GenAiLab.ServiceDefaults` | Shared telemetry, health checks, resilience |
 
 ### Docker-free path: local vector store without Aspire
 
-The template also supports a local JSON vector store and a standalone web project. Scaffold that variant with:
+The template also supports a single-project variant that stores vectors in a local
+SQLite file and skips containers entirely. Scaffold it with:
 
 ```bash
-dotnet new aichatweb --provider azureopenai --vector-store local --name GenAiLab --output GenAiLab
+dotnet new aichatweb --provider azureopenai --vector-store local --managed-identity false --name GenAiLab --output GenAiLab
 ```
 
-In Visual Studio, choose **Local** for the vector store and leave **Use Aspire orchestration** disabled. The standalone Azure OpenAI template uses keyless authentication. Sign in to Visual Studio or the Azure CLI with an account assigned the **Azure AI Developer** role on the Azure OpenAI resource, then set the endpoint and run the generated project directly:
+In Visual Studio, choose **Local** for the vector store, leave **Use Aspire
+orchestration** disabled, and clear **Use managed identity**.
+
+`--managed-identity false` matters. Left at its default the template authenticates
+with Entra ID, which requires your signed-in account to hold the **Azure AI
+Developer** role on the Azure OpenAI resource. Turning it off gives you API-key
+authentication and the same two secrets you already used in Parts 2 and 3:
 
 ```bash
 dotnet user-secrets --project GenAiLab set AzureOpenAI:Endpoint "https://YOUR-RESOURCE.openai.azure.com/"
+dotnet user-secrets --project GenAiLab set AzureOpenAI:Key "YOUR-KEY"
 dotnet run --project GenAiLab
 ```
 
-For more about the local template and keyless authentication, see the [official .NET AI template quickstart](https://learn.microsoft.com/dotnet/ai/quickstarts/ai-templates).
+This variant is not just "the Aspire one minus the containers" — it differs in
+several ways worth knowing about:
 
-Use the rest of this part to inspect the same chat, embedding, ingestion, and retrieval abstractions. The generated local-store implementation differs from the Qdrant snippets shown below, but it plays the same role behind `Microsoft.Extensions.VectorData`.
+| | Aspire path | Docker-free path |
+| --- | --- | --- |
+| Projects | Three (Web, AppHost, ServiceDefaults) | One |
+| Vector store | Qdrant container with a data volume | SQLite file via `AddSqliteVectorStore` |
+| PDF reading | `mcp/markitdown` container | `PdfPig`, in-process |
+| Chat API | `AddChatClient("gpt-5-mini")` | `GetResponsesClient().AsIChatClient("gpt-5-mini")` |
+
+Use the rest of this part to inspect the same chat, embedding, ingestion, and
+retrieval abstractions. The file names and the roles they play are the same; only
+the wiring differs.
 
 | You can still complete | This path omits |
 | --- | --- |
@@ -91,7 +109,16 @@ Use the rest of this part to inspect the same chat, embedding, ingestion, and re
 | Document ingestion, embeddings, and semantic search | The Aspire AppHost and service orchestration |
 | RAG and the vector-store abstraction | The Aspire dashboard, distributed health checks, logs, traces, and metrics |
 
-The local JSON store is intended for prototyping and learning; it is not the production-oriented vector database used by the recommended path. Skip Step 3, and interpret the Qdrant/AppHost sections as an architecture comparison rather than files that exist in your generated project.
+Skip Steps 3 and 4, and read the AppHost sections as an architecture comparison
+rather than files that exist in your generated project.
+
+> [!IMPORTANT]
+> `dotnet restore` on this variant reports `NU1903` for a transitive
+> `SQLitePCLRaw.lib.e_sqlite3` 2.1.10 reference. Pin the fixed version to clear it:
+>
+> ```bash
+> dotnet add GenAiLab package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
+> ```
 
 ### Bring the packages up to date
 
@@ -99,6 +126,10 @@ Templates ship on their own release cadence, so a freshly scaffolded project is
 usually a few versions behind the current packages. Update it before you go any
 further — this is what you would do on any real project, and it keeps your code
 matching the snapshot in this repo.
+
+This is not only housekeeping. The template scaffolds Aspire **13.0.0**, which
+pulls in a MessagePack version carrying known high-severity advisories, so
+`dotnet restore` reports `NU1903` until you move off it.
 
 In `GenAiLab.AppHost/GenAiLab.AppHost.csproj`, change the SDK version to `13.4.6`:
 
@@ -110,28 +141,18 @@ The `<Sdk>` element has to be edited by hand — `dotnet add package` only manag
 `<PackageReference>` items. For the rest, run these from the `GenAiLab` folder:
 
 ```bash
-dotnet add GenAiLab.AppHost package Aspire.Hosting.AppHost
-dotnet add GenAiLab.AppHost package Aspire.Hosting.Qdrant
-dotnet add GenAiLab.Web package Aspire.Qdrant.Client
+dotnet add GenAiLab.AppHost package Aspire.Hosting.AppHost --version 13.4.6
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Qdrant --version 13.4.6
+dotnet add GenAiLab.Web package Aspire.Qdrant.Client --version 13.4.6
 dotnet add GenAiLab.Web package Aspire.Azure.AI.OpenAI --prerelease
-dotnet add GenAiLab.Web package Azure.AI.OpenAI --prerelease
+dotnet add GenAiLab.Web package Microsoft.Extensions.AI
+dotnet add GenAiLab.Web package Microsoft.Extensions.AI.OpenAI
+dotnet add GenAiLab.Web package Microsoft.SemanticKernel.Connectors.Qdrant --prerelease
 ```
 
-Without a `--version`, `dotnet add package` takes the newest **stable** release,
-which is what you want for the three Aspire packages.
-
-The two OpenAI packages need `--prerelease` for different reasons.
-`Aspire.Azure.AI.OpenAI` has never shipped a stable build, so the command fails
-without it. `Azure.AI.OpenAI` has a stable 2.1.0, but it is from December 2024
-and is *older* than the version the template already referenced — taking it would
-downgrade you.
-
-> [!IMPORTANT]
-> The last two go together. `Aspire.Azure.AI.OpenAI` 13.4.6 requires
-> `Azure.AI.OpenAI` 2.8.0-beta.1 or later, so bumping only the first one fails
-> the build with `NU1605: Detected package downgrade`. This is normal when a
-> package raises its minimum dependency, and the error message names the version
-> you need.
+`Aspire.Azure.AI.OpenAI` and `Microsoft.SemanticKernel.Connectors.Qdrant` need
+`--prerelease` because neither has ever shipped a stable build; without the flag
+the command fails.
 
 Then confirm everything still restores and compiles:
 
@@ -140,7 +161,7 @@ dotnet build
 ```
 
 > [!NOTE]
-> The snapshot in this repo pins exact versions, so if a newer prerelease has
+> The snapshot in this repo pins exact versions, so if a newer release has
 > shipped since this was written you may end up slightly ahead of it. That is
 > fine — the code in this part does not depend on anything that changed.
 
@@ -155,12 +176,15 @@ you already built.
 
 ```csharp
 var openai = builder.AddAzureOpenAIClient("openai");
-openai.AddChatClient("gpt-5-mini")
+openai.AddChatClient("gpt-4o-mini")
     .UseFunctionInvocation()
     .UseOpenTelemetry(configure: c =>
         c.EnableSensitiveData = builder.Environment.IsDevelopment());
 openai.AddEmbeddingGenerator("text-embedding-3-small");
 ```
+
+The template hardcodes `gpt-4o-mini`. You will change that to `gpt-5-mini` in
+Step 3, because that is the deployment name on the workshop resource.
 
 | Part 2/3 (by hand) | Template (generated) |
 | --- | --- |
@@ -176,11 +200,20 @@ pipeline (function calling + telemetry instead of your hand-added logging).
 `GenAiLab.Web/Services/SemanticSearch.cs`:
 
 ```csharp
-public class SemanticSearch(VectorStoreCollection<Guid, IngestedChunk> vectorCollection)
+public class SemanticSearch(
+    VectorStoreCollection<Guid, IngestedChunk> vectorCollection,
+    [FromKeyedServices("ingestion_directory")] DirectoryInfo ingestionDirectory,
+    DataIngestor dataIngestor)
 {
     public async Task<IReadOnlyList<IngestedChunk>> SearchAsync(string text, string? documentIdFilter, int maxResults)
     {
-        var nearest = vectorCollection.SearchAsync(text, maxResults, new VectorSearchOptions<IngestedChunk> { /* ... */ });
+        await LoadDocumentsAsync();
+
+        var nearest = vectorCollection.SearchAsync(text, maxResults, new VectorSearchOptions<IngestedChunk>
+        {
+            Filter = documentIdFilter is { Length: > 0 } ? record => record.DocumentId == documentIdFilter : null,
+        });
+
         return await nearest.Select(result => result.Record).ToListAsync();
     }
 }
@@ -198,23 +231,35 @@ the vector-store level.
 
 ### Ingestion: your Part 3 chunk-and-embed step, as a pipeline
 
-`GenAiLab.Web/Services/Ingestion/DataIngestor.cs` upserts chunks and documents into
-Qdrant collections, tracking what's already ingested so it only processes new or
-changed files. `PDFDirectorySource` reads PDFs from `wwwroot/Data`.
+`GenAiLab.Web/Services/Ingestion/DataIngestor.cs` builds an ingestion pipeline out
+of three pieces — a reader, a chunker, and a writer — and runs every file in
+`wwwroot/Data` through it:
+
+```csharp
+using var pipeline = new IngestionPipeline<string>(
+    reader: new DocumentReader(directory),
+    chunker: new SemanticSimilarityChunker(embeddingGenerator, new(TiktokenTokenizer.CreateForModel("gpt-4o"))),
+    writer: writer,
+    loggerFactory: loggerFactory);
+
+await foreach (var result in pipeline.ProcessAsync(directory, searchPattern))
+{
+    logger.LogInformation("Completed processing '{id}'. Succeeded: '{succeeded}'.", result.DocumentId, result.Succeeded);
+}
+```
+
+`DocumentReader.cs` dispatches on media type: Markdown goes through an in-process
+Markdig reader, and PDFs go to the **markitdown** container over MCP.
 
 | Part 3 (by hand) | Template (generated) |
 | --- | --- |
-| Split doc into paragraph chunks | `PDFDirectorySource` + chunking |
-| `GenerateAsync(chunks)` once at startup | `DataIngestor.IngestDataAsync(...)` with change tracking |
-| `store.Add((text, vector))` in a `List` | `chunksCollection.UpsertAsync(...)` into Qdrant |
+| Split doc into paragraph chunks | `SemanticSimilarityChunker` — splits where the meaning shifts, not at fixed lengths |
+| `GenerateAsync(chunks)` once at startup | `IngestionPipeline<T>.ProcessAsync(...)` |
+| `store.Add((text, vector))` in a `List` | `VectorStoreWriter<T>` upserting into Qdrant |
+| Plain text only | Markdown and PDF, via pluggable readers |
 
-`Program.cs` kicks it off at startup:
-
-```csharp
-await DataIngestor.IngestDataAsync(
-    app.Services,
-    new PDFDirectorySource(Path.Combine(builder.Environment.WebRootPath, "Data")));
-```
+Ingestion is lazy. `SemanticSearch.LoadDocumentsAsync()` runs it once on the first
+search, which is why your first question takes noticeably longer than the rest.
 
 > ⚠️ Only ingest **trusted** content. Ingested text is reflected back to users and
 > is a prompt-injection risk.
@@ -224,24 +269,78 @@ await DataIngestor.IngestDataAsync(
 `GenAiLab.AppHost/AppHost.cs`:
 
 ```csharp
+var openai = builder.AddAzureOpenAI("openai");
+
+openai.AddDeployment(name: "gpt-4o-mini", modelName: "gpt-4o-mini", modelVersion: "2024-07-18");
+openai.AddDeployment(name: "text-embedding-3-small", modelName: "text-embedding-3-small", modelVersion: "1");
+
 var vectorDB = builder.AddQdrant("vectordb")
     .WithDataVolume()
     .WithLifetime(ContainerLifetime.Persistent);
 
+var markitdown = builder.AddContainer("markitdown", "mcp/markitdown")
+    .WithArgs("--http", "--host", "0.0.0.0", "--port", "3001")
+    .WithHttpEndpoint(targetPort: 3001, name: "http");
+
 var webApp = builder.AddProject<Projects.GenAiLab_Web>("aichatweb-app");
-webApp.WithReference(openai);
+webApp.WithReference(openai).WaitFor(openai);
 webApp.WithReference(vectorDB).WaitFor(vectorDB);
+webApp.WithEnvironment("MARKITDOWN_MCP_URL", markitdown.GetEndpoint("http"));
 ```
 
 This is the direct fix for Part 3's limitation: the vectors now live in a **Qdrant
-container with a persistent data volume**, and Aspire starts the database, waits
-for it to be ready, then starts the web app and wires the connection strings between
-them automatically.
+container with a persistent data volume**, and Aspire starts the database and the
+document reader, waits for them to be ready, then starts the web app and wires the
+connection strings and endpoints between them automatically.
 
-## Step 3: Configure secrets
+## Step 3: Point the app at the workshop's Azure OpenAI resource
 
-The AppHost reads the Azure connection string from user-secrets (same secrets-first
-rule as Parts 2-3):
+The template assumes you want Aspire to **create** an Azure OpenAI account for you.
+That is what `builder.AddAzureOpenAI("openai")` means: it declares a provisionable
+Azure resource, and the two `AddDeployment` calls describe the models to deploy
+into it. Run it as-is and the Aspire dashboard stops with an *Azure provisioning*
+prompt asking for a tenant, subscription, and location.
+
+For the workshop you already have a resource, so point at it instead. Replace the
+whole `AddAzureOpenAI` block at the top of `AppHost.cs` with one line:
+
+```csharp
+var openai = builder.AddConnectionString("openai");
+```
+
+`AddConnectionString` declares no Azure resource at all — Aspire just reads the
+`openai` connection string from configuration and passes it to the web project.
+Then drop the package that the provisioning code needed:
+
+```bash
+dotnet remove GenAiLab.AppHost package Aspire.Hosting.Azure.CognitiveServices
+```
+
+> [!IMPORTANT]
+> Setting `ConnectionStrings:openai` does **not** make `AddAzureOpenAI` skip
+> provisioning — it is ignored, and the dashboard still asks for a subscription.
+> The dialog behind the dashboard's **Enter values** button collects tenant,
+> subscription, resource group, and location, so there is nowhere to paste an
+> endpoint and key. Swapping to `AddConnectionString` is the fix.
+>
+> If you *do* want Aspire to provision the resource — in [Part 11](../Part%2011%20-%20Deployment/README.md), against your own subscription — put the template's
+> version back. You will need Owner or User Access Administrator on the
+> subscription, because provisioning also creates role assignments.
+
+While you are in there, change the model name. The template hardcodes
+`gpt-4o-mini`; the workshop resource deploys `gpt-5-mini`. In
+`GenAiLab.Web/Program.cs`:
+
+```csharp
+openai.AddChatClient("gpt-5-mini")
+```
+
+That string is a **deployment** name, not a model name — it has to match what is
+deployed on the resource you are pointing at. This is the same coupling you will
+work around in [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md).
+
+Finally, store the credentials. The AppHost reads them from user secrets, same
+secrets-first rule as Parts 2-3:
 
 ```bash
 dotnet user-secrets --project GenAiLab.AppHost set ConnectionStrings:openai "Endpoint=https://YOUR-RESOURCE.openai.azure.com/;Key=YOUR-KEY"
@@ -265,11 +364,12 @@ its health, logs, traces, and metrics. This is why `UseOpenTelemetry(...)` was i
 
 ## Step 5: Test the app end to end
 
-1. In the Aspire dashboard, wait until both `aichatweb-app` and `vectordb` are healthy.
+1. In the Aspire dashboard, wait until `aichatweb-app`, `vectordb`, and `markitdown` are running.
 1. Open the `aichatweb-app` URL from the dashboard.
-1. Ask a question grounded in your sample data (for example: "What does the document say about warranty terms?").
-1. Confirm the answer cites or reflects content from ingested documents rather than a generic model response.
-1. In the dashboard, open logs/traces for `aichatweb-app` to confirm request flow and model calls.
+1. Ask a question grounded in the sample data, for example "What water purification supplies are in the emergency survival kit?"
+1. The first question takes a while — that is ingestion running for the first time, including sending the sample PDF to the markitdown container. Later questions are fast.
+1. Confirm the answer carries citations back to `Example_Emergency_Survival_Kit.pdf` or `Example_GPS_Watch.md` rather than reading like a generic model response. Clicking a citation opens the source document at the quoted text.
+1. In the dashboard, open logs and traces for `aichatweb-app` to see the search calls the model made on its own — the template registers search as a tool, so the model decides when to retrieve.
 
 If you want the official step-by-step quickstart for scaffold + config + first run, see:
 [.NET AI templates quickstart](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/ai-templates?tabs=visual-studio%2Cconfigure-visual-studio&pivots=azure-openai).
@@ -282,6 +382,10 @@ concept by hand first:
 - `IChatClient` + middleware → Part 2
 - `IEmbeddingGenerator`, chunking, vector search, prompt augmentation → Part 3
 - Qdrant + Aspire → the persistence and orchestration your hand-built version lacked
+
+You also saw two things the template can't decide for you: which Azure OpenAI
+resource to talk to, and which deployment name to ask for. Both are choices about
+*your* environment, and both are one line of code.
 
 ## What's next
 

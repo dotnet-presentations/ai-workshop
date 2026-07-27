@@ -81,7 +81,7 @@ In this final part, you will learn how to deploy the AI Web Chat application you
    - Resource group
    - Container registry
    - Container apps environment
-   - Container apps for your application and Qdrant vector database
+   - Container apps for your application, the Qdrant vector database, and the markitdown document reader
    - Log Analytics workspace
 
 > [!NOTE]
@@ -111,7 +111,7 @@ In this final part, you will learn how to deploy the AI Web Chat application you
 
    This command:
    - Builds your .NET application
-   - Creates container images for both the web app and Qdrant
+   - Creates container images for the web app, Qdrant, and markitdown
    - Pushes them to the Azure Container Registry
    - Deploys them to Azure Container Apps
   
@@ -138,7 +138,10 @@ Your search code depends on an abstraction rather than on Qdrant:
 
 ```csharp
 // GenAiLab.Web/Services/SemanticSearch.cs
-public class SemanticSearch(VectorStoreCollection<Guid, IngestedChunk> vectorCollection)
+public class SemanticSearch(
+    VectorStoreCollection<Guid, IngestedChunk> vectorCollection,
+    [FromKeyedServices("ingestion_directory")] DirectoryInfo ingestionDirectory,
+    DataIngestor dataIngestor)
 ```
 
 `VectorStoreCollection<TKey, TRecord>` comes from `Microsoft.Extensions.VectorData`,

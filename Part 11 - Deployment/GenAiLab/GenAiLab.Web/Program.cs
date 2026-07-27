@@ -2,7 +2,6 @@ using Microsoft.Extensions.AI;
 using GenAiLab.Web.Components;
 using GenAiLab.Web.Services;
 using GenAiLab.Web.Services.Ingestion;
-using OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
@@ -16,10 +15,11 @@ openai.AddChatClient("gpt-5-mini")
 openai.AddEmbeddingGenerator("text-embedding-3-small");
 
 builder.AddQdrantClient("vectordb");
-builder.Services.AddQdrantCollection<Guid, IngestedChunk>("data-genailab-chunks");
-builder.Services.AddQdrantCollection<Guid, IngestedDocument>("data-genailab-documents");
-builder.Services.AddScoped<DataIngestor>();
+builder.Services.AddQdrantVectorStore();
+builder.Services.AddQdrantCollection<Guid, IngestedChunk>(IngestedChunk.CollectionName);
+builder.Services.AddSingleton<DataIngestor>();
 builder.Services.AddSingleton<SemanticSearch>();
+builder.Services.AddKeyedSingleton("ingestion_directory", new DirectoryInfo(Path.Combine(builder.Environment.WebRootPath, "Data")));
 
 var app = builder.Build();
 
@@ -39,13 +39,5 @@ app.UseAntiforgery();
 app.UseStaticFiles();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
-// By default, we ingest PDF files from the /wwwroot/Data directory. You can ingest from
-// other sources by implementing IIngestionSource.
-// Important: ensure that any content you ingest is trusted, as it may be reflected back
-// to users or could be a source of prompt injection risk.
-await DataIngestor.IngestDataAsync(
-    app.Services,
-    new PDFDirectorySource(Path.Combine(builder.Environment.WebRootPath, "Data")));
 
 app.Run();

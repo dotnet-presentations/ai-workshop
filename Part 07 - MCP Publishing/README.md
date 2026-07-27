@@ -53,127 +53,114 @@ There are several ways to distribute MCP servers:
 
 ## Step 1: Preparing for NuGet Publication
 
-### Configure Package Metadata
+### Work on a copy
 
-For this example, we'll publish the **MyMcpServer** from Part 5. First, update the project file with proper metadata:
+This part publishes the **MyMcpServer** you built in Part 5. Packing produces
+seven `.nupkg` files and a `bin/` tree full of per-platform builds, so work on a
+copy rather than editing the workshop snapshot in place:
 
-1. **Open** `Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj`
+```powershell
+cd "Part 07 - MCP Publishing"
+Copy-Item "..\Part 05 - MCP Server Basics\MyMcpServer" .\publish-lab\MyMcpServer -Recurse
+Remove-Item .\publish-lab\MyMcpServer\bin, .\publish-lab\MyMcpServer\obj -Recurse -Force -ErrorAction SilentlyContinue
+cd .\publish-lab\MyMcpServer
+```
 
-2. **Update the package information**:
+If you still have your own Part 5 project from when you ran
+`dotnet new mcpserver`, use that instead.
+
+### Configure package metadata
+
+Open `MyMcpServer.csproj`. The `mcpserver` template already wrote the properties
+that make this an MCP server, so **do not replace the file** — you are only
+filling in publishing metadata.
+
+Replace the `<!-- Set recommended package metadata -->` block with the following.
+Leave everything above it exactly as it is:
 
 ```xml
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    
-    <!-- NuGet Package Information -->
+    <!-- Set recommended package metadata -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageId>YourName.MyMcpServer</PackageId>
-    <Version>1.0.0</Version>
+    <PackageVersion>1.0.0</PackageVersion>
     <Authors>Your Name</Authors>
-    <Company>Your Organization</Company>
-    <Description>An MCP server that provides weather information tools for AI agents</Description>
-    <PackageTags>mcp;ai;weather;copilot;tools</PackageTags>
+    <Description>An MCP server that provides weather information tools for AI agents.</Description>
+    <PackageTags>AI; MCP; server; stdio; weather</PackageTags>
     <PackageProjectUrl>https://github.com/your-username/weather-mcp-server</PackageProjectUrl>
     <RepositoryUrl>https://github.com/your-username/weather-mcp-server</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    
-    <!-- MCP Server Configuration -->
-    <McpServerName>MyMcpServer</McpServerName>
-    <PackAsTool>true</PackAsTool>
     <ToolCommandName>weather-mcp-server</ToolCommandName>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
-    <PackageReference Include="ModelContextProtocol" Version="1.4.1" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="" />
-  </ItemGroup>
-
-</Project>
 ```
 
-### Configure MCP Server Metadata
+> [!WARNING]
+> Four things in the template's `.csproj` are what turn an ordinary console app
+> into a publishable MCP server. Deleting any of them produces a package that
+> builds and pushes but that no MCP client will recognise:
+>
+> | Setting | Why it has to stay |
+> | --- | --- |
+> | `<PackageType>McpServer</PackageType>` | Without it the package is only a `DotnetTool`, and MCP registries and clients skip it |
+> | `<None Include=".mcp\server.json" Pack="true" PackagePath="/.mcp/" />` | Ships the server manifest inside the package |
+> | `<RuntimeIdentifiers>` | Drives the per-platform packages MCP servers ship as |
+> | `<SelfContained>`, `<PublishSelfContained>`, `<PublishSingleFile>` | Let the server run without a matching shared framework on the consumer's machine |
+>
+> `<ImplicitUsings>enable</ImplicitUsings>` also has to stay, or `WeatherTools.cs`
+> stops compiling with `CS0246: The type or namespace name 'Task<>' could not be
+> found`.
 
-Update `.mcp/server.json` with publication information:
+There is no `<McpServerName>` MSBuild property. The server's name comes from
+`.mcp/server.json` and from the `WithStdioServerTransport` call in `Program.cs`.
 
-> **Important**: Replace all placeholder values (like `your-username`, `Your Name`, etc.) with your actual project information before publishing to any package registry.
+### Configure MCP server metadata
+
+`.mcp/server.json` is the manifest that registries read. The template ships it
+with placeholders, so you are filling those in rather than rewriting the file.
+
+> [!IMPORTANT]
+> Replace every placeholder (`your-username`, `your repo name`, the package ID)
+> with real values before pushing to any registry.
 
 ```json
 {
-  "name": "MyMcpServer",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "description": "An MCP server that provides weather information tools for AI agents.",
+  "name": "io.github.your-username/weather-mcp-server",
   "version": "1.0.0",
-  "description": "Provides weather information tools for AI agents",
-  "author": "Your Name",
-  "license": "MIT",
-  "homepage": "https://github.com/your-username/weather-mcp-server",
+  "packages": [
+    {
+      "registryType": "nuget",
+      "identifier": "YourName.MyMcpServer",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [],
+      "environmentVariables": []
+    }
+  ],
   "repository": {
-    "type": "git",
-    "url": "https://github.com/your-username/weather-mcp-server.git"
-  },
-  "bugs": {
-    "url": "https://github.com/your-username/weather-mcp-server/issues"
-  },
-  "keywords": [
-    "mcp",
-    "weather",
-    "ai",
-    "tools",
-    "copilot"
-  ],
-  "tools": [
-    {
-      "name": "GetCurrentWeather",
-      "description": "Gets current weather for a specified city",
-      "parameters": {
-        "city": {
-          "type": "string",
-          "description": "Name of the city to get weather for",
-          "required": true
-        }
-      }
-    },
-    {
-      "name": "GetWeatherForecast", 
-      "description": "Gets a 5-day weather forecast for a specified city starting from tomorrow",
-      "parameters": {
-        "city": {
-          "type": "string",
-          "description": "Name of the city to get forecast for",
-          "required": true
-        }
-      }
-    }
-  ],
-  "inputs": {
-    "apiKey": {
-      "description": "Optional API key for enhanced weather data",
-      "type": "string",
-      "required": false
-    },
-    "units": {
-      "description": "Temperature units (celsius/fahrenheit)",
-      "type": "string",
-      "default": "celsius",
-      "enum": ["celsius", "fahrenheit"]
-    }
+    "url": "https://github.com/your-username/weather-mcp-server",
+    "source": "github"
   }
 }
 ```
 
+The `version` values here and `<PackageVersion>` in the `.csproj` have to match,
+or the manifest describes a package that doesn't exist.
+
+> [!NOTE]
+> This schema is versioned and it moves. If your template scaffolded a different
+> `$schema` URL, keep the one the template gave you and edit its fields instead
+> of pasting this block wholesale.
+
 ## Step 2: Create Professional Documentation
 
-### Create Package README
+### Write the package README
 
-Create a professional README for package consumers:
-
-**Create** `Part 05 - MCP Server Basics/MyMcpServer/PACKAGE_README.md`:
+`<PackageReadmeFile>README.md</PackageReadmeFile>` means NuGet shows this
+project's `README.md` on the package page, so that is the file to write. The
+template put a short placeholder there. **Replace the contents** of
+`README.md` with something a consumer can actually use:
 
 ````markdown
 # MyMcpServer
@@ -289,20 +276,49 @@ MIT License - see LICENSE file for details.
 1. **Build the package**:
 
    ```powershell
-   cd "Part 05 - MCP Server Basics\MyMcpServer"
    dotnet pack -c Release
    ```
 
-2. **Test the package locally**:
+   This produces **seven** packages, not one:
+
+   ```text
+   YourName.MyMcpServer.1.0.0.nupkg
+   YourName.MyMcpServer.win-x64.1.0.0.nupkg
+   YourName.MyMcpServer.win-arm64.1.0.0.nupkg
+   YourName.MyMcpServer.osx-arm64.1.0.0.nupkg
+   YourName.MyMcpServer.linux-x64.1.0.0.nupkg
+   YourName.MyMcpServer.linux-arm64.1.0.0.nupkg
+   YourName.MyMcpServer.linux-musl-x64.1.0.0.nupkg
+   ```
+
+   That fan-out is what `<RuntimeIdentifiers>` and `<SelfContained>` buy you. The
+   base package carries the metadata and the server manifest; each RID package
+   carries a self-contained executable for one platform. A consumer's `dnx`
+   resolves the right one for their machine, which is why an MCP server can run
+   without the consumer installing a matching .NET runtime first.
+
+2. **Install it as a local tool**:
 
    ```powershell
-   # Install locally for testing
-   dotnet tool install --global --add-source ./bin/Release YourName.MyMcpServer
-   
-   # Test the tool
-   my-mcp-server --help
-   
-   # Uninstall after testing
+   dotnet tool install --global --add-source ./bin/Release YourName.MyMcpServer --version 1.0.0
+   ```
+
+   The output tells you the command name, which comes from `<ToolCommandName>`:
+
+   ```text
+   You can invoke the tool using the following command: weather-mcp-server
+   ```
+
+   > [!NOTE]
+   > Don't expect `weather-mcp-server --help` to print anything. The template's
+   > `Program.cs` doesn't parse arguments; it starts an stdio MCP server and
+   > waits for a client on standard input. Run it bare and it will simply sit
+   > there until you press Ctrl+C. The real test is pointing an MCP client at it,
+   > which you do in Step 5.
+
+3. **Uninstall after testing**:
+
+   ```powershell
    dotnet tool uninstall --global YourName.MyMcpServer
    ```
 
@@ -316,10 +332,26 @@ Get-ChildItem temp -Recurse
 
 Expected contents:
 
-- Tool executables
-- MCP server metadata
-- README documentation
-- License information
+```text
+[Content_Types].xml
+README.md
+YourName.MyMcpServer.nuspec
+.mcp\server.json
+tools\net10.0\any\DotnetToolSettings.xml
+```
+
+Open `YourName.MyMcpServer.nuspec` and confirm it declares **both** package
+types:
+
+```xml
+<packageTypes>
+  <packageType name="DotnetTool" />
+  <packageType name="McpServer" />
+</packageTypes>
+```
+
+If `McpServer` is missing, or `.mcp\server.json` isn't in the package, something
+in the `.csproj` was overwritten. Go back to Step 1.
 
 ## Step 4: Publish to NuGet.org
 
@@ -331,10 +363,13 @@ Expected contents:
 
 ### Publishing Process
 
-1. **Publish the package**:
+1. **Publish the packages**:
+
+   Push every `.nupkg` in the output folder, not just the base one. Consumers on
+   a platform whose RID package is missing can't run your server.
 
    ```powershell
-   dotnet nuget push bin/Release/YourName.MyMcpServer.1.0.0.nupkg --api-key YOUR_API_KEY --source https://api.nuget.org/v3/index.json
+   dotnet nuget push "bin/Release/*.nupkg" --api-key YOUR_API_KEY --source https://api.nuget.org/v3/index.json --skip-duplicate
    ```
 
 2. **Verify publication**:

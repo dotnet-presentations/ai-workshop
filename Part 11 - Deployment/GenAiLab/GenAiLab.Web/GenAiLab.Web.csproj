@@ -14,8 +14,8 @@
     <PackageReference Include="Microsoft.Extensions.DataIngestion" Version="10.7.0-preview.1.26309.5" />
     <PackageReference Include="Microsoft.Extensions.DataIngestion.Markdig" Version="10.7.0-preview.1.26309.5" />
     <PackageReference Include="Microsoft.Extensions.DataIngestion.MarkItDown" Version="10.7.0-preview.1.26309.5" />
-    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" Version="1.0.1" />
-    <PackageReference Include="Microsoft.ML.Tokenizers.Data.O200kBase" Version="1.0.1" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" Version="2.0.0" />
+    <PackageReference Include="Microsoft.ML.Tokenizers.Data.O200kBase" Version="2.0.0" />
     <PackageReference Include="Aspire.Qdrant.Client" Version="13.4.6" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.74.0-preview" />
   </ItemGroup>

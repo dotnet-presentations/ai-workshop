@@ -1,3 +1,7 @@
+using Azure;
+using Azure.AI.OpenAI;
+using Microsoft.Extensions.AI;
+using Store.Ai;
 using Store.Components;
 using Store.Services;
 
@@ -12,6 +16,22 @@ builder.Services.AddRazorComponents()
 // "products" is resolved by Aspire service discovery to the Products project.
 builder.Services.AddHttpClient<ProductService>(client =>
     client.BaseAddress = new Uri("https+http://products"));
+
+// --- AI services -------------------------------------------------------------
+
+var aiEndpoint = builder.Configuration["AzureOpenAI:Endpoint"]
+    ?? throw new InvalidOperationException("Missing AzureOpenAI:Endpoint. Set it with dotnet user-secrets.");
+var aiKey = builder.Configuration["AzureOpenAI:Key"]
+    ?? throw new InvalidOperationException("Missing AzureOpenAI:Key. Set it with dotnet user-secrets.");
+
+builder.Services.AddChatClient(
+    new AzureOpenAIClient(new Uri(aiEndpoint), new AzureKeyCredential(aiKey))
+        .GetChatClient("gpt-5-mini")
+        .AsIChatClient());
+
+builder.Services.AddScoped<ProductDiscovery>();
+
+// -----------------------------------------------------------------------------
 
 var app = builder.Build();
 

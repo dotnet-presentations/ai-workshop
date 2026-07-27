@@ -1,5 +1,6 @@
 using DataEntities;
 using Microsoft.EntityFrameworkCore;
+using Products.Ai;
 using Products.Data;
 
 namespace Products.Endpoints;
@@ -27,5 +28,29 @@ public static class ProductEndpoints
                          || EF.Functions.Like(p.Description, $"%{search}%"))
                 .ToListAsync())
             .WithName("SearchProducts");
+
+        // Semantic search. The vector store returns ids, the database returns the products.
+        group.MapGet("/aisearch/{search}", async (
+            string search,
+            ProductSemanticSearch semanticSearch,
+            ProductDataContext db) =>
+        {
+            var ids = await semanticSearch.SearchAsync(search);
+
+            if (ids.Count == 0)
+            {
+                return Results.Ok(new List<Product>());
+            }
+
+            var products = await db.Product.Where(p => ids.Contains(p.Id)).ToListAsync();
+
+            // Preserve the ranking the vector search gave us.
+            var ordered = ids
+                .Select(id => products.First(p => p.Id == id))
+                .ToList();
+
+            return Results.Ok(ordered);
+        })
+            .WithName("AiSearchProducts");
     }
 }

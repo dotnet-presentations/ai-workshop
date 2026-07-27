@@ -31,4 +31,18 @@ public class ProductService(HttpClient httpClient, ILogger<ProductService> logge
             return [];
         }
     }
+
+    public async Task<List<Product>> AiSearchProducts(string searchTerm)
+    {
+        try
+        {
+            var url = $"/api/product/aisearch/{Uri.EscapeDataString(searchTerm)}";
+            return await httpClient.GetFromJsonAsync<List<Product>>(url) ?? [];
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Semantic search failed for term {SearchTerm}.", searchTerm);
+            return [];
+        }
+    }
 }

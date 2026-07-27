@@ -153,12 +153,14 @@ This splits the document into paragraph-sized chunks so the app can search
 smaller pieces instead of treating the whole file as one block of text.
 
 > [!IMPORTANT]
-> `ReplaceLineEndings("\n")` is not optional. On Windows the file is usually
-> checked out with CRLF line endings, so a blank line is `"\r\n\r\n"` and
-> splitting on `"\n\n"` matches nothing. Without it the whole document comes back
-> as a single chunk and the next step prints `Embedding 1 chunks` instead of
-> `Embedding 11 chunks`. The answers still look right, because that one chunk is
-> small enough to always be selected, so the bug is easy to miss.
+> `ReplaceLineEndings("\n")` is important even though this repo's `.gitattributes`
+> forces LF on checkout. On Windows, files created, edited, or copied outside the
+> repo can still arrive with CRLF line endings. If the file has CRLF, a blank line
+> is `"\r\n\r\n"` and splitting on `"\n\n"` matches nothing. Without normalization
+> the whole document comes back as a single chunk and the next step prints
+> `Embedding 1 chunks` instead of `Embedding 11 chunks`. The answers still look
+> right, because that one chunk is small enough to always be selected, so the bug
+> is easy to miss.
 
 ### 2.3 Embed chunks and build a simple in-memory store
 

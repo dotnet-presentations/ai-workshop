@@ -411,3 +411,6 @@ FodyWeavers.xsd
 *.db
 *.db-shm
 *.db-wal
+
+# Scratch copy attendees make in Part 7 before packing
+publish-lab/

@@ -143,6 +143,7 @@ string docPath = Path.Combine(AppContext.BaseDirectory, "sample-docs", "contoso-
 string document = await File.ReadAllTextAsync(docPath);
 
 string[] chunks = document
+  .ReplaceLineEndings("\n")
   .Split("\n\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
   .Where(c => c.Length > 0)
   .ToArray();
@@ -150,6 +151,16 @@ string[] chunks = document
 
 This splits the document into paragraph-sized chunks so the app can search
 smaller pieces instead of treating the whole file as one block of text.
+
+> [!IMPORTANT]
+> `ReplaceLineEndings("\n")` is important even though this repo's `.gitattributes`
+> forces LF on checkout. On Windows, files created, edited, or copied outside the
+> repo can still arrive with CRLF line endings. If the file has CRLF, a blank line
+> is `"\r\n\r\n"` and splitting on `"\n\n"` matches nothing. Without normalization
+> the whole document comes back as a single chunk and the next step prints
+> `Embedding 1 chunks` instead of `Embedding 11 chunks`. The answers still look
+> right, because that one chunk is small enough to always be selected, so the bug
+> is easy to miss.
 
 ### 2.3 Embed chunks and build a simple in-memory store
 
@@ -391,16 +402,39 @@ components for reading, splitting, and storing content.
 Add the ingestion loop:
 
 ```csharp
+bool ingestedAnything = false;
+
 await foreach (IngestionResult result in pipeline.ProcessAsync(
   new DirectoryInfo("./sample-docs"),
   searchPattern: "*.md"))
 {
   Console.WriteLine($"Completed processing '{result.DocumentId}'. Succeeded: '{result.Succeeded}'.");
+
+  if (result.Succeeded)
+  {
+    ingestedAnything = true;
+  }
+  else
+  {
+    Console.WriteLine($"  {result.Exception?.Message}");
+  }
+}
+
+if (!ingestedAnything)
+{
+  Console.WriteLine("No documents were ingested, so there is nothing to search. Check the errors above.");
+  return;
 }
 ```
 
 Each markdown file is read, split into smaller pieces, prepared for search, and
 written to `vectors.db`.
+
+Ingestion can fail on a source file the reader can't parse or an unreachable
+embedding endpoint, and `ProcessAsync` reports that through `Succeeded` instead
+of throwing. The guard prints the underlying error and stops. Without it, the
+next step throws `InvalidOperationException: The collection has not been
+initialized yet` and the real cause is buried.
 
 ### 3.5 Keep grounded retrieval and streaming chat
 

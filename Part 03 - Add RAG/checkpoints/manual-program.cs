@@ -45,7 +45,10 @@ IEmbeddingGenerator<string, Embedding<float>> embeddingGenerator =
 string docPath = Path.Combine(AppContext.BaseDirectory, "sample-docs", "contoso-trailblazer-3000.md");
 string document = await File.ReadAllTextAsync(docPath);
 
+// ReplaceLineEndings normalizes CRLF to LF first. Without it, a document checked
+// out with Windows line endings never matches "\n\n" and collapses to one chunk.
 string[] chunks = document
+    .ReplaceLineEndings("\n")
     .Split("\n\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
     .Where(c => c.Length > 0)
     .ToArray();

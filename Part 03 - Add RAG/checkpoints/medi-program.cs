@@ -60,11 +60,31 @@ using IngestionPipeline<string> pipeline =
     new(reader, chunker, writer, loggerFactory: loggerFactory);
 
 // Ingest the sample markdown docs.
+bool ingestedAnything = false;
+
 await foreach (IngestionResult result in pipeline.ProcessAsync(
     new DirectoryInfo("./sample-docs"),
     searchPattern: "*.md"))
 {
     Console.WriteLine($"Completed processing '{result.DocumentId}'. Succeeded: '{result.Succeeded}'.");
+
+    if (result.Succeeded)
+    {
+        ingestedAnything = true;
+    }
+    else
+    {
+        Console.WriteLine($"  {result.Exception?.Message}");
+    }
+}
+
+// If nothing was ingested the vector store collection was never created, and
+// reading writer.VectorStoreCollection below would throw. Fail with a message
+// that points at the real problem instead.
+if (!ingestedAnything)
+{
+    Console.WriteLine("No documents were ingested, so there is nothing to search. Check the errors above.");
+    return;
 }
 
 // Retrieve from the vector store and answer with grounded chat.

@@ -173,7 +173,7 @@ The ContosoOrders tools return rich, structured business data:
    }
    ```
 
-   **For Visual Studio 2022** - Update `.mcp.json` in your solution directory:
+   **For Visual Studio 2026** - Update `.mcp.json` in your solution directory:
 
    ```json
    {
@@ -200,7 +200,7 @@ The ContosoOrders tools return rich, structured business data:
    }
    ```
 
-3. **Restart your IDE** (VS Code or Visual Studio 2022) to load the new business server configuration.
+3. **Restart your IDE** (VS Code or Visual Studio 2026) to load the new business server configuration.
 
 ## Step 5: Test Business Scenarios with GitHub Copilot
 

@@ -233,6 +233,15 @@ dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
 dotnet run
 ```
 
+In Visual Studio 2026, open `StoreApp/StoreApp.csproj`, right-click the project and select **Manage User Secrets**, add the same two values to `secrets.json`, then press **Ctrl+F5**:
+
+```json
+{
+    "AzureOpenAI:Endpoint": "https://YOUR-RESOURCE.openai.azure.com/",
+    "AzureOpenAI:Key": "YOUR-KEY"
+}
+```
+
 The app needs a chat deployment (`gpt-5-mini`) and an embedding deployment (`text-embedding-3-small`) — the same two you deployed in [Part 1](../Part%2001%20-%20Setup/README.md). If your deployment names differ, edit the two constants near the top of `Program.cs`.
 
 ### Step 2: See why keyword search is not enough (menu option 4)

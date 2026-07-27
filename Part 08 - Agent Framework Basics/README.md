@@ -170,6 +170,8 @@ Time to write code. You will create a standalone console app that uses `AIAgent`
 
 ### Step 1: Create the project
 
+#### Option A: Command line
+
 ```bash
 mkdir AgentApp && cd AgentApp
 dotnet new console
@@ -181,6 +183,24 @@ dotnet add package Microsoft.Extensions.Configuration.UserSecrets
 dotnet user-secrets init
 ```
 
+#### Option B: Visual Studio 2026
+
+1. Select **File > New > Project**, search for **Console App**, and select **Next**.
+1. Name the project `AgentApp` and select **Next**.
+1. Set **Framework** to **.NET 10.0**, then select **Create**.
+1. Open **Tools > NuGet Package Manager > Package Manager Console** and run:
+
+   ```powershell
+   Install-Package Microsoft.Extensions.AI
+   Install-Package Microsoft.Extensions.AI.OpenAI
+   Install-Package Azure.AI.OpenAI
+   Install-Package Microsoft.Agents.AI
+   Install-Package Microsoft.Extensions.Configuration.UserSecrets
+   ```
+
+1. Right-click the project and select **Manage User Secrets**. Visual Studio adds
+   the `UserSecretsId` to the project file and opens an empty `secrets.json`.
+
 ### Step 2: Configure your credentials
 
 Use the same Azure OpenAI credentials from Part 2:
@@ -188,6 +208,15 @@ Use the same Azure OpenAI credentials from Part 2:
 ```bash
 dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-RESOURCE.openai.azure.com/"
 dotnet user-secrets set "AzureOpenAI:Key" "YOUR-KEY"
+```
+
+In Visual Studio 2026, put the same values in the `secrets.json` you opened above:
+
+```json
+{
+    "AzureOpenAI:Endpoint": "https://YOUR-RESOURCE.openai.azure.com/",
+    "AzureOpenAI:Key": "YOUR-KEY"
+}
 ```
 
 ### Step 3: Write the agent
@@ -265,6 +294,8 @@ while (true)
 ```bash
 dotnet run
 ```
+
+In Visual Studio 2026, press **Ctrl+F5**.
 
 Try these prompts to see the agent use the tool:
 

@@ -377,7 +377,7 @@ Expected contents:
 }
 ```
 
-### Visual Studio 2022 Configuration
+### Visual Studio 2026 Configuration
 
 **`.mcp.json`** (in solution directory):
 

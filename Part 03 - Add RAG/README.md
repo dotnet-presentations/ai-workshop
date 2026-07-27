@@ -40,15 +40,37 @@ flowchart LR
 
 ## Step 1: Start from the Part 2 project
 
-Copy your Part 2 `ChatApp` (or the [provided project](RagChatApp)) and add one
-package for embeddings. Everything else is already there.
+Continue in your Part 2 `ChatApp` (or open the [provided project](RagChatApp)).
+The embedding client comes from `Microsoft.Extensions.AI.OpenAI`, which you
+already reference, so there are no new packages in this step.
 
-Create a `sample-docs` folder in the same directory as your project file and copy
-the sample markdown document into it:
+Create a `sample-docs` folder next to your project file and copy the sample
+markdown document into it.
+
+### Option A: Copy from the command line
 
 ```bash
 mkdir sample-docs
 copy "..\Part 03 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md" "sample-docs\"
+```
+
+### Option B: Copy in Visual Studio 2026
+
+1. In Solution Explorer, right-click the project and select **Add > New Folder**.
+   Name it `sample-docs`.
+1. Right-click `sample-docs` and select **Add > Existing Item**.
+1. Browse to `Part 03 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md`
+   and select **Add**.
+
+The app reads the document from its output folder at runtime, so the file has to
+be copied on build. Select `contoso-trailblazer-3000.md` in Solution Explorer and
+set **Copy to Output Directory** to **Copy if newer** in the Properties window,
+or add this to your `.csproj` directly:
+
+```xml
+<ItemGroup>
+  <None Include="sample-docs\**\*" CopyToOutputDirectory="PreserveNewest" />
+</ItemGroup>
 ```
 
 > [!TIP]
@@ -265,6 +287,8 @@ and move toward something you would be more likely to keep in a real app.
 
 ### 3.1 Add MEDI packages
 
+From the command line:
+
 ```bash
 dotnet add package Microsoft.Extensions.DataIngestion --prerelease
 dotnet add package Microsoft.Extensions.DataIngestion.Markdig --prerelease
@@ -272,6 +296,21 @@ dotnet add package Microsoft.Extensions.Logging.Console
 dotnet add package Microsoft.ML.Tokenizers.Data.O200kBase
 dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
 ```
+
+Or, in Visual Studio 2026, from **Tools > NuGet Package Manager > Package Manager
+Console**:
+
+```powershell
+Install-Package Microsoft.Extensions.DataIngestion -IncludePrerelease
+Install-Package Microsoft.Extensions.DataIngestion.Markdig -IncludePrerelease
+Install-Package Microsoft.Extensions.Logging.Console
+Install-Package Microsoft.ML.Tokenizers.Data.O200kBase
+Install-Package Microsoft.SemanticKernel.Connectors.SqliteVec -IncludePrerelease
+```
+
+Three of these are prerelease. If you use **Manage NuGet Packages** instead of
+the console, check **Include prerelease** or they won't show up in search
+results.
 
 ### 3.2 Add MEDI usings, logger, config, and AI clients
 
@@ -446,6 +485,8 @@ Run it and ask something only the document knows:
 ```bash
 dotnet run
 ```
+
+In Visual Studio 2026, press **Ctrl+F5**.
 
 ```text
 You: How do I dry the boots?

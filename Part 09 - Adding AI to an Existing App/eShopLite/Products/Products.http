@@ -1,0 +1,19 @@
+@Products_HostAddress = http://localhost:5297
+
+### Get the whole catalog
+GET {{Products_HostAddress}}/api/product/
+Accept: application/json
+
+### Get a single product
+GET {{Products_HostAddress}}/api/product/1
+Accept: application/json
+
+### Keyword search - matches because "water" is a substring of "waterproof"
+GET {{Products_HostAddress}}/api/product/search/water
+Accept: application/json
+
+### Keyword search - returns nothing, even though the sleeping bag is the obvious answer
+GET {{Products_HostAddress}}/api/product/search/warm at night
+Accept: application/json
+
+###

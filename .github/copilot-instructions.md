@@ -16,7 +16,7 @@ Everything targets **.NET 10** and uses **Microsoft Foundry (Azure OpenAI)** as 
 | 06 - Enhanced MCP Server | `ContosoOrdersMcpServer/` | Optional/bonus. Exploration of an existing snapshot — the README does **not** ask the user to scaffold it |
 | 07 - MCP Publishing | — | Optional/bonus, README only |
 | 08 - Agent Framework Basics | `AgentApp/` | `dotnet new console` + `Microsoft.Agents.AI` |
-| 09 - Adding AI to an Existing App | `eShopLite/` (5-project Aspire solution) | Capstone. A cut-down eShopLite with no AI; the workshop adds semantic search, grounded discovery, and a local-model assistant. Added code lives in `Products/Ai/` and `Store/Ai/` |
+| 09 - Adding AI to an Existing App | `eShopLite-start/` and `eShopLite/` (5-project Aspire solutions) | Capstone. `eShopLite-start/` is the AI-free starting point attendees work in; `eShopLite/` is the finished answer key. The workshop adds semantic search, grounded discovery, and a local-model assistant. Added code lives in `Products/Ai/` and `Store/Ai/` |
 | 10 - Choosing Providers and Services | — | README only. Sits immediately before deployment because provider and service selection is a deployment prerequisite |
 | 11 - Deployment | `GenAiLab/` (3-project Aspire solution) | Same app as Part 4 plus `WithExternalHttpEndpoints()` in `AppHost.cs` |
 
@@ -24,7 +24,7 @@ Other folders: `docs/` (instructor guides, planning, archived test reports), `im
 
 ## Build
 
-CI (`.github/workflows/dotnet-build.yml`) restores and builds these seven targets on the .NET `10.0.x` SDK with `--configuration Release`. Run the same set when validating a change:
+CI (`.github/workflows/dotnet-build.yml`) restores and builds these eight targets on the .NET `10.0.x` SDK with `--configuration Release`. Run the same set when validating a change:
 
 ```pwsh
 "Part 02 - Build Chat App/ChatApp/ChatApp.csproj",
@@ -33,10 +33,11 @@ CI (`.github/workflows/dotnet-build.yml`) restores and builds these seven target
 "Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj",
 "Part 08 - Agent Framework Basics/AgentApp/AgentApp.csproj",
 "Part 09 - Adding AI to an Existing App/eShopLite/eShopLite.slnx",
+"Part 09 - Adding AI to an Existing App/eShopLite-start/eShopLite.slnx",
 "Part 11 - Deployment/GenAiLab/GenAiLab.sln" | ForEach-Object { dotnet build $_ -c Release }
 ```
 
-All seven targets build clean — zero warnings. Treat any new warning as a regression.
+All eight targets build clean — zero warnings. Treat any new warning as a regression.
 
 Markdown is linted by `.github/workflows/markdownlint.yml` using `.markdownlint.json`.
 

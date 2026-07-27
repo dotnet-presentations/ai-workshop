@@ -1,0 +1,71 @@
+@page "/products"
+@using DataEntities
+@using Store.Services
+@inject ProductService ProductService
+
+<PageTitle>Products</PageTitle>
+
+<h1>Products</h1>
+
+<p>Search the catalog by keyword.</p>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="input-group">
+            <input @bind="searchTerm" @bind:event="oninput" @onkeyup="HandleKeyUp"
+                   class="form-control" placeholder="Search products" aria-label="Search products" />
+            <button class="btn btn-primary" @onclick="Search">Search</button>
+        </div>
+    </div>
+</div>
+
+@if (products is null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (products.Count == 0)
+{
+    <p><em>No products matched that search.</em></p>
+}
+else
+{
+    <div class="row">
+        @foreach (var product in products)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Description</p>
+                        <p class="card-text"><strong>@product.Price.ToString("C")</strong></p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Product>? products;
+    private string searchTerm = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductService.GetProducts();
+    }
+
+    private async Task Search()
+    {
+        products = string.IsNullOrWhiteSpace(searchTerm)
+            ? await ProductService.GetProducts()
+            : await ProductService.SearchProducts(searchTerm);
+    }
+
+    private async Task HandleKeyUp(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await Search();
+        }
+    }
+}

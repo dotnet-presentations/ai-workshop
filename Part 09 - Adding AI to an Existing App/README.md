@@ -30,10 +30,17 @@ By the end of this part, you will:
 
 ## The application you are starting with
 
-Open the solution:
+This part ships two copies of the same solution:
+
+| Folder | What it is |
+| --- | --- |
+| `eShopLite-start/` | The store **before** any AI. This is the one you work in. |
+| `eShopLite/` | The finished app with all three steps already done — the answer key. Look here if you get stuck, or run it if you want to see where you are heading. |
+
+Open the starting solution:
 
 ```bash
-cd "Part 09 - Adding AI to an Existing App/eShopLite"
+cd "Part 09 - Adding AI to an Existing App/eShopLite-start"
 code .
 ```
 
@@ -109,11 +116,13 @@ dotnet add package Azure.AI.OpenAI
 dotnet add package Microsoft.Extensions.AI
 dotnet add package Microsoft.Extensions.AI.OpenAI
 dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
-dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
-dotnet add package Microsoft.OpenApi --version 2.7.5
 ```
 
 `SqliteVec` gives you a vector store in a local file. No container, no service to run.
+
+> The project already pins `SQLitePCLRaw.bundle_e_sqlite3` 3.0.4 and `Microsoft.OpenApi` 2.7.5. Both are there to pull transitive dependencies above versions with open advisories, and neither has anything to do with AI. Leave them alone.
+
+<!-- -->
 
 > **Why SQLite here, and what you would use at work**
 >
@@ -479,7 +488,7 @@ builder.Services.AddScoped<ProductDiscovery>();
 
 ### 2.4 Add the page
 
-Create `Store/Components/Pages/Discovery.razor`. The full file is in the snapshot; the parts that matter:
+Create `Store/Components/Pages/Discovery.razor`. The full file is in `eShopLite/`; the parts that matter:
 
 ```razor
 @page "/discovery"
@@ -531,7 +540,7 @@ That second behaviour is the one worth demonstrating to anyone who is nervous ab
 
 ## Step 3 (optional): An operations assistant on a local model
 
-> **Short on time?** Read this section and skip the code. The snapshot has all of it, and the point is the decision rather than the syntax.
+> **Short on time?** Read this section and skip the code. `eShopLite/` has all of it, and the point is the decision rather than the syntax.
 
 Steps 1 and 2 face customers, and they use a cloud model. Not everything should.
 

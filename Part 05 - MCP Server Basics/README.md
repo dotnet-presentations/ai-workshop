@@ -59,9 +59,31 @@ Before starting this part, ensure you have:
 - ✅ **Visual Studio Code** with GitHub Copilot extension, or **Visual Studio 2026** (see Step 7)
 - ✅ **Active GitHub Copilot subscription**
 
-## Step 1: Verify the MCP Server Template
+## Step 1: Install the MCP Server Template
 
-The MCP server template is included in the `Microsoft.Extensions.AI.Templates` package that you installed in Part 4. Let's verify it's available:
+The MCP server template ships in its own NuGet package,
+**`Microsoft.McpServer.ProjectTemplates`** — not in the
+`Microsoft.Extensions.AI.Templates` package you installed in Part 4, which
+provides only the `aichatweb` template.
+
+1. **Install the template package**:
+
+   ```powershell
+   dotnet new install Microsoft.McpServer.ProjectTemplates
+   ```
+
+   You should see it report the installed template:
+
+   ```text
+   Success: Microsoft.McpServer.ProjectTemplates@1.2.1 installed the following templates:
+   Template Name   Short Name  Language  Tags
+   --------------  ----------  --------  -------------
+   MCP Server App  mcpserver   [C#]      Common/AI/MCP
+   ```
+
+   If it is already present you will see *"is already installed, it will be
+   replaced with latest version"* first. That is fine — the command is safe to
+   re-run and simply moves you to the current version.
 
 1. **Verify the template is available and see its options**:
 
@@ -72,16 +94,22 @@ The MCP server template is included in the `Microsoft.Extensions.AI.Templates` p
    You should see help output showing the MCP Server template options, including:
 
    ```text
-   MCP Server (C#)
+   MCP Server App (C#)
    Author: Microsoft
-   Description: A template for creating a Model Context Protocol server...
-   
+
+   Usage:
+     dotnet new mcpserver [options] [template options]
+
    Options:
      -n, --name <name>           The name for the output being created...
      -o, --output <output>       Location to place the generated output...
    ```
 
-   > **Note**: If you get an error that the template is not found, make sure you have the .NET 10.0 SDK or later installed and the templates were installed correctly in Part 4. You can reinstall with: `dotnet new install Microsoft.Extensions.AI.Templates`
+> [!NOTE]
+> Some .NET SDK installations bundle this template, so `dotnet new mcpserver` may
+> already work before you install anything. Run the install command anyway — it
+> is how you get the current version, and it is the only reliable way to get the
+> template if your SDK does not carry it.
 
 ## Step 2: Create Your First MCP Server
 
@@ -99,10 +127,11 @@ Now let's create a new MCP server project using the template:
    dotnet new mcpserver -n MyMcpServer
    ```
 
-   This command creates a new MCP server project with:
-   - Basic MCP server infrastructure  
-   - Example `RandomNumberTools` implementation
-   - Configuration files for VS Code integration
+   This creates a project containing:
+   - `Program.cs` — the MCP server host, using stdio transport
+   - `Tools/RandomNumberTools.cs` — an example tool
+   - `.mcp/server.json` — server metadata used when packaging (see [Part 7](../Part%2007%20-%20MCP%20Publishing/README.md))
+   - `README.md` — the template's own notes
 
 3. **Navigate to the new project**:
 
@@ -119,8 +148,8 @@ Now let's create a new MCP server project using the template:
 
 > [!NOTE]
 > If **MCP Server** does not appear in the **Create a new project** dialog,
-> install the templates from a terminal with
-> `dotnet new install Microsoft.Extensions.AI.Templates`, then restart Visual
+> install the template from a terminal with
+> `dotnet new install Microsoft.McpServer.ProjectTemplates`, then restart Visual
 > Studio 2026 and search again.
 
 ## Step 3: Understanding the Generated Project Structure
@@ -160,8 +189,6 @@ The template generates a simple `RandomNumberTools` class with a `GetRandomNumbe
 using System.ComponentModel;
 using ModelContextProtocol.Server;
 
-namespace MyMcpServer.Tools;
-
 /// <summary>
 /// Sample MCP tools for demonstration purposes.
 /// These tools can be invoked by MCP clients to perform various operations.
@@ -178,6 +205,19 @@ internal class RandomNumberTools
     }
 }
 ```
+
+> [!NOTE]
+> The template emits this file with **no namespace declaration**, so the class
+> lands in the global namespace. The tools you add next use
+> `namespace MyMcpServer.Tools;`, which is the convention the completed snapshot
+> in this folder follows. To match that snapshot exactly, add the same namespace
+> line to `RandomNumberTools.cs`:
+>
+> ```csharp
+> namespace MyMcpServer.Tools;
+> ```
+>
+> Either way the project compiles and both tools are discovered.
 
 We'll add weather functionality alongside this, keeping both tools available.
 
@@ -374,13 +414,20 @@ If you prefer to use **Visual Studio 2026** instead of VS Code, you can configur
 
 ### Configuration Steps
 
-1. **Navigate to your solution directory** (where the `.sln` file is located):
+1. **Make sure you have a solution file.** Visual Studio only discovers `.mcp.json`
+   relative to a *solution* directory, so opening the bare `.csproj` is not enough.
+   From your `MyMcpServer` folder:
 
    ```powershell
-   cd "Part 11 - Deployment\GenAiLab"  # or your main solution directory
+   cd MyMcpServer
+   dotnet new sln --name MyMcpServer --format slnx
+   dotnet sln add MyMcpServer.csproj
    ```
 
-2. **Create the MCP configuration file** `.mcp.json` in your solution directory:
+   > **NOTE:** The committed snapshot already includes `MyMcpServer.slnx`, so if you
+   > are exploring the snapshot rather than your own project you can skip this.
+
+2. **Create the MCP configuration file** `.mcp.json` next to the solution file:
 
    ```json
    {
@@ -391,18 +438,20 @@ If you prefer to use **Visual Studio 2026** instead of VS Code, you can configur
          "args": [
            "run",
            "--project",
-           "../../Part 05 - MCP Server Basics/MyMcpServer"
+           "MyMcpServer.csproj"
          ]
        }
      }
    }
    ```
 
-3. **Add the configuration file to your solution** (optional but recommended):
-   - Right-click on the solution in **Solution Explorer**
-   - Select **Add > Existing Item**
-   - Navigate to and select the `.mcp.json` file
-   - Choose **Add as Link** to include it in your solution
+   The `--project` path is relative to the folder holding `.mcp.json`. If you put the
+   configuration in a different solution's directory, adjust the path to point at
+   `MyMcpServer.csproj` from there.
+
+3. **Open the solution in Visual Studio** (`MyMcpServer.slnx`). Visual Studio reads
+   `.mcp.json` from the solution directory on load. Adding the file to the solution
+   via **Add > Existing Item** is optional, but makes it easier to find later.
 
 4. **Enable Agent Mode in GitHub Copilot**:
    - Open the **GitHub Copilot Chat** window
@@ -608,11 +657,12 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 
 ### Development Workflow
 
-1. **Create** MCP server project with `dotnet new mcpserver`
-2. **Implement** custom tools with proper attributes
-3. **Configure** VS Code or Visual Studio 2026 to use your server
-4. **Test** with GitHub Copilot conversations
-5. **Iterate** and improve based on AI usage patterns
+1. **Install** the template with `dotnet new install Microsoft.McpServer.ProjectTemplates`
+2. **Create** MCP server project with `dotnet new mcpserver`
+3. **Implement** custom tools with proper attributes
+4. **Configure** VS Code or Visual Studio 2026 to use your server
+5. **Test** with GitHub Copilot conversations
+6. **Iterate** and improve based on AI usage patterns
 
 > **🚀 Advanced Challenge**: If you're moving quickly and want an extra challenge, check out the [official Microsoft quickstart guide](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/build-mcp-server) which shows how to publish your MCP server to NuGet for others to use. This is covered in more detail in Part 7, but the quickstart provides a streamlined approach if you want to try it now!
 

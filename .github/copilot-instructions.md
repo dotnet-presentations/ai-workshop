@@ -12,7 +12,7 @@ Everything targets **.NET 10** and uses **Microsoft Foundry (Azure OpenAI)** as 
 | 02 - Build Chat App | `ChatApp/` | Console app built by hand (`dotnet new console`) |
 | 03 - Add RAG | `RagChatApp/` | Continues from Part 2; `checkpoints/` holds two alternate `Program.cs` paths (manual cosine similarity, and MEDI + SqliteVec). `checkpoints/verify/` holds compile-only projects so CI type-checks both checkpoints — the snapshot itself is the Step 2 manual path |
 | 04 - AI Web Chat Template | *(shares `Part 11 - Deployment/GenAiLab/`)* | README only in this folder; scaffolds `GenAiLab` with `dotnet new aichatweb`. The completed code deliberately lives in Part 11 rather than being duplicated here — keep both READMEs saying so |
-| 05 - MCP Server Basics | `MyMcpServer/` | `dotnet new mcpserver`; `RandomNumberTools` + `WeatherTools` |
+| 05 - MCP Server Basics | `MyMcpServer/` | `dotnet new mcpserver` (template from `Microsoft.McpServer.ProjectTemplates`); `RandomNumberTools` + `WeatherTools` |
 | 06 - Enhanced MCP Server | `ContosoOrdersMcpServer/` | Optional/bonus. Exploration of an existing snapshot — the README does **not** ask the user to scaffold it |
 | 07 - MCP Publishing | — | Optional/bonus, README only |
 | 08 - Agent Framework Basics | `AgentApp/` | `dotnet new console` + `Microsoft.Agents.AI` |
@@ -45,7 +45,7 @@ Markdown is linted by `.github/workflows/markdownlint.yml` using `.markdownlint.
 ## Conventions
 
 - **Snapshots must match the README.** If you change instructions in a `README.md`, update that part's snapshot code in the same change, and vice versa.
-- **Projects are created with `dotnet new`,** never by hand-authoring a `.csproj`. Templates come from `Microsoft.Extensions.AI.Templates` and `Aspire.ProjectTemplates`.
+- **Projects are created with `dotnet new`,** never by hand-authoring a `.csproj`. Templates come from `Microsoft.Extensions.AI.Templates`, `Microsoft.McpServer.ProjectTemplates`, and `Aspire.ProjectTemplates`.
 - **Scaffold, then update packages.** Templates lag the current package versions. After `dotnet new`, bump to current and record the bump as an explicit README step so the snapshot and the instructions stay in sync. Aspire is pinned at **13.4.6** across the repo; note that the `<Sdk Name="Aspire.AppHost.Sdk" />` element must be edited by hand because `dotnet add package` only manages `<PackageReference>` items.
 - The Part 4 scaffold command is fixed and load-bearing for later parts:
   `dotnet new aichatweb --provider azureopenai --vector-store qdrant --aspire --name GenAiLab --output GenAiLab`

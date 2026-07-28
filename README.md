@@ -20,7 +20,7 @@ Docker Desktop or Podman is required when you run the workshop's **Qdrant contai
 | Parts | Docker requirement |
 | --- | --- |
 | Parts 1-3 | Not required. These use console applications and an in-memory vector store. |
-| Part 4 | Required for the recommended Qdrant + Aspire path. A supported Docker-free path uses the template's local JSON vector store without Aspire; see the [Part 4 instructions](Part%2004%20-%20AI%20Web%20Chat%20Template/README.md#docker-free-path-local-vector-store-without-aspire). |
+| Part 4 | Required for the recommended Qdrant + Aspire path. A supported Docker-free path uses the template's local SQLite vector store without Aspire; see the [Part 4 instructions](Part%2004%20-%20AI%20Web%20Chat%20Template/README.md#alternative-docker-free-path-local-vector-store-without-aspire). |
 | Part 5 | Not required for the MCP exercises. |
 | Parts 6-7 | Not required. Containerizing an MCP server in Part 7 is optional. |
 | Part 8 | Not required. This module includes a standalone `AgentApp` sample and remains Docker-free. |
@@ -125,6 +125,11 @@ The repository is structured as follows:
 - 📖 `Part 01 - Setup` through `Part 11 - Deployment`: Contains all the lab instructions, documentation, and working code snapshots
 - 📄 `manuals/`: Product documentation PDFs for the AI chatbot exercises
 - 🧪 `docs/`: Instructor guides, testing procedures, and archived reports
+
+Most parts keep their completed code beside their own README. The one exception is
+**Part 4**, whose finished solution lives in `Part 11 - Deployment/GenAiLab/` because
+Part 11 deploys that same app. It is a correctly completed Part 4 plus the single
+`WithExternalHttpEndpoints()` line that Part 11 adds.
 
 ## Session Resources 📚
 

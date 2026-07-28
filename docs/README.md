@@ -12,6 +12,8 @@ This directory contains all documentation related to the .NET AI Workshop develo
 
 New test reports are written here using the template and skill at [`.github/skills/workshop-testing/`](../.github/skills/workshop-testing/SKILL.md). Name files `workshop-test-report-<YYYY-MM-DD>.md`.
 
+- **[workshop-test-report-2026-07-27.md](testing/workshop-test-report-2026-07-27.md)** - Full run of Parts 1-11 against live Microsoft Foundry (deployment excluded)
+
 ### 🗄️ Archived Historical Artifacts (`/archive`)
 
 - **[MCP_WORKSHOP_PLANNING.md](archive/planning/MCP_WORKSHOP_PLANNING.md)** - Legacy implementation plan retained for historical context

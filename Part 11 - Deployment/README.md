@@ -11,6 +11,34 @@ In this final part, you will learn how to deploy the AI Web Chat application you
 > [!TIP]
 > If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the working code snapshot provided in this `Part 11 - Deployment` folder. The complete code has already been updated with the necessary configuration for external HTTP endpoints and deployment. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
 
+## `GenAiLab/` is also the completed code for Part 4
+
+There is deliberately only one copy of this solution in the repository, and it lives
+here because Part 11 is the part that deploys it.
+[`GenAiLab/`](GenAiLab/) is a correctly finished
+[Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) — current package
+versions, `AddConnectionString("openai")` in `AppHost.cs`, and `gpt-5-mini` as the
+chat deployment — plus the single `WithExternalHttpEndpoints()` line added in the
+next section, which is harmless when running locally.
+
+So if you started from this snapshot rather than from your own Part 4 output, that
+line is already there and you can skip the next section.
+
+Either way, you supply your own credentials. Set `ConnectionStrings:openai` in user
+secrets on **`GenAiLab.AppHost`** — in Visual Studio, right-click the project and
+choose **Manage User Secrets**:
+
+```json
+{
+  "ConnectionStrings": {
+    "openai": "Endpoint=https://YOUR-RESOURCE.openai.azure.com/;Key=YOUR-KEY"
+  }
+}
+```
+
+Or let `.github/scripts/setup-workshop-credentials.ps1 -ApplyUserSecrets` write it
+for you.
+
 ## Configure the web application for external access
 
   Before the web application is deployed to Azure Container Apps, you will need to configure it so that it is available via web browser. Update `GenAiLab.AppHost/AppHost.cs` to add the following line just before the call to `builder.Build().Run();` at the end of the file:
@@ -21,6 +49,11 @@ In this final part, you will learn how to deploy the AI Web Chat application you
 
 > [!IMPORTANT]
 > This is an Aspire solution. Always launch the `GenAiLab.AppHost` project when running locally because AppHost bootstraps the full distributed app (web app + supporting services).
+
+If `vectordb` never reaches **Running** when you run this locally, you are probably
+hitting a Qdrant data volume left behind by an older package version. See
+[Qdrant won't start after updating packages](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md#qdrant-wont-start-after-updating-packages)
+in Part 4 — remove the stale container and volume, then run again.
 
 ## Set Up the Azure Developer CLI
 

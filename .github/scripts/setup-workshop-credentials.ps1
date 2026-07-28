@@ -150,6 +150,8 @@ function Write-WorkshopUserSecrets {
         'Part 02 - Build Chat App/ChatApp'
         'Part 03 - Add RAG/RagChatApp'
         'Part 08 - Agent Framework Basics/AgentApp'
+        'Part 09 - Adding AI to an Existing App/eShopLite-start/Products'
+        'Part 09 - Adding AI to an Existing App/eShopLite-start/Store'
         'Part 09 - Adding AI to an Existing App/eShopLite/Products'
         'Part 09 - Adding AI to an Existing App/eShopLite/Store'
     )
@@ -167,7 +169,7 @@ function Write-WorkshopUserSecrets {
         $ok = (Set-ProjectSecret $project 'AzureOpenAI:Key' $env:WORKSHOP_AZURE_OPENAI_KEY) -and $ok
 
         # Part 9's optional observability assistant can run against a local model.
-        if ($relative -like '*eShopLite/Store' -and $env:WORKSHOP_LOCAL_MODEL_ENDPOINT -and $env:WORKSHOP_LOCAL_MODEL_NAME) {
+        if ($relative -like '*/Store' -and $env:WORKSHOP_LOCAL_MODEL_ENDPOINT -and $env:WORKSHOP_LOCAL_MODEL_NAME) {
             $ok = (Set-ProjectSecret $project 'LocalModel:Endpoint' $env:WORKSHOP_LOCAL_MODEL_ENDPOINT) -and $ok
             $ok = (Set-ProjectSecret $project 'LocalModel:Model' $env:WORKSHOP_LOCAL_MODEL_NAME) -and $ok
         }
@@ -181,11 +183,11 @@ function Write-WorkshopUserSecrets {
         dotnet user-secrets init --project $appHost 2>&1 | Out-Null
         $connection = "Endpoint=$($env:WORKSHOP_AZURE_OPENAI_ENDPOINT);Key=$($env:WORKSHOP_AZURE_OPENAI_KEY)"
         if (Set-ProjectSecret $appHost 'ConnectionStrings:openai' $connection) {
-            Write-Host "  [ok] Part 11 - Deployment/GenAiLab/GenAiLab.AppHost" -ForegroundColor Green
+            Write-Host "  [ok] Part 11 - Deployment/GenAiLab/GenAiLab.AppHost (Parts 4 and 11)" -ForegroundColor Green
         }
     }
     else {
-        Write-Host "  [missing] Part 11 - Deployment/GenAiLab/GenAiLab.AppHost" -ForegroundColor Yellow
+        Write-Host "  [missing] Part 11 - Deployment/GenAiLab/GenAiLab.AppHost (Parts 4 and 11)" -ForegroundColor Yellow
     }
 }
 

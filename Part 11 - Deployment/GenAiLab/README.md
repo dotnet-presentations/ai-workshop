@@ -1,5 +1,26 @@
 # AI Chat with Custom Data
 
+> [!IMPORTANT]
+> **Workshop note.** This file is the template's own generated README. This copy of
+> the app is the completed code for both
+> [Part 4](../../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) and
+> [Part 11](../README.md), and it has already been modified for the workshop:
+> `AppHost.cs` uses `builder.AddConnectionString("openai")` to point at an
+> **existing** Azure OpenAI resource instead of provisioning a new one, and the chat
+> deployment is `gpt-5-mini`. So ignore the "Using Azure Provisioning" section below
+> — instead, set `ConnectionStrings:openai` in user secrets on `GenAiLab.AppHost`:
+>
+> ```json
+> {
+>   "ConnectionStrings": {
+>     "openai": "Endpoint=https://YOUR-RESOURCE.openai.azure.com/;Key=YOUR-KEY"
+>   }
+> }
+> ```
+>
+> In Visual Studio, right-click `GenAiLab.AppHost` → **Manage User Secrets**. Run the
+> solution by launching the `GenAiLab.AppHost` project.
+
 This project is an AI chat application that demonstrates how to chat with custom data using an AI language model. Please note that this template is currently in an early preview stage. If you have feedback, please take a [brief survey](https://aka.ms/dotnet-chat-templatePreview2-survey).
 
 >[!NOTE]

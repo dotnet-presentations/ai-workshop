@@ -11,13 +11,8 @@ Everything targets **.NET 10** and uses **Microsoft Foundry (Azure OpenAI)** as 
 | 01 - Setup | — | README only |
 | 02 - Build Chat App | `ChatApp/` | Console app built by hand (`dotnet new console`) |
 | 03 - Add RAG | `RagChatApp/` | Continues from Part 2; `checkpoints/` holds two alternate `Program.cs` paths (manual cosine similarity, and MEDI + SqliteVec). `checkpoints/verify/` holds compile-only projects so CI type-checks both checkpoints — the snapshot itself is the Step 2 manual path |
-<<<<<<< HEAD
-| 04 - AI Web Chat Template | — | README only; scaffolds `GenAiLab` with `dotnet new aichatweb` |
-| 05 - MCP Server Basics | `MyMcpServer/` | `dotnet new mcpserver` (template from `Microsoft.McpServer.ProjectTemplates`); `RandomNumberTools` + `WeatherTools` |
-=======
 | 04 - AI Web Chat Template | *(shares `Part 11 - Deployment/GenAiLab/`)* | README only in this folder; scaffolds `GenAiLab` with `dotnet new aichatweb`. The completed code deliberately lives in Part 11 rather than being duplicated here — keep both READMEs saying so |
-| 05 - MCP Server Basics | `MyMcpServer/` | `dotnet new mcpserver`; `RandomNumberTools` + `WeatherTools` |
->>>>>>> origin/main
+| 05 - MCP Server Basics | `MyMcpServer/` | `dotnet new mcpserver` (template from `Microsoft.McpServer.ProjectTemplates`); `RandomNumberTools` + `WeatherTools` |
 | 06 - Enhanced MCP Server | `ContosoOrdersMcpServer/` | Optional/bonus. Exploration of an existing snapshot — the README does **not** ask the user to scaffold it |
 | 07 - MCP Publishing | — | Optional/bonus, README only |
 | 08 - Agent Framework Basics | `AgentApp/` | `dotnet new console` + `Microsoft.Agents.AI` |

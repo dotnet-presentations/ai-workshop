@@ -90,7 +90,7 @@ For both VS Code and Visual Studio, the configuration file uses the following se
 .NET MCP servers use the [ModelContextProtocol](https://www.nuget.org/packages/ModelContextProtocol) C# SDK. For more information about MCP:
 
 - [Official Documentation](https://modelcontextprotocol.io/)
-- [Protocol Specification](https://spec.modelcontextprotocol.io/)
+- [Protocol Specification](https://modelcontextprotocol.io/specification/)
 - [GitHub Organization](https://github.com/modelcontextprotocol)
 
 Refer to the VS Code or Visual Studio documentation for more information on configuring and using MCP servers:

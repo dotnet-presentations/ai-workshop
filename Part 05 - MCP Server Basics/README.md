@@ -669,7 +669,7 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 ## Additional Resources
 
 - 📖 [Official MCP Documentation](https://modelcontextprotocol.io/)
-- 🔧 [MCP Protocol Specification](https://spec.modelcontextprotocol.io/)
+- 🔧 [MCP Protocol Specification](https://modelcontextprotocol.io/specification/)
 - 📦 [ModelContextProtocol NuGet Package](https://www.nuget.org/packages/ModelContextProtocol)
 - 💻 [MCP in VS Code Documentation](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
 - 🎯 [MCP .NET Guide](https://aka.ms/nuget/mcp/guide)

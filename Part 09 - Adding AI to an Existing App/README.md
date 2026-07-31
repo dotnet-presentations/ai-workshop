@@ -112,7 +112,7 @@ dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
 >
 > A file-based vector store keeps this exercise Docker-free, which matters in a room full of laptops on conference wifi. It is not the enterprise answer.
 >
-> If your data already lives in SQL Server, you do not need a separate vector database at all. **SQL Server 2025 has a native [`vector` data type](https://learn.microsoft.com/sql/t-sql/data-types/vector-data-type?view=sql-server-ver17&tabs=csharp)** with built-in distance functions, so embeddings sit in the same table as the rows they describe, inside the same transaction and the same backup. The eShopLite [`08-SQLServer2025`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/08-SQLServer2025) scenario shows this in action. Azure AI Search, Postgres with `pgvector`, and Qdrant (which you saw in Part 4) are the other common choices — [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) compares them.
+> If your data already lives in SQL Server, you do not need a separate vector database at all. **SQL Server 2025 has a native [`vector` data type](https://learn.microsoft.com/sql/t-sql/data-types/vector-data-type?view=sql-server-ver17&tabs=csharp)** with built-in distance functions, so embeddings sit in the same table as the rows they describe, inside the same transaction and the same backup. The eShopLite [`08-Sql2025`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/08-Sql2025) scenario shows this in action. Azure AI Search, Postgres with `pgvector`, and Qdrant (which you saw in Part 4) are the other common choices — [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) compares them.
 >
 > The retrieval code barely changes between them. That is the point of `Microsoft.Extensions.VectorData`.
 
@@ -633,7 +633,7 @@ Everything above is a trimmed version of something that exists at full size in [
 | Semantic search over the catalog | [`01-SemanticSearch`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/01-SemanticSearch) |
 | Grounded product discovery | [`14-ProductDiscoveryCopilot`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/14-ProductDiscoveryCopilot) |
 | Local-model operations assistant | [`13-ObservabilityAssistantFoundryLocal`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/13-ObservabilityAssistantFoundryLocal) |
-| Vectors stored in SQL Server 2025 | [`08-SQLServer2025`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/08-SQLServer2025) |
+| Vectors stored in SQL Server 2025 | [`08-Sql2025`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/08-Sql2025) |
 
 Three more scenarios continue the story past where an hour allows. They are worth understanding even if you never run them, because they are the next questions people ask.
 

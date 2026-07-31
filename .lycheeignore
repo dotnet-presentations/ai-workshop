@@ -1,0 +1,7 @@
+# Hosts that block automated requests (403/405) but load fine in a browser
+marketplace\.visualstudio\.com
+github\.com/signup
+(www\.)?nuget\.org
+
+# Placeholder URLs inside sample templates and instructions
+github\.com/your-username/

@@ -767,7 +767,7 @@ You have completed the MCP workshop series. You now have the foundation to:
 
 ### Official Documentation
 
-- 📖 [Model Context Protocol Specification](https://spec.modelcontextprotocol.io/)
+- 📖 [Model Context Protocol Specification](https://modelcontextprotocol.io/specification/)
 - 🔧 [MCP .NET SDK Documentation](https://aka.ms/nuget/mcp/guide)
 - 💻 [VS Code MCP Integration](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
 
@@ -775,7 +775,7 @@ You have completed the MCP workshop series. You now have the foundation to:
 
 - 🐙 [MCP GitHub Organization](https://github.com/modelcontextprotocol)
 - 💬 [MCP Community Discussions](https://github.com/modelcontextprotocol/specification/discussions)
-- 📚 [Awesome MCP](https://github.com/modelcontextprotocol/awesome-mcp)
+- 📚 [Reference MCP Servers](https://github.com/modelcontextprotocol/servers)
 
 ### Development Tools
 

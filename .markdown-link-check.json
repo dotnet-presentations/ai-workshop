@@ -4,7 +4,8 @@
     { "pattern": "^https?://github\\.com/signup" },
     { "pattern": "^https?://(www\\.)?nuget\\.org" },
     { "pattern": "^https?://github\\.com/your-username/" },
-    { "pattern": "^https?://localhost" }
+    { "pattern": "^https?://localhost" },
+    { "pattern": "^https?://vscode\\.dev/redirect\\?url=vscode:" }
   ],
   "httpHeaders": [
     {

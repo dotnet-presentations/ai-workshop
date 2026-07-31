@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - '**.md'
-      - '.lycheeignore'
+      - '.markdown-link-check.json'
       - '.github/workflows/link-check.yml'
   schedule:
     # Weekly, so link rot is caught even when the READMEs are not being edited
@@ -25,13 +25,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Run lychee
-      uses: lycheeverse/lychee-action@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
-        args: >-
-          --no-progress
-          --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36"
-          --accept 200,206,403,429
-          --max-retries 3
-          './**/*.md'
-        fail: true
+        node-version: '20'
+
+    - name: Install markdown-link-check
+      run: npm install -g markdown-link-check@3
+
+    - name: Check links
+      run: >-
+        markdown-link-check
+        --config .markdown-link-check.json
+        --quiet
+        --retry
+        --ignore "node_modules,bin,obj,wwwroot/lib,docs/archive"
+        .

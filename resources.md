@@ -5,8 +5,8 @@ Use this page at the end of the workshop as a single handoff list for continued 
 ## Microsoft Learn and .NET AI
 
 - [AI developer resources learning plan](https://aka.ms/build25/plan/ADAI_DevStartPlan)
-- [.NET AI overview](https://learn.microsoft.com/dotnet/machine-learning/ai-overview)
-- [Extensions for AI in .NET](https://learn.microsoft.com/dotnet/machine-learning/extensions-ai/)
+- [.NET AI overview](https://learn.microsoft.com/en-us/dotnet/ai/overview)
+- [Extensions for AI in .NET](https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai)
 - [Microsoft Foundry (Azure OpenAI)](https://learn.microsoft.com/azure/foundry/what-is-foundry)
 - [Azure OpenAI documentation](https://learn.microsoft.com/azure/ai-services/openai/)
 

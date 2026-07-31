@@ -5,7 +5,8 @@
     { "pattern": "^https?://(www\\.)?nuget\\.org" },
     { "pattern": "^https?://github\\.com/your-username/" },
     { "pattern": "^https?://localhost" },
-    { "pattern": "^https?://vscode\\.dev/redirect\\?url=vscode:" }
+    { "pattern": "^https?://vscode\\.dev/redirect\\?url=vscode:" },
+    { "pattern": "^mailto:" }
   ],
   "httpHeaders": [
     {

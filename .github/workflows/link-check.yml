@@ -34,10 +34,12 @@ jobs:
       run: npm install -g markdown-link-check@3
 
     - name: Check links
-      run: >-
-        markdown-link-check
-        --config .markdown-link-check.json
-        --quiet
-        --retry
-        --ignore "node_modules,bin,obj,wwwroot/lib,docs/archive"
-        .
+      run: |
+        set -euo pipefail
+        find . -type f -name "*.md" \
+          -not -path "./node_modules/*" \
+          -not -path "*/bin/*" \
+          -not -path "*/obj/*" \
+          -not -path "*/wwwroot/lib/*" \
+          -not -path "./docs/archive/*" \
+          -print0 | xargs -0 -n1 markdown-link-check --config .markdown-link-check.json --quiet --retry

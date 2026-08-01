@@ -1,0 +1,25 @@
+{
+  "ignorePatterns": [
+    { "pattern": "^https?://marketplace\\.visualstudio\\.com" },
+    { "pattern": "^https?://github\\.com/signup" },
+    { "pattern": "^https?://(www\\.)?nuget\\.org" },
+    { "pattern": "^https?://github\\.com/your-username/" },
+    { "pattern": "^https?://localhost" },
+    { "pattern": "^https?://vscode\\.dev/redirect\\?url=vscode:" },
+    { "pattern": "^mailto:" }
+  ],
+  "httpHeaders": [
+    {
+      "urls": ["https://", "http://"],
+      "headers": {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+      }
+    }
+  ],
+  "aliveStatusCodes": [200, 206, 403, 429],
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "30s",
+  "timeout": "20s"
+}

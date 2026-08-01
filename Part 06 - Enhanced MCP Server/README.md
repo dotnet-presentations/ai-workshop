@@ -542,10 +542,10 @@ public async Task GetOrderDetails_InvalidOrder_ReturnsNotFound()
 
 ## Additional Resources
 
-- 📖 [MCP Business Integration Guide](https://modelcontextprotocol.io/business)
-- 🔐 [MCP Security Best Practices](https://modelcontextprotocol.io/security)
-- 📊 [MCP Performance Guidelines](https://modelcontextprotocol.io/performance)
-- 🧪 [MCP Testing Strategies](https://modelcontextprotocol.io/testing)
+- 📖 [Official MCP Documentation](https://modelcontextprotocol.io/)
+- 🔐 [MCP Specification](https://github.com/modelcontextprotocol/modelcontextprotocol) - Protocol source, including the security sections
+- 📊 [Reference MCP Servers](https://github.com/modelcontextprotocol/servers) - Patterns to borrow for your own tools
+- 🧪 [MCP Inspector](https://github.com/modelcontextprotocol/inspector) - Test and debug your server interactively
 
 ---
 

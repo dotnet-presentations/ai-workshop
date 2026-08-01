@@ -1,0 +1,69 @@
+name: Link Checking
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**.md'
+      - '.markdown-link-check.json'
+      - '.github/workflows/link-check.yml'
+  schedule:
+    # Weekly, so link rot is caught even when the READMEs are not being edited
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  link-check:
+    name: Check Markdown Links
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: '24'
+
+    - name: Install markdown-link-check
+      run: npm install -g markdown-link-check@3
+
+    - name: Check links
+      run: |
+        set -euo pipefail
+
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          mapfile -d '' files < <(
+            git diff --name-only -z --diff-filter=ACMR \
+              "${{ github.event.pull_request.base.sha }}" HEAD -- '*.md'
+          )
+
+          if (( ${#files[@]} == 0 )); then
+            files=(README.md)
+          fi
+        else
+          mapfile -d '' files < <(
+            find . -type f -name "*.md" \
+              -not -path "./node_modules/*" \
+              -not -path "*/bin/*" \
+              -not -path "*/obj/*" \
+              -not -path "*/wwwroot/lib/*" \
+              -not -path "./docs/archive/*" \
+              -print0
+          )
+        fi
+
+        if (( ${#files[@]} == 0 )); then
+          echo "No Markdown files to check."
+          exit 0
+        fi
+
+        echo "Checking ${#files[@]} Markdown files."
+        markdown-link-check --config .markdown-link-check.json --quiet --retry "${files[@]}"

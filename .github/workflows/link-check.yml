@@ -23,12 +23,14 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
 
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
-        node-version: '20'
+        node-version: '24'
 
     - name: Install markdown-link-check
       run: npm install -g markdown-link-check@3
@@ -36,10 +38,32 @@ jobs:
     - name: Check links
       run: |
         set -euo pipefail
-        find . -type f -name "*.md" \
-          -not -path "./node_modules/*" \
-          -not -path "*/bin/*" \
-          -not -path "*/obj/*" \
-          -not -path "*/wwwroot/lib/*" \
-          -not -path "./docs/archive/*" \
-          -print0 | xargs -0 -n1 markdown-link-check --config .markdown-link-check.json --quiet --retry
+
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          mapfile -d '' files < <(
+            git diff --name-only -z --diff-filter=ACMR \
+              "${{ github.event.pull_request.base.sha }}" HEAD -- '*.md'
+          )
+
+          if (( ${#files[@]} == 0 )); then
+            files=(README.md)
+          fi
+        else
+          mapfile -d '' files < <(
+            find . -type f -name "*.md" \
+              -not -path "./node_modules/*" \
+              -not -path "*/bin/*" \
+              -not -path "*/obj/*" \
+              -not -path "*/wwwroot/lib/*" \
+              -not -path "./docs/archive/*" \
+              -print0
+          )
+        fi
+
+        if (( ${#files[@]} == 0 )); then
+          echo "No Markdown files to check."
+          exit 0
+        fi
+
+        echo "Checking ${#files[@]} Markdown files."
+        markdown-link-check --config .markdown-link-check.json --quiet --retry "${files[@]}"

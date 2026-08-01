@@ -27,7 +27,7 @@ This project is an AI chat application that demonstrates how to chat with custom
 > Before running this project you need to configure the API keys or endpoints for the providers you have chosen. See below for details specific to your choices.
 
 ### Prerequisites
-To use Azure OpenAI or Azure AI Search, you need an Azure account. If you don't already have one, [create an Azure account](https://azure.microsoft.com/free/).
+To use Azure OpenAI or Azure AI Search, you need an Azure account. If you don't already have one, [create an Azure account](https://azure.microsoft.com/pricing/purchase-options/azure-account?cid=msft_learn).
 
 ### Known Issues
 
@@ -69,7 +69,7 @@ Note: Qdrant and Docker are excellent open source products, but are not maintain
 
 Several Aspire templates include ASP.NET Core projects that are configured to use HTTPS by default. If this is the first time you're running the project, an exception might occur when loading the Aspire dashboard. This error can be resolved by trusting the self-signed development certificate with the .NET CLI.
 
-See [Troubleshoot untrusted localhost certificate in Aspire](https://aspire.dev/app-host/certificate-trust/) for more information.
+See the [`dotnet dev-certs` command reference](https://learn.microsoft.com/dotnet/core/tools/dotnet-dev-certs) for more information.
 
 # Updating JavaScript dependencies
 

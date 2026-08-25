@@ -17,7 +17,7 @@ Everything targets **.NET 10** and uses **Microsoft Foundry (Azure OpenAI)** as 
 | 07 - MCP Publishing | — | Optional/bonus, README only |
 | 08 - Agent Framework Basics | `AgentApp/` | `dotnet new console` + `Microsoft.Agents.AI` |
 | 09 - Adding AI to an Existing App | `eShopLite-start/` and `eShopLite/` (5-project Aspire solutions) | Capstone. `eShopLite-start/` is the AI-free starting point attendees work in; `eShopLite/` is the finished answer key. The workshop adds semantic search, grounded discovery, and a local-model assistant. Added code lives in `Products/Ai/` and `Store/Ai/` |
-| 10 - Choosing Providers and Services | — | README only. Sits immediately before deployment because provider and service selection is a deployment prerequisite |
+| 10 - Providers and Fallbacks | — | README only. Sits immediately before deployment because provider and service selection is a deployment prerequisite |
 | 11 - Deployment | `GenAiLab/` (3-project Aspire solution) | Same app as Part 4 plus `WithExternalHttpEndpoints()` in `AppHost.cs`. This is also the answer key for Part 4, so changes here must stay consistent with the Part 4 README |
 
 Other folders: `docs/` (instructor guides, planning, archived test reports), `images/` (screenshots used by workshop instructions), `manuals/` (PDFs used as RAG source data).

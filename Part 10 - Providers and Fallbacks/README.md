@@ -1,4 +1,4 @@
-# Part 10: Choosing Providers and Services
+# Part 10: Providers and Fallbacks
 
 > **⏱️ Estimated Time:** 20-30 minutes
 
@@ -162,11 +162,35 @@ specific store.
 | **The template's local JSON store** | The Docker-free path, and quick experiments | No infrastructure at all, but not a production store |
 | **[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview)** | Production apps that want a managed service, an SLA, and hybrid keyword + vector search | Billed per service hour even when idle |
 
-Part 11 deploys the Qdrant path, because it is the one you have been running all
-day and it needs no extra provisioning. If you want the managed option instead,
-the swap is a registration change in two files rather than a rewrite — see
-[Optional: using a managed vector store](../Part%2011%20-%20Deployment/README.md#optional-using-a-managed-vector-store)
-in the next part.
+Part 11 deploys the Qdrant path because it is the one you have been running all
+day and it needs no extra service setup. If you want a managed production vector
+store instead, use the optional setup below before continuing to deployment.
+
+## Optional: prepare an Azure AI Search variant
+
+Azure AI Search is not provisioned by the workshop's default deployment. The
+default remains Qdrant. To evaluate the managed option without overwriting your
+working Part 4 project, scaffold a separate comparison project:
+
+```bash
+dotnet new aichatweb --provider azureopenai --vector-store azureaisearch --aspire --name GenAiLabSearch --output GenAiLabSearch
+```
+
+Compare that project with `Part 11 - Deployment/GenAiLab/`. The generated Azure
+AI Search variant replaces the Qdrant resource and registrations with:
+
+- an Azure AI Search resource in AppHost
+- the Azure AI Search client and vector-store registrations in the web app
+- Azure AI Search hosting, client, and vector-data connector packages
+
+That path needs one Azure AI Search service. The application creates its vector
+index during ingestion, so you do not create the index manually. If you use
+managed identity, the application needs permission to manage the index and to
+read and write its documents.
+
+This is an optional production-oriented exercise. Continue with the Qdrant-based
+`GenAiLab` snapshot in Part 11 unless you intentionally choose to carry the
+generated Azure AI Search variant through deployment.
 
 ## What's next
 

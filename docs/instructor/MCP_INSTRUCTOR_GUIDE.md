@@ -22,7 +22,7 @@ This guide provides instructors with comprehensive information for teaching Part
 
 - Part 8: Agent Framework Essentials (30-45 minutes)
 - Part 9: Adding AI to an Existing App (30-45 minutes)
-- Part 10: Choosing Providers and Services (20-30 minutes)
+- Part 10: Providers and Fallbacks (20-30 minutes)
 - Part 11: Deploy to Azure (30-45 minutes)
 
 ### Teaching Options

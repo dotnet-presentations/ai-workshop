@@ -219,7 +219,7 @@ openai.AddChatClient("gpt-5-mini")
 That string is a **deployment** name, not a model name — it has to match what is
 deployed on the resource you are pointing at. If yours is named something else,
 use that instead. This is the same coupling you will work around in
-[Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md).
+[Part 10](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md).
 
 The embedding line below it already matches, so leave
 `openai.AddEmbeddingGenerator("text-embedding-3-small")` as it is.
@@ -623,7 +623,7 @@ the one you hand to an agent in Part 8.
 One thread stays open until the end of the day. Everything you have written so
 far talks to `IChatClient` and `IEmbeddingGenerator` rather than to Azure
 OpenAI directly, and nothing yet explains why that indirection is worth it. In
-[Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) you
+[Part 10](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md) you
 swap the provider out entirely — for a local model, with no application code
 changes — right before you deploy.
 

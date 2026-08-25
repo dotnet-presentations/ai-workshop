@@ -21,7 +21,7 @@
 | 7 - MCP Publishing | | | |
 | 8 - Agent Framework Basics | | | |
 | 9 - Adding AI to an Existing App | | | |
-| 10 - Choosing Providers and Services | | | |
+| 10 - Providers and Fallbacks | | | |
 | 11 - Deployment | | | |
 
 Status: Pass / Pass with issues / Fail / Skipped.

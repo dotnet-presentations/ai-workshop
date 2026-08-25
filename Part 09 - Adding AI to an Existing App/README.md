@@ -112,7 +112,7 @@ dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
 >
 > A file-based vector store keeps this exercise Docker-free, which matters in a room full of laptops on conference wifi. It is not the enterprise answer.
 >
-> If your data already lives in SQL Server, you do not need a separate vector database at all. **SQL Server 2025 has a native [`vector` data type](https://learn.microsoft.com/sql/t-sql/data-types/vector-data-type?view=sql-server-ver17&tabs=csharp)** with built-in distance functions, so embeddings sit in the same table as the rows they describe, inside the same transaction and the same backup. The eShopLite [`08-Sql2025`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/08-Sql2025) scenario shows this in action. Azure AI Search, Postgres with `pgvector`, and Qdrant (which you saw in Part 4) are the other common choices — [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) compares them.
+> If your data already lives in SQL Server, you do not need a separate vector database at all. **SQL Server 2025 has a native [`vector` data type](https://learn.microsoft.com/sql/t-sql/data-types/vector-data-type?view=sql-server-ver17&tabs=csharp)** with built-in distance functions, so embeddings sit in the same table as the rows they describe, inside the same transaction and the same backup. The eShopLite [`08-Sql2025`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/08-Sql2025) scenario shows this in action. Azure AI Search, Postgres with `pgvector`, and Qdrant (which you saw in Part 4) are the other common choices — [Part 10](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md) compares them.
 >
 > The retrieval code barely changes between them. That is the point of `Microsoft.Extensions.VectorData`.
 
@@ -618,7 +618,7 @@ Run the app, ask a few questions on the **Ask** page including some the store ca
 
 The report correctly picks out a search that returned nothing and calls it a lost sale — from a model running on your laptop, over data that never left it.
 
-It is also visibly weaker than `gpt-5-mini`. It missed one of the two zero-result searches, and it summarizes at a coarser level than the cloud model would. That is the honest tradeoff, and it is a better argument for [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) than any slide. A few practical notes from building this:
+It is also visibly weaker than `gpt-5-mini`. It missed one of the two zero-result searches, and it summarizes at a coarser level than the cloud model would. That is the honest tradeoff, and it is a better argument for [Part 10](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md) than any slide. A few practical notes from building this:
 
 - The first request loads the model into memory and can take **minutes** — over three on the machine these screenshots came from. Later requests took a few seconds. Warm the model before you demo this.
 - Small models have small context windows — this one caps at about 3,700 input and 528 output tokens, so the code sends only the last 40 events.
@@ -681,7 +681,7 @@ That is what makes this different from bolting a chatbot onto a homepage, and it
 
 ## Next steps
 
-- [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) — the model, hosting, and vector store decisions this part made for you
+- [Part 10: Providers and Fallbacks](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md) — the model, hosting, and vector store decisions this part made for you
 - [Part 11: Deployment](../Part%2011%20-%20Deployment/README.md) — getting it to Azure
 
 ## Reference
@@ -693,4 +693,4 @@ That is what makes this different from bolting a chatbot onto a homepage, and it
 
 ---
 
-**[⬅️ Back: Part 8 - Agent Framework Basics](../Part%2008%20-%20Agent%20Framework%20Basics/README.md)** | **[Next: Part 10 - Choosing Providers and Services ➡️](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md)**
+**[⬅️ Back: Part 8 - Agent Framework Basics](../Part%2008%20-%20Agent%20Framework%20Basics/README.md)** | **[Next: Part 10 - Providers and Fallbacks ➡️](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md)**

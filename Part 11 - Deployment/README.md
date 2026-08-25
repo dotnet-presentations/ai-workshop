@@ -166,21 +166,12 @@ often wants a managed vector store instead, and on Azure that usually means
 [Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview).
 
 > [!NOTE]
-> **Azure AI Search is not provisioned by this workshop.** The default deployment
-> continues to use the Qdrant container described above. To evaluate Azure AI
-> Search, scaffold a separate comparison project with:
->
-> ```bash
-> dotnet new aichatweb --provider azureopenai --vector-store azureaisearch --aspire --name GenAiLabSearch --output GenAiLabSearch
-> ```
->
-> That variant needs one Azure AI Search service. The application creates its
-> vector index during ingestion, so you do not need to create an index manually.
-> If you use managed identity, grant the application permissions to manage the
-> index and read and write its documents.
+> **Azure AI Search is not provisioned by this workshop.** Part 10 explains how
+> to [scaffold an optional Azure AI Search variant](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md#optional-prepare-an-azure-ai-search-variant)
+> before deployment. The default path here continues to deploy Qdrant.
 
 That swap is smaller than you might expect, for the same reason provider swaps
-were small in [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md).
+were small in [Part 10](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md).
 Your search code depends on an abstraction rather than on Qdrant:
 
 ```csharp
@@ -198,11 +189,9 @@ Only registration changes, in two files: the `AddQdrantClient` and
 `builder.AddQdrant("vectordb")` resource in `GenAiLab.AppHost/AppHost.cs` that tells
 `azd` what to provision.
 
-Rather than editing by hand, scaffold the template a second time with the Azure AI
-Search vector store option (the same `dotnet new aichatweb` command from
-[Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md), with a different
-`--vector-store` value) and diff the two projects. That shows you the exact
-registration and Aspire wiring the template generates.
+The optional setup in Part 10 scaffolds that variant separately so you can diff
+the exact registration and Aspire wiring the template generates without
+overwriting the Qdrant snapshot used by this deployment path.
 
 The trade-off is the usual one. Qdrant is cheaper and portable, and you own the
 container and its data volume. Azure AI Search is billed per service hour even
@@ -325,4 +314,4 @@ Use this app as a baseline for your own AI application experiments.
 
 ---
 
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 10: Providers and Fallbacks](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md)

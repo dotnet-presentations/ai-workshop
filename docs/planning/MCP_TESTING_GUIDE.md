@@ -32,6 +32,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - [ ] **MCP Template** available
 
   ```powershell
+  dotnet new install Microsoft.McpServer.ProjectTemplates
   dotnet new list | findstr mcp
   # Expected: mcpserver template should be listed
   ```

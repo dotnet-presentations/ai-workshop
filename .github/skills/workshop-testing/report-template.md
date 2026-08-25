@@ -48,6 +48,7 @@ Repeat per part that had anything worth saying.
 | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` | | |
 | `Part 08 - Agent Framework Basics/AgentApp/` | | |
 | `Part 09 - Adding AI to an Existing App/StoreApp/` | | |
+| `Part 10 - Providers and Fallbacks/` | | |
 | `Part 11 - Deployment/GenAiLab/` | | |
 
 ## Issues

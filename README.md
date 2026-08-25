@@ -25,10 +25,14 @@ Docker Desktop or Podman is required when you run the workshop's **Qdrant contai
 | Parts 6-7 | Not required. Containerizing an MCP server in Part 7 is optional. |
 | Part 8 | Not required. This module includes a standalone `AgentApp` sample and remains Docker-free. |
 | Part 9 | Not required. The `eShopLite` sample in this repo is an Aspire solution that deliberately avoids containers — it uses SQLite for both the catalog and the vector store. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
-| Part 10 | Not required. Provider comparisons can use Microsoft Foundry, Foundry Local, or a native Ollama installation. |
-| Part 11 | Required to run the supplied Qdrant + Aspire application locally. The Azure deployment itself runs the containers in Azure. |
+| Part 10 | Not required for the provider comparison. Docker is still needed if you run the Part 4 Qdrant fallback locally. |
+| Part 11 | Docker is needed to run the markitdown document-reader container locally. The recommended vector store is managed Azure AI Search. |
 
-Without Docker, you can still complete Parts 1-10, including the main chat, RAG, template, MCP, agent, capstone, and provider concepts. In Part 4 you will miss the hands-on Qdrant, Aspire dashboard, service orchestration, and container persistence experience. Part 11 uses the full Qdrant + Aspire application, so local execution of that snapshot requires Docker or Podman.
+Without Docker, you can still complete Parts 1-10, including the main chat, RAG,
+template, MCP, agent, capstone, and provider concepts. In Part 4 you will miss the
+hands-on Qdrant, Aspire dashboard, service orchestration, and container persistence
+experience. Part 11 replaces Qdrant with Azure AI Search, but its markitdown
+document reader still runs as a container when you launch the full app locally.
 
 ### Model Context Protocol (Parts 5-7)
 
@@ -127,9 +131,10 @@ The repository is structured as follows:
 - 🧪 `docs/`: Instructor guides, testing procedures, and archived reports
 
 Most parts keep their completed code beside their own README. The one exception is
-**Part 4**, whose finished solution lives in `Part 11 - Deployment/GenAiLab/` because
-Part 11 deploys that same app. It is a correctly completed Part 4 plus the single
-`WithExternalHttpEndpoints()` line that Part 11 adds.
+**Part 4**, whose application continues into Parts 10 and 11. The deployment-ready
+snapshot lives in `Part 11 - Deployment/GenAiLab/`; it includes the Part 4
+application plus the Azure AI Search and external-endpoint changes made before
+deployment.
 
 ## Session Resources 📚
 

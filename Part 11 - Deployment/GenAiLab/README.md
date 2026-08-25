@@ -2,12 +2,14 @@
 
 > [!IMPORTANT]
 > **Workshop note.** This file is the template's own generated README. This copy of
-> the app is the completed code for both
-> [Part 4](../../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) and
-> [Part 11](../README.md), and it has already been modified for the workshop:
+> the app is the deployment-ready continuation of
+> [Part 4](../../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md), prepared in
+> [Part 10](../../Part%2010%20-%20Providers%20and%20Fallbacks/README.md) and deployed
+> in [Part 11](../README.md). It has already been modified for the workshop:
 > `AppHost.cs` uses `builder.AddConnectionString("openai")` to point at an
 > **existing** Azure OpenAI resource instead of provisioning a new one, and the chat
-> deployment is `gpt-5-mini`. So ignore the "Using Azure Provisioning" section below
+> deployment is `gpt-5-mini`. It uses Azure AI Search for vectors. Ignore the
+> Azure OpenAI portion of "Using Azure Provisioning" below
 > — instead, set `ConnectionStrings:openai` in user secrets on `GenAiLab.AppHost`:
 >
 > ```json
@@ -44,12 +46,12 @@ This incompatibility can be addressed by upgrading to Docker Desktop 4.41.1. See
 The project is set up to automatically provision Azure resources. When running the app for the first time, you will be prompted to provide Azure configuration values. For detailed instructions, see the [Local Provisioning documentation](https://learn.microsoft.com/dotnet/aspire/azure/local-provisioning#configuration).
 
 
-## Setting up a local environment for Qdrant
-This project is configured to run Qdrant in a Docker container. Docker Desktop must be installed and running for the project to run successfully. A Qdrant container will automatically start when running the application.
+## Azure AI Search
 
-Download, install, and run Docker Desktop from the [official website](https://www.docker.com/). Follow the installation instructions specific to your operating system.
-
-Note: Qdrant and Docker are excellent open source products, but are not maintained by Microsoft.
+This project provisions Azure AI Search through Aspire. The application creates
+its vector index during ingestion. Docker Desktop or Podman is still required
+when running the complete application locally because the markitdown document
+reader runs as a container.
 
 # Running the application
 

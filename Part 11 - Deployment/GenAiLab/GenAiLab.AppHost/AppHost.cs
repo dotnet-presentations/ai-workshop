@@ -5,9 +5,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 // builder.AddAzureOpenAI("openai") if you want Aspire to provision one for you.
 var openai = builder.AddConnectionString("openai");
 
-var vectorDB = builder.AddQdrant("vectordb")
-    .WithDataVolume()
-    .WithLifetime(ContainerLifetime.Persistent);
+var search = builder.AddAzureSearch("search");
 
 var markitdown = builder.AddContainer("markitdown", "mcp/markitdown")
     .WithArgs("--http", "--host", "0.0.0.0", "--port", "3001")
@@ -19,8 +17,8 @@ webApp
     .WithReference(openai)
     .WaitFor(openai);
 webApp
-    .WithReference(vectorDB)
-    .WaitFor(vectorDB);
+    .WithReference(search)
+    .WaitFor(search);
 webApp
     .WithEnvironment("MARKITDOWN_MCP_URL", markitdown.GetEndpoint("http"));
 

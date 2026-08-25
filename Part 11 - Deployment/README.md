@@ -4,25 +4,30 @@
 
 ## In this workshop
 
-In this final part, you will learn how to deploy the AI Web Chat application you scaffolded in [Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) to Azure using the Azure Developer CLI (`azd`). You'll deploy your Qdrant-backed application to Azure Container Apps for production use.
+In this final part, you will deploy the AI Web Chat application you brought back
+in [Part 10](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md) using the
+Azure Developer CLI (`azd`). The recommended path runs the web application in
+Azure Container Apps and uses managed Azure AI Search for its vector index.
 
 > [!NOTE]
 > This part deliberately returns to the **Part 4 web application** rather than the samples from Parts 5-9. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship — it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the Part 9 capstone are things you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
 > [!TIP]
 > If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the working code snapshot provided in this `Part 11 - Deployment` folder. The complete code has already been updated with the necessary configuration for external HTTP endpoints and deployment. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
 
-## `GenAiLab/` is also the completed code for Part 4
+## `GenAiLab/` is the deployment-ready snapshot
 
-There is deliberately only one copy of this solution in the repository, and it lives
-here because Part 11 is the part that deploys it.
-[`GenAiLab/`](GenAiLab/) is a correctly finished
-[Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) — current package
-versions, `AddConnectionString("openai")` in `AppHost.cs`, and `gpt-5-mini` as the
-chat deployment — plus the single `WithExternalHttpEndpoints()` line added in the
-next section, which is harmless when running locally.
+[`GenAiLab/`](GenAiLab/) starts from the completed
+[Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) application and
+includes the production preparation from Part 10:
 
-So if you started from this snapshot rather than from your own Part 4 output, that
-line is already there and you can skip the next section.
+- current package versions
+- `AddConnectionString("openai")` for your existing Azure OpenAI resource
+- `gpt-5-mini` as the chat deployment
+- Azure AI Search instead of the local Qdrant container
+- `WithExternalHttpEndpoints()` for the deployed web application
+
+Use this snapshot if you did not keep your morning project or do not want to make
+the Part 10 changes by hand.
 
 Either way, you supply your own credentials. Set `ConnectionStrings:openai` in user
 secrets on **`GenAiLab.AppHost`** — in Visual Studio, right-click the project and
@@ -49,11 +54,6 @@ for you.
 
 > [!IMPORTANT]
 > This is an Aspire solution. Always launch the `GenAiLab.AppHost` project when running locally because AppHost bootstraps the full distributed app (web app + supporting services).
-
-If `vectordb` never reaches **Running** when you run this locally, you are probably
-hitting a Qdrant data volume left behind by an older package version. See
-[Qdrant won't start after updating packages](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md#qdrant-wont-start-after-updating-packages)
-in Part 4 — remove the stale container and volume, then run again.
 
 ## Set Up the Azure Developer CLI
 
@@ -82,9 +82,15 @@ in Part 4 — remove the stale container and volume, then run again.
 ## Deploy to Azure Container Apps
 
 > [!IMPORTANT]
-> **Vector Database Configuration**: This deployment uses **Qdrant** as the vector database, which runs as a containerized service in Azure Container Apps. No additional vector database setup is required.
+> **Vector Database Configuration**: The recommended deployment uses **Azure AI
+> Search**. Aspire provisions the Search service, configures access for the
+> application, and passes its connection information to the web app. The
+> ingestion pipeline creates the vector index, so you do not create one manually.
+> Your Azure account must be able to create Azure AI Search resources and role
+> assignments.
 >
-> For a note on using a managed vector store in production, see [Optional: using a managed vector store](#optional-using-a-managed-vector-store) at the end of this part.
+> If you kept Qdrant as the Part 10 fallback, `azd` deploys it as another
+> Container App instead.
 
 1. Ensure you are in the root directory which contains the solution file.
 
@@ -114,7 +120,8 @@ in Part 4 — remove the stale container and volume, then run again.
    - Resource group
    - Container registry
    - Container apps environment
-   - Container apps for your application, the Qdrant vector database, and the markitdown document reader
+   - Azure AI Search service
+   - Container apps for your application and the markitdown document reader
    - Log Analytics workspace
 
 > [!NOTE]
@@ -144,7 +151,7 @@ in Part 4 — remove the stale container and volume, then run again.
 
    This command:
    - Builds your .NET application
-   - Creates container images for the web app, Qdrant, and markitdown
+   - Creates container images for the web app and markitdown
    - Pushes them to the Azure Container Registry
    - Deploys them to Azure Container Apps
   
@@ -158,45 +165,12 @@ in Part 4 — remove the stale container and volume, then run again.
    azd show
    ```
 
-## Optional: using a managed vector store
+## Qdrant fallback
 
-This workshop deploys Qdrant because it needs no setup, behaves the same locally
-and in Azure, and costs nothing beyond the container it runs in. A production app
-often wants a managed vector store instead, and on Azure that usually means
-[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview).
-
-> [!NOTE]
-> **Azure AI Search is not provisioned by this workshop.** Part 10 explains how
-> to [scaffold an optional Azure AI Search variant](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md#optional-prepare-an-azure-ai-search-variant)
-> before deployment. The default path here continues to deploy Qdrant.
-
-That swap is smaller than you might expect, for the same reason provider swaps
-were small in [Part 10](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md).
-Your search code depends on an abstraction rather than on Qdrant:
-
-```csharp
-// GenAiLab.Web/Services/SemanticSearch.cs
-public class SemanticSearch(
-    VectorStoreCollection<Guid, IngestedChunk> vectorCollection,
-    [FromKeyedServices("ingestion_directory")] DirectoryInfo ingestionDirectory,
-    DataIngestor dataIngestor)
-```
-
-`VectorStoreCollection<TKey, TRecord>` comes from `Microsoft.Extensions.VectorData`,
-so `SemanticSearch`, `DataIngestor`, and the Blazor components stay as they are.
-Only registration changes, in two files: the `AddQdrantClient` and
-`AddQdrantCollection<...>` calls in `GenAiLab.Web/Program.cs`, and the
-`builder.AddQdrant("vectordb")` resource in `GenAiLab.AppHost/AppHost.cs` that tells
-`azd` what to provision.
-
-The optional setup in Part 10 scaffolds that variant separately so you can diff
-the exact registration and Aspire wiring the template generates without
-overwriting the Qdrant snapshot used by this deployment path.
-
-The trade-off is the usual one. Qdrant is cheaper and portable, and you own the
-container and its data volume. Azure AI Search is billed per service hour even
-when idle, but it is managed, has an SLA, and adds keyword and hybrid search
-alongside vector search.
+If Azure AI Search provisioning is unavailable in your subscription, use the
+Qdrant project you completed in Part 4. Its `AddQdrant("vectordb")` resource tells
+`azd` to deploy Qdrant as a Container App alongside the web application. The
+remaining deployment commands are the same.
 
 ## Manage Your Deployment
 

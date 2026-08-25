@@ -31,12 +31,12 @@ with production-oriented wiring for persistence and orchestration.
 The finished version of the app you are about to build lives in
 **[`Part 11 - Deployment/GenAiLab/`](../Part%2011%20-%20Deployment/GenAiLab/)**.
 
-It is the same solution, already scaffolded, already updated to the current
-package versions, and already carrying every change this part asks you to make.
-Part 11 reuses it for deployment, which is why it lives there rather than in this
-folder. The **only** difference from a correctly completed Part 4 is one line that
-Part 11 adds — `WithExternalHttpEndpoints()` in `AppHost.cs` — which is harmless
-when running locally.
+It begins as the same solution, already scaffolded and updated to the current
+package versions. Parts 10 and 11 then prepare it for production by replacing
+Qdrant with Azure AI Search and adding `WithExternalHttpEndpoints()` in
+`AppHost.cs`. Use it as the completed reference for the shared application code;
+the vector-store registration and packages intentionally show the later
+deployment-ready state.
 
 Use it to check your work if a step doesn't behave, or to catch up if you fall
 behind. It still needs your own credentials: see [Step 2.4](#24-store-the-connection-string)

@@ -18,16 +18,21 @@ That matters at deployment time for reasons that are not academic: cost per
 token, data residency, whether a feature is allowed to call the cloud at all,
 and what happens in a demo when the conference wifi drops.
 
-> [!NOTE]
-> This part is a comparison, not a build. There is nothing to scaffold. If you
-> want to try the swaps against real code, use any project from earlier in the
-> day — the Part 3 `RagChatApp` is the most interesting one, because it exercises
-> both chat and embeddings. If you don't have it, you can scaffold a fresh app in
-> about a minute:
->
-> ```bash
-> dotnet new aichatweb --provider azureopenai --vector-store local --name ProviderTest --output ProviderTest
-> ```
+This part and Part 11 form one deployment block. If the workshop schedule does
+not include deployment, skip both parts and protect the Part 9 capstone time.
+
+You will return to the `GenAiLab` project you created in Part 4 and prepare it for
+production deployment. If you do not have that project, use the completed
+[`Part 11 - Deployment/GenAiLab`](../Part%2011%20-%20Deployment/GenAiLab/) snapshot,
+or scaffold the deployment variant directly:
+
+```bash
+dotnet new aichatweb --provider azureopenai --vector-store azureaisearch --aspire --name GenAiLab --output GenAiLab
+```
+
+If you scaffold this variant, follow the Part 4 package-update and
+`AddConnectionString("openai")` steps, then skip the Qdrant replacement steps
+below because the template has already generated the Azure AI Search wiring.
 
 ## The three providers
 
@@ -158,39 +163,87 @@ specific store.
 
 | Vector store | Best for | Trade-off |
 | --- | --- | --- |
-| **Qdrant in a container** (workshop default) | Local development, and deployments where you want to own the data | Cheap and portable, but you run and back up the container |
-| **The template's local JSON store** | The Docker-free path, and quick experiments | No infrastructure at all, but not a production store |
-| **[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview)** | Production apps that want a managed service, an SLA, and hybrid keyword + vector search | Billed per service hour even when idle |
+| **Qdrant in a container** (fallback) | Local development, and deployments where you want to own the data | Cheap and portable, but you run and back up the container |
+| **The template's local SQLite store** | The Docker-free path, and quick experiments | No infrastructure at all, but not a production store |
+| **[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview)** (recommended for deployment) | Production apps that want a managed service, an SLA, and hybrid keyword + vector search | Billed per service hour even when idle |
 
-Part 11 deploys the Qdrant path because it is the one you have been running all
-day and it needs no extra service setup. If you want a managed production vector
-store instead, use the optional setup below before continuing to deployment.
+## Prepare the production vector store
 
-## Optional: prepare an Azure AI Search variant
+The morning project used Qdrant because it is easy to run locally and makes
+Aspire orchestration visible. For the production deployment, replace that
+container with Azure AI Search. Aspire and `azd` will provision one Search
+service; the application creates its vector index during ingestion.
 
-Azure AI Search is not provisioned by the workshop's default deployment. The
-default remains Qdrant. To evaluate the managed option without overwriting your
-working Part 4 project, scaffold a separate comparison project:
+You need an Azure subscription where you can create Azure AI Search and role
+assignments. If your workshop account cannot do that, use the Qdrant fallback in
+Step 4.
+
+> [!TIP]
+> The completed `Part 11 - Deployment/GenAiLab` snapshot already contains these
+> changes. Use it if you want to inspect the result or did not keep your Part 4
+> project.
+
+### Step 1: replace the packages
+
+From the `GenAiLab` solution directory:
 
 ```bash
-dotnet new aichatweb --provider azureopenai --vector-store azureaisearch --aspire --name GenAiLabSearch --output GenAiLabSearch
+dotnet remove GenAiLab.AppHost package Aspire.Hosting.Qdrant
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.4.6
+
+dotnet remove GenAiLab.Web package Aspire.Qdrant.Client
+dotnet remove GenAiLab.Web package Microsoft.SemanticKernel.Connectors.Qdrant
+dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.4.6
+dotnet add GenAiLab.Web package CommunityToolkit.VectorData.AzureAISearch --version 1.0.0
 ```
 
-Compare that project with `Part 11 - Deployment/GenAiLab/`. The generated Azure
-AI Search variant replaces the Qdrant resource and registrations with:
+### Step 2: replace the AppHost resource
 
-- an Azure AI Search resource in AppHost
-- the Azure AI Search client and vector-store registrations in the web app
-- Azure AI Search hosting, client, and vector-data connector packages
+In `GenAiLab.AppHost/AppHost.cs`, replace:
 
-That path needs one Azure AI Search service. The application creates its vector
-index during ingestion, so you do not create the index manually. If you use
-managed identity, the application needs permission to manage the index and to
-read and write its documents.
+```csharp
+var vectorDB = builder.AddQdrant("vectordb")
+    .WithDataVolume()
+    .WithLifetime(ContainerLifetime.Persistent);
+```
 
-This is an optional production-oriented exercise. Continue with the Qdrant-based
-`GenAiLab` snapshot in Part 11 unless you intentionally choose to carry the
-generated Azure AI Search variant through deployment.
+with:
+
+```csharp
+var search = builder.AddAzureSearch("search");
+```
+
+Then replace the `vectorDB` reference:
+
+```csharp
+webApp
+    .WithReference(search)
+    .WaitFor(search);
+```
+
+### Step 3: replace the web registrations
+
+In `GenAiLab.Web/Program.cs`, replace the three Qdrant registrations with:
+
+```csharp
+builder.AddAzureSearchClient("search");
+builder.Services.AddAzureAISearchVectorStore();
+builder.Services.AddAzureAISearchCollection<IngestedChunk>(
+    IngestedChunk.CollectionName);
+```
+
+The rest of the application stays unchanged because ingestion and semantic search
+depend on `Microsoft.Extensions.VectorData` abstractions.
+
+### Step 4: choose the fallback if needed
+
+Keep Qdrant instead if your subscription cannot provision Azure AI Search, your
+account cannot create role assignments, or you want the lowest-cost workshop
+path. Do not make the changes above; Part 11 can deploy the Qdrant container
+alongside the web app.
+
+With Azure AI Search, `azd` provisions the service and assigns the deployed app
+access. You do not need to create a Search endpoint or index in Part 1.
 
 ## What's next
 

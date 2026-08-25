@@ -165,6 +165,20 @@ and in Azure, and costs nothing beyond the container it runs in. A production ap
 often wants a managed vector store instead, and on Azure that usually means
 [Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview).
 
+> [!NOTE]
+> **Azure AI Search is not provisioned by this workshop.** The default deployment
+> continues to use the Qdrant container described above. To evaluate Azure AI
+> Search, scaffold a separate comparison project with:
+>
+> ```bash
+> dotnet new aichatweb --provider azureopenai --vector-store azureaisearch --aspire --name GenAiLabSearch --output GenAiLabSearch
+> ```
+>
+> That variant needs one Azure AI Search service. The application creates its
+> vector index during ingestion, so you do not need to create an index manually.
+> If you use managed identity, grant the application permissions to manage the
+> index and read and write its documents.
+
 That swap is smaller than you might expect, for the same reason provider swaps
 were small in [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md).
 Your search code depends on an abstraction rather than on Qdrant:

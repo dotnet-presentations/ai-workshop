@@ -84,7 +84,7 @@ in Part 4 — remove the stale container and volume, then run again.
 > [!IMPORTANT]
 > **Vector Database Configuration**: This deployment uses **Qdrant** as the vector database, which runs as a containerized service in Azure Container Apps. No additional vector database setup is required.
 >
-> For a note on using a managed vector store in production, see [Optional: using a managed vector store](#optional-using-a-managed-vector-store) at the end of this part.
+> If you want a managed vector store for production later, Azure AI Search is an optional alternative. That is separate from the Qdrant-based walkthrough in this part, so no Azure AI Search resources are required to complete the steps below. See [Optional: using a managed vector store](#optional-using-a-managed-vector-store) at the end of this part for the high-level swap.
 
 1. Ensure you are in the root directory which contains the solution file.
 

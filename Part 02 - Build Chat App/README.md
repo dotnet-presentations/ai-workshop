@@ -29,6 +29,9 @@ of this for you.
 > Never hardcode endpoints or API keys in source code. This project uses
 > [user-secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets)
 > so your credentials stay out of the repository.
+>
+> Every setup step below includes both a .NET CLI route and a Visual Studio 2026
+> route. Choose one route and stay in the same `ChatApp` project.
 
 ## Step 1: Create the console project
 
@@ -60,7 +63,20 @@ dotnet add package Microsoft.Extensions.Logging.Console
 
 ### Option B: Add packages in Visual Studio 2026
 
-Open **Tools > NuGet Package Manager > Package Manager Console** and run:
+1. In Solution Explorer, right-click the `ChatApp` project and select
+   **Manage NuGet Packages**.
+1. Select the **Browse** tab.
+1. Search for and install each package:
+   - `Microsoft.Extensions.AI`
+   - `Microsoft.Extensions.AI.OpenAI`
+   - `Azure.AI.OpenAI`
+   - `Microsoft.Extensions.Configuration.UserSecrets`
+   - `Microsoft.Extensions.Logging.Console`
+1. Accept any license prompts, then select **Build > Build Solution**.
+
+If you prefer the Package Manager Console inside Visual Studio, open
+**Tools > NuGet Package Manager > Package Manager Console**, confirm that
+`ChatApp` is the **Default project**, and run:
 
 ```powershell
 Install-Package Microsoft.Extensions.AI
@@ -69,9 +85,6 @@ Install-Package Azure.AI.OpenAI
 Install-Package Microsoft.Extensions.Configuration.UserSecrets
 Install-Package Microsoft.Extensions.Logging.Console
 ```
-
-You can also right-click the project and select **Manage NuGet Packages** and
-search for each package on the **Browse** tab.
 
 | Package | Why |
 | --- | --- |
@@ -320,6 +333,9 @@ Your completed file should now match [ChatApp/Program.cs](ChatApp/Program.cs).
 ```bash
 dotnet run
 ```
+
+In Visual Studio 2026, press **Ctrl+F5** to run without the debugger attached, or
+**F5** to debug.
 
 Chat for a turn or two, then type `summary`:
 

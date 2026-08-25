@@ -693,4 +693,4 @@ That is what makes this different from bolting a chatbot onto a homepage, and it
 
 ---
 
-**[⬅️ Back: Part 8 - Agent Framework Basics](../Part%2008%20-%20Agent%20Framework%20Basics/README.md)** | **[Next: Part 10 - Choosing Providers and Services ➡️](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md)**
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 8: Agent Framework Essentials](../Part%2008%20-%20Agent%20Framework%20Basics/README.md) | ➡️ **Next**: [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md)

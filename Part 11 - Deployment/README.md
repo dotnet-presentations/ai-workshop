@@ -1,6 +1,6 @@
 # Part 11: Deploy to Azure
 
-> **⏱️ Estimated Time:** 30-45 minutes (excluding Azure provisioning time ~6 minutes)
+> **⏱️ Estimated Time:** 30-45 minutes (excluding Azure provisioning time, typically 7-12 minutes)
 
 ## In this workshop
 
@@ -11,6 +11,11 @@ Azure Container Apps and uses managed Azure AI Search for its vector index.
 
 > [!NOTE]
 > This part deliberately returns to the **Part 4 web application** rather than the samples from Parts 5-9. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship — it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the Part 9 capstone are things you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
+>
+> Docker Desktop or Podman is required only if you run the complete application
+> locally, because the markitdown document reader is a container. Azure Container
+> Apps runs it after deployment.
+>
 > [!TIP]
 > If you haven't completed the previous steps in the lab or are having trouble with your code, you can use the working code snapshot provided in this `Part 11 - Deployment` folder. The complete code has already been updated with the necessary configuration for external HTTP endpoints and deployment. You can skip directly to the "Set Up the Azure Developer CLI" section and deploy that code instead.
 
@@ -41,16 +46,19 @@ choose **Manage User Secrets**:
 }
 ```
 
-Or let `.github/scripts/setup-workshop-credentials.ps1 -ApplyUserSecrets` write it
-for you.
+Or, from the workshop root, run
+`.\.github\scripts\setup-workshop-credentials.ps1 -ApplyUserSecrets`.
 
-## Configure the web application for external access
+## Confirm the web application has external access
 
-  Before the web application is deployed to Azure Container Apps, you will need to configure it so that it is available via web browser. Update `GenAiLab.AppHost/AppHost.cs` to add the following line just before the call to `builder.Build().Run();` at the end of the file:
+The Part 11 snapshot already includes `WithExternalHttpEndpoints()`. If you
+carried your own project forward from Part 10, confirm that
+`GenAiLab.AppHost/AppHost.cs` adds it to `webApp`:
 
-  ```csharp
-  webApp.WithExternalHttpEndpoints();
-  ```
+```csharp
+var webApp = builder.AddProject<Projects.GenAiLab_Web>("aichatweb-app")
+    .WithExternalHttpEndpoints();
+```
 
 > [!IMPORTANT]
 > This is an Aspire solution. Always launch the `GenAiLab.AppHost` project when running locally because AppHost bootstraps the full distributed app (web app + supporting services).
@@ -97,7 +105,7 @@ for you.
 1. **Initialize your Azure environment**:
 
    ```powershell
-   # Initialize the application for managment with azd
+   # Initialize the application for management with azd
    azd init
    ```
 
@@ -135,10 +143,13 @@ for you.
    Endpoint=https://your-resource.openai.azure.com/;Key=your-api-key
    ```
 
-   Or use your environment variable:
+   PowerShell does not expand environment variables pasted as text into an
+   interactive prompt. To use the workshop variables, copy the expanded value
+   before running `azd provision`, then paste it when prompted:
 
-   ```text
-   Endpoint=$env:WORKSHOP_AZURE_OPENAI_ENDPOINT;Key=$env:WORKSHOP_AZURE_OPENAI_KEY
+   ```powershell
+   "Endpoint=$env:WORKSHOP_AZURE_OPENAI_ENDPOINT;Key=$env:WORKSHOP_AZURE_OPENAI_KEY" |
+       Set-Clipboard
    ```
 
 1. Press enter and watch as your resources are provisioned! You can either just follow along in the terminal, or you can click on the link to watch the progress in the Azure portal. Provisioning should take roughly 5 minutes, but may take longer during conference events as multiple concurrent deployments can slow things down.
@@ -168,9 +179,12 @@ for you.
 ## Qdrant fallback
 
 If Azure AI Search provisioning is unavailable in your subscription, use the
-Qdrant project you completed in Part 4. Its `AddQdrant("vectordb")` resource tells
-`azd` to deploy Qdrant as a Container App alongside the web application. The
-remaining deployment commands are the same.
+Qdrant project you completed in Part 4. If you no longer have it, scaffold it
+again with the [Part 4 command](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md#step-1-install-the-template-and-scaffold),
+complete Part 4 Steps 2.1-2.4, and confirm the external endpoint as shown above.
+Its `AddQdrant("vectordb")` resource tells `azd` to deploy Qdrant as a Container
+App alongside the web application. The remaining deployment commands are the
+same.
 
 ## Manage Your Deployment
 
@@ -182,7 +196,7 @@ Once deployed, you can manage your deployment using various Azure Developer CLI 
    azd show
    ```
 
-   This command shows your deployment details, including endpoints and resource information. Launch the link for the *aichatweb-app** service and verify that it is continuing to run as it did locally.
+   This command shows your deployment details, including endpoints and resource information. Launch the link for the **aichatweb-app** service and verify that it is continuing to run as it did locally.
 
 1. **Monitor your application**:
 

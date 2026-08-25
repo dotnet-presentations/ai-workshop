@@ -12,7 +12,7 @@ Before starting, ensure you have:
 
 - **.NET 10 SDK** or later
 - **Visual Studio 2026** (with the Web & Cloud workload) **or** Visual Studio Code with the **C# Dev Kit** extension
-- [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/) for the recommended Qdrant + Aspire path in Part 4
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/) for the recommended Qdrant + Aspire path in Part 4 and the markitdown document reader in Part 11
 - **An Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI)**, the primary AI provider for this workshop
 - GitHub Copilot subscription (recommended; used later for the MCP and GitHub Copilot SDK units)
 - (Optional) A GitHub account (recommended for contributor workflows such as cloning, branching, and pull requests)
@@ -23,7 +23,7 @@ Before starting, ensure you have:
 <!-- -->
 
 > [!NOTE]
-> **No Docker or Podman?** You can complete Parts 1-3, use the local JSON vector-store option in Part 4, and continue with Parts 5-10. Docker or Podman is only required to run the workshop's Qdrant container locally; see the [workshop overview](../README.md#when-docker-is-required) for details.
+> **No Docker or Podman?** You can complete Parts 1-3, use the local SQLite vector-store option in Part 4, and continue with Parts 5-10. Part 11 also needs a container runtime to run its markitdown document reader locally; see the [workshop overview](../README.md#when-docker-is-required) for details.
 
 ## Before the workshop: provision [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) ⏳
 

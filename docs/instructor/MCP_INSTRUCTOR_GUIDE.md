@@ -51,7 +51,7 @@ This guide provides instructors with comprehensive information for teaching Part
 
 **Essential Prerequisites:**
 
-- ✅ **.NET 10.0 SDK** (preview 6 or higher) - Required for MCP development
+- ✅ **.NET 10.0 SDK** - Required for MCP development
 - ✅ **Visual Studio Code** - Required for MCP integration testing
 - ✅ **GitHub Copilot** subscription and VS Code extensions
 - ✅ **Basic .NET knowledge** - C# syntax, project structure, NuGet packages
@@ -67,14 +67,14 @@ This guide provides instructors with comprehensive information for teaching Part
 **Pre-Workshop Setup Checklist:**
 
 1. Verify .NET 10 SDK installation: `dotnet --version`
-2. Install MCP templates: `dotnet new install Microsoft.Extensions.AI.Templates`
+2. Install MCP templates: `dotnet new install Microsoft.McpServer.ProjectTemplates`
 3. Verify VS Code with GitHub Copilot extensions
 4. Test GitHub Copilot functionality
 5. Clone workshop repository
 
 **Common Setup Issues:**
 
-- **.NET Version Conflicts**: Ensure .NET 10 preview is primary version
+- **.NET Version Conflicts**: Ensure the .NET 10 SDK is the active version
 - **GitHub Copilot Access**: Verify subscription is active and extensions installed
 - **Template Installation**: May require clearing NuGet cache if templates don't appear
 

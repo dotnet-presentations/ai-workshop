@@ -61,7 +61,7 @@ The workshop is structured as 11 parts:
 - Part 8: Agent Framework Essentials
 - Part 9: Adding AI to an Existing App
 - Part 10: Choosing Providers and Services
-- Part 11: Azure Deployment
+- Part 11: Deploy to Azure
 
 ## Contributing
 

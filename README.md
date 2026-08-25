@@ -12,6 +12,7 @@ Get up to speed quickly with AI app building in .NET. This workshop covers AI ap
 - .NET 10.0 SDK or later
 - Docker Desktop or Podman (recommended for the full Qdrant + Aspire path in Part 4)
 - Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI), the primary AI provider
+- Permission to create Azure AI Search resources and role assignments for the recommended Parts 10-11 deployment path; otherwise, keep the documented Qdrant fallback
 
 ### When Docker is required
 
@@ -25,7 +26,7 @@ Docker Desktop or Podman is required when you run the workshop's **Qdrant contai
 | Parts 6-7 | Not required. Containerizing an MCP server in Part 7 is optional. |
 | Part 8 | Not required. This module includes a standalone `AgentApp` sample and remains Docker-free. |
 | Part 9 | Not required. The `eShopLite` sample in this repo is an Aspire solution that deliberately avoids containers — it uses SQLite for both the catalog and the vector store. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
-| Part 10 | Not required for the provider comparison. Docker is still needed if you run the Part 4 Qdrant fallback locally. |
+| Part 10 | Not required. Docker is still needed if you run the Part 4 Qdrant fallback locally. |
 | Part 11 | Docker is needed to run the markitdown document-reader container locally. The recommended vector store is managed Azure AI Search. |
 
 Without Docker, you can still complete Parts 1-10, including the main chat, RAG,
@@ -58,7 +59,7 @@ The workshop is split into five sections:
 
 ### Pacing
 
-The workshop is designed as a **two-part, roughly 8-hour hands-on lab** (8:30-5:30 less an hour for lunch). The core path is Parts 1-5 and 8-11; the sections badged *(Optional / bonus)* exist so groups that move quickly have somewhere to go, and so the schedule keeps slack for everyone else.
+The workshop is designed as a **two-part, roughly 8-hour hands-on lab** (8:30-5:30 less an hour for lunch). The full core path is Parts 1-5 and 8-11; the sections badged *(Optional / bonus)* exist so groups that move quickly have somewhere to go, and so the schedule keeps slack for everyone else. Parts 10-11 are still the first core modules to cut when time is short, as described below.
 
 | Session | Parts | Budget | Focus |
 | --- | --- | --- | --- |
@@ -120,7 +121,7 @@ Part 5 is required: its weather tool is the tool you hand to an agent in Part 8.
 
 1. 🔁 [**Choosing Providers and Services**](Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md): Decide which model provider and supporting Azure services your application will run against ([Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) primary, with local options).
 
-2. 🚀 [**Deployment**](Part%2011%20-%20Deployment/README.md): Deploy your application to Azure using the Azure Developer CLI.
+2. 🚀 [**Deploy to Azure**](Part%2011%20-%20Deployment/README.md): Deploy your application to Azure using the Azure Developer CLI.
 
 ## Lab Structure 📁
 

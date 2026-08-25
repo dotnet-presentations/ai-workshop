@@ -197,9 +197,11 @@ dotnet remove GenAiLab.AppHost package Aspire.Hosting.Azure.CognitiveServices
 > subscription, resource group, and location, so there is nowhere to paste an
 > endpoint and key. Swapping to `AddConnectionString` is the fix.
 >
-> If you *do* want Aspire to provision the resource — in [Part 11](../Part%2011%20-%20Deployment/README.md), against your own subscription — put the template's
-> version back. You will need Owner or User Access Administrator on the
-> subscription, because provisioning also creates role assignments.
+> If you *do* want Aspire to provision Azure OpenAI in your own application, put
+> the template's version back. You will need Owner or User Access Administrator on
+> the subscription, because provisioning also creates role assignments. The
+> workshop's [Part 11](../Part%2011%20-%20Deployment/README.md) deployment keeps
+> using your existing Azure OpenAI resource through `AddConnectionString`.
 
 ### 2.3 Use the deployment name your resource actually has
 

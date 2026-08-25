@@ -37,7 +37,7 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 | --- | --- | --- |
 | 1 - Setup | Verify prerequisites and install steps actually work | — |
 | 2 - Build Chat App | `dotnet new console -n ChatApp`, add packages and code per README. Run it: chat, streaming, structured output | `Part 02 - Build Chat App/ChatApp/` |
-| 3 - Add RAG | Continue from your Part 2 app (README says copy it). Verify retrieval answers from `manuals/`. Also check the two `checkpoints/*.cs` variants still compile against the described packages | `Part 03 - Add RAG/RagChatApp/` |
+| 3 - Add RAG | Continue from your Part 2 app (README says copy it). Verify retrieval answers from `sample-docs/contoso-trailblazer-3000.md`. Also check the two `checkpoints/*.cs` variants still compile against the described packages | `Part 03 - Add RAG/RagChatApp/` |
 | 4 - AI Web Chat Template | Scaffold with the exact command in the README (`--provider azureopenai --vector-store qdrant --aspire --name GenAiLab`). Run via `GenAiLab.AppHost`. Also sanity-check the documented Docker-free `--vector-store local` path | Compare against `Part 11 - Deployment/GenAiLab/` |
 | 5 - MCP Server Basics | `dotnet new install Microsoft.McpServer.ProjectTemplates`, then `dotnet new mcpserver -n MyMcpServer`, add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 05 - MCP Server Basics/MyMcpServer/` |
 | 6 - Enhanced MCP Server *(bonus)* | Exploration only — build and run the existing snapshot, review the README's business-integration guidance | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
@@ -83,7 +83,7 @@ Write `docs/testing/workshop-test-report-<YYYY-MM-DD>.md` using [report-template
 
 ## Known quirks
 
-- Package versions drift between parts (`Microsoft.Extensions.AI`, `Microsoft.Agents.AI`, `Azure.AI.OpenAI`). Flag inconsistencies in the report rather than unilaterally bumping them.
-- The MCP template's namespace style has changed between previews; the Part 6 snapshot uses `namespace MyMcpServer.Tools;` while Part 7's tool file has none. Note which style the current template emits.
+- Keep shared direct package references aligned across snapshots: `Microsoft.Extensions.AI` and `Microsoft.Extensions.AI.OpenAI` 10.8.1, `Microsoft.Agents.AI` 1.15.0, and `Azure.AI.OpenAI` 2.1.0.
+- The MCP template's namespace style has changed between releases. The Part 5 snapshot uses `namespace MyMcpServer.Tools;`, and the Part 6 snapshot uses `namespace ContosoOrdersMcpServer.Tools;`; Part 7 is README-only. Note which style the current template emits.
 - Missing `--vector-store qdrant` in Part 4 silently produces a local JSON store app that no longer matches the Part 11 snapshot.
 - The AI Web Chat template ships `ChatInput.razor.js` and `ChatMessageList.razor.js` (auto-resize and auto-scroll). They must survive into any snapshot update.

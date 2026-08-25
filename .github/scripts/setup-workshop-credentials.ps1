@@ -189,6 +189,28 @@ function Write-WorkshopUserSecrets {
     else {
         Write-Host "  [missing] Part 11 - Deployment/GenAiLab/GenAiLab.AppHost (Parts 4 and 11)" -ForegroundColor Yellow
     }
+
+    # Part 4 scaffolds a GenAiLab app in the repo root when the workshop is tested from scratch.
+    # Apply the same Azure OpenAI secrets there when the scaffold exists.
+    $scaffoldedGenAiLab = Join-Path $repoRoot 'GenAiLab'
+    if (Test-Path $scaffoldedGenAiLab) {
+        $scaffoldedRootProject = Join-Path $scaffoldedGenAiLab 'GenAiLab.csproj'
+        if (Test-Path $scaffoldedRootProject) {
+            dotnet user-secrets init --project $scaffoldedGenAiLab 2>&1 | Out-Null
+            $ok = Set-ProjectSecret $scaffoldedGenAiLab 'AzureOpenAI:Endpoint' $env:WORKSHOP_AZURE_OPENAI_ENDPOINT
+            $ok = (Set-ProjectSecret $scaffoldedGenAiLab 'AzureOpenAI:Key' $env:WORKSHOP_AZURE_OPENAI_KEY) -and $ok
+            if ($ok) { Write-Host "  [ok] GenAiLab scaffold" -ForegroundColor Green }
+        }
+
+        $scaffoldedAppHost = Join-Path $scaffoldedGenAiLab 'GenAiLab.AppHost'
+        if (Test-Path $scaffoldedAppHost) {
+            dotnet user-secrets init --project $scaffoldedAppHost 2>&1 | Out-Null
+            $connection = "Endpoint=$($env:WORKSHOP_AZURE_OPENAI_ENDPOINT);Key=$($env:WORKSHOP_AZURE_OPENAI_KEY)"
+            if (Set-ProjectSecret $scaffoldedAppHost 'ConnectionStrings:openai' $connection) {
+                Write-Host "  [ok] GenAiLab scaffold AppHost" -ForegroundColor Green
+            }
+        }
+    }
 }
 
 Write-Host ''

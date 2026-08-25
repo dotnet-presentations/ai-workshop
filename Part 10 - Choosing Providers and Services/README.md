@@ -168,6 +168,51 @@ the swap is a registration change in two files rather than a rewrite — see
 [Optional: using a managed vector store](../Part%2011%20-%20Deployment/README.md#optional-using-a-managed-vector-store)
 in the next part.
 
+## Optional: set up Azure AI Search for deployment
+
+If you plan to take the managed vector store path in Part 11, provision the
+service now so the deployment unit is pure deployment. You will use the AI Web
+Chat project from [Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md)
+— if you do not have it, scaffold a fresh one in about a minute:
+
+```bash
+dotnet new aichatweb --provider azureopenai --vector-store local --name ProviderTest --output ProviderTest
+```
+
+1. **Create the Azure AI Search service** in the Azure portal: **Create a
+   resource → Azure AI Search**. Vector search requires the **Basic** tier or
+   higher — the Free tier does not support it.
+2. **Capture the credentials**: from the service's **Keys** blade, note the
+   endpoint URL (`https://<name>.search.windows.net`) and an admin key. The
+   connection string format the deployment expects is:
+
+   ```text
+   Endpoint=https://<name>.search.windows.net;Key=<admin-key>
+   ```
+
+3. **See what changes in the app**: scaffold the Part 4 template a second time
+   with the Azure AI Search vector store and diff it against your project:
+
+   ```bash
+   dotnet new aichatweb --provider azureopenai --vector-store azureaisearch --aspire --name GenAiLabSearch --output GenAiLabSearch
+   ```
+
+   The differences are confined to registration: the `AddQdrantClient` /
+   `AddQdrantCollection<...>` calls in `Program.cs` and the
+   `builder.AddQdrant("vectordb")` resource in `AppHost.cs`. Your search and
+   ingestion code (`SemanticSearch`, `DataIngestor`) is written against
+   `VectorStoreCollection<TKey, TRecord>` and does not change.
+4. **Deploy with Part 11's steps.** When `azd provision` prompts for the search
+   infrastructure parameter, paste the connection string from step 2.
+5. **Tear down when finished** — `azd down --purge --force`, and confirm the
+   Search service is gone in the portal. Azure AI Search is billed per service
+   hour even when idle, unlike the Qdrant container.
+
+> [!NOTE]
+> If you scaffolded the Docker-free `--vector-store local` project in the
+> morning, this swap is also your upgrade path from the local JSON store to a
+> real vector database.
+
 ## What's next
 
 You have made the two decisions that deployment depends on: which provider serves

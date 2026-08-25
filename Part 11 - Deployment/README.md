@@ -188,7 +188,11 @@ Rather than editing by hand, scaffold the template a second time with the Azure 
 Search vector store option (the same `dotnet new aichatweb` command from
 [Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md), with a different
 `--vector-store` value) and diff the two projects. That shows you the exact
-registration and Aspire wiring the template generates.
+registration and Aspire wiring the template generates. For the provisioning
+steps — creating the Search service and the connection string to give `azd` —
+see
+[Optional: set up Azure AI Search for deployment](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md#optional-set-up-azure-ai-search-for-deployment)
+in Part 10.
 
 The trade-off is the usual one. Qdrant is cheaper and portable, and you own the
 container and its data volume. Azure AI Search is billed per service hour even

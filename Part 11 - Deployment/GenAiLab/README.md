@@ -4,7 +4,7 @@
 > **Workshop note.** This file is the template's own generated README. This copy of
 > the app is the deployment-ready continuation of
 > [Part 4](../../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md), prepared in
-> [Part 10](../../Part%2010%20-%20Providers%20and%20Fallbacks/README.md) and deployed
+> [Part 10](../../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) and deployed
 > in [Part 11](../README.md). It has already been modified for the workshop:
 > `AppHost.cs` uses `builder.AddConnectionString("openai")` to point at an
 > **existing** Azure OpenAI resource instead of provisioning a new one, and the chat

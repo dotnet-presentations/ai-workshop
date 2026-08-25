@@ -5,7 +5,7 @@
 ## In this workshop
 
 In this final part, you will deploy the AI Web Chat application you brought back
-in [Part 10](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md) using the
+in [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) using the
 Azure Developer CLI (`azd`). The recommended path runs the web application in
 Azure Container Apps and uses managed Azure AI Search for its vector index.
 
@@ -288,4 +288,4 @@ Use this app as a baseline for your own AI application experiments.
 
 ---
 
-📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 10: Providers and Fallbacks](../Part%2010%20-%20Providers%20and%20Fallbacks/README.md)
+📖 **Return to**: [Workshop Overview](../README.md) | 🔄 **Previous**: [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md)

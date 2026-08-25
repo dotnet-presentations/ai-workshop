@@ -44,7 +44,7 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 | 7 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | — |
 | 8 - Agent Framework Basics | `dotnet new console` → `AgentApp`, add `Microsoft.Agents.AI` per README. Verify the agent runs and can call the Part 5 weather tool if the README wires that up | `Part 08 - Agent Framework Basics/AgentApp/` |
 | 9 - Adding AI to an Existing App | Run the completed `StoreApp` snapshot. The local-inference module needs `LocalModel:Endpoint` / `LocalModel:Model` (Ollama or Foundry Local) — note it as skipped if unavailable | `Part 09 - Adding AI to an Existing App/StoreApp/` |
-| 10 - Providers and Fallbacks | Apply the documented Azure AI Search package and registration changes to the Part 4 project. Verify Qdrant remains a usable fallback | Reconcile with `Part 11 - Deployment/GenAiLab/` |
+| 10 - Choosing Providers and Services | Apply the documented Azure AI Search package and registration changes to the Part 4 project. Verify Qdrant remains a usable fallback | Reconcile with `Part 11 - Deployment/GenAiLab/` |
 | 11 - Deployment | See below | `Part 11 - Deployment/GenAiLab/` |
 
 ### MCP server verification (Parts 5-6)

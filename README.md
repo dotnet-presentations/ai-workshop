@@ -118,7 +118,7 @@ Part 5 is required: its weather tool is the tool you hand to an agent in Part 8.
 
 ### Deployment (Parts 10-11)
 
-1. 🔁 [**Providers and Fallbacks**](Part%2010%20-%20Providers%20and%20Fallbacks/README.md): Decide which model provider and supporting Azure services your application will run against ([Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) primary, with local options).
+1. 🔁 [**Choosing Providers and Services**](Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md): Decide which model provider and supporting Azure services your application will run against ([Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) primary, with local options).
 
 2. 🚀 [**Deployment**](Part%2011%20-%20Deployment/README.md): Deploy your application to Azure using the Azure Developer CLI.
 

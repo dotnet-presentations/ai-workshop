@@ -1,4 +1,4 @@
-# Part 10: Providers and Fallbacks
+# Part 10: Choosing Providers and Services
 
 > **⏱️ Estimated Time:** 20-30 minutes
 

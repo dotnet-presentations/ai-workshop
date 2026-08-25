@@ -21,7 +21,7 @@
 | 7 - MCP Publishing | | | |
 | 8 - Agent Framework Basics | | | |
 | 9 - Adding AI to an Existing App | | | |
-| 10 - Providers and Fallbacks | | | |
+| 10 - Choosing Providers and Services | | | |
 | 11 - Deployment | | | |
 
 Status: Pass / Pass with issues / Fail / Skipped.
@@ -48,7 +48,7 @@ Repeat per part that had anything worth saying.
 | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` | | |
 | `Part 08 - Agent Framework Basics/AgentApp/` | | |
 | `Part 09 - Adding AI to an Existing App/StoreApp/` | | |
-| `Part 10 - Providers and Fallbacks/` | | |
+| `Part 10 - Choosing Providers and Services/` | | |
 | `Part 11 - Deployment/GenAiLab/` | | |
 
 ## Issues

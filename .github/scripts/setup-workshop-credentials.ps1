@@ -189,6 +189,16 @@ function Write-WorkshopUserSecrets {
     else {
         Write-Host "  [missing] Part 11 - Deployment/GenAiLab/GenAiLab.AppHost (Parts 4 and 11)" -ForegroundColor Yellow
     }
+
+    # Workshop tests scaffold Part 4 under test-workspace/GenAiLab.
+    $scaffoldedAppHost = Join-Path $repoRoot 'test-workspace/GenAiLab/GenAiLab.AppHost'
+    if (Test-Path $scaffoldedAppHost) {
+        dotnet user-secrets init --project $scaffoldedAppHost 2>&1 | Out-Null
+        $connection = "Endpoint=$($env:WORKSHOP_AZURE_OPENAI_ENDPOINT);Key=$($env:WORKSHOP_AZURE_OPENAI_KEY)"
+        if (Set-ProjectSecret $scaffoldedAppHost 'ConnectionStrings:openai' $connection) {
+            Write-Host "  [ok] test-workspace/GenAiLab/GenAiLab.AppHost" -ForegroundColor Green
+        }
+    }
 }
 
 Write-Host ''

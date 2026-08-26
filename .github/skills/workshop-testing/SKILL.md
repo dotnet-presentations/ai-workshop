@@ -43,7 +43,7 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 | 6 - Enhanced MCP Server *(bonus)* | Exploration only — build and run the existing snapshot, review the README's business-integration guidance | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
 | 7 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | — |
 | 8 - Agent Framework Basics | `dotnet new console` → `AgentApp`, add `Microsoft.Agents.AI` per README. Verify the agent runs and can call the Part 5 weather tool if the README wires that up | `Part 08 - Agent Framework Basics/AgentApp/` |
-| 9 - Adding AI to an Existing App | Run the completed `StoreApp` snapshot. The local-inference module needs `LocalModel:Endpoint` / `LocalModel:Model` (Ollama or Foundry Local) — note it as skipped if unavailable | `Part 09 - Adding AI to an Existing App/StoreApp/` |
+| 9 - Adding AI to an Existing App | Follow the README in `eShopLite-start/`, then reconcile against the `eShopLite/` answer key. The optional local-model step needs `LocalModel:Endpoint` / `LocalModel:Model` (Foundry Local or Ollama) in the `Store` project — note it as skipped if unavailable | `Part 09 - Adding AI to an Existing App/eShopLite/` (answer key); `Part 09 - Adding AI to an Existing App/eShopLite-start/` |
 | 10 - Choosing Providers and Services | Documentation only — read for accuracy of provider names, packages, and config keys | — |
 | 11 - Deployment | See below | `Part 11 - Deployment/GenAiLab/` |
 
@@ -84,6 +84,6 @@ Write `docs/testing/workshop-test-report-<YYYY-MM-DD>.md` using [report-template
 ## Known quirks
 
 - Package versions drift between parts (`Microsoft.Extensions.AI`, `Microsoft.Agents.AI`, `Azure.AI.OpenAI`). Flag inconsistencies in the report rather than unilaterally bumping them.
-- The MCP template's namespace style has changed between previews; the Part 6 snapshot uses `namespace MyMcpServer.Tools;` while Part 7's tool file has none. Note which style the current template emits.
+- The MCP template's namespace style has changed between previews; the Part 6 snapshot uses `namespace ContosoOrdersMcpServer.Tools;` while Part 7's tool file has none. Note which style the current template emits.
 - Missing `--vector-store qdrant` in Part 4 silently produces a local JSON store app that no longer matches the Part 11 snapshot.
 - The AI Web Chat template ships `ChatInput.razor.js` and `ChatMessageList.razor.js` (auto-resize and auto-scroll). They must survive into any snapshot update.

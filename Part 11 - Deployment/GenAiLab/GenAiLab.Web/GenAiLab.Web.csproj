@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
-    <PackageReference Include="Aspire.Azure.AI.OpenAI" Version="9.5.0-preview.1.25474.7" />
+    <PackageReference Include="Aspire.Azure.AI.OpenAI" Version="13.4.6-preview.1.26319.6" />
     <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="10.8.1" />
     <PackageReference Include="Microsoft.Extensions.AI" Version="10.8.1" />
     <PackageReference Include="Microsoft.Extensions.DataIngestion" Version="10.7.0-preview.1.26309.5" />

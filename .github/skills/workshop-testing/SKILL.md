@@ -84,6 +84,6 @@ Write `docs/testing/workshop-test-report-<YYYY-MM-DD>.md` using [report-template
 ## Known quirks
 
 - Package versions drift between parts (`Microsoft.Extensions.AI`, `Microsoft.Agents.AI`, `Azure.AI.OpenAI`). Flag inconsistencies in the report rather than unilaterally bumping them.
-- The MCP template's namespace style has changed between previews; the Part 6 snapshot uses `namespace MyMcpServer.Tools;` while Part 7's tool file has none. Note which style the current template emits.
+- The MCP template's namespace style has changed between previews; the Part 6 snapshot uses `namespace ContosoOrdersMcpServer.Tools;` while Part 7's tool file has none. Note which style the current template emits.
 - Missing `--vector-store qdrant` in Part 4 silently produces a local JSON store app that no longer matches the Part 11 snapshot.
 - The AI Web Chat template ships `ChatInput.razor.js` and `ChatMessageList.razor.js` (auto-resize and auto-scroll). They must survive into any snapshot update.

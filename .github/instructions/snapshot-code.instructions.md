@@ -11,8 +11,10 @@ applyTo: "Part 02 - Build Chat App/**,Part 03 - Add RAG/**,Part 05 - MCP Server 
 - Preserve the workshop's scaffold-first flow. Projects taught as generated must
   begin with the documented `dotnet new` command; record required package updates
   as explicit attendee steps.
-- Read the affected project files before changing package versions. Preserve
-  deliberate pins and cross-project consistency documented by the surrounding lab.
+- Read the affected project files and
+  `docs/instructor/DEPENDENCY_POLICY.md` before changing package versions. Preserve
+  security overrides, compatibility boundaries, coordinated sets, and cross-project
+  consistency documented by the surrounding lab.
 - Store credentials in user secrets or the configuration mechanism taught by the
   lab. Never add real endpoints, keys, generated `.azure/` state, or deployment
   output to a snapshot.

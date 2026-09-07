@@ -24,7 +24,8 @@ successful package restore. Return one disposition: **merge**, **repair**,
 
 ### 1. Establish scope and freshness
 
-- Update the PR branch from its base or determine whether regeneration is safer.
+- Determine whether the PR branch is behind its base and whether regeneration is
+  safer, without updating the branch yet.
 - List every changed package, old version, new version, project, and workshop part.
 - Confirm the changed projects belong to one update unit in
   `.github/dependabot.yml`.
@@ -96,6 +97,8 @@ check.
 Repair the PR when the proposed update is still current and the necessary code,
 README, policy, or paired-snapshot changes are small and belong together. Split or
 regenerate when repair would preserve unrelated updates in one review.
+
+Update the PR branch from its base only as part of an explicitly requested repair.
 
 After repairs, rerun the failed focused check first, then all validation required
 by the classification. Run Markdown lint and link checks when documentation

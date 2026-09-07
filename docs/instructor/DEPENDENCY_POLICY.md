@@ -47,10 +47,11 @@ known advisories and preserves the lab behavior.
 
 ## Versions that are not protected pins
 
-Routine exact references such as `Microsoft.Extensions.*`, OpenTelemetry, and
-patch-level runtime packages generally record the last tested snapshot. They may
-be updated, but related packages should stay on compatible versions and every
-affected snapshot must continue to build without warnings.
+Routine exact references such as stable `Microsoft.Extensions.*` packages other
+than `Microsoft.Extensions.DataIngestion*`, OpenTelemetry, and patch-level runtime
+packages generally record the last tested snapshot. They may be updated, but
+related packages should stay on compatible versions and every affected snapshot
+must continue to build without warnings.
 
 Major updates are never routine in this repository. For example,
 `ModelContextProtocol` 1.x to 2.x, `Microsoft.OpenApi` 2.x to 3.x, or an Agent

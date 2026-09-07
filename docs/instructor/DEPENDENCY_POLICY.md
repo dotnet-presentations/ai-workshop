@@ -60,6 +60,9 @@ code and teaching flow. Do not group unrelated major updates into one pull reque
 
 ## Reviewing a dependency change
 
+Use the [dependency update review skill](../../.github/skills/dependency-update-review/SKILL.md)
+to apply this checklist consistently to Dependabot and manual package updates.
+
 1. Classify each update as routine, security override, compatibility boundary,
    coordinated set, or template baseline.
 1. Check the affected README for package commands and explanations. Update it when

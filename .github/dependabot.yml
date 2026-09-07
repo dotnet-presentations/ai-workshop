@@ -1,22 +1,119 @@
 version: 2
 updates:
-  # Dependabot configuration for workshop-wide NuGet package updates
+  # Parts 2, 3, and 8 share the foundational AI package progression.
   # Review docs/instructor/DEPENDENCY_POLICY.md before accepting generated changes.
   - package-ecosystem: "nuget"
     directories:
       - "/Part 02 - Build Chat App/ChatApp/"
       - "/Part 03 - Add RAG/RagChatApp/"
-      - "/Part 11 - Deployment/GenAiLab/"
+      - "/Part 03 - Add RAG/checkpoints/verify/"
+      - "/Part 08 - Agent Framework Basics/AgentApp/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      part3-ingestion-template-set:
+        patterns:
+          - "Microsoft.Extensions.DataIngestion*"
+      protected-dependencies:
+        patterns:
+          - "Microsoft.Bcl.Memory"
+          - "Microsoft.SemanticKernel.Connectors.SqliteVec"
+          - "SQLitePCLRaw.bundle_e_sqlite3"
+        group-by: "dependency-name"
+      major-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+        group-by: "dependency-name"
+      routine-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    open-pull-requests-limit: 10
+
+  # Parts 5 and 6 use the same MCP SDK and hosting packages.
+  - package-ecosystem: "nuget"
+    directories:
       - "/Part 05 - MCP Server Basics/MyMcpServer/"
       - "/Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/"
-      - "/Part 08 - Agent Framework Basics/AgentApp/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      major-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+        group-by: "dependency-name"
+      routine-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    open-pull-requests-limit: 10
+
+  # Keep the Part 9 starting point and answer key aligned.
+  - package-ecosystem: "nuget"
+    directories:
       - "/Part 09 - Adding AI to an Existing App/eShopLite-start/"
       - "/Part 09 - Adding AI to an Existing App/eShopLite/"
     schedule:
       interval: "weekly"
       day: "monday"
     groups:
-      nuget-all:
+      part9-aspire-baseline:
+        patterns:
+          - "Aspire.AppHost.Sdk"
+      protected-dependencies:
+        patterns:
+          - "Microsoft.OpenApi"
+          - "Microsoft.SemanticKernel.Connectors.SqliteVec"
+          - "SQLitePCLRaw.bundle_e_sqlite3"
+        group-by: "dependency-name"
+      major-updates:
         patterns:
           - "*"
+        update-types:
+          - "major"
+        group-by: "dependency-name"
+      routine-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "Microsoft.OpenApi"
+        update-types:
+          - "version-update:semver-major"
+    open-pull-requests-limit: 10
+
+  # Part 11 is the committed endpoint of the Parts 4, 10, and 11 template flow.
+  - package-ecosystem: "nuget"
+    directory: "/Part 11 - Deployment/GenAiLab/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      genailab-aspire-set:
+        patterns:
+          - "Aspire.*"
+      genailab-ingestion-set:
+        patterns:
+          - "Microsoft.Extensions.DataIngestion*"
+      protected-dependencies:
+        patterns:
+          - "Microsoft.Bcl.Memory"
+      routine-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     open-pull-requests-limit: 10

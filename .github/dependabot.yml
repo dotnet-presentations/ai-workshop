@@ -1,6 +1,7 @@
 version: 2
 updates:
   # Dependabot configuration for workshop-wide NuGet package updates
+  # Review docs/instructor/DEPENDENCY_POLICY.md before accepting generated changes.
   - package-ecosystem: "nuget"
     directories:
       - "/Part 02 - Build Chat App/ChatApp/"

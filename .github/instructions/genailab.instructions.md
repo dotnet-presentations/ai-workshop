@@ -8,6 +8,8 @@ applyTo: "Part 04 - AI Web Chat Template/**,Part 10 - Choosing Providers and Ser
 - Treat Parts 4, 10, and 11 as one app progression. Part 4 scaffolds GenAiLab,
   Part 10 changes its production service choices, and the Part 11 snapshot is the
   deployment-ready result.
+- Read `docs/instructor/DEPENDENCY_POLICY.md` before changing package versions in
+  this progression. Preserve its security overrides and coordinated Aspire set.
 - Preserve the exact Part 4 scaffold command unless intentionally updating the
   entire progression. Its provider, vector-store, Aspire, name, and output options
   determine what later instructions can assume.

@@ -55,7 +55,7 @@ Before starting this part, ensure you have:
   - [Part 2: Build Chat App](../Part%2002%20-%20Build%20Chat%20App/README.md) - Build the core chat loop by hand
   - [Part 3: Add RAG](../Part%2003%20-%20Add%20RAG/README.md) - Add embeddings and retrieval by hand
   - [Part 4: AI Web Chat Template](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) - Map your hand-built concepts to the generated template
-- ✅ **.NET 10.0 SDK** (preview 6 or higher) - `dotnet --version`
+- ✅ **.NET 10 SDK** - `dotnet --version`
 - ✅ **Visual Studio Code** with GitHub Copilot extension, or **Visual Studio 2026** (see Step 7)
 - ✅ **Active GitHub Copilot subscription**
 
@@ -706,7 +706,7 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 
 **Solution**:
 
-1. Install .NET 10 SDK preview: Download from [.NET Downloads](https://dotnet.microsoft.com/download/dotnet/10.0)
+1. Install the .NET 10 SDK from [.NET Downloads](https://dotnet.microsoft.com/download/dotnet/10.0)
 2. Verify installation: `dotnet --version` should show 10.0.x
 3. Set .NET 10 as default if multiple versions installed
 

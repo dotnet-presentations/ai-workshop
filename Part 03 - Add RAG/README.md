@@ -38,11 +38,30 @@ flowchart LR
 - A [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) resource with **`gpt-5-mini`** *and*
   **`text-embedding-3-small`** deployed (see [Part 1 - Setup](../Part%2001%20-%20Setup/README.md))
 
+> [!NOTE]
+> The file and package setup steps below include both a command-line route and a
+> Visual Studio 2026 route. The C# implementation is identical whichever route
+> you choose.
+
 ## Step 1: Start from the Part 2 project
 
 Continue in your Part 2 `ChatApp` (or open the [provided project](RagChatApp)).
 The embedding client comes from `Microsoft.Extensions.AI.OpenAI`, which you
 already reference, so there are no new packages in this step.
+
+### Open the project in Visual Studio 2026
+
+You do not create another console app for this part—the RAG work extends the
+Part 2 project.
+
+1. If `ChatApp` is already open from Part 2, keep using it.
+1. Otherwise, select **File > Open > Project/Solution** and open your Part 2
+   `.sln` or `ChatApp.csproj`.
+1. To use the provided project instead, open
+   `Part 03 - Add RAG\RagChatApp\RagChatApp.csproj`.
+1. If you opened the provided project, right-click `RagChatApp` in Solution
+   Explorer, select **Manage User Secrets**, and add the same
+   `AzureOpenAI:Endpoint` and `AzureOpenAI:Key` values you used in Part 2.
 
 Create a `sample-docs` folder next to your project file and copy the sample
 markdown document into it.
@@ -298,7 +317,7 @@ and move toward something you would be more likely to keep in a real app.
 
 ### 3.1 Add MEDI packages
 
-From the command line:
+#### Option A: Add packages from the command line
 
 ```bash
 dotnet add package Microsoft.Extensions.DataIngestion --prerelease
@@ -310,8 +329,28 @@ dotnet add package Microsoft.Bcl.Memory --version 10.0.10
 dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
 ```
 
-Or, in Visual Studio 2026, from **Tools > NuGet Package Manager > Package Manager
-Console**:
+#### Option B: Add packages in Visual Studio 2026
+
+1. In Solution Explorer, right-click the console project and select
+   **Manage NuGet Packages**.
+1. Select the **Browse** tab and check **Include prerelease**.
+1. Search for and install:
+   - `Microsoft.Extensions.DataIngestion`
+   - `Microsoft.Extensions.DataIngestion.Markdig`
+   - `Microsoft.Extensions.Logging.Console`
+   - `Microsoft.ML.Tokenizers.Data.O200kBase`
+   - `Microsoft.SemanticKernel.Connectors.SqliteVec`
+1. Search for `Microsoft.Bcl.Memory`, select version `10.0.10`, and install it.
+1. Search for `SQLitePCLRaw.bundle_e_sqlite3`, select version `3.0.4`, and
+   install it.
+1. Select **Build > Build Solution**.
+
+For the two DataIngestion packages and the SqliteVec connector, choose the
+latest prerelease version if Visual Studio asks you to select a version.
+
+If you prefer the Package Manager Console inside Visual Studio, open
+**Tools > NuGet Package Manager > Package Manager Console**, confirm that your
+console app is the **Default project**, and run:
 
 ```powershell
 Install-Package Microsoft.Extensions.DataIngestion -IncludePrerelease
@@ -323,9 +362,8 @@ Install-Package Microsoft.Bcl.Memory -Version 10.0.10
 Install-Package SQLitePCLRaw.bundle_e_sqlite3 -Version 3.0.4
 ```
 
-Three of these are prerelease. If you use **Manage NuGet Packages** instead of
-the console, check **Include prerelease** or they won't show up in search
-results.
+Three of these are prerelease, so they do not appear in the NuGet package
+manager unless **Include prerelease** is checked.
 
 > **Why the last two are pinned**
 >

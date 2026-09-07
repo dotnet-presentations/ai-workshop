@@ -47,8 +47,8 @@ Repeat per part that had anything worth saying.
 | `Part 05 - MCP Server Basics/MyMcpServer/` | | |
 | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` | | |
 | `Part 08 - Agent Framework Basics/AgentApp/` | | |
-| `Part 09 - Adding AI to an Existing App/eShopLite/` | | |
 | `Part 09 - Adding AI to an Existing App/eShopLite-start/` | | |
+| `Part 09 - Adding AI to an Existing App/eShopLite/` | | |
 | `Part 11 - Deployment/GenAiLab/` | | |
 
 ## Issues

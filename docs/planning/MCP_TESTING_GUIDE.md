@@ -10,11 +10,11 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 ### ✅ Environment Checklist
 
-- [ ] **.NET 10.0 SDK** (preview 6 or higher) installed
+- [ ] **.NET 10.0 SDK** installed
 
   ```powershell
   dotnet --version
-  # Expected: 10.0.100-preview.6.25358.103 or higher
+  # Expected: 10.0.x
   ```
 
 - [ ] **Visual Studio Code** installed and updated
@@ -32,6 +32,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - [ ] **MCP Template** available
 
   ```powershell
+  dotnet new install Microsoft.McpServer.ProjectTemplates
   dotnet new list | findstr mcp
   # Expected: mcpserver template should be listed
   ```
@@ -421,7 +422,7 @@ Use this checklist to verify complete MCP functionality:
 
 ### Environment Setup
 
-- [x] .NET 10 SDK installed and verified ✅ **10.0.100-preview.6.25358.103**
+- [x] .NET 10 SDK installed and verified
 - [x] VS Code with GitHub Copilot extensions ✅ **Confirmed available**
 - [x] MCP template available ✅ **mcpserver template working**
 - [x] Workshop prerequisites completed ✅ **All parts validated**

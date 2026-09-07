@@ -31,12 +31,12 @@ with production-oriented wiring for persistence and orchestration.
 The finished version of the app you are about to build lives in
 **[`Part 11 - Deployment/GenAiLab/`](../Part%2011%20-%20Deployment/GenAiLab/)**.
 
-It is the same solution, already scaffolded, already updated to the current
-package versions, and already carrying every change this part asks you to make.
-Part 11 reuses it for deployment, which is why it lives there rather than in this
-folder. The **only** difference from a correctly completed Part 4 is one line that
-Part 11 adds — `WithExternalHttpEndpoints()` in `AppHost.cs` — which is harmless
-when running locally.
+It begins as the same solution, already scaffolded and updated to the current
+package versions. Parts 10 and 11 then prepare it for production by replacing
+Qdrant with Azure AI Search and adding `WithExternalHttpEndpoints()` in
+`AppHost.cs`. Use it as the completed reference for the shared application code;
+the vector-store registration and packages intentionally show the later
+deployment-ready state.
 
 Use it to check your work if a step doesn't behave, or to catch up if you fall
 behind. It still needs your own credentials: see [Step 2.4](#24-store-the-connection-string)
@@ -112,19 +112,24 @@ This is not only housekeeping. The template scaffolds Aspire **13.0.0**, which
 pulls in a MessagePack version carrying known high-severity advisories, so
 `dotnet restore` reports `NU1903` until you move off it.
 
-In `GenAiLab.AppHost/GenAiLab.AppHost.csproj`, change the SDK version to `13.4.6`:
+In `GenAiLab.AppHost/GenAiLab.AppHost.csproj`, change the SDK version to `13.5.3`
+and enable the Aspire CLI bundle:
 
 ```xml
-<Sdk Name="Aspire.AppHost.Sdk" Version="13.4.6" />
+<Sdk Name="Aspire.AppHost.Sdk" Version="13.5.3" />
+
+<PropertyGroup>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
+</PropertyGroup>
 ```
 
 The `<Sdk>` element has to be edited by hand — `dotnet add package` only manages
 `<PackageReference>` items. For the rest, run these from the `GenAiLab` folder:
 
 ```bash
-dotnet add GenAiLab.AppHost package Aspire.Hosting.AppHost --version 13.4.6
-dotnet add GenAiLab.AppHost package Aspire.Hosting.Qdrant --version 13.4.6
-dotnet add GenAiLab.Web package Aspire.Qdrant.Client --version 13.4.6
+dotnet add GenAiLab.AppHost package Aspire.Hosting.AppHost --version 13.5.3
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Qdrant --version 13.5.3
+dotnet add GenAiLab.Web package Aspire.Qdrant.Client --version 13.5.3
 dotnet add GenAiLab.Web package Aspire.Azure.AI.OpenAI --prerelease
 dotnet add GenAiLab.Web package Microsoft.Extensions.AI
 dotnet add GenAiLab.Web package Microsoft.Extensions.AI.OpenAI
@@ -197,9 +202,11 @@ dotnet remove GenAiLab.AppHost package Aspire.Hosting.Azure.CognitiveServices
 > subscription, resource group, and location, so there is nowhere to paste an
 > endpoint and key. Swapping to `AddConnectionString` is the fix.
 >
-> If you *do* want Aspire to provision the resource — in [Part 11](../Part%2011%20-%20Deployment/README.md), against your own subscription — put the template's
-> version back. You will need Owner or User Access Administrator on the
-> subscription, because provisioning also creates role assignments.
+> If you *do* want Aspire to provision Azure OpenAI in your own application, put
+> the template's version back. You will need Owner or User Access Administrator on
+> the subscription, because provisioning also creates role assignments. The
+> workshop's [Part 11](../Part%2011%20-%20Deployment/README.md) deployment keeps
+> using your existing Azure OpenAI resource through `AddConnectionString`.
 
 ### 2.3 Use the deployment name your resource actually has
 
@@ -624,8 +631,8 @@ One thread stays open until the end of the day. Everything you have written so
 far talks to `IChatClient` and `IEmbeddingGenerator` rather than to Azure
 OpenAI directly, and nothing yet explains why that indirection is worth it. In
 [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) you
-swap the provider out entirely — for a local model, with no application code
-changes — right before you deploy.
+compare the workshop's Azure OpenAI deployment with local alternatives and see
+how a provider swap changes registration without changing the application code.
 
 **Continue to** → [Part 5: MCP Server Basics](../Part%2005%20-%20MCP%20Server%20Basics/README.md)
 

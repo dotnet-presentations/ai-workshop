@@ -1,6 +1,6 @@
 # Part 10: Choosing Providers and Services
 
-> **⏱️ Estimated Time:** 20-30 minutes
+> **⏱️ Estimated Time:** 30-40 minutes
 
 You are about to deploy. Before you do, there is a decision to make that you have
 been able to postpone all day: **which model provider does this application
@@ -18,16 +18,35 @@ That matters at deployment time for reasons that are not academic: cost per
 token, data residency, whether a feature is allowed to call the cloud at all,
 and what happens in a demo when the conference wifi drops.
 
-> [!NOTE]
-> This part is a comparison, not a build. There is nothing to scaffold. If you
-> want to try the swaps against real code, use any project from earlier in the
-> day — the Part 3 `RagChatApp` is the most interesting one, because it exercises
-> both chat and embeddings. If you don't have it, you can scaffold a fresh app in
-> about a minute:
->
-> ```bash
-> dotnet new aichatweb --provider azureopenai --vector-store local --name ProviderTest --output ProviderTest
-> ```
+For the deployment you will complete today, the workshop chooses **Microsoft
+Foundry (Azure OpenAI)**. The Foundry Local and Ollama sections demonstrate the
+alternatives and include optional experiments; you do not need to change the
+provider in `GenAiLab` before continuing to Part 11.
+
+This part and Part 11 form one deployment block. If the workshop schedule does
+not include deployment, skip both parts and protect the Part 9 capstone time.
+
+You will return to the `GenAiLab` project you created in Part 4 and prepare it for
+production deployment. If you do not have that project, use the completed
+[`Part 11 - Deployment/GenAiLab`](../Part%2011%20-%20Deployment/GenAiLab/) snapshot,
+or scaffold the deployment variant directly:
+
+```bash
+dotnet new aichatweb --provider azureopenai --vector-store azureaisearch --aspire --name GenAiLab --output GenAiLab
+```
+
+If you scaffold this variant, follow Part 4 Steps 2.1-2.4, but do not run its
+three Qdrant-specific package commands. Use these Azure AI Search packages
+instead:
+
+```bash
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.5.3
+dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.5.3
+dotnet add GenAiLab.Web package CommunityToolkit.VectorData.AzureAISearch --version 1.0.0
+```
+
+Then skip the Qdrant replacement steps below because the template has already
+generated the Azure AI Search wiring.
 
 ## The three providers
 
@@ -158,20 +177,105 @@ specific store.
 
 | Vector store | Best for | Trade-off |
 | --- | --- | --- |
-| **Qdrant in a container** (workshop default) | Local development, and deployments where you want to own the data | Cheap and portable, but you run and back up the container |
-| **The template's local JSON store** | The Docker-free path, and quick experiments | No infrastructure at all, but not a production store |
-| **[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview)** | Production apps that want a managed service, an SLA, and hybrid keyword + vector search | Billed per service hour even when idle |
+| **Qdrant in a container** (fallback) | Local development, and deployments where you want to own the data | Cheap and portable, but you run and back up the container |
+| **The template's local SQLite store** | The Docker-free path, and quick experiments | No infrastructure at all, but not a production store |
+| **[Azure AI Search](https://learn.microsoft.com/azure/search/vector-search-overview)** (recommended for deployment) | Production apps that want a managed service, an SLA, and hybrid keyword + vector search | Billed per service hour even when idle |
 
-Part 11 deploys the Qdrant path, because it is the one you have been running all
-day and it needs no extra provisioning. If you want the managed option instead,
-the swap is a registration change in two files rather than a rewrite — see
-[Optional: using a managed vector store](../Part%2011%20-%20Deployment/README.md#optional-using-a-managed-vector-store)
-in the next part.
+## Prepare the production vector store
+
+The morning project used Qdrant because it is easy to run locally and makes
+Aspire orchestration visible. For the production deployment, replace that
+container with Azure AI Search. Aspire and `azd` will provision one Search
+service; the application creates its vector index during ingestion.
+
+You need an Azure subscription where you can create Azure AI Search and role
+assignments. If your workshop account cannot do that, use the Qdrant fallback in
+Step 4.
+
+> [!TIP]
+> The completed `Part 11 - Deployment/GenAiLab` snapshot already contains these
+> changes. Use it if you want to inspect the result or did not keep your Part 4
+> project.
+
+### Step 1: replace the packages
+
+From the `GenAiLab` solution directory:
+
+```bash
+dotnet remove GenAiLab.AppHost package Aspire.Hosting.Qdrant
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.5.3
+
+dotnet remove GenAiLab.Web package Aspire.Qdrant.Client
+dotnet remove GenAiLab.Web package Microsoft.SemanticKernel.Connectors.Qdrant
+dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.5.3
+dotnet add GenAiLab.Web package CommunityToolkit.VectorData.AzureAISearch --version 1.0.0
+```
+
+### Step 2: replace the AppHost resource
+
+In `GenAiLab.AppHost/AppHost.cs`, replace:
+
+```csharp
+var vectorDB = builder.AddQdrant("vectordb")
+    .WithDataVolume()
+    .WithLifetime(ContainerLifetime.Persistent);
+```
+
+with:
+
+```csharp
+var search = builder.AddAzureSearch("search");
+```
+
+Then replace the `vectorDB` reference:
+
+```csharp
+webApp
+    .WithReference(search)
+    .WaitFor(search);
+```
+
+### Step 3: replace the web registrations
+
+In `GenAiLab.Web/Program.cs`, replace the three Qdrant registrations with:
+
+```csharp
+builder.AddAzureSearchClient("search");
+builder.Services.AddAzureAISearchVectorStore();
+builder.Services.AddAzureAISearchCollection<IngestedChunk>(
+    IngestedChunk.CollectionName);
+```
+
+### Step 4: update the collection key type
+
+Azure AI Search uses string keys. In `GenAiLab.Web/Services/SemanticSearch.cs`,
+change the constructor dependency to match the collection registration:
+
+```csharp
+public class SemanticSearch(
+    VectorStoreCollection<string, IngestedChunk> vectorCollection,
+    [FromKeyedServices("ingestion_directory")] DirectoryInfo ingestionDirectory,
+    DataIngestor dataIngestor)
+```
+
+The ingestion and semantic-search logic otherwise stays unchanged because it
+depends on `Microsoft.Extensions.VectorData` abstractions.
+
+### Step 5: choose the fallback if needed
+
+Keep Qdrant instead if your subscription cannot provision Azure AI Search, your
+account cannot create role assignments, or you want the lowest-cost workshop
+path. Do not make the changes above; Part 11 can deploy the Qdrant container
+alongside the web app.
+
+With Azure AI Search, `azd` provisions the service and assigns the deployed app
+access. You do not need to create a Search endpoint or index in Part 1.
 
 ## What's next
 
-You have made the two decisions that deployment depends on: which provider serves
-the model, and which service stores the vectors. Now put it in Azure.
+You have reviewed both deployment decisions and applied the workshop's choices:
+Microsoft Foundry (Azure OpenAI) serves the model, and Azure AI Search stores the
+vectors. Now put the application in Azure.
 
 **Continue to** → [Part 11: Deploy to Azure](../Part%2011%20-%20Deployment/README.md)
 

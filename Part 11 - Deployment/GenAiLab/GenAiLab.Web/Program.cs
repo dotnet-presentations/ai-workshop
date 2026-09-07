@@ -14,9 +14,9 @@ openai.AddChatClient("gpt-5-mini")
         c.EnableSensitiveData = builder.Environment.IsDevelopment());
 openai.AddEmbeddingGenerator("text-embedding-3-small");
 
-builder.AddQdrantClient("vectordb");
-builder.Services.AddQdrantVectorStore();
-builder.Services.AddQdrantCollection<Guid, IngestedChunk>(IngestedChunk.CollectionName);
+builder.AddAzureSearchClient("search");
+builder.Services.AddAzureAISearchVectorStore();
+builder.Services.AddAzureAISearchCollection<IngestedChunk>(IngestedChunk.CollectionName);
 builder.Services.AddSingleton<DataIngestor>();
 builder.Services.AddSingleton<SemanticSearch>();
 builder.Services.AddKeyedSingleton("ingestion_directory", new DirectoryInfo(Path.Combine(builder.Environment.WebRootPath, "Data")));

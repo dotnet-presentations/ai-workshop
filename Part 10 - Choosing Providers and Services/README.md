@@ -246,10 +246,22 @@ builder.Services.AddAzureAISearchCollection<IngestedChunk>(
     IngestedChunk.CollectionName);
 ```
 
-The rest of the application stays unchanged because ingestion and semantic search
-depend on `Microsoft.Extensions.VectorData` abstractions.
+### Step 4: update the collection key type
 
-### Step 4: choose the fallback if needed
+Azure AI Search uses string keys. In `GenAiLab.Web/Services/SemanticSearch.cs`,
+change the constructor dependency to match the collection registration:
+
+```csharp
+public class SemanticSearch(
+    VectorStoreCollection<string, IngestedChunk> vectorCollection,
+    [FromKeyedServices("ingestion_directory")] DirectoryInfo ingestionDirectory,
+    DataIngestor dataIngestor)
+```
+
+The ingestion and semantic-search logic otherwise stays unchanged because it
+depends on `Microsoft.Extensions.VectorData` abstractions.
+
+### Step 5: choose the fallback if needed
 
 Keep Qdrant instead if your subscription cannot provision Azure AI Search, your
 account cannot create role assignments, or you want the lowest-cost workshop

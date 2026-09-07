@@ -155,7 +155,7 @@ var webApp = builder.AddProject<Projects.GenAiLab_Web>("aichatweb-app")
        Set-Clipboard
    ```
 
-1. Press enter and watch as your resources are provisioned! You can either just follow along in the terminal, or you can click on the link to watch the progress in the Azure portal. Provisioning should take roughly 5 minutes, but may take longer during conference events as multiple concurrent deployments can slow things down.
+1. Press enter and watch as your resources are provisioned! You can either just follow along in the terminal, or you can click on the link to watch the progress in the Azure portal. Provisioning typically takes 7-12 minutes, but may take longer during conference events as multiple concurrent deployments can slow things down.
 
 1. **Deploy your application code**:
 

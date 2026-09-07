@@ -75,6 +75,9 @@ to apply this checklist consistently to Dependabot and manual package updates.
    prerelease, template, or provider changes, also run the relevant attendee flow.
 1. Record why a protected pin changed or was removed in the pull request and update
    this inventory in the same change.
+1. After repairing a generated dependency pull request, reconcile its title and
+  description with the final diff and resolve review threads only after recording
+  the validation evidence.
 
 Use the `workshop-testing` skill when an update requires re-scaffolding a project,
 reconciling a snapshot, or exercising the workshop as an attendee.

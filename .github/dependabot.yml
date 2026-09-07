@@ -24,12 +24,22 @@ updates:
       major-updates:
         patterns:
           - "*"
+        exclude-patterns:
+          - "Microsoft.Bcl.Memory"
+          - "Microsoft.Extensions.DataIngestion*"
+          - "Microsoft.SemanticKernel.Connectors.SqliteVec"
+          - "SQLitePCLRaw.bundle_e_sqlite3"
         update-types:
           - "major"
         group-by: "dependency-name"
       routine-minor-patch:
         patterns:
           - "*"
+        exclude-patterns:
+          - "Microsoft.Bcl.Memory"
+          - "Microsoft.Extensions.DataIngestion*"
+          - "Microsoft.SemanticKernel.Connectors.SqliteVec"
+          - "SQLitePCLRaw.bundle_e_sqlite3"
         update-types:
           - "minor"
           - "patch"
@@ -47,12 +57,22 @@ updates:
       major-updates:
         patterns:
           - "*"
+        exclude-patterns:
+          - "Aspire.AppHost.Sdk"
+          - "Microsoft.OpenApi"
+          - "Microsoft.SemanticKernel.Connectors.SqliteVec"
+          - "SQLitePCLRaw.bundle_e_sqlite3"
         update-types:
           - "major"
         group-by: "dependency-name"
       routine-minor-patch:
         patterns:
           - "*"
+        exclude-patterns:
+          - "Aspire.AppHost.Sdk"
+          - "Microsoft.OpenApi"
+          - "Microsoft.SemanticKernel.Connectors.SqliteVec"
+          - "SQLitePCLRaw.bundle_e_sqlite3"
         update-types:
           - "minor"
           - "patch"
@@ -85,6 +105,10 @@ updates:
       routine-minor-patch:
         patterns:
           - "*"
+        exclude-patterns:
+          - "Aspire.*"
+          - "Microsoft.Bcl.Memory"
+          - "Microsoft.Extensions.DataIngestion*"
         update-types:
           - "minor"
           - "patch"

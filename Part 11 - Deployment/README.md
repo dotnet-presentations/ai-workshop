@@ -25,7 +25,7 @@ Azure Container Apps and uses managed Azure AI Search for its vector index.
 [Part 4](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) application and
 includes the production preparation from Part 10:
 
-- current package versions
+- workshop-pinned compatible package versions
 - `AddConnectionString("openai")` for your existing Azure OpenAI resource
 - `gpt-5-mini` as the chat deployment
 - Azure AI Search instead of the local Qdrant container
@@ -132,6 +132,9 @@ var webApp = builder.AddProject<Projects.GenAiLab_Web>("aichatweb-app")
    - Container apps for your application and the markitdown document reader
    - Log Analytics workspace
 
+   If you kept the Qdrant fallback, expect a Qdrant Container App instead of an
+   Azure AI Search service.
+
 > [!NOTE]
 > When provisioning resources with `azd`, it will automatically create a resource group with the prefix "rg-" added to your environment name (e.g., "rg-mygenaiapp").
   
@@ -165,6 +168,9 @@ var webApp = builder.AddProject<Projects.GenAiLab_Web>("aichatweb-app")
    - Creates container images for the web app and markitdown
    - Pushes them to the Azure Container Registry
    - Deploys them to Azure Container Apps
+
+   On the Qdrant fallback path, this also creates and deploys the Qdrant
+   container image.
   
    This should take roughly 2 minutes, but may take longer under busy conditions.
 

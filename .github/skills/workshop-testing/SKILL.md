@@ -27,7 +27,7 @@ docker --version                                    # only needed for Parts 4 an
 
 The script collects the `WORKSHOP_*` variables and, with `-ApplyUserSecrets`, writes the Foundry endpoint and key into the snapshot console projects (as `AzureOpenAI:Endpoint` / `AzureOpenAI:Key`), the local model settings into Part 9 if configured, and the composed `ConnectionStrings:openai` into the Part 11 AppHost. Add `-Force` if a key has been rotated since the last run.
 
-Nothing in the workshop reads `WORKSHOP_*` directly. The console samples read user secrets (`AzureOpenAI:Endpoint`, `AzureOpenAI:Key`) and the Aspire app reads `ConnectionStrings:openai`. **Projects you scaffold yourself during a test run still need their secrets set by hand** — the script only knows about the committed snapshots.
+Nothing in the workshop reads `WORKSHOP_*` directly. The console samples read user secrets (`AzureOpenAI:Endpoint`, `AzureOpenAI:Key`) and the Aspire app reads `ConnectionStrings:openai`. The script also configures a Part 4 app scaffolded at `test-workspace/GenAiLab`.
 
 The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-small`. If the test resource uses different names, that is a source edit in every part, not a config change.
 
@@ -43,7 +43,7 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 | 6 - Enhanced MCP Server *(bonus)* | Exploration only — build and run the existing snapshot, review the README's business-integration guidance | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
 | 7 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | — |
 | 8 - Agent Framework Basics | `dotnet new console` → `AgentApp`, add `Microsoft.Agents.AI` per README. Verify the agent runs and can call the Part 5 weather tool if the README wires that up | `Part 08 - Agent Framework Basics/AgentApp/` |
-| 9 - Adding AI to an Existing App | Follow the README in `eShopLite-start/`, then compare with the completed `eShopLite/`. Verify semantic search and grounded discovery. The optional local-model assistant needs `LocalModel:Endpoint` / `LocalModel:Model`; note it as skipped if unavailable | `Part 09 - Adding AI to an Existing App/eShopLite-start/` and `eShopLite/` |
+| 9 - Adding AI to an Existing App | Follow the README in `eShopLite-start/`, then reconcile against the `eShopLite/` answer key. The optional local-model step needs `LocalModel:Endpoint` / `LocalModel:Model` (Foundry Local or Ollama) in the `Store` project — note it as skipped if unavailable | `Part 09 - Adding AI to an Existing App/eShopLite/` (answer key); `Part 09 - Adding AI to an Existing App/eShopLite-start/` |
 | 10 - Choosing Providers and Services | Apply the documented Azure AI Search package and registration changes to the Part 4 project. Verify Qdrant remains a usable fallback | Reconcile with `Part 11 - Deployment/GenAiLab/` |
 | 11 - Deployment | See below | `Part 11 - Deployment/GenAiLab/` |
 
@@ -87,7 +87,7 @@ Write `docs/testing/workshop-test-report-<YYYY-MM-DD>.md` using [report-template
 
 ## Known quirks
 
-- Keep shared direct package references aligned across snapshots: `Microsoft.Extensions.AI` and `Microsoft.Extensions.AI.OpenAI` 10.8.1, `Microsoft.Agents.AI` 1.15.0, and `Azure.AI.OpenAI` 2.1.0.
+- Package versions drift between parts (`Microsoft.Extensions.AI`, `Microsoft.Agents.AI`, `Azure.AI.OpenAI`). Flag inconsistencies in the report rather than unilaterally bumping them.
 - The MCP template's namespace style has changed between releases. The Part 5 snapshot uses `namespace MyMcpServer.Tools;`, and the Part 6 snapshot uses `namespace ContosoOrdersMcpServer.Tools;`; Part 7 is README-only. Note which style the current template emits.
 - Missing `--vector-store qdrant` in Part 4 silently produces the local SQLite variant and prevents the intended Qdrant-to-Azure-AI-Search comparison in Part 10.
 - The AI Web Chat template ships `ChatInput.razor.js` and `ChatMessageList.razor.js` (auto-resize and auto-scroll). They must survive into any snapshot update.

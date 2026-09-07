@@ -64,8 +64,9 @@ reader runs as a container.
 
 1. Open the project folder in Visual Studio Code.
 2. Install the [C# Dev Kit extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit) for Visual Studio Code.
-3. Once installed, Open the `Program.cs` file in the GenAiLab.AppHost project.
-4. Run the project by clicking the "Run" button in the Debug view.
+3. Launch the `GenAiLab.AppHost` project (not just `GenAiLab.Web`) so Aspire starts all dependent services.
+4. Once installed, open the `AppHost.cs` file in the `GenAiLab.AppHost` project.
+5. Run the project by clicking the "Run" button in the Debug view.
 
 ## Trust the localhost certificate
 

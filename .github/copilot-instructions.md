@@ -46,7 +46,7 @@ Markdown is linted by `.github/workflows/markdownlint.yml` using `.markdownlint.
 
 - **Snapshots must match the README.** If you change instructions in a `README.md`, update that part's snapshot code in the same change, and vice versa.
 - **Projects are created with `dotnet new`,** never by hand-authoring a `.csproj`. Templates come from `Microsoft.Extensions.AI.Templates`, `Microsoft.McpServer.ProjectTemplates`, and `Aspire.ProjectTemplates`.
-- **Scaffold, then update packages.** Templates lag the current package versions. After `dotnet new`, bump to current and record the bump as an explicit README step so the snapshot and the instructions stay in sync. Aspire is pinned at **13.4.6** across the repo; note that the `<Sdk Name="Aspire.AppHost.Sdk" />` element must be edited by hand because `dotnet add package` only manages `<PackageReference>` items.
+- **Scaffold, then update packages.** Templates lag the current package versions. After `dotnet new`, bump to current and record the bump as an explicit README step so the snapshot and the instructions stay in sync. Part 9 is pinned at Aspire **13.4.6**; the shared Parts 4 and 11 `GenAiLab` app is pinned at **13.5.3**. Note that the `<Sdk Name="Aspire.AppHost.Sdk" />` element must be edited by hand because `dotnet add package` only manages `<PackageReference>` items.
 - The Part 4 scaffold command is fixed and load-bearing for later parts:
   `dotnet new aichatweb --provider azureopenai --vector-store qdrant --aspire --name GenAiLab --output GenAiLab`
   (a Docker-free variant, `--vector-store local --managed-identity false`, is documented as an alternative).

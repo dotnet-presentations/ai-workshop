@@ -1,6 +1,6 @@
 # Part 10: Choosing Providers and Services
 
-> **⏱️ Estimated Time:** 20-30 minutes
+> **⏱️ Estimated Time:** 30-40 minutes
 
 You are about to deploy. Before you do, there is a decision to make that you have
 been able to postpone all day: **which model provider does this application
@@ -17,6 +17,11 @@ provider with no application code changes. The only thing that changes is
 That matters at deployment time for reasons that are not academic: cost per
 token, data residency, whether a feature is allowed to call the cloud at all,
 and what happens in a demo when the conference wifi drops.
+
+For the deployment you will complete today, the workshop chooses **Microsoft
+Foundry (Azure OpenAI)**. The Foundry Local and Ollama sections demonstrate the
+alternatives and include optional experiments; you do not need to change the
+provider in `GenAiLab` before continuing to Part 11.
 
 This part and Part 11 form one deployment block. If the workshop schedule does
 not include deployment, skip both parts and protect the Part 9 capstone time.
@@ -35,8 +40,8 @@ three Qdrant-specific package commands. Use these Azure AI Search packages
 instead:
 
 ```bash
-dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.4.6
-dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.4.6
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.5.3
+dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.5.3
 dotnet add GenAiLab.Web package CommunityToolkit.VectorData.AzureAISearch --version 1.0.0
 ```
 
@@ -198,11 +203,11 @@ From the `GenAiLab` solution directory:
 
 ```bash
 dotnet remove GenAiLab.AppHost package Aspire.Hosting.Qdrant
-dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.4.6
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.5.3
 
 dotnet remove GenAiLab.Web package Aspire.Qdrant.Client
 dotnet remove GenAiLab.Web package Microsoft.SemanticKernel.Connectors.Qdrant
-dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.4.6
+dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.5.3
 dotnet add GenAiLab.Web package CommunityToolkit.VectorData.AzureAISearch --version 1.0.0
 ```
 
@@ -256,8 +261,9 @@ access. You do not need to create a Search endpoint or index in Part 1.
 
 ## What's next
 
-You have made the two decisions that deployment depends on: which provider serves
-the model, and which service stores the vectors. Now put it in Azure.
+You have reviewed both deployment decisions and applied the workshop's choices:
+Microsoft Foundry (Azure OpenAI) serves the model, and Azure AI Search stores the
+vectors. Now put the application in Azure.
 
 **Continue to** → [Part 11: Deploy to Azure](../Part%2011%20-%20Deployment/README.md)
 

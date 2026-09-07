@@ -112,19 +112,24 @@ This is not only housekeeping. The template scaffolds Aspire **13.0.0**, which
 pulls in a MessagePack version carrying known high-severity advisories, so
 `dotnet restore` reports `NU1903` until you move off it.
 
-In `GenAiLab.AppHost/GenAiLab.AppHost.csproj`, change the SDK version to `13.4.6`:
+In `GenAiLab.AppHost/GenAiLab.AppHost.csproj`, change the SDK version to `13.5.3`
+and enable the Aspire CLI bundle:
 
 ```xml
-<Sdk Name="Aspire.AppHost.Sdk" Version="13.4.6" />
+<Sdk Name="Aspire.AppHost.Sdk" Version="13.5.3" />
+
+<PropertyGroup>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
+</PropertyGroup>
 ```
 
 The `<Sdk>` element has to be edited by hand — `dotnet add package` only manages
 `<PackageReference>` items. For the rest, run these from the `GenAiLab` folder:
 
 ```bash
-dotnet add GenAiLab.AppHost package Aspire.Hosting.AppHost --version 13.4.6
-dotnet add GenAiLab.AppHost package Aspire.Hosting.Qdrant --version 13.4.6
-dotnet add GenAiLab.Web package Aspire.Qdrant.Client --version 13.4.6
+dotnet add GenAiLab.AppHost package Aspire.Hosting.AppHost --version 13.5.3
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Qdrant --version 13.5.3
+dotnet add GenAiLab.Web package Aspire.Qdrant.Client --version 13.5.3
 dotnet add GenAiLab.Web package Aspire.Azure.AI.OpenAI --prerelease
 dotnet add GenAiLab.Web package Microsoft.Extensions.AI
 dotnet add GenAiLab.Web package Microsoft.Extensions.AI.OpenAI
@@ -626,8 +631,8 @@ One thread stays open until the end of the day. Everything you have written so
 far talks to `IChatClient` and `IEmbeddingGenerator` rather than to Azure
 OpenAI directly, and nothing yet explains why that indirection is worth it. In
 [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) you
-swap the provider out entirely — for a local model, with no application code
-changes — right before you deploy.
+compare the workshop's Azure OpenAI deployment with local alternatives and see
+how a provider swap changes registration without changing the application code.
 
 **Continue to** → [Part 5: MCP Server Basics](../Part%2005%20-%20MCP%20Server%20Basics/README.md)
 

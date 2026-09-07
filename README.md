@@ -64,7 +64,7 @@ The workshop is designed as a **two-part, roughly 8-hour hands-on lab** (8:30-5:
 | Session | Parts | Budget | Focus |
 | --- | --- | --- | --- |
 | Morning | Parts 1-4 | ~2h20m-3h30m | Setup, console chat, manual RAG, template reveal |
-| Afternoon | Parts 5, 8, 9, 10, 11 | ~2h50m-4h10m | MCP basics, agents, capstone, provider and service choices, deployment |
+| Afternoon | Parts 5, 8, 9, 10, 11 | ~3h-4h10m | MCP basics, agents, capstone, provider and service choices, deployment |
 | Bonus (any time) | Parts 6-7 | ~1h15m-1h45m | Enhanced MCP server and MCP publishing |
 
 > [!IMPORTANT]

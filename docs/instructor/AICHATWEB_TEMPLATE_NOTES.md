@@ -62,7 +62,9 @@ attendees edit it by hand.
 
 The template scaffolds Aspire **13.0.0**, which pulls in a MessagePack version with
 known high-severity advisories. `dotnet restore` reports `NU1903` until you move to
-13.4.6. Keep the version-bump step in Part 4 even if it looks like tidiness.
+13.5.3. Keep the version-bump step in Part 4 even if it looks like tidiness. Aspire
+13.5.3 also requires `<AspireUseCliBundle>true</AspireUseCliBundle>` to avoid the
+`ASPIRE010` warning.
 
 The Docker-free variant has its own version of this: a transitive
 `SQLitePCLRaw.lib.e_sqlite3` 2.1.10 reference with the same advisory as

@@ -69,7 +69,7 @@ known high-severity advisories. `dotnet restore` reports `NU1903` until you move
 The Docker-free variant has its own version of this: a transitive
 `SQLitePCLRaw.lib.e_sqlite3` 2.1.10 reference with the same advisory as
 [issue #564](https://github.com/dotnet-presentations/ai-workshop/issues/564).
-Part 4 documents the `SQLitePCLRaw.bundle_e_sqlite3` 3.0.4 pin that clears it.
+Part 4 documents the `SQLitePCLRaw.bundle_e_sqlite3` 3.0.5 pin that clears it.
 
 ## The Docker-free path is a different app
 

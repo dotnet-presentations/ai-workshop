@@ -88,6 +88,7 @@ Then scale validation to risk:
 | Compatibility boundary or major | Compile dependent/generated code and run the relevant lab flow |
 | Coordinated set | Build and exercise every member of the set together |
 | Template baseline or prerelease | Re-scaffold, compare, and run the affected attendee flow |
+| Fast-moving AI framework minor | Inspect release notes and run the affected lab flow when behavior or APIs changed |
 
 Do not substitute a repository-wide green build for a required template or runtime
 check.
@@ -103,6 +104,15 @@ Update the PR branch from its base only as part of an explicitly requested repai
 After repairs, rerun the failed focused check first, then all validation required
 by the classification. Run Markdown lint and link checks when documentation
 changes, and finish with `git diff --check`.
+
+Before marking a repaired PR ready to merge:
+
+- Compare the final diff with the PR title and description. Remove generated
+  package entries and release notes for updates that were reverted, and correct
+  package counts.
+- Record retained protected pins and their policy rationale in the PR description.
+- Reply to each addressed review comment with the repair and validation evidence,
+  then resolve the thread.
 
 ## Disposition rules
 
@@ -127,4 +137,5 @@ Return:
 3. **Classification:** one row per package or coordinated set.
 4. **Findings:** blockers and risks, highest severity first, with file references.
 5. **Validation:** commands run and their outcomes, including skipped checks.
-6. **Required action:** the smallest next step that makes the disposition actionable.
+6. **Required action:** the smallest next step that makes the disposition actionable
+  and reviewable.

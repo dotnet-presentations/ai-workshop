@@ -9,7 +9,7 @@ namespace MyMcpServer.Tools;
 /// </summary>
 internal class RandomNumberTools
 {
-    [McpServerTool]
+    [McpServerTool(UseStructuredContent = true)]
     [Description("Generates a random number between the specified minimum and maximum values.")]
     public int GetRandomNumber(
         [Description("Minimum value (inclusive)")] int min = 0,

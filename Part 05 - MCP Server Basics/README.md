@@ -197,7 +197,8 @@ builder.Services
 
 **`Tools/RandomNumberTools.cs`** - Contains example tools that AI agents can use. We'll customize this for weather functionality.
 
-The template generates a simple `RandomNumberTools` class with a `GetRandomNumber` method:
+Update the template-generated `RandomNumberTools` class to enable structured
+output for its scalar result:
 
 ```csharp
 using System.ComponentModel;
@@ -209,7 +210,7 @@ using ModelContextProtocol.Server;
 /// </summary>
 internal class RandomNumberTools
 {
-    [McpServerTool]
+   [McpServerTool(UseStructuredContent = true)]
     [Description("Generates a random number between the specified minimum and maximum values.")]
     public int GetRandomNumber(
         [Description("Minimum value (inclusive)")] int min = 0,
@@ -245,7 +246,6 @@ Instead of replacing the existing tools, let's add new weather tools alongside t
 
 ```csharp
 using System.ComponentModel;
-using System.Text.Json;
 using ModelContextProtocol.Server;
 
 namespace MyMcpServer.Tools;
@@ -256,56 +256,46 @@ namespace MyMcpServer.Tools;
 internal class WeatherTools
 {
     private static readonly string[] WeatherConditions = [
-        "Sunny", "Partly Cloudy", "Cloudy", "Overcast", "Light Rain", 
+      "Sunny", "Partly Cloudy", "Cloudy", "Overcast", "Light Rain",
         "Heavy Rain", "Snow", "Fog", "Windy", "Stormy"
     ];
 
-    [McpServerTool]
+      [McpServerTool(UseStructuredContent = true)]
     [Description("Gets current weather for a specified city.")]
-    public async Task<string> GetCurrentWeather(
+      public async Task<CurrentWeather> GetCurrentWeather(
         [Description("Name of the city to get weather for")] string city)
     {
         // Simulate API call delay
         await Task.Delay(500);
         
         // Simulate weather API call with realistic data
-        var weatherData = new
-        {
-            City = city,
-            Temperature = Random.Shared.Next(-10, 35) + "°C",
-            Condition = GetRandomWeatherCondition(),
-            Humidity = Random.Shared.Next(30, 90) + "%",
-            WindSpeed = Random.Shared.Next(5, 25) + " km/h",
-            Pressure = Random.Shared.Next(980, 1040) + " hPa",
-            LastUpdated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-        };
-
-        return JsonSerializer.Serialize(weatherData, new JsonSerializerOptions { WriteIndented = true });
+         return new CurrentWeather(
+             city,
+             Random.Shared.Next(-10, 35) + "°C",
+             GetRandomWeatherCondition(),
+             Random.Shared.Next(30, 90) + "%",
+             Random.Shared.Next(5, 25) + " km/h",
+             Random.Shared.Next(980, 1040) + " hPa",
+             DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
     }
 
-    [McpServerTool]
+          [McpServerTool(UseStructuredContent = true)]
     [Description("Gets a 5-day weather forecast for a specified city starting from tomorrow.")]
-    public async Task<string> GetWeatherForecast(
+          public async Task<WeatherForecast> GetWeatherForecast(
         [Description("Name of the city to get forecast for")] string city)
     {
         // Simulate API call delay
         await Task.Delay(800);
         
-        var forecast = new
-        {
-            City = city,
-            Forecast = Enumerable.Range(1, 5).Select(day => new
-            {
-                Date = DateTime.Now.AddDays(day).ToString("yyyy-MM-dd"),
-                DayName = DateTime.Now.AddDays(day).ToString("dddd"),
-                HighTemp = Random.Shared.Next(15, 35) + "°C",
-                LowTemp = Random.Shared.Next(-5, 20) + "°C",
-                Condition = GetRandomWeatherCondition(),
-                ChanceOfRain = Random.Shared.Next(0, 100) + "%"
-            }).ToArray()
-        };
+            var forecast = Enumerable.Range(1, 5).Select(day => new WeatherForecastDay(
+                  DateTime.Now.AddDays(day).ToString("yyyy-MM-dd"),
+                  DateTime.Now.AddDays(day).ToString("dddd"),
+                  Random.Shared.Next(15, 35) + "°C",
+                  Random.Shared.Next(-5, 20) + "°C",
+                  GetRandomWeatherCondition(),
+                  Random.Shared.Next(0, 100) + "%")).ToArray();
 
-        return JsonSerializer.Serialize(forecast, new JsonSerializerOptions { WriteIndented = true });
+            return new WeatherForecast(city, forecast);
     }
 
     private static string GetRandomWeatherCondition()
@@ -313,6 +303,25 @@ internal class WeatherTools
         return WeatherConditions[Random.Shared.Next(WeatherConditions.Length)];
     }
 }
+
+internal sealed record CurrentWeather(
+   string City,
+   string Temperature,
+   string Condition,
+   string Humidity,
+   string WindSpeed,
+   string Pressure,
+   string LastUpdated);
+
+internal sealed record WeatherForecast(string City, WeatherForecastDay[] Forecast);
+
+internal sealed record WeatherForecastDay(
+   string Date,
+   string DayName,
+   string HighTemp,
+   string LowTemp,
+   string Condition,
+   string ChanceOfRain);
 ```
 
 1. **Register the new weather tools** in `Program.cs`. Update the file to register both tool classes:
@@ -371,10 +380,10 @@ Now that we've added our weather tools alongside the original random number tool
 
 Now that you've built your own MCP server, let's review the key concepts:
 
-1. **`[McpServerTool]` Attributes**: Mark methods as tools available to AI agents
+1. **`[McpServerTool]` Attributes**: Mark methods as tools available to AI agents; `UseStructuredContent = true` publishes the return type as an output schema
 2. **`[Description]` Attributes**: Provide context to AI agents about what tools do and what parameters mean
 3. **Async Methods**: Tools can perform async operations (database calls, API requests, etc.)
-4. **JSON Serialization**: MCP tools return structured data as JSON strings
+4. **Typed Structured Output**: The SDK serializes typed return values into MCP structured content, so clients can validate and consume the result directly
 5. **Realistic Data Simulation**: The tools simulate real API calls with delays and varied data
 
 ## Step 6: Configure VS Code to Use Your MCP Server
@@ -659,7 +668,7 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 - **MCP servers** extend AI agents with custom capabilities
 - **Tools** are methods marked with `[McpServerTool]` attribute
 - **Descriptions** help AI understand when and how to use tools
-- **JSON serialization** provides structured data to AI agents
+- **Typed structured output** gives AI agents a declared output schema and a directly consumable result
 
 ### Integration Points
 

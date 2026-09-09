@@ -325,7 +325,7 @@ dotnet add package Microsoft.Extensions.DataIngestion.Markdig --prerelease
 dotnet add package Microsoft.Extensions.Logging.Console
 dotnet add package Microsoft.ML.Tokenizers.Data.O200kBase
 dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
-dotnet add package Microsoft.Bcl.Memory --version 10.0.10
+dotnet add package Microsoft.Bcl.Memory --version 10.0.11
 dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
 ```
 
@@ -340,7 +340,7 @@ dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
    - `Microsoft.Extensions.Logging.Console`
    - `Microsoft.ML.Tokenizers.Data.O200kBase`
    - `Microsoft.SemanticKernel.Connectors.SqliteVec`
-1. Search for `Microsoft.Bcl.Memory`, select version `10.0.10`, and install it.
+1. Search for `Microsoft.Bcl.Memory`, select version `10.0.11`, and install it.
 1. Search for `SQLitePCLRaw.bundle_e_sqlite3`, select version `3.0.4`, and
    install it.
 1. Select **Build > Build Solution**.
@@ -358,7 +358,7 @@ Install-Package Microsoft.Extensions.DataIngestion.Markdig -IncludePrerelease
 Install-Package Microsoft.Extensions.Logging.Console
 Install-Package Microsoft.ML.Tokenizers.Data.O200kBase
 Install-Package Microsoft.SemanticKernel.Connectors.SqliteVec -IncludePrerelease
-Install-Package Microsoft.Bcl.Memory -Version 10.0.10
+Install-Package Microsoft.Bcl.Memory -Version 10.0.11
 Install-Package SQLitePCLRaw.bundle_e_sqlite3 -Version 3.0.4
 ```
 

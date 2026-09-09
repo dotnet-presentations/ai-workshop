@@ -104,7 +104,7 @@ dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
 
 `SqliteVec` gives you a vector store in a local file. No container, no service to run.
 
-> The project already pins `SQLitePCLRaw.bundle_e_sqlite3` 3.0.4 and `Microsoft.OpenApi` 2.7.5. Both are there to pull transitive dependencies above versions with open advisories, and neither has anything to do with AI. Leave them alone.
+> The project already pins `SQLitePCLRaw.bundle_e_sqlite3` 3.0.4 and `Microsoft.OpenApi` 2.12.2. Both are there to pull transitive dependencies above versions with open advisories, and neither has anything to do with AI. Leave them alone.
 
 <!-- -->
 

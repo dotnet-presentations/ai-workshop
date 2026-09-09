@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using ModelContextProtocol.Server;
 
 namespace MyMcpServer.Tools;
@@ -14,52 +13,42 @@ internal class WeatherTools
         "Heavy Rain", "Snow", "Fog", "Windy", "Stormy"
     ];
 
-    [McpServerTool]
+    [McpServerTool(UseStructuredContent = true)]
     [Description("Gets current weather for a specified city.")]
-    public async Task<string> GetCurrentWeather(
+    public async Task<CurrentWeather> GetCurrentWeather(
         [Description("Name of the city to get weather for")] string city)
     {
         // Simulate API call delay
         await Task.Delay(500);
 
         // Simulate weather API call with realistic data
-        var weatherData = new
-        {
-            City = city,
-            Temperature = Random.Shared.Next(-10, 35) + "°C",
-            Condition = GetRandomWeatherCondition(),
-            Humidity = Random.Shared.Next(30, 90) + "%",
-            WindSpeed = Random.Shared.Next(5, 25) + " km/h",
-            Pressure = Random.Shared.Next(980, 1040) + " hPa",
-            LastUpdated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-        };
-
-        return JsonSerializer.Serialize(weatherData, new JsonSerializerOptions { WriteIndented = true });
+        return new CurrentWeather(
+            city,
+            Random.Shared.Next(-10, 35) + "°C",
+            GetRandomWeatherCondition(),
+            Random.Shared.Next(30, 90) + "%",
+            Random.Shared.Next(5, 25) + " km/h",
+            Random.Shared.Next(980, 1040) + " hPa",
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
     }
 
-    [McpServerTool]
+    [McpServerTool(UseStructuredContent = true)]
     [Description("Gets a 5-day weather forecast for a specified city starting from tomorrow.")]
-    public async Task<string> GetWeatherForecast(
+    public async Task<WeatherForecast> GetWeatherForecast(
         [Description("Name of the city to get forecast for")] string city)
     {
         // Simulate API call delay
         await Task.Delay(800);
 
-        var forecast = new
-        {
-            City = city,
-            Forecast = Enumerable.Range(1, 5).Select(day => new
-            {
-                Date = DateTime.Now.AddDays(day).ToString("yyyy-MM-dd"),
-                DayName = DateTime.Now.AddDays(day).ToString("dddd"),
-                HighTemp = Random.Shared.Next(15, 35) + "°C",
-                LowTemp = Random.Shared.Next(-5, 20) + "°C",
-                Condition = GetRandomWeatherCondition(),
-                ChanceOfRain = Random.Shared.Next(0, 100) + "%"
-            }).ToArray()
-        };
+        var forecast = Enumerable.Range(1, 5).Select(day => new WeatherForecastDay(
+            DateTime.Now.AddDays(day).ToString("yyyy-MM-dd"),
+            DateTime.Now.AddDays(day).ToString("dddd"),
+            Random.Shared.Next(15, 35) + "°C",
+            Random.Shared.Next(-5, 20) + "°C",
+            GetRandomWeatherCondition(),
+            Random.Shared.Next(0, 100) + "%")).ToArray();
 
-        return JsonSerializer.Serialize(forecast, new JsonSerializerOptions { WriteIndented = true });
+        return new WeatherForecast(city, forecast);
     }
 
     private static string GetRandomWeatherCondition()
@@ -67,3 +56,22 @@ internal class WeatherTools
         return WeatherConditions[Random.Shared.Next(WeatherConditions.Length)];
     }
 }
+
+internal sealed record CurrentWeather(
+    string City,
+    string Temperature,
+    string Condition,
+    string Humidity,
+    string WindSpeed,
+    string Pressure,
+    string LastUpdated);
+
+internal sealed record WeatherForecast(string City, WeatherForecastDay[] Forecast);
+
+internal sealed record WeatherForecastDay(
+    string Date,
+    string DayName,
+    string HighTemp,
+    string LowTemp,
+    string Condition,
+    string ChanceOfRain);

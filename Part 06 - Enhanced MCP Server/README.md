@@ -57,9 +57,9 @@ Open `ContosoOrdersMcpServer/Tools/ContosoOrdersTools.cs` and examine the three 
 ### Tool 1: Order Details Lookup
 
 ```csharp
-[McpServerTool]
+[McpServerTool(UseStructuredContent = true)]
 [Description("Retrieves order information from the Contoso business system.")]
-public string GetOrderDetails(
+public OrderLookupResult GetOrderDetails(
     [Description("The order ID to look up")] string orderId)
 ```
 
@@ -68,9 +68,9 @@ public string GetOrderDetails(
 ### Tool 2: Customer Order Search  
 
 ```csharp
-[McpServerTool]
+[McpServerTool(UseStructuredContent = true)]
 [Description("Searches for orders by customer name.")]
-public string SearchOrdersByCustomer(
+public CustomerOrderSearchResult SearchOrdersByCustomer(
     [Description("Customer name to search for")] string customerName)
 ```
 
@@ -79,9 +79,9 @@ public string SearchOrdersByCustomer(
 ### Tool 3: Product Inventory Status
 
 ```csharp
-[McpServerTool]
+[McpServerTool(UseStructuredContent = true)]
 [Description("Gets inventory status for a specific product.")]
-public string GetProductInventory(
+public ProductInventoryResult GetProductInventory(
     [Description("Product name or SKU to check inventory for")] string productName)
 ```
 
@@ -89,19 +89,25 @@ public string GetProductInventory(
 
 ## Step 3: Examine Business Data Structures
 
-The ContosoOrders tools return rich, structured business data:
+The ContosoOrders tools return typed business records. Setting
+`UseStructuredContent = true` makes the SDK publish an output schema for each
+tool and return its result as MCP structured content.
 
 ### Order Data Example
 
 ```json
 {
-  "Customer": "John Doe",
-  "Total": "$150.00",
-  "Status": "Shipped",
-  "Items": ["Camping Tent", "Sleeping Bag"],
-  "ShippingAddress": "123 Adventure Lane, Outdoor City, OC 12345",
-  "OrderDate": "2025-07-25",
-  "TrackingNumber": "1Z999AA1012345675"
+  "found": true,
+  "orderId": "12345",
+  "order": {
+    "customer": "John Doe",
+    "total": "$150.00",
+    "status": "Shipped",
+    "items": ["Camping Tent", "Sleeping Bag"],
+    "shippingAddress": "123 Adventure Lane, Outdoor City, OC 12345",
+    "orderDate": "2025-07-25",
+    "trackingNumber": "1Z999AA1012345675"
+  }
 }
 ```
 
@@ -109,13 +115,14 @@ The ContosoOrders tools return rich, structured business data:
 
 ```json
 {
-  "Customer": "John Doe",
-  "Orders": [
+  "found": true,
+  "customer": "John Doe",
+  "orders": [
     {
-      "OrderId": "12345",
-      "Total": "$150.00", 
-      "Status": "Shipped",
-      "Date": "2025-07-25"
+      "orderId": "12345",
+      "total": "$150.00",
+      "status": "Shipped",
+      "date": "2025-07-25"
     }
   ]
 }
@@ -125,12 +132,13 @@ The ContosoOrders tools return rich, structured business data:
 
 ```json
 {
-  "Product": "Camping Tent",
-  "Details": {
-    "SKU": "CT-001",
-    "InStock": 15,
-    "Price": "$89.99",
-    "Category": "Shelter"
+  "found": true,
+  "product": "Camping Tent",
+  "details": {
+    "sku": "CT-001",
+    "inStock": 15,
+    "price": "$89.99",
+    "category": "Shelter"
   }
 }
 ```
@@ -286,11 +294,11 @@ When building business MCP tools, consider these important aspects:
 ### Data Validation
 
 ```csharp
-public async Task<string> GetOrderDetails(string orderId)
+public OrderLookupResult GetOrderDetails(string orderId)
 {
     // Validate input parameters
     if (string.IsNullOrWhiteSpace(orderId))
-        return "Error: Order ID is required";
+    throw new ArgumentException("Order ID is required", nameof(orderId));
     
     // Sanitize inputs to prevent injection attacks
     orderId = orderId.Trim();
@@ -307,12 +315,14 @@ public async Task<string> GetOrderDetails(string orderId)
 try 
 {
     // Business logic here
-    return JsonSerializer.Serialize(result);
+  return result;
 }
 catch (Exception ex)
 {
     // Log errors securely (don't expose sensitive data)
-    return $"Error: Unable to process request. Reference ID: {Guid.NewGuid()}";
+  var referenceId = Guid.NewGuid();
+  _logger.LogError(ex, "Request failed. Reference ID: {ReferenceId}", referenceId);
+  throw new InvalidOperationException($"Unable to process request. Reference ID: {referenceId}");
 }
 ```
 
@@ -334,9 +344,9 @@ catch (Exception ex)
 Real business MCP servers often integrate with multiple systems:
 
 ```csharp
-[McpServerTool]
+[McpServerTool(UseStructuredContent = true)]
 [Description("Process a return request with inventory and accounting updates.")]
-public async Task<string> ProcessReturn(string orderId, string reason)
+public async Task<ReturnResult> ProcessReturn(string orderId, string reason)
 {
     // 1. Look up order details
     var order = await GetOrderFromDatabase(orderId);
@@ -350,11 +360,7 @@ public async Task<string> ProcessReturn(string orderId, string reason)
     // 4. Generate return label
     var label = await GenerateReturnLabel(order.ShippingAddress);
     
-    return JsonSerializer.Serialize(new { 
-        ReturnId = Guid.NewGuid(),
-        RefundAmount = order.Total,
-        ReturnLabel = label.TrackingNumber 
-    });
+    return new ReturnResult(Guid.NewGuid(), order.Total, label.TrackingNumber);
 }
 ```
 
@@ -372,8 +378,8 @@ public class ContosoOrdersTools
         _config = config;
     }
     
-    [McpServerTool]
-    public async Task<string> GetOrderDetails(string orderId)
+    [McpServerTool(UseStructuredContent = true)]
+    public async Task<OrderLookupResult> GetOrderDetails(string orderId)
     {
         var connectionString = _config["ContosoDb:ConnectionString"];
         var maxResults = _config.GetValue<int>("Orders:MaxResults", 100);
@@ -392,12 +398,12 @@ public class ContosoOrdersTools
 ```csharp
 private static readonly MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
 
-[McpServerTool]
-public async Task<string> GetProductInventory(string productName)
+[McpServerTool(UseStructuredContent = true)]
+public async Task<ProductInventoryResult> GetProductInventory(string productName)
 {
     var cacheKey = $"inventory_{productName}";
     
-    if (_cache.TryGetValue(cacheKey, out string cachedResult))
+    if (_cache.TryGetValue(cacheKey, out ProductInventoryResult? cachedResult) && cachedResult is not null)
         return cachedResult;
     
     // Fetch fresh data
@@ -413,8 +419,8 @@ public async Task<string> GetProductInventory(string productName)
 ### Async Operations
 
 ```csharp
-[McpServerTool]
-public async Task<string> GetCustomerOrderSummary(string customerId)
+[McpServerTool(UseStructuredContent = true)]
+public async Task<CustomerOrderSummary> GetCustomerOrderSummary(string customerId)
 {
     // Run multiple operations in parallel
     var orderTask = GetCustomerOrders(customerId);
@@ -423,11 +429,10 @@ public async Task<string> GetCustomerOrderSummary(string customerId)
     
     await Task.WhenAll(orderTask, profileTask, preferencesTask);
     
-    return JsonSerializer.Serialize(new {
-        Orders = orderTask.Result,
-        Profile = profileTask.Result,
-        Preferences = preferencesTask.Result
-    });
+    return new CustomerOrderSummary(
+      orderTask.Result,
+      profileTask.Result,
+      preferencesTask.Result);
 }
 ```
 
@@ -438,8 +443,8 @@ public async Task<string> GetCustomerOrderSummary(string customerId)
 ### Tool Usage Logging
 
 ```csharp
-[McpServerTool]
-public async Task<string> GetOrderDetails(string orderId)
+[McpServerTool(UseStructuredContent = true)]
+public async Task<OrderLookupResult> GetOrderDetails(string orderId)
 {
     var stopwatch = Stopwatch.StartNew();
     
@@ -469,33 +474,35 @@ public async Task<string> GetOrderDetails(string orderId)
 
 ```csharp
 [Test]
-public async Task GetOrderDetails_ValidOrder_ReturnsOrderData()
+public void GetOrderDetails_ValidOrder_ReturnsOrderData()
 {
     // Arrange
     var tools = new ContosoOrdersTools();
     var orderId = "12345";
     
     // Act
-    var result = await tools.GetOrderDetails(orderId);
+    var result = tools.GetOrderDetails(orderId);
     
     // Assert
     Assert.That(result, Is.Not.Null);
-    var orderData = JsonSerializer.Deserialize<dynamic>(result);
-    Assert.That(orderData.Customer, Is.EqualTo("John Doe"));
+    Assert.That(result.Found, Is.True);
+    Assert.That(result.Order?.Customer, Is.EqualTo("John Doe"));
 }
 
 [Test] 
-public async Task GetOrderDetails_InvalidOrder_ReturnsNotFound()
+public void GetOrderDetails_InvalidOrder_ReturnsNotFound()
 {
     // Arrange
     var tools = new ContosoOrdersTools();
     var orderId = "99999";
     
     // Act
-    var result = await tools.GetOrderDetails(orderId);
+    var result = tools.GetOrderDetails(orderId);
     
     // Assert
-    Assert.That(result, Does.Contain("not found"));
+    Assert.That(result.Found, Is.False);
+    Assert.That(result.Order, Is.Null);
+    Assert.That(result.Message, Does.Contain("not found"));
 }
 ```
 

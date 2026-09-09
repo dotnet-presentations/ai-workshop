@@ -112,7 +112,7 @@ flowchart TD
 - Clear, descriptive tool names and descriptions
 - Proper parameter documentation with `[Description]` attributes
 - Error handling for invalid inputs
-- JSON serialization for structured responses
+- Typed return records with `UseStructuredContent = true` for declared output schemas
 
 ### Teaching Flow - Part 5 (45-60 minutes)
 
@@ -133,7 +133,7 @@ flowchart TD
    - Open `Tools/WeatherTools.cs`
    - Explain `[McpServerTool]` and `[Description]` attributes
    - Walk through `GetCurrentWeather` implementation
-   - Discuss JSON serialization patterns
+   - Show how typed records become output schemas and structured content
 
 3. **Build and Validate** (5 minutes)
    - Run `dotnet build` to verify compilation
@@ -150,6 +150,27 @@ flowchart TD
 1. **GitHub Copilot Testing** - Test weather queries
 2. **Error Handling** - Try invalid locations
 3. **Tool Discovery** - Verify Copilot can find and use tools
+
+### MCP SDK 2.x Scope Decision
+
+Keep the required lesson focused on typed structured output over stdio. This is
+the smallest SDK 2.x feature that improves the existing tools without adding a
+new hosting model or client dependency.
+
+| Capability | Decision | Instructor rationale |
+| --- | --- | --- |
+| Typed structured output | Adopt | Typed records publish output schemas and let clients consume results without parsing JSON strings. |
+| Stateless Streamable HTTP | Defer | Requires ASP.NET Core hosting and HTTP client configuration beyond the Part 5 transport lesson. |
+| Multi-round-trip elicitation | Defer | Needs a consequential write workflow plus accepted, declined, cancelled, and fallback paths. |
+| Standard headers and `[McpHeader]` | Defer | Useful with HTTP intermediaries, which these stdio samples do not use. |
+| Caching hints | Defer | Simulated in-memory lookups do not provide meaningful observable cache behavior. |
+| MCP Apps | Defer | Experimental APIs require host support and warning suppression. |
+| Tasks | Defer | Neither sample has a durable, long-running operation. |
+| Roots, sampling, and protocol logging | Do not teach | These SDK APIs are deprecated; use current tool and host patterns instead. |
+| Legacy SSE transport | Do not teach | Streamable HTTP supersedes the deprecated SSE transport. |
+
+Point out that a scalar result, such as `GetRandomNumber`, appears directly in
+structured content. SDK 2.x does not wrap it in a `{ "result": ... }` object.
 
 ### Common Student Questions
 

@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using ModelContextProtocol.Server;
 
 namespace ContosoOrdersMcpServer.Tools;
@@ -10,72 +9,47 @@ namespace ContosoOrdersMcpServer.Tools;
 /// </summary>
 internal class ContosoOrdersTools
 {
-    [McpServerTool]
+    [McpServerTool(UseStructuredContent = true)]
     [Description("Retrieves order information from the Contoso business system.")]
-    public string GetOrderDetails(
+    public OrderLookupResult GetOrderDetails(
         [Description("The order ID to look up")] string orderId)
     {
         // Simulate business data lookup
-        var orders = new Dictionary<string, object>
+        var orders = new Dictionary<string, OrderDetails>
         {
-            ["12345"] = new
-            {
-                Customer = "John Doe",
-                Total = "$150.00",
-                Status = "Shipped",
-                Items = new[] { "Camping Tent", "Sleeping Bag" },
-                ShippingAddress = "123 Adventure Lane, Outdoor City, OC 12345",
-                OrderDate = "2025-07-25",
-                TrackingNumber = "1Z999AA1012345675"
-            },
-            ["12346"] = new
-            {
-                Customer = "Jane Smith",
-                Total = "$89.99",
-                Status = "Processing",
-                Items = new[] { "Hiking Boots" },
-                ShippingAddress = "456 Trail Rd, Mountain View, MV 67890",
-                OrderDate = "2025-07-30",
-                TrackingNumber = (string?)null
-            },
-            ["12347"] = new
-            {
-                Customer = "Bob Johnson",
-                Total = "$245.50",
-                Status = "Delivered",
-                Items = new[] { "Backpack", "Water Bottle", "Trail Mix" },
-                ShippingAddress = "789 Summit St, Peak Town, PT 11111",
-                OrderDate = "2025-07-20",
-                TrackingNumber = "1Z999AA1012345676"
-            }
+            ["12345"] = new("John Doe", "$150.00", "Shipped",
+                ["Camping Tent", "Sleeping Bag"],
+                "123 Adventure Lane, Outdoor City, OC 12345", "2025-07-25", "1Z999AA1012345675"),
+            ["12346"] = new("Jane Smith", "$89.99", "Processing",
+                ["Hiking Boots"],
+                "456 Trail Rd, Mountain View, MV 67890", "2025-07-30", null),
+            ["12347"] = new("Bob Johnson", "$245.50", "Delivered",
+                ["Backpack", "Water Bottle", "Trail Mix"],
+                "789 Summit St, Peak Town, PT 11111", "2025-07-20", "1Z999AA1012345676")
         };
 
         if (orders.TryGetValue(orderId, out var order))
         {
-            return JsonSerializer.Serialize(order, new JsonSerializerOptions { WriteIndented = true });
+            return new OrderLookupResult(true, orderId, order, null);
         }
 
-        return $"Order {orderId} not found in the system.";
+        return new OrderLookupResult(false, orderId, null, $"Order {orderId} not found in the system.");
     }
 
-    [McpServerTool]
+    [McpServerTool(UseStructuredContent = true)]
     [Description("Searches for orders by customer name.")]
-    public string SearchOrdersByCustomer(
+    public CustomerOrderSearchResult SearchOrdersByCustomer(
         [Description("Customer name to search for")] string customerName)
     {
         // Simulate customer search
-        var customerOrders = new Dictionary<string, object[]>
+        var customerOrders = new Dictionary<string, CustomerOrder[]>
         {
-            ["John Doe"] = new object[] {
-                new { OrderId = "12345", Total = "$150.00", Status = "Shipped", Date = "2025-07-25" },
-                new { OrderId = "12350", Total = "$75.99", Status = "Delivered", Date = "2025-07-15" }
-            },
-            ["Jane Smith"] = new object[] {
-                new { OrderId = "12346", Total = "$89.99", Status = "Processing", Date = "2025-07-30" }
-            },
-            ["Bob Johnson"] = new object[] {
-                new { OrderId = "12347", Total = "$245.50", Status = "Delivered", Date = "2025-07-20" }
-            }
+            ["John Doe"] = [
+                new("12345", "$150.00", "Shipped", "2025-07-25"),
+                new("12350", "$75.99", "Delivered", "2025-07-15")
+            ],
+            ["Jane Smith"] = [new("12346", "$89.99", "Processing", "2025-07-30")],
+            ["Bob Johnson"] = [new("12347", "$245.50", "Delivered", "2025-07-20")]
         };
 
         var searchKey = customerOrders.Keys.FirstOrDefault(name =>
@@ -83,27 +57,27 @@ internal class ContosoOrdersTools
 
         if (searchKey != null)
         {
-            var result = new { Customer = searchKey, Orders = customerOrders[searchKey] };
-            return JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true });
+            return new CustomerOrderSearchResult(true, searchKey, customerOrders[searchKey], null);
         }
 
-        return $"No orders found for customer '{customerName}'.";
+        return new CustomerOrderSearchResult(
+            false, customerName, [], $"No orders found for customer '{customerName}'.");
     }
 
-    [McpServerTool]
+    [McpServerTool(UseStructuredContent = true)]
     [Description("Gets inventory status for a specific product.")]
-    public string GetProductInventory(
+    public ProductInventoryResult GetProductInventory(
         [Description("Product name or SKU to check inventory for")] string productName)
     {
         // Simulate inventory lookup
-        var inventory = new Dictionary<string, object>
+        var inventory = new Dictionary<string, InventoryDetails>
         {
-            ["Camping Tent"] = new { SKU = "CT-001", InStock = 15, Price = "$89.99", Category = "Shelter" },
-            ["Sleeping Bag"] = new { SKU = "SB-002", InStock = 23, Price = "$59.99", Category = "Sleep" },
-            ["Hiking Boots"] = new { SKU = "HB-003", InStock = 8, Price = "$89.99", Category = "Footwear" },
-            ["Backpack"] = new { SKU = "BP-004", InStock = 12, Price = "$129.99", Category = "Gear" },
-            ["Water Bottle"] = new { SKU = "WB-005", InStock = 45, Price = "$19.99", Category = "Hydration" },
-            ["Trail Mix"] = new { SKU = "TM-006", InStock = 67, Price = "$8.99", Category = "Food" }
+            ["Camping Tent"] = new("CT-001", 15, "$89.99", "Shelter"),
+            ["Sleeping Bag"] = new("SB-002", 23, "$59.99", "Sleep"),
+            ["Hiking Boots"] = new("HB-003", 8, "$89.99", "Footwear"),
+            ["Backpack"] = new("BP-004", 12, "$129.99", "Gear"),
+            ["Water Bottle"] = new("WB-005", 45, "$19.99", "Hydration"),
+            ["Trail Mix"] = new("TM-006", 67, "$8.99", "Food")
         };
 
         var searchKey = inventory.Keys.FirstOrDefault(name =>
@@ -111,10 +85,37 @@ internal class ContosoOrdersTools
 
         if (searchKey != null)
         {
-            var result = new { Product = searchKey, Details = inventory[searchKey] };
-            return JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true });
+            return new ProductInventoryResult(true, searchKey, inventory[searchKey], null);
         }
 
-        return $"Product '{productName}' not found in inventory.";
+        return new ProductInventoryResult(
+            false, productName, null, $"Product '{productName}' not found in inventory.");
     }
 }
+
+internal sealed record OrderLookupResult(bool Found, string OrderId, OrderDetails? Order, string? Message);
+
+internal sealed record OrderDetails(
+    string Customer,
+    string Total,
+    string Status,
+    string[] Items,
+    string ShippingAddress,
+    string OrderDate,
+    string? TrackingNumber);
+
+internal sealed record CustomerOrderSearchResult(
+    bool Found,
+    string Customer,
+    CustomerOrder[] Orders,
+    string? Message);
+
+internal sealed record CustomerOrder(string OrderId, string Total, string Status, string Date);
+
+internal sealed record ProductInventoryResult(
+    bool Found,
+    string Product,
+    InventoryDetails? Details,
+    string? Message);
+
+internal sealed record InventoryDetails(string Sku, int InStock, string Price, string Category);

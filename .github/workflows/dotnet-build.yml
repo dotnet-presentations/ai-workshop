@@ -14,6 +14,7 @@ on:
       - "Part 08 - Agent Framework Basics/**"
       - "Part 09 - Adding AI to an Existing App/**"
       - "Part 11 - Deployment/**"
+      - "tests/McpStructuredOutputTests/**"
   pull_request:
     branches:
       - main
@@ -53,6 +54,8 @@ on:
       - "Part 11 - Deployment/**/*.sln"
       - "Part 11 - Deployment/**/*.props"
       - "Part 11 - Deployment/**/*.targets"
+      - "tests/McpStructuredOutputTests/**/*.cs"
+      - "tests/McpStructuredOutputTests/**/*.csproj"
   workflow_dispatch:
 
 jobs:
@@ -100,3 +103,24 @@ jobs:
 
       - name: Build solution
         run: dotnet build "${{ matrix.solution }}" --no-restore --configuration Release
+
+  mcp-structured-output:
+    name: MCP structured output
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Build MCP servers
+        run: |
+          dotnet build "Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj" --configuration Release
+          dotnet build "Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj" --configuration Release
+
+      - name: Validate MCP structured output
+        run: dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csproj --configuration Release

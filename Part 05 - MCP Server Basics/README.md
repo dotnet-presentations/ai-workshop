@@ -69,7 +69,7 @@ provides only the `aichatweb` template.
 1. **Install the template package**:
 
    ```powershell
-   dotnet new install Microsoft.McpServer.ProjectTemplates
+   dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1
    ```
 
    You should see it report the installed template:
@@ -81,9 +81,8 @@ provides only the `aichatweb` template.
    MCP Server App  mcpserver   [C#]      Common/AI/MCP
    ```
 
-   If it is already present you will see *"is already installed, it will be
-   replaced with latest version"* first. That is fine — the command is safe to
-   re-run and simply moves you to the current version.
+   If it is already present, the command is safe to re-run and keeps you on the
+   workshop's tested template version.
 
 1. **Verify the template is available and see its options**:
 
@@ -108,8 +107,8 @@ provides only the `aichatweb` template.
 > [!NOTE]
 > Some .NET SDK installations bundle this template, so `dotnet new mcpserver` may
 > already work before you install anything. Run the install command anyway — it
-> is how you get the current version, and it is the only reliable way to get the
-> template if your SDK does not carry it.
+> is how you get the workshop's tested version, and it is the only reliable way
+> to get the template if your SDK does not carry it.
 
 ## Step 2: Create Your First MCP Server
 
@@ -139,17 +138,32 @@ Now let's create a new MCP server project using the template:
    cd MyMcpServer
    ```
 
+4. **Upgrade the MCP SDK used by the generated project**:
+
+   ```powershell
+   dotnet add package ModelContextProtocol --version 2.2.0
+   ```
+
+   Template version 1.2.1 generates a project using an older MCP SDK. This
+   explicit step keeps the scaffold-first workflow while moving the server to
+   the workshop's tested SDK version.
+
 ### Alternative: create the project in Visual Studio 2026
 
 1. Select **File > New > Project**.
 1. Search for **MCP Server** and select the C# template.
 1. Name the project `MyMcpServer`, set the location to the
    `Part 05 - MCP Server Basics` folder, and select **Create**.
+1. In the generated project's directory, open a terminal and upgrade the MCP SDK:
+
+   ```powershell
+   dotnet add package ModelContextProtocol --version 2.2.0
+   ```
 
 > [!NOTE]
 > If **MCP Server** does not appear in the **Create a new project** dialog,
 > install the template from a terminal with
-> `dotnet new install Microsoft.McpServer.ProjectTemplates`, then restart Visual
+> `dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1`, then restart Visual
 > Studio 2026 and search again.
 
 ## Step 3: Understanding the Generated Project Structure
@@ -657,12 +671,13 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 
 ### Development Workflow
 
-1. **Install** the template with `dotnet new install Microsoft.McpServer.ProjectTemplates`
+1. **Install** template version 1.2.1 with `dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1`
 2. **Create** MCP server project with `dotnet new mcpserver`
-3. **Implement** custom tools with proper attributes
-4. **Configure** VS Code or Visual Studio 2026 to use your server
-5. **Test** with GitHub Copilot conversations
-6. **Iterate** and improve based on AI usage patterns
+3. **Upgrade** the generated project to `ModelContextProtocol` 2.2.0
+4. **Implement** custom tools with proper attributes
+5. **Configure** VS Code or Visual Studio 2026 to use your server
+6. **Test** with GitHub Copilot conversations
+7. **Iterate** and improve based on AI usage patterns
 
 > **🚀 Advanced Challenge**: If you're moving quickly and want an extra challenge, check out the [official Microsoft quickstart guide](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/build-mcp-server) which shows how to publish your MCP server to NuGet for others to use. This is covered in more detail in Part 7, but the quickstart provides a streamlined approach if you want to try it now!
 

@@ -333,7 +333,7 @@ Expected contents:
 README.md
 YourName.MyMcpServer.nuspec
 .mcp\server.json
-tools\net10.0\any\DotnetToolSettings.xml
+tools\any\any\DotnetToolSettings.xml
 ```
 
 Open `YourName.MyMcpServer.nuspec` and confirm it declares **both** package

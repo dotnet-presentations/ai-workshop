@@ -32,10 +32,19 @@ Before testing MCP functionality, verify all prerequisites are met:
 - [ ] **MCP Template** available
 
   ```powershell
-  dotnet new install Microsoft.McpServer.ProjectTemplates
+  dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1
   dotnet new list | findstr mcp
   # Expected: mcpserver template should be listed
   ```
+
+  If version 1.2.1 is already installed, the install command may exit with code
+  106. Verify the template is listed and continue.
+
+- [ ] **MCP client support** available
+  - Use a current VS Code or Visual Studio 2026 build for manual tool testing.
+  - Use `ModelContextProtocol.Core` 2.2.0 for deterministic SDK-client checks.
+  - The workshop uses stdio tools and typed structured output. It does not
+    require experimental MCP Apps, Tasks, or multi-round-trip elicitation.
 
 ### ✅ Workshop Prerequisites
 
@@ -60,7 +69,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 2. Build the project:
 
    ```powershell
-   dotnet build
+    dotnet build --configuration Release
    ```
 
 **Expected Results**:
@@ -74,7 +83,27 @@ Before testing MCP functionality, verify all prerequisites are met:
 - If build fails, verify .NET 10 SDK is installed
 - Check that `ModelContextProtocol` package is properly restored
 
-### Test 2: MCP Server Configuration
+### Test 2: Deterministic Protocol Validation
+
+**Objective**: Exercise real MCP discovery and calls against both server
+snapshots without depending on an IDE or model response.
+
+From the repository root, run:
+
+```powershell
+dotnet build "Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj" --configuration Release
+dotnet build "Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj" --configuration Release
+dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csproj --configuration Release
+```
+
+**Expected Results**:
+
+- ✅ The client discovers all Part 5 and Part 6 tools and required input schemas
+- ✅ Object tools advertise output schemas and return structured content
+- ✅ The scalar random-number result is a number, not a `{ "result": ... }` wrapper
+- ✅ Weather, forecast, order, customer search, and inventory calls succeed
+
+### Test 3: MCP Server Configuration
 
 **Objective**: Verify VS Code can discover and configure the MCP server
 
@@ -87,8 +116,9 @@ Before testing MCP functionality, verify all prerequisites are met:
    {
      "servers": {
        "weather-server": {
-         "command": "dnx",
-         "args": ["run", "--project", "./Part 05 - MCP Server Basics/MyMcpServer"]
+         "type": "stdio",
+         "command": "dotnet",
+         "args": ["run", "--project", "Part 05 - MCP Server Basics/MyMcpServer"]
        }
      }
    }
@@ -109,11 +139,11 @@ Before testing MCP functionality, verify all prerequisites are met:
 - Check VS Code output panel for MCP-related errors
 - Ensure GitHub Copilot extension is properly signed in
 
-### Test 3: Weather Tools Functionality
+### Test 4: Weather Tools Functionality
 
 **Objective**: Test weather tools through GitHub Copilot
 
-#### Test 3.1: Current Weather
+#### Test 4.1: Current Weather
 
 1. Open GitHub Copilot Chat
 2. Enter prompt: "What's the current weather in Seattle?"
@@ -124,7 +154,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 - ✅ Returns simulated weather data for Seattle
 - ✅ Response includes temperature, conditions, and humidity
 
-#### Test 3.2: Weather Forecast
+#### Test 4.2: Weather Forecast
 
 1. In Copilot Chat, enter: "Give me a 5-day weather forecast for New York"
 
@@ -134,17 +164,16 @@ Before testing MCP functionality, verify all prerequisites are met:
 - ✅ Returns 5-day forecast data
 - ✅ Each day includes date, temperature range, and conditions
 
-#### Test 3.3: Invalid Location Handling
+#### Test 4.3: Simulation Boundary
 
-1. In Copilot Chat, enter: "What's the weather in InvalidCity?"
+1. In Copilot Chat, enter: "What's the weather in Example City?"
 
 **Expected Results**:
 
-- ✅ Tool handles invalid location gracefully
-- ✅ Returns appropriate error message
-- ✅ No exceptions or crashes
+- ✅ Tool returns simulated data and preserves `Example City` in the result
+- ✅ Explain that this workshop sample does not call a real geocoding or weather API
 
-### Test 4: Tool Discovery and Descriptions
+### Test 5: Tool Discovery and Descriptions
 
 **Objective**: Verify tools have proper descriptions and parameters
 
@@ -197,12 +226,14 @@ Before testing MCP functionality, verify all prerequisites are met:
    {
      "servers": {
        "weather-server": {
-         "command": "dnx",
-         "args": ["run", "--project", "./Part 05 - MCP Server Basics/MyMcpServer"]
+         "type": "stdio",
+         "command": "dotnet",
+         "args": ["run", "--project", "Part 05 - MCP Server Basics/MyMcpServer"]
        },
        "contoso-orders": {
-         "command": "dnx",
-         "args": ["run", "--project", "./Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer"]
+         "type": "stdio",
+         "command": "dotnet",
+         "args": ["run", "--project", "Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer"]
        }
      }
    }
@@ -265,14 +296,14 @@ Before testing MCP functionality, verify all prerequisites are met:
 - ✅ No exceptions or crashes
 - ✅ User-friendly error message
 
-#### Test 8.2: Empty Customer Name
+#### Test 8.2: Unknown Customer
 
-1. Enter: "Find orders for customer with empty name"
+1. Enter: "Find orders for customer Unknown Customer"
 
 **Expected Results**:
 
-- ✅ Tool handles empty/invalid input gracefully
-- ✅ Returns appropriate validation message
+- ✅ Tool returns `found: false` with an empty orders collection
+- ✅ Result includes a clear not-found message
 
 ## MCP Integration Testing
 
@@ -375,7 +406,7 @@ Before testing MCP functionality, verify all prerequisites are met:
 ```powershell
 # Verify server can start manually
 cd "Part 05 - MCP Server Basics\MyMcpServer"
-dnx run
+dotnet run
 ```
 
 **VS Code MCP Logs**:
@@ -398,7 +429,7 @@ dnx run
 - ✅ Project builds without errors
 - ✅ VS Code discovers MCP server
 - ✅ Weather tools respond correctly to prompts
-- ✅ Error handling works for invalid inputs
+- ✅ Simulated city names are preserved in structured results
 - ✅ Tool descriptions are clear and accurate
 
 ### Part 6 (Business MCP Server)
@@ -406,7 +437,7 @@ dnx run
 - ✅ Project builds without errors
 - ✅ Business tools integrate with Copilot
 - ✅ Order, customer, and inventory tools function correctly
-- ✅ Data validation prevents errors
+- ✅ Known and unknown business lookups return stable structured results
 - ✅ Multiple servers work simultaneously
 
 ### Integration
@@ -422,36 +453,36 @@ Use this checklist to verify complete MCP functionality:
 
 ### Environment Setup
 
-- [x] .NET 10 SDK installed and verified
-- [x] VS Code with GitHub Copilot extensions ✅ **Confirmed available**
-- [x] MCP template available ✅ **mcpserver template working**
-- [x] Workshop prerequisites completed ✅ **All parts validated**
+- [ ] .NET 10 SDK installed and verified
+- [ ] Current VS Code or Visual Studio 2026 MCP client available for manual checks
+- [ ] MCP template version 1.2.1 available
+- [ ] Workshop prerequisites completed
 
 ### Part 5 - Weather MCP Server
 
-- [x] Project builds successfully ✅ **Verified with expected warnings**
-- [x] MCP server starts and connects ✅ **Configuration files present and properly structured**
-- [x] `GetCurrentWeather` tool works correctly ✅ **Tool implementation validated**
-- [x] `GetWeatherForecast` tool works correctly ✅ **Tool implementation validated**
-- [x] Error handling for invalid locations ✅ **Graceful error handling implemented**
-- [x] Tool descriptions are clear and accurate ✅ **Proper MCP attributes and descriptions**
+- [ ] Project builds in Release with no warnings
+- [ ] Deterministic client discovers all three tools and validates their schemas
+- [ ] `GetCurrentWeather` tool works correctly
+- [ ] `GetWeatherForecast` tool works correctly
+- [ ] Scalar random-number structured output is not wrapped in a `result` object
+- [ ] Tool descriptions are clear and accurate
 
 ### Part 6 - Business MCP Server
 
-- [x] Project builds successfully ✅ **Verified with expected warnings**
-- [x] Business MCP server starts and connects ✅ **Configuration files present and properly structured**
-- [x] `GetOrderDetails` tool works correctly ✅ **Tool implementation validated**
-- [x] `SearchOrdersByCustomer` tool works correctly ✅ **Tool implementation validated**
-- [x] `GetProductInventory` tool works correctly ✅ **Tool implementation validated**
-- [x] Data validation and error handling ✅ **Proper error handling implemented**
-- [x] Multiple servers work together ✅ **Multi-server configuration verified**
+- [ ] Project builds in Release with no warnings
+- [ ] Deterministic client validates discovery, schemas, and structured results
+- [ ] `GetOrderDetails` tool works correctly
+- [ ] `SearchOrdersByCustomer` tool works correctly
+- [ ] `GetProductInventory` tool works correctly
+- [ ] Known and unknown lookup envelopes remain stable
+- [ ] Multiple servers work together in the selected IDE client
 
 ### Integration and Performance
 
-- [x] Multi-server functionality verified ✅ **Both servers configured to work together**
-- [x] GitHub Copilot integration stable ✅ **Tools properly structured for Copilot**
-- [x] Performance acceptable under normal use ✅ **Build performance validated**
-- [x] All troubleshooting scenarios tested ✅ **Common issues documented and solutions provided**
+- [ ] Multi-server functionality verified
+- [ ] GitHub Copilot integration stable
+- [ ] Performance acceptable under normal use
+- [ ] Relevant troubleshooting scenarios tested
 
 ## Enhanced Testing Prompts (Updated for Phase 5)
 
@@ -472,10 +503,10 @@ Use this checklist to verify complete MCP functionality:
 - "Compare the weather between New York and Los Angeles"
 - Expected: Makes multiple GetCurrentWeather calls, provides comparison
 
-**Invalid Location**:
+**Simulated Location**:
 
-- "What's the weather in FakeCity123?"
-- Expected: Graceful error handling, user-friendly message
+- "What's the weather in Example City?"
+- Expected: Returns simulated weather data whose `city` is `Example City`
 
 ### Part 6 - Business MCP Testing Prompts
 
@@ -517,9 +548,9 @@ Use this checklist to verify complete MCP functionality:
 
 After completing this testing guide:
 
-1. **Phase 4**: Execute systematic testing using this guide ✅ **COMPLETED**
-2. **Phase 5**: Address any issues found during testing ✅ **COMPLETED**
-3. **Final Review**: Validate complete workshop experience ✅ **COMPLETED**
+1. Execute systematic testing using this guide.
+2. Record clarifications or skipped client paths.
+3. Reconcile the attendee workspace with the committed snapshots.
 
 For issues not covered in this guide, refer to:
 

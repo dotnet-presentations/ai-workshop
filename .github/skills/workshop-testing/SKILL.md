@@ -21,7 +21,7 @@ Complete the workshop the way an attendee would — follow each `Part N - */READ
 .\.github\scripts\setup-workshop-credentials.ps1 -ApplyUserSecrets
 dotnet --list-sdks                                  # expect 10.0.x
 dotnet new install Microsoft.Extensions.AI.Templates
-dotnet new install Microsoft.McpServer.ProjectTemplates
+dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1
 docker --version                                    # only needed for Parts 4 and 11
 ```
 
@@ -39,7 +39,7 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 | 2 - Build Chat App | `dotnet new console -n ChatApp`, add packages and code per README. Run it: chat, streaming, structured output | `Part 02 - Build Chat App/ChatApp/` |
 | 3 - Add RAG | Continue from your Part 2 app (README says copy it). Verify retrieval answers from `sample-docs/contoso-trailblazer-3000.md`. Also check the two `checkpoints/*.cs` variants still compile against the described packages | `Part 03 - Add RAG/RagChatApp/` |
 | 4 - AI Web Chat Template | Scaffold with the exact command in the README (`--provider azureopenai --vector-store qdrant --aspire --name GenAiLab`). Run via `GenAiLab.AppHost`. Also sanity-check the documented Docker-free `--vector-store local` path | Compare shared app code with `Part 11 - Deployment/GenAiLab/`; expect Part 10's Azure AI Search substitutions |
-| 5 - MCP Server Basics | `dotnet new install Microsoft.McpServer.ProjectTemplates`, then `dotnet new mcpserver -n MyMcpServer`, add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 05 - MCP Server Basics/MyMcpServer/` |
+| 5 - MCP Server Basics | `dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1`, then `dotnet new mcpserver -n MyMcpServer`, upgrade `ModelContextProtocol` to 2.2.0, and add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 05 - MCP Server Basics/MyMcpServer/` |
 | 6 - Enhanced MCP Server *(bonus)* | Exploration only — build and run the existing snapshot, review the README's business-integration guidance | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
 | 7 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | — |
 | 8 - Agent Framework Basics | `dotnet new console` → `AgentApp`, add `Microsoft.Agents.AI` per README. Verify the agent runs and can call the Part 5 weather tool if the README wires that up | `Part 08 - Agent Framework Basics/AgentApp/` |
@@ -52,9 +52,11 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 An MCP server is a stdio process — it starts and waits. Check:
 
 1. `dotnet build` succeeds with no warnings.
-2. `dotnet run` logs `Server (stream) (<Name>) transport reading messages`.
-3. Ctrl+C shuts it down cleanly.
-4. *Optional:* register it in `.vscode/mcp.json` and confirm the tools appear in Copilot Chat.
+2. `dotnet run` waits for protocol input; no terminal banner is required.
+3. Run `tests/McpStructuredOutputTests` from the repository root to exercise
+   real `tools/list` and `tools/call` requests against both server snapshots.
+4. Ctrl+C shuts a manually started server down cleanly.
+5. *Optional:* register it in `.vscode/mcp.json` and confirm the tools appear in Copilot Chat.
 
 ### Part 11 deployment
 

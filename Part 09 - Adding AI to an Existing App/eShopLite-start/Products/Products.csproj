@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.OpenApi" Version="2.12.2" />
     <!-- Pins the native SQLite bundle above the version EF Core pulls in transitively,
          which still has an open advisory. Nothing to do with AI. -->
-    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
+        <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.4" />
   </ItemGroup>
 
   <ItemGroup>

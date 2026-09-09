@@ -326,7 +326,7 @@ dotnet add package Microsoft.Extensions.Logging.Console
 dotnet add package Microsoft.ML.Tokenizers.Data.O200kBase
 dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
 dotnet add package Microsoft.Bcl.Memory --version 10.0.11
-dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.5
+dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
 ```
 
 #### Option B: Add packages in Visual Studio 2026
@@ -341,7 +341,7 @@ dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.5
    - `Microsoft.ML.Tokenizers.Data.O200kBase`
    - `Microsoft.SemanticKernel.Connectors.SqliteVec`
 1. Search for `Microsoft.Bcl.Memory`, select version `10.0.11`, and install it.
-1. Search for `SQLitePCLRaw.bundle_e_sqlite3`, select version `3.0.5`, and
+1. Search for `SQLitePCLRaw.bundle_e_sqlite3`, select version `3.0.4`, and
    install it.
 1. Select **Build > Build Solution**.
 
@@ -359,7 +359,7 @@ Install-Package Microsoft.Extensions.Logging.Console
 Install-Package Microsoft.ML.Tokenizers.Data.O200kBase
 Install-Package Microsoft.SemanticKernel.Connectors.SqliteVec -IncludePrerelease
 Install-Package Microsoft.Bcl.Memory -Version 10.0.11
-Install-Package SQLitePCLRaw.bundle_e_sqlite3 -Version 3.0.5
+Install-Package SQLitePCLRaw.bundle_e_sqlite3 -Version 3.0.4
 ```
 
 Three of these are prerelease, so they do not appear in the NuGet package

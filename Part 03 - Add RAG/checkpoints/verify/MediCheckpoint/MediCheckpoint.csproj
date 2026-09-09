@@ -36,7 +36,7 @@
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" Version="1.74.0-preview" />
     <!-- Pinned to clear NU1903 on transitive dependencies. See Part 3 Step 3.1. -->
     <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.11" />
-    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.4" />
   </ItemGroup>
 
 </Project>

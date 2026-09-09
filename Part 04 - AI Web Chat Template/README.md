@@ -573,7 +573,7 @@ and paste:
 `SQLitePCLRaw.lib.e_sqlite3` 2.1.10 reference. Pin the fixed version:
 
 ```bash
-dotnet add GenAiLab package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.5
+dotnet add GenAiLab package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
 ```
 
 ### Run it

@@ -50,6 +50,7 @@ updates:
     directories:
       - "/Part 05 - MCP Server Basics/MyMcpServer/"
       - "/Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/"
+      - "/tests/McpStructuredOutputTests/"
     schedule:
       interval: "weekly"
       day: "monday"

@@ -403,7 +403,7 @@ public async Task<ProductInventoryResult> GetProductInventory(string productName
 {
     var cacheKey = $"inventory_{productName}";
     
-    if (_cache.TryGetValue(cacheKey, out ProductInventoryResult? cachedResult))
+    if (_cache.TryGetValue(cacheKey, out ProductInventoryResult? cachedResult) && cachedResult is not null)
         return cachedResult;
     
     // Fetch fresh data

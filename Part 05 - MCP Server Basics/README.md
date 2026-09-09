@@ -154,6 +154,11 @@ Now let's create a new MCP server project using the template:
 1. Search for **MCP Server** and select the C# template.
 1. Name the project `MyMcpServer`, set the location to the
    `Part 05 - MCP Server Basics` folder, and select **Create**.
+1. In the generated project's directory, open a terminal and upgrade the MCP SDK:
+
+   ```powershell
+   dotnet add package ModelContextProtocol --version 2.2.0
+   ```
 
 > [!NOTE]
 > If **MCP Server** does not appear in the **Create a new project** dialog,

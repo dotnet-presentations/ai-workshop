@@ -122,24 +122,25 @@ with placeholders, so you are filling those in rather than rewriting the file.
 
 ```json
 {
-  "$schema": "https://modelcontextprotocol.io/schemas/draft/2025-07-09/server.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "description": "An MCP server that provides weather information tools for AI agents.",
   "name": "io.github.your-username/weather-mcp-server",
+  "version": "1.0.0",
   "packages": [
     {
-      "registry_name": "nuget",
-      "name": "YourName.MyMcpServer",
+      "registryType": "nuget",
+      "identifier": "YourName.MyMcpServer",
       "version": "1.0.0",
-      "package_arguments": [],
-      "environment_variables": []
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [],
+      "environmentVariables": []
     }
   ],
   "repository": {
     "url": "https://github.com/your-username/weather-mcp-server",
     "source": "github"
-  },
-  "version_detail": {
-    "version": "1.0.0"
   }
 }
 ```

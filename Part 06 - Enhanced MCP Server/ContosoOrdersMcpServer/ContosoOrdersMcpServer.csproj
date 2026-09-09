@@ -13,7 +13,7 @@
 
     <!-- Set recommended package metadata -->
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageId>SampleMcpServer</PackageId>
+    <PackageId>ContosoOrdersMcpServer</PackageId>
     <PackageVersion>0.1.0-beta</PackageVersion>
     <PackageTags>AI; MCP; server; stdio</PackageTags>
     <Description>An MCP server using the MCP C# SDK.</Description>

@@ -108,6 +108,40 @@ direct scalar call result.
 The stale instructions found during this run were corrected in the same change. No further
 documentation changes are required from this validation.
 
+## Validation evidence
+
+### Restore, build, and vulnerability checks
+
+| Command | Outcome |
+| --- | --- |
+| `dotnet --version` | Returned `10.0.400`. |
+| `dotnet new install Microsoft.McpServer.ProjectTemplates::1.2.1` | Template version 1.2.1 was available for the fresh Part 5 scaffold. Reinstalling the exact version can return exit code 106 when already installed. |
+| `dotnet add package ModelContextProtocol --version 2.2.0` | Updated the fresh Part 5 scaffold to MCP SDK 2.2.0. |
+| `dotnet restore "Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj"` | Restore succeeded. |
+| `dotnet build "Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj" --configuration Release` | Build succeeded with zero warnings. |
+| `dotnet list "Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj" package --vulnerable --include-transitive` | No vulnerable packages were found. |
+| `dotnet restore "Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj"` | Restore succeeded. |
+| `dotnet build "Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj" --configuration Release` | Build succeeded with zero warnings. |
+| `dotnet list "Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj" package --vulnerable --include-transitive` | No vulnerable packages were found. |
+| `dotnet build "Part 08 - Agent Framework Basics/AgentApp/AgentApp.csproj" --configuration Release` | Build succeeded with zero warnings. |
+| `dotnet run --project "tests/McpStructuredOutputTests/McpStructuredOutputTests.csproj" --configuration Release` | MCP list/call checks passed for the Part 5 and Part 6 committed servers. |
+| `dotnet pack --configuration Release` | The Part 7 package flow created the base package and six RID packages. |
+
+### MCP clients and selected 2.x scenarios
+
+| Client or tool | Version / source | Outcome |
+| --- | --- | --- |
+| MCP protocol harness | `tests/McpStructuredOutputTests` using `ModelContextProtocol.Client` 2.2.0 APIs | `tools/list` and `tools/call` passed for weather, forecast, random-number, order lookup, customer search, inventory, and unknown-order scenarios. |
+| VS Code / Visual Studio MCP clients | Not run | Manual IDE flows were out of scope for this command-line validation. |
+
+### Packaging and Markdown checks
+
+| Command | Outcome |
+| --- | --- |
+| `tar -tf SampleMcpServer.0.1.0-beta.nupkg` | Verified the package includes `README.md`, `.mcp/server.json`, the nuspec, and `tools/any/any/DotnetToolSettings.xml`. |
+| `markdownlint '**/*.md' --ignore 'node_modules' --ignore 'src' --ignore '**/bin/**' --ignore '**/obj/**' --ignore '**/lib/**' --ignore '**/GenAiLab/**'` | Passed for the repository Markdown set used by the workflow. |
+| `markdown-link-check --config .markdown-link-check.json --quiet --retry ".github/skills/workshop-testing/SKILL.md" "Part 05 - MCP Server Basics/README.md" "Part 07 - MCP Publishing/README.md" "Part 08 - Agent Framework Basics/README.md" "docs/README.md" "docs/instructor/MCP_INSTRUCTOR_GUIDE.md" "docs/planning/MCP_TESTING_GUIDE.md" "docs/testing/workshop-test-report-2026-09-09.md"` | Passed for the changed Markdown files. |
+
 ## Summary
 
 The command-line MCP progression in Parts 5-8 is reproducible with .NET 10.0.400, template

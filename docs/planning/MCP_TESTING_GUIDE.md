@@ -190,7 +190,7 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 
 ## Part 6 Testing: Enhanced MCP Server (ContosoOrdersMcpServer)
 
-### Test 5: Business Tools Build Verification
+### Test 6: Business Tools Build Verification
 
 **Objective**: Verify the ContosoOrdersMcpServer builds successfully
 
@@ -214,7 +214,7 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 - ✅ All business tools compile correctly
 - ✅ No missing dependency warnings
 
-### Test 6: Business Tools Configuration
+### Test 7: Business Tools Configuration
 
 **Objective**: Configure and test business MCP server
 
@@ -248,11 +248,11 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 - ✅ VS Code shows both servers in MCP panel
 - ✅ No configuration conflicts
 
-### Test 7: Order Management Tools
+### Test 8: Order Management Tools
 
 **Objective**: Test business tools functionality
 
-#### Test 7.1: Order Lookup
+#### Test 8.1: Order Lookup
 
 1. In Copilot Chat, enter: "Look up order details for order ID 12345"
 
@@ -262,7 +262,7 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 - ✅ Returns order information (customer: John Doe, items, status)
 - ✅ Data is properly formatted and readable
 
-#### Test 7.2: Customer Search
+#### Test 8.2: Customer Search
 
 1. Enter: "Find all orders for customer Jane Smith"
 
@@ -272,7 +272,7 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 - ✅ Returns relevant customer order information
 - ✅ Handles customer name matching correctly
 
-#### Test 7.3: Product Inventory
+#### Test 8.3: Product Inventory
 
 1. Enter: "Check inventory for hiking boots"
 
@@ -282,11 +282,11 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 - ✅ Returns product availability and pricing
 - ✅ Provides useful inventory information
 
-### Test 8: Data Validation and Error Handling
+### Test 9: Data Validation and Error Handling
 
 **Objective**: Test business tools handle edge cases properly
 
-#### Test 8.1: Invalid Order ID
+#### Test 9.1: Invalid Order ID
 
 1. Enter: "Look up order 99999"
 
@@ -296,7 +296,7 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 - ✅ No exceptions or crashes
 - ✅ User-friendly error message
 
-#### Test 8.2: Unknown Customer
+#### Test 9.2: Unknown Customer
 
 1. Enter: "Find orders for customer Unknown Customer"
 
@@ -307,7 +307,7 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 
 ## MCP Integration Testing
 
-### Test 9: Multi-Server Functionality
+### Test 10: Multi-Server Functionality
 
 **Objective**: Verify both MCP servers work simultaneously
 
@@ -323,7 +323,7 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 - ✅ No conflicts between different MCP servers
 - ✅ Responses combine information from multiple sources
 
-### Test 10: Performance and Reliability
+### Test 11: Performance and Reliability
 
 **Objective**: Test MCP server stability under normal use
 

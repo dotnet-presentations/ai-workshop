@@ -149,11 +149,29 @@ Part 5 built an MCP server (and the optional Parts 6-7 go further). Their relati
 
 In Part 5 the consumer happened to be GitHub Copilot. Here the consumer is your own agent. The server does not change.
 
+Install the client-only MCP package:
+
+```bash
+dotnet add package ModelContextProtocol.Core --version 2.2.0
+```
+
 ```csharp
 using ModelContextProtocol.Client;
 using Microsoft.Extensions.AI;
 
-await using var mcpClient = await McpClient.CreateAsync(clientTransport);
+var transport = new StdioClientTransport(new StdioClientTransportOptions
+{
+    Name = "MyMcpServer",
+    Command = "dotnet",
+    Arguments = [
+        "run",
+        "--project",
+        Path.GetFullPath(
+            "../../Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj")
+    ]
+});
+
+await using var mcpClient = await McpClient.CreateAsync(transport);
 var mcpTools = await mcpClient.ListToolsAsync();
 
 AIAgent agent = chatClient.AsAIAgent(
@@ -161,6 +179,11 @@ AIAgent agent = chatClient.AsAIAgent(
     instructions: "You help support staff answer questions about customer orders.",
     tools: [.. mcpTools]);
 ```
+
+The relative path assumes you run the code from
+`Part 08 - Agent Framework Basics/AgentApp`. Adjust it if your project is in a
+different directory. This excerpt is optional; the hands-on app below uses a
+local .NET tool and does not require Part 5.
 
 This is why MCP matters: **the agent uses the app, not the database.** Tools are the safe, reviewed surface your application chooses to expose, so business rules, validation, and authorization stay in your application instead of being re-implemented in a prompt.
 

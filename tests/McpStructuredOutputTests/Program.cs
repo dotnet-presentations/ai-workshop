@@ -1,9 +1,12 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol;
 
 var repositoryRoot = FindRepositoryRoot();
 
+await BuildProjectAsync(repositoryRoot, "Part 05 - MCP Server Basics/MyMcpServer/MyMcpServer.csproj");
+await BuildProjectAsync(repositoryRoot, "Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/ContosoOrdersMcpServer.csproj");
 await ValidatePart5Async(repositoryRoot);
 await ValidatePart6Async(repositoryRoot);
 
@@ -18,7 +21,7 @@ static async Task ValidatePart5Async(string repositoryRoot)
 	var tools = await client.ListToolsAsync();
 	AssertToolSchema(tools, "get_current_weather", "city", "object", "city", "temperature", "condition");
 	AssertToolSchema(tools, "get_weather_forecast", "city", "object", "city", "forecast");
-	AssertToolSchema(tools, "get_random_number", null, "integer");
+	AssertScalarToolSchema(tools, "get_random_number");
 
 	var weather = await client.CallToolAsync(
 		"get_current_weather",
@@ -115,6 +118,26 @@ static async Task<McpClient> CreateClientAsync(string repositoryRoot, string pro
 	return await McpClient.CreateAsync(transport);
 }
 
+static async Task BuildProjectAsync(string repositoryRoot, string projectPath)
+{
+	using var process = Process.Start(new ProcessStartInfo
+	{
+		FileName = "dotnet",
+		ArgumentList =
+		{
+			"build",
+			Path.Combine(repositoryRoot, projectPath),
+			"--configuration",
+			"Release"
+		},
+		WorkingDirectory = repositoryRoot,
+		UseShellExecute = false
+	}) ?? throw new InvalidOperationException($"Could not build '{projectPath}'.");
+
+	await process.WaitForExitAsync();
+	Assert(process.ExitCode == 0, $"Build failed for '{projectPath}'.");
+}
+
 static void AssertToolSchema(
 	IList<McpClientTool> tools,
 	string toolName,
@@ -136,9 +159,10 @@ static void AssertToolSchema(
 
 	var outputSchema = tool.ProtocolTool.OutputSchema
 		?? throw new InvalidOperationException($"Tool '{toolName}' does not advertise an output schema.");
+	var actualOutputType = outputSchema.GetProperty("type").GetString();
 	Assert(
-		outputSchema.GetProperty("type").GetString() == expectedOutputType,
-		$"Tool '{toolName}' output schema is not '{expectedOutputType}'.");
+		actualOutputType == expectedOutputType,
+		$"Tool '{toolName}' output schema is '{actualOutputType}', not '{expectedOutputType}': {outputSchema.GetRawText()}");
 
 	if (requiredOutputProperties.Length > 0)
 	{
@@ -152,6 +176,20 @@ static void AssertToolSchema(
 				$"Tool '{toolName}' does not require its '{propertyName}' output.");
 		}
 	}
+}
+
+static void AssertScalarToolSchema(IList<McpClientTool> tools, string toolName)
+{
+	var tool = tools.SingleOrDefault(tool => tool.Name == toolName)
+		?? throw new InvalidOperationException($"Tool '{toolName}' was not discovered.");
+	var outputSchema = tool.ProtocolTool.OutputSchema
+		?? throw new InvalidOperationException($"Tool '{toolName}' does not advertise an output schema.");
+
+	var isInteger = outputSchema.GetProperty("type").GetString() == "integer";
+	var isWrappedInteger = outputSchema.GetProperty("type").GetString() == "object" &&
+		outputSchema.GetProperty("properties").GetProperty("result").GetProperty("type").GetString() == "integer" &&
+		outputSchema.GetProperty("required").EnumerateArray().Any(item => item.GetString() == "result");
+	Assert(isInteger || isWrappedInteger, $"Tool '{toolName}' has an unexpected output schema: {outputSchema.GetRawText()}");
 }
 
 static JsonElement GetStructuredContent(CallToolResult result, string toolName)

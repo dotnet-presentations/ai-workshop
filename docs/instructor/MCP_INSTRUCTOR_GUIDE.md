@@ -67,7 +67,7 @@ This guide provides instructors with comprehensive information for teaching Part
 **Pre-Workshop Setup Checklist:**
 
 1. Verify .NET 10 SDK installation: `dotnet --version`
-2. Install MCP templates: `dotnet new install Microsoft.McpServer.ProjectTemplates`
+2. Install MCP templates: `dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1`
 3. Verify VS Code with GitHub Copilot extensions
 4. Test GitHub Copilot functionality
 5. Clone workshop repository
@@ -137,6 +137,7 @@ flowchart TD
 
 3. **Build and Validate** (5 minutes)
    - Run `dotnet build` to verify compilation
+   - Run the `McpStructuredOutputTests` harness to verify tool schemas and calls
    - Address any build issues or questions
 
 #### **VS Code Integration (10 minutes)**
@@ -148,7 +149,7 @@ flowchart TD
 #### **Testing and Validation (10 minutes)**
 
 1. **GitHub Copilot Testing** - Test weather queries
-2. **Error Handling** - Try invalid locations
+2. **Simulation Boundary** - Explain that every city name receives simulated data
 3. **Tool Discovery** - Verify Copilot can find and use tools
 
 ### MCP SDK 2.x Scope Decision

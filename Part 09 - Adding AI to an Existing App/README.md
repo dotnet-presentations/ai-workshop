@@ -631,6 +631,8 @@ winget install Microsoft.FoundryLocal
 foundry run qwen2.5-1.5b
 ```
 
+This opens an interactive local model session. Leave it running in one terminal window, then open a second terminal to run `foundry server status` and the `curl`/`dotnet user-secrets` commands below. When you are done, press `Ctrl+C` in the first terminal to stop the model.
+
 Any small **instruct** model will do. Prefer the generic model id such as `qwen2.5-1.5b` and let Foundry Local choose the correct local variant rather than pinning an NPU-only id.
 
 Then find the endpoint and the exact model id it is serving:

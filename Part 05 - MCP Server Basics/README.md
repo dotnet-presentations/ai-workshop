@@ -81,8 +81,9 @@ provides only the `aichatweb` template.
    MCP Server App  mcpserver   [C#]      Common/AI/MCP
    ```
 
-   If it is already present, the command is safe to re-run and keeps you on the
-   workshop's tested template version.
+   If version 1.2.1 is already installed, the command reports that no update is
+   needed and may exit with code 106. Continue to the verification step. Use
+   `--force` only when you intentionally want to reinstall the same version.
 
 1. **Verify the template is available and see its options**:
 
@@ -147,6 +148,10 @@ Now let's create a new MCP server project using the template:
    Template version 1.2.1 generates a project using an older MCP SDK. This
    explicit step keeps the scaffold-first workflow while moving the server to
    the workshop's tested SDK version.
+
+   SDK 2.x preserves the stable server APIs used by the generated project. The
+   workshop then opts into current 2.x structured output explicitly when it
+   adds the tools below.
 
 ### Alternative: create the project in Visual Studio 2026
 
@@ -365,16 +370,12 @@ Now that we've added our weather tools alongside the original random number tool
    dotnet run
    ```
 
-   The server will start and wait for MCP protocol messages. You should see output similar to:
+      The server starts and waits for MCP protocol messages on standard input. It
+      may not print a startup banner in the terminal. This is expected: standard
+      output is reserved for MCP messages, while logs go to standard error.
 
-   ```text
-   info: Microsoft.Hosting.Lifetime[14]
-         Now listening on: stdio
-   info: Microsoft.Hosting.Lifetime[0]
-         Application started. Press Ctrl+C to shut down.
-   ```
-
-   Press `Ctrl+C` to stop the server after verifying it starts successfully.
+      Press `Ctrl+C` to stop the server. Tool discovery and calls are the meaningful
+      runtime test, which you perform through an MCP client in the next step.
 
 ### Key MCP Concepts You've Implemented
 

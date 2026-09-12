@@ -63,6 +63,7 @@ This is what Parts 2-4 already use: the Azure-specific client, adapted to `IChat
 ```csharp
 using Azure;
 using Azure.AI.OpenAI;
+using Microsoft.Extensions.AI;
 
 var client = new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(key));
 IChatClient chat = client.GetChatClient("gpt-5-mini").AsIChatClient();
@@ -74,9 +75,14 @@ IEmbeddingGenerator<string, Embedding<float>> embeddings =
 
 Foundry Local and Ollama both expose an **OpenAI-compatible** endpoint. That means
 both use the *same* client, `OpenAIClient`, pointed at a different base URL and
-key:
+key. In a fresh project, add the adapter package:
+
+```bash
+dotnet add package Microsoft.Extensions.AI.OpenAI
+```
 
 ```csharp
+using Microsoft.Extensions.AI;
 using OpenAI;
 using System.ClientModel;
 
@@ -100,15 +106,31 @@ Microsoft-curated small language models entirely on-device, with no Azure
 subscription, no network, no per-token cost.
 
 ```bash
+dotnet add package Microsoft.Extensions.AI.OpenAI
 dotnet add package Microsoft.AI.Foundry.Local   # or ...Local.WinML on Windows
 dotnet add package OpenAI
 ```
+
+> [!IMPORTANT]
+> On .NET 10, `Microsoft.AI.Foundry.Local` may require an explicit `RuntimeIdentifier`
+> in the project file when restoring on Windows, for example:
+>
+> ```xml
+> <PropertyGroup>
+>   <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+> </PropertyGroup>
+> ```
+>
+> This avoids the NETSDK1047 restore error if the SDK cannot infer a target RID.
 
 The manager downloads a model and starts a local OpenAI-compatible web service;
 you then use the **universal pattern** against it:
 
 ```csharp
 using Microsoft.AI.Foundry.Local;
+using Microsoft.Extensions.AI;
+using OpenAI;
+using System.ClientModel;
 
 // Start Foundry Local and load a small model (abbreviated - see docs link below).
 var mgr = FoundryLocalManager.Instance;
@@ -118,9 +140,10 @@ await model.LoadAsync();
 await mgr.StartWebServiceAsync();
 
 // Same universal pattern - just a local endpoint and a throwaway key:
+var baseUrl = "http://127.0.0.1:PORT/v1"; // replace PORT with the URL exposed by the local service
 var client = new OpenAIClient(
     new ApiKeyCredential("notneeded"),
-    new OpenAIClientOptions { Endpoint = new Uri(config.Web.Urls + "/v1") });
+    new OpenAIClientOptions { Endpoint = new Uri(baseUrl) });
 IChatClient chat = client.GetChatClient(model.Id).AsIChatClient();
 ```
 
@@ -143,6 +166,10 @@ ollama pull all-minilm     # embeddings
 ```
 
 ```csharp
+using Microsoft.Extensions.AI;
+using OpenAI;
+using System.ClientModel;
+
 var client = new OpenAIClient(
     new ApiKeyCredential("ollama"),  // Ollama ignores the key
     new OpenAIClientOptions { Endpoint = new Uri("http://localhost:11434/v1") });

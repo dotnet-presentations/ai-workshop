@@ -24,7 +24,7 @@ Why it fits this workshop with no content changes:
   proxy URL with an issued event key:
 
   ```bash
-  dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-PROXY-URL/"
+  dotnet user-secrets set "AzureOpenAI:Endpoint" "https://YOUR-PROXY-URL/api/v1"
   dotnet user-secrets set "AzureOpenAI:Key" "ATTENDEE-EVENT-KEY"
   ```
 
@@ -44,12 +44,29 @@ Why it fits this workshop with no content changes:
    workshop date.
 2. Assign the same models the workshop uses: `gpt-5-mini` and
    `text-embedding-3-small`.
-3. **Size the caps for RAG.** The manual-RAG part ingests the workshop manuals,
+3. **Activate the event before distributing keys.** Attendee event keys are
+   unauthorized until the event is active and the current time is inside its
+   configured start/end window.
+4. **Size the caps for RAG.** The manual-RAG part ingests the workshop manuals,
    which fires many embedding calls. Do one test ingestion through the proxy and
    set the daily-request / token caps above that, or proxy users will hit the wall
    mid-ingestion.
-4. Distribute join info out-of-band (e.g., a private gist / QR code shown in the
+5. **Run an attendee-key smoke test.** Before the workshop, use a real attendee
+   event key (not an administrator credential) with the attendee endpoint and
+   verify both one chat completion against `gpt-5-mini` and one embedding request
+   against `text-embedding-3-small`. Do not record the key, endpoint, or private
+   join information in the repository.
+6. Distribute join info out-of-band (e.g., a private gist / QR code shown in the
    room) — keep it out of the public workshop materials.
+
+## Troubleshooting attendee access
+
+| Symptom | Check |
+| --- | --- |
+| HTTP 401 for every attendee key | Confirm the event is active and the current time is inside its scheduled window. |
+| HTTP 404 or another route error | Confirm the endpoint given to attendees is the Azure OpenAI-compatible proxy endpoint and includes the proxy API route, commonly `/api/v1`. |
+| Chat works but RAG fails | Confirm `text-embedding-3-small` is assigned to the event and that the event limits allow the manual-RAG ingestion traffic. |
+| Only one attendee fails | Reissue or recopy that attendee's event key, then repeat the smoke test. |
 
 ## Deciding not to set it up
 

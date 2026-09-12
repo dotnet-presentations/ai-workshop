@@ -208,7 +208,8 @@ dotnet user-secrets init
 
 These commands intentionally use the latest compatible AI and Agent Framework
 packages. The committed snapshot records the versions validated with this
-workshop; keep any explicit protocol or security pins shown in later steps.
+workshop; if you try the optional MCP client excerpt above, keep its explicit
+`ModelContextProtocol.Core` package version.
 
 #### Option B: Visual Studio 2026
 

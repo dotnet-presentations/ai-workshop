@@ -624,19 +624,19 @@ Create `Store/Ai/SearchTelemetry.cs` — a capped in-memory queue of `SearchEven
 
 ### 3.2 Point an IChatClient at a local model
 
-Install [Foundry Local](https://learn.microsoft.com/azure/ai-foundry/foundry-local/get-started) and start a model:
+Install [Foundry Local](https://learn.microsoft.com/azure/ai-foundry/foundry-local/get-started) and start a small instruct model:
 
 ```bash
 winget install Microsoft.FoundryLocal
-foundry model run qwen2.5-1.5b-instruct-openvino-npu:5
+foundry run qwen2.5-1.5b
 ```
 
-Any small model will do. Pick an **instruct** model rather than a reasoning one — see the notes at the end of this step for why.
+Any small **instruct** model will do. Prefer the generic model id such as `qwen2.5-1.5b` and let Foundry Local choose the correct local variant rather than pinning an NPU-only id.
 
 Then find the endpoint and the exact model id it is serving:
 
 ```bash
-foundry service status
+foundry server status
 curl http://127.0.0.1:PORT/v1/models
 ```
 
@@ -647,7 +647,9 @@ dotnet user-secrets set "LocalModel:Endpoint" "http://127.0.0.1:PORT/v1"
 dotnet user-secrets set "LocalModel:Model" "THE-ID-FROM-/v1/models"
 ```
 
-> Two things that will cost you ten minutes if you guess. The endpoint must be the OpenAI-compatible base ending in `/v1` — the SDK appends `/chat/completions` to it. And the model id must be the one `/v1/models` reports, not the friendly alias; a model you have not downloaded returns `400`.
+> [!WARNING]
+> The first request can take minutes to load the model into memory. Warm it with a throwaway prompt before the demo, or the audience will sit through a long silence. The port reported by `foundry server status` can change after a restart, so re-run the secret setup after rebooting. And the model id must be the exact value from `/v1/models`, not the friendly alias; a model you have not downloaded returns `400`.
+> The endpoint must be the OpenAI-compatible base ending in `/v1` — the SDK appends `/chat/completions` to it.
 
 Foundry Local speaks the OpenAI protocol, so it needs no new package — the same `OpenAIClient` you already have, pointed somewhere else:
 

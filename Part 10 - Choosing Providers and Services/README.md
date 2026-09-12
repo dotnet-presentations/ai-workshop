@@ -116,7 +116,9 @@ dotnet add package OpenAI
 > in the project file when restoring on Windows, for example:
 >
 > ```xml
-> <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+> <PropertyGroup>
+>   <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+> </PropertyGroup>
 > ```
 >
 > This avoids the NETSDK1047 restore error if the SDK cannot infer a target RID.
@@ -127,6 +129,8 @@ you then use the **universal pattern** against it:
 ```csharp
 using Microsoft.AI.Foundry.Local;
 using Microsoft.Extensions.AI;
+using OpenAI;
+using System.ClientModel;
 
 // Start Foundry Local and load a small model (abbreviated - see docs link below).
 var mgr = FoundryLocalManager.Instance;

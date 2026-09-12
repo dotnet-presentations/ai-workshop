@@ -51,7 +51,7 @@ Why it fits this workshop with no content changes:
    which fires many embedding calls. Do one test ingestion through the proxy and
    set the daily-request / token caps above that, or proxy users will hit the wall
    mid-ingestion.
-5. **Run an attendee-key smoke test.** Before the workshop, use a real attendee
+5. **Run an attendee-key smoke test.** Set the event start time early enough to run this before attendees arrive. Once the event is active, use a real attendee
    event key (not an administrator credential) with the attendee endpoint and
    verify both one chat completion against `gpt-5-mini` and one embedding request
    against `text-embedding-3-small`. Do not record the key, endpoint, or private

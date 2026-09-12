@@ -7,8 +7,9 @@ and what to say when someone asks.
 Verified against `Microsoft.Extensions.AI.Templates` **10.10.0** on .NET SDK
 11.0.100-preview.7.26381.103, September 2026.
 
-The current scaffold for `--vector-store qdrant --aspire` emits the Qdrant
-packages `Aspire.Qdrant.Client` and `CommunityToolkit.VectorData.Qdrant`.
+A fresh 10.10.0 scaffold for `--vector-store qdrant --aspire` emits the Qdrant
+packages `Aspire.Qdrant.Client` and `CommunityToolkit.VectorData.Qdrant`; this is
+the package baseline used by Parts 4 and 10.
 `Microsoft.SemanticKernel.Connectors.Qdrant` is stale for this template and
 should not be added alongside the CommunityToolkit connector because it creates a
 second Qdrant registration path.

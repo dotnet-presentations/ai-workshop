@@ -329,6 +329,10 @@ dotnet add package Microsoft.Bcl.Memory --version 10.0.12
 dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.5
 ```
 
+The AI and MEDI commands use the latest compatible releases. Keep the explicit
+versions for `Microsoft.Bcl.Memory` and `SQLitePCLRaw.bundle_e_sqlite3`: they
+are security overrides required by the validated vector-store dependency graph.
+
 #### Option B: Add packages in Visual Studio 2026
 
 1. In Solution Explorer, right-click the console project and select

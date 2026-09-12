@@ -102,6 +102,11 @@ dotnet add package Microsoft.Extensions.AI.OpenAI
 dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
 ```
 
+The AI package commands use the latest compatible releases. Leave the
+project's explicit `SQLitePCLRaw.bundle_e_sqlite3` and `Microsoft.OpenApi`
+references in place; they are documented security and compatibility overrides,
+not AI package choices.
+
 `SqliteVec` gives you a vector store in a local file. No container, no service to run.
 
 > The project already pins `SQLitePCLRaw.bundle_e_sqlite3` 3.0.5 and `Microsoft.OpenApi` 2.12.2. Both are there to pull transitive dependencies above versions with open advisories, and neither has anything to do with AI. Leave them alone.

@@ -206,7 +206,7 @@ dotnet remove GenAiLab.AppHost package Aspire.Hosting.Qdrant
 dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.5.3
 
 dotnet remove GenAiLab.Web package Aspire.Qdrant.Client
-dotnet remove GenAiLab.Web package Microsoft.SemanticKernel.Connectors.Qdrant
+dotnet remove GenAiLab.Web package CommunityToolkit.VectorData.Qdrant
 dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.5.3
 dotnet add GenAiLab.Web package CommunityToolkit.VectorData.AzureAISearch --version 1.0.0
 ```

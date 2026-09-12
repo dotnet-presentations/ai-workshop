@@ -131,14 +131,14 @@ dotnet add GenAiLab.AppHost package Aspire.Hosting.AppHost --version 13.5.3
 dotnet add GenAiLab.AppHost package Aspire.Hosting.Qdrant --version 13.5.3
 dotnet add GenAiLab.Web package Aspire.Qdrant.Client --version 13.5.3
 dotnet add GenAiLab.Web package Aspire.Azure.AI.OpenAI --prerelease
+dotnet add GenAiLab.Web package CommunityToolkit.VectorData.Qdrant --version 1.0.0
 dotnet add GenAiLab.Web package Microsoft.Extensions.AI
 dotnet add GenAiLab.Web package Microsoft.Extensions.AI.OpenAI
-dotnet add GenAiLab.Web package Microsoft.SemanticKernel.Connectors.Qdrant --prerelease
 ```
 
-`Aspire.Azure.AI.OpenAI` and `Microsoft.SemanticKernel.Connectors.Qdrant` need
-`--prerelease` because neither has ever shipped a stable build; without the flag
-the command fails.
+`Aspire.Azure.AI.OpenAI` is still preview, so it needs `--prerelease`. The
+current template emits `CommunityToolkit.VectorData.Qdrant` as its Qdrant
+connector, so do not install a second Qdrant package alongside it.
 
 > [!NOTE]
 > The completed solution in this repo pins exact versions, so if a newer release

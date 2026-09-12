@@ -67,6 +67,12 @@ Create a `sample-docs` folder next to your project file and copy the sample
 markdown document into it. Choose the Visual Studio or command-line option
 below.
 
+> [!NOTE]
+> If you opened the provided `RagChatApp` project, skip the setup options
+> below. That project already includes the sample document and its
+> copy-to-output setting. These steps are for attendees continuing with their
+> own Part 2 `ChatApp` project.
+
 ### Option A: Copy in Visual Studio 2026
 
 1. In Solution Explorer, right-click the project and select **Add > New Folder**.

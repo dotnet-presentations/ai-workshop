@@ -4,8 +4,14 @@ Instructor-facing background for Parts 4 and 11. Attendees don't need any of thi
 but it explains why the workshop deviates from the template in a couple of places
 and what to say when someone asks.
 
-Verified against `Microsoft.Extensions.AI.Templates` **10.7.0-preview.3.26309.5**
-on .NET SDK 10.0.301, July 2026.
+Verified against `Microsoft.Extensions.AI.Templates` **10.10.0** on .NET SDK
+11.0.100-preview.7.26381.103, September 2026.
+
+The current scaffold for `--vector-store qdrant --aspire` emits the Qdrant
+packages `Aspire.Qdrant.Client` and `CommunityToolkit.VectorData.Qdrant`.
+`Microsoft.SemanticKernel.Connectors.Qdrant` is stale for this template and
+should not be added alongside the CommunityToolkit connector because it creates a
+second Qdrant registration path.
 
 ## Azure provisioning is the one real deviation
 

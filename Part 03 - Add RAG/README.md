@@ -64,22 +64,71 @@ Part 2 project.
    `AzureOpenAI:Endpoint` and `AzureOpenAI:Key` values you used in Part 2.
 
 Create a `sample-docs` folder next to your project file and copy the sample
-markdown document into it.
+markdown document into it. Choose the Visual Studio or command-line option
+below.
 
-### Option A: Copy from the command line
+> [!NOTE]
+> If you opened the provided `RagChatApp` project, skip the setup options
+> below. That project already includes the sample document and its
+> copy-to-output setting. These steps are for attendees continuing with their
+> own Part 2 `ChatApp` project.
 
-```powershell
-mkdir sample-docs
-copy "..\Part 03 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md" "sample-docs\"
-```
-
-### Option B: Copy in Visual Studio 2026
+### Option A: Copy in Visual Studio 2026
 
 1. In Solution Explorer, right-click the project and select **Add > New Folder**.
    Name it `sample-docs`.
-1. Right-click `sample-docs` and select **Add > Existing Item**.
-1. Browse to `Part 03 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md`
-   and select **Add**.
+1. In File Explorer, open the repository's
+   `Part 03 - Add RAG\RagChatApp\sample-docs` folder.
+1. Drag `contoso-trailblazer-3000.md` from File Explorer onto the `sample-docs`
+   folder in Solution Explorer. If Visual Studio does not copy the file when
+   you drag it, right-click `sample-docs`, select **Add > Existing Item**, and
+   choose the same file.
+
+### Option B: Copy with a guided PowerShell script
+
+Run this from inside your Part 2 project. The script suggests the repository
+sample document and the current directory as defaults, but prompts so you can
+correct either path. It validates both paths before creating `sample-docs` and
+copying the file:
+
+The script finds the workshop repository, checks that the source Markdown file
+and destination project folder exist, then copies the document into the
+project's `sample-docs` folder. If you already know how to get the Markdown file
+into the correct directory, you can also do that on your own instead of using
+this script.
+
+```powershell
+$workshopRoot = git rev-parse --show-toplevel
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($workshopRoot)) {
+  throw "Run this command from a directory inside the workshop repository."
+}
+
+$defaultSource = Join-Path $workshopRoot "Part 03 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md"
+$defaultDestination = (Get-Location).Path
+
+$sourceInput = Read-Host "Source document [$defaultSource]"
+$source = if ([string]::IsNullOrWhiteSpace($sourceInput)) { $defaultSource } else { $sourceInput }
+
+$destinationInput = Read-Host "Destination project folder [$defaultDestination]"
+$destinationProject = if ([string]::IsNullOrWhiteSpace($destinationInput)) { $defaultDestination } else { $destinationInput }
+
+if (-not (Test-Path -LiteralPath $source -PathType Leaf)) {
+  throw "Source document was not found: $source"
+}
+
+if (-not (Test-Path -LiteralPath $destinationProject -PathType Container)) {
+  throw "Destination project folder was not found: $destinationProject"
+}
+
+$sampleDocs = Join-Path $destinationProject "sample-docs"
+$destination = Join-Path $sampleDocs (Split-Path $source -Leaf)
+
+Write-Host "Source:      $source"
+Write-Host "Destination: $destination"
+New-Item -ItemType Directory -Force -Path $sampleDocs | Out-Null
+Copy-Item -LiteralPath $source -Destination $destination -Force
+Write-Host "Copied sample document successfully."
+```
 
 The app reads the document from its output folder at runtime, so the file has to
 be copied on build. Select `contoso-trailblazer-3000.md` in Solution Explorer and
@@ -289,12 +338,17 @@ find the best matching chunks, add them to the prompt, then stream the answer.
 
 ### Checkpoint A: Complete manual implementation
 
+This is the completed manual RAG implementation. The provided
+`RagChatApp/Program.cs` is a manual reference project, not the final MEDI
+implementation for this part.
+
 After typing each section, compare with the reference files:
 
 - [RagChatApp/Program.cs](RagChatApp/Program.cs)
 - [checkpoints/manual-program.cs](checkpoints/manual-program.cs)
 
-At this checkpoint, your manual `Program.cs` should match the manual reference.
+Both files represent the manual RAG checkpoint. At this checkpoint, your
+manual `Program.cs` should match the manual reference.
 
 ## Step 3: Replace ingestion plumbing with MEDI (recommended)
 
@@ -561,11 +615,13 @@ from a real vector store instead of an in-memory list.
 
 ### Checkpoint B: Complete MEDI implementation
 
-After typing each section, compare with the MEDI reference:
+This is the final recommended implementation for Part 3. After typing each
+section, compare your MEDI-based `Program.cs` with the MEDI reference:
 
 - [checkpoints/medi-program.cs](checkpoints/medi-program.cs)
 
-At this checkpoint, your MEDI-based `Program.cs` should match the checkpoint.
+Unlike `RagChatApp/Program.cs`, this checkpoint includes the MEDI ingestion
+pipeline and SQLite-backed vector store.
 
 ## Step 4: See the difference
 

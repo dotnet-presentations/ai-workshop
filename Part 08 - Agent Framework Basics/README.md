@@ -206,6 +206,10 @@ dotnet add package Microsoft.Extensions.Configuration.UserSecrets
 dotnet user-secrets init
 ```
 
+These commands intentionally use the latest compatible AI and Agent Framework
+packages. The committed snapshot records the versions validated with this
+workshop; keep any explicit protocol or security pins shown in later steps.
+
 #### Option B: Visual Studio 2026
 
 1. Select **File > New > Project**, search for **Console App**, and select **Next**.

@@ -260,9 +260,9 @@ Add the `System.Numerics.Tensors` namespace at the top of `Program.cs` and then 
 
 ```csharp
 using System.Numerics.Tensors;
-
-float score = TensorPrimitives.CosineSimilarity(a, b);
 ```
+
+This makes the `TensorPrimitives.CosineSimilarity(...)` API available for the call you add in Step 2.5, where `questionVector` and `item.Vector` are both in scope.
 
 Cosine similarity is a way to measure how aligned two embedding vectors are. The math is `dot(a, b) / (|a| * |b|)`: it compares the direction of the vectors while normalizing for their length. A score near `1` means they point in almost the same direction, near `0` means they are unrelated, and near `-1` means they point in opposite directions.
 

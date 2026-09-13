@@ -115,8 +115,8 @@ while (true)
     // -------------------------------------------------------------------------
     // Embed the question with the SAME generator, then rank every stored chunk by
     // cosine similarity and take the top matches. This is the heart of retrieval.
-    // TensorPrimitives.CosineSimilarity does the same dot-product-over-magnitudes
-    // calculation as the manual version, but with a .NET-optimized implementation.
+    // TensorPrimitives.CosineSimilarity measures how closely two vectors point in
+    // the same direction, which is what makes a relevant chunk rank higher.
     ReadOnlyMemory<float> questionVector =
         (await embeddingGenerator.GenerateAsync(input)).Vector;
 

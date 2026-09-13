@@ -10,11 +10,11 @@ Before testing MCP functionality, verify all prerequisites are met:
 
 ### ✅ Environment Checklist
 
-- [ ] **.NET 10.0 SDK** installed
+- [ ] **.NET 10.0 SDK (10.0.9 or higher)** installed
 
   ```powershell
   dotnet --version
-  # Expected: 10.0.x
+  # Expected: 10.0.9 or higher
   ```
 
 - [ ] **Visual Studio Code** installed and updated
@@ -32,13 +32,11 @@ Before testing MCP functionality, verify all prerequisites are met:
 - [ ] **MCP Template** available
 
   ```powershell
-  dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1
-  dotnet new list | findstr mcp
-  # Expected: mcpserver template should be listed
+  dotnet new mcpserver -h
+  # Expected: mcpserver template help output (included in .NET 10.0.9+ SDK)
   ```
 
-  If version 1.2.1 is already installed, the install command may exit with code
-  106. Verify the template is listed and continue.
+  If `dotnet new mcpserver` is not recognized, update to the latest .NET 10 SDK.
 
 - [ ] **MCP client support** available
   - Use a current VS Code or Visual Studio 2026 build for manual tool testing.
@@ -453,9 +451,9 @@ Use this checklist to verify complete MCP functionality:
 
 ### Environment Setup
 
-- [ ] .NET 10 SDK installed and verified
+- [ ] .NET 10 SDK (10.0.9+) installed and verified
 - [ ] Current VS Code or Visual Studio 2026 MCP client available for manual checks
-- [ ] MCP template version 1.2.1 available
+- [ ] MCP template (included in .NET 10.0.9+ SDK) available
 - [ ] Workshop prerequisites completed
 
 ### Part 5 - Weather MCP Server

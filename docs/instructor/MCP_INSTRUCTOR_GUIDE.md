@@ -66,8 +66,8 @@ This guide provides instructors with comprehensive information for teaching Part
 
 **Pre-Workshop Setup Checklist:**
 
-1. Verify .NET 10 SDK installation: `dotnet --version`
-2. Install MCP templates: `dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1`
+1. Verify .NET 10 SDK installation: `dotnet --version` (requires .NET 10.0.9 or later)
+2. Verify MCP template: `dotnet new mcpserver -h` (included in .NET 10.0.9+ SDK; update SDK if missing)
 3. Verify VS Code with GitHub Copilot extensions
 4. Test GitHub Copilot functionality
 5. Clone workshop repository

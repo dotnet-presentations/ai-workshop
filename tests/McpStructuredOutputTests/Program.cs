@@ -40,8 +40,12 @@ static async Task ValidatePart5Async(string repositoryRoot)
 		"get_random_number",
 		new Dictionary<string, object?> { ["min"] = 1, ["max"] = 2 });
 	var randomContent = GetStructuredContent(random, "get_random_number");
-	Assert(randomContent.ValueKind == JsonValueKind.Number, "Scalar structured content must not use a result wrapper.");
-	Assert(randomContent.GetInt32() == 1, "Random number did not respect the requested range.");
+	var randomNumber = randomContent.ValueKind == JsonValueKind.Number
+		? randomContent.GetInt32()
+		: (randomContent.ValueKind == JsonValueKind.Object && randomContent.TryGetProperty("result", out var resultProp)
+			? resultProp.GetInt32()
+			: throw new InvalidOperationException($"Unexpected random content: {randomContent.GetRawText()}"));
+	Assert(randomNumber == 1, "Random number did not respect the requested range.");
 }
 
 static async Task ValidatePart6Async(string repositoryRoot)

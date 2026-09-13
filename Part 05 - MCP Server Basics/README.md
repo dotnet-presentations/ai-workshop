@@ -55,7 +55,7 @@ Before starting this part, ensure you have:
   - [Part 2: Build Chat App](../Part%2002%20-%20Build%20Chat%20App/README.md) - Build the core chat loop by hand
   - [Part 3: Add RAG](../Part%2003%20-%20Add%20RAG/README.md) - Add embeddings and retrieval by hand
   - [Part 4: AI Web Chat Template](../Part%2004%20-%20AI%20Web%20Chat%20Template/README.md) - Map your hand-built concepts to the generated template
-- ✅ **.NET 10 SDK** - `dotnet --version`
+- ✅ **.NET 10 SDK (10.0.9 or later)** - `dotnet --version`
 - ✅ **Visual Studio Code** with GitHub Copilot extension, or **Visual Studio 2026** (see Step 7)
 - ✅ **Active GitHub Copilot subscription**
 
@@ -87,11 +87,10 @@ current .NET 10 SDK.
    ```
 
 > [!NOTE]
-> If you are using an older build or preview of the .NET 10 SDK and `dotnet new mcpserver`
-> is not found, you can install the template package manually:
-> ```powershell
-> dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1
-> ```
+> If `dotnet new mcpserver` is not recognized, check your SDK version with
+> `dotnet --version`. If it is older than 10.0.9, update to the latest .NET 10 SDK
+> from [https://dotnet.microsoft.com/download/dotnet/10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
+> or using your package manager (such as `winget upgrade Microsoft.DotNet.SDK.10`).
 
 ## Step 2: Create Your First MCP Server
 
@@ -130,10 +129,9 @@ Now let's create a new MCP server project using the template:
 
 > [!NOTE]
 > If **MCP Server** does not appear in the **Create a new project** dialog,
-> verify you are running .NET 10 SDK 10.0.9 or later, or install the template
-> manually from a terminal with
-> `dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1`, then restart Visual
-> Studio 2026 and search again.
+> verify you are running .NET 10 SDK 10.0.9 or later (update the SDK from
+> [https://dotnet.microsoft.com/download/dotnet/10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
+> if needed), then restart Visual Studio 2026 and search again.
 
 ## Step 3: Understanding the Generated Project Structure
 

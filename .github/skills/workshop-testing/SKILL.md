@@ -19,9 +19,9 @@ Complete the workshop the way an attendee would — follow each `Part N - */READ
 
 ```pwsh
 .\.github\scripts\setup-workshop-credentials.ps1 -ApplyUserSecrets
-dotnet --list-sdks                                  # expect 10.0.x
+dotnet --list-sdks                                  # expect 10.0.9+
 dotnet new install Microsoft.Extensions.AI.Templates
-dotnet new mcpserver -h                        # built into .NET 10.0.9+ SDK (or install Microsoft.McpServer.ProjectTemplates@1.2.1 for older SDKs)
+dotnet new mcpserver -h                        # built into .NET 10.0.9+ SDK
 docker --version                                    # only needed for Parts 4 and 11
 ```
 
@@ -39,7 +39,7 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 | 2 - Build Chat App | `dotnet new console -n ChatApp`, add packages and code per README. Run it: chat, streaming, structured output | `Part 02 - Build Chat App/ChatApp/` |
 | 3 - Add RAG | Continue from your Part 2 app (README says copy it). Verify retrieval answers from `sample-docs/contoso-trailblazer-3000.md`. Also check the two `checkpoints/*.cs` variants still compile against the described packages | `Part 03 - Add RAG/RagChatApp/` |
 | 4 - AI Web Chat Template | Scaffold with the exact command in the README (`--provider azureopenai --vector-store qdrant --aspire --name GenAiLab`). Run via `GenAiLab.AppHost`. Also sanity-check the documented Docker-free `--vector-store local` path | Compare shared app code with `Part 11 - Deployment/GenAiLab/`; expect Part 10's Azure AI Search substitutions |
-| 5 - MCP Server Basics | Verify `dotnet new mcpserver -n MyMcpServer` (included in .NET 10.0.9+ SDK; install `Microsoft.McpServer.ProjectTemplates@1.2.1` if using an older SDK) and add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 05 - MCP Server Basics/MyMcpServer/` |
+| 5 - MCP Server Basics | Verify `dotnet new mcpserver -n MyMcpServer` (included in .NET 10.0.9+ SDK) and add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 05 - MCP Server Basics/MyMcpServer/` |
 | 6 - Enhanced MCP Server *(bonus)* | Exploration only — build and run the existing snapshot, review the README's business-integration guidance | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
 | 7 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | — |
 | 8 - Agent Framework Basics | `dotnet new console` → `AgentApp`, add `Microsoft.Agents.AI` per README. Verify the agent runs and can call the Part 5 weather tool if the README wires that up | `Part 08 - Agent Framework Basics/AgentApp/` |

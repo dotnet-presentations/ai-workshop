@@ -31,15 +31,15 @@ with production-oriented wiring for persistence and orchestration.
 The finished version of the app you are about to build lives in
 **[`Part 11 - Deployment/GenAiLab/`](../Part%2011%20-%20Deployment/GenAiLab/)**.
 
-It begins as the same solution, already scaffolded and updated to the current
-package versions. Parts 10 and 11 then prepare it for production by replacing
+It begins as the same solution, using the package versions emitted by the
+template. Parts 10 and 11 then prepare it for production by replacing
 Qdrant with Azure AI Search and adding `WithExternalHttpEndpoints()` in
 `AppHost.cs`. Use it as the completed reference for the shared application code;
 the vector-store registration and packages intentionally show the later
 deployment-ready state.
 
 Use it to check your work if a step doesn't behave, or to catch up if you fall
-behind. It still needs your own credentials: see [Step 2.4](#24-store-the-connection-string)
+behind. It still needs your own credentials: see [Step 2.3](#23-store-the-connection-string)
 and set `ConnectionStrings:openai` on `GenAiLab.AppHost`.
 
 ## Step 1: Install the template and scaffold
@@ -92,66 +92,15 @@ This generates a solution with three projects:
 > is not ready to talk to the workshop's Azure OpenAI resource, and running it
 > first produces a confusing *Azure provisioning* prompt rather than a useful error.
 
-Four things need to change, and all four are small:
+Three things need to change, and all three are small:
 
 | # | Change | File |
 | --- | --- | --- |
-| 2.1 | Bring the packages up to date | both `.csproj` files |
-| 2.2 | Point the AppHost at an **existing** resource | `GenAiLab.AppHost/AppHost.cs` |
-| 2.3 | Use the deployment name your resource actually has | `GenAiLab.Web/Program.cs` |
-| 2.4 | Store the connection string | user secrets on `GenAiLab.AppHost` |
+| 2.1 | Point the AppHost at an **existing** resource | `GenAiLab.AppHost/AppHost.cs` |
+| 2.2 | Use the deployment name your resource actually has | `GenAiLab.Web/Program.cs` |
+| 2.3 | Store the connection string | user secrets on `GenAiLab.AppHost` |
 
-### 2.1 Bring the packages up to date
-
-Templates ship on their own release cadence, so a freshly scaffolded project is
-usually a few versions behind the current packages. Update it before you go any
-further – this is what you would do on any real project, and it keeps your code
-matching the completed solution in this repo.
-
-This is not only housekeeping. The template scaffolds Aspire **13.0.0**, which
-pulls in a MessagePack version carrying known high-severity advisories, so
-`dotnet restore` reports `NU1903` until you move off it.
-
-In `GenAiLab.AppHost/GenAiLab.AppHost.csproj`, change the SDK version to `13.5.3`
-and enable the Aspire CLI bundle:
-
-```xml
-<Sdk Name="Aspire.AppHost.Sdk" Version="13.5.3" />
-
-<PropertyGroup>
-    <AspireUseCliBundle>true</AspireUseCliBundle>
-</PropertyGroup>
-```
-
-The `<Sdk>` element has to be edited by hand – `dotnet add package` only manages
-`<PackageReference>` items. For the rest, run these from the `GenAiLab` folder:
-
-```bash
-dotnet add GenAiLab.AppHost package Aspire.Hosting.AppHost --version 13.5.3
-dotnet add GenAiLab.AppHost package Aspire.Hosting.Qdrant --version 13.5.3
-dotnet add GenAiLab.Web package Aspire.Qdrant.Client --version 13.5.3
-dotnet add GenAiLab.Web package Aspire.Azure.AI.OpenAI --prerelease
-dotnet add GenAiLab.Web package CommunityToolkit.VectorData.Qdrant --version 1.0.0
-dotnet add GenAiLab.Web package Microsoft.Extensions.AI
-dotnet add GenAiLab.Web package Microsoft.Extensions.AI.OpenAI
-```
-
-`Aspire.Azure.AI.OpenAI` is still preview, so it needs `--prerelease`. The
-current template emits `CommunityToolkit.VectorData.Qdrant` as its Qdrant
-connector, so do not install a second Qdrant package alongside it.
-
-> [!NOTE]
-> The completed solution in this repo pins exact versions, so if a newer release
-> has shipped since this was written you may end up slightly ahead of it. That is
-> fine – the code in this part does not depend on anything that changed.
-
-**Already ran the app before doing this step?** Updating Aspire also updates the
-Qdrant container image, and the data volume written by the old version can stop the
-new one from starting. See
-[What to do if Qdrant won't start after updating packages](#what-to-do-if-qdrant-wont-start-after-updating-packages)
-in Step 3, but only if you encounter that problem.
-
-### 2.2 Point the AppHost at your existing Azure OpenAI resource
+### 2.1 Point the AppHost at your existing Azure OpenAI resource
 
 The template assumes you want Aspire to **create** an Azure OpenAI account for you.
 That is what `builder.AddAzureOpenAI("openai")` means: it declares a provisionable
@@ -208,7 +157,7 @@ dotnet remove GenAiLab.AppHost package Aspire.Hosting.Azure.CognitiveServices
 > workshop's [Part 11](../Part%2011%20-%20Deployment/README.md) deployment keeps
 > using your existing Azure OpenAI resource through `AddConnectionString`.
 
-### 2.3 Use the deployment name your resource actually has
+### 2.2 Use the deployment name your resource actually has
 
 The template hardcodes `gpt-4o-mini`; the workshop resource deploys `gpt-5-mini`.
 In `GenAiLab.Web/Program.cs`, change:
@@ -231,7 +180,7 @@ use that instead. This is the same coupling you will work around in
 The embedding line below it already matches, so leave
 `openai.AddEmbeddingGenerator("text-embedding-3-small")` as it is.
 
-### 2.4 Store the connection string
+### 2.3 Store the connection string
 
 The AppHost needs one setting, `ConnectionStrings:openai`, and it goes in **user
 secrets** – the same secrets-first rule as Parts 2 and 3. Never put a key in
@@ -294,8 +243,8 @@ From the `GenAiLab` folder:
 dotnet build
 ```
 
-Expect a clean build with no warnings. `NU1903` here means step 2.1 was missed;
-an error about `AddAzureOpenAI` or `AddDeployment` means step 2.2 is incomplete.
+Expect a clean build with no warnings. An error about `AddAzureOpenAI` or
+`AddDeployment` means step 2.1 is incomplete.
 
 ## Step 3: Run the app
 
@@ -321,55 +270,7 @@ its health, logs, traces, and metrics. This is why `UseOpenTelemetry(...)` was i
 
 > [!TIP]
 > If the dashboard shows an **Azure provisioning** prompt asking for a subscription,
-> step 2.2 didn't take effect – `AppHost.cs` is still calling `AddAzureOpenAI`.
-
-### What to do if Qdrant won't start after updating packages
-
-> [!IMPORTANT]
-> Only follow the steps in this section if `vectordb` does not start after you
-> update the packages. If Qdrant starts normally, skip this section.
-
-If you ran the app before Step 2.1 and then updated the packages, `vectordb` may
-never reach **Running**. Its logs in the Aspire dashboard show a storage or version
-error rather than the usual startup banner.
-
-Two things in `AppHost.cs` cause this, and both are deliberate:
-
-```csharp
-var vectorDB = builder.AddQdrant("vectordb")
-    .WithDataVolume()                                  // storage survives shutdown
-    .WithLifetime(ContainerLifetime.Persistent);       // container survives shutdown
-```
-
-`WithDataVolume()` is the whole point of this part – it is the answer to Part 3's
-vectors vanishing on exit. But bumping Aspire also bumps the Qdrant image, and a
-data volume written by the older Qdrant can be incompatible with the newer one.
-`WithLifetime(ContainerLifetime.Persistent)` compounds it: the old container is
-kept and reused rather than recreated, so it does not pick up the new image.
-
-The fix is to throw away both. Nothing of value is lost – the volume holds only
-embeddings of the two sample documents, which the app regenerates on your next
-question.
-
-```bash
-# find the leftovers (Aspire names them after your AppHost)
-docker ps -a --filter "name=vectordb"
-docker volume ls --filter "name=vectordb-data"
-
-# remove them, substituting the names you just saw
-docker rm -f vectordb-38984c72
-docker volume rm genailab.apphost-38984c7271-vectordb-data
-```
-
-In Docker Desktop, do the same from the **Containers** and **Volumes** tabs.
-
-Then run the AppHost again. Aspire recreates the container from the new image with
-an empty volume, and your first question re-ingests the sample documents – so it
-will be slow again, exactly like the first run.
-
-> [!TIP]
-> Doing Step 2 in order avoids this entirely: update the packages *before* the
-> first run and there is never an old volume to conflict with.
+> step 2.1 didn't take effect – `AppHost.cs` is still calling `AddAzureOpenAI`.
 
 ## Step 4: Test the app end to end
 
@@ -413,7 +314,7 @@ pipeline (function calling + telemetry instead of your hand-added logging).
 Note what the endpoint and key did *not* do here: there is no `new
 AzureOpenAIClient(endpoint, key)`. `AddAzureOpenAIClient("openai")` looks up a
 connection string **by name**, and Aspire supplied it from the AppHost. That
-indirection is the reason step 2.4 set the secret on the AppHost instead.
+indirection is the reason step 2.3 set the secret on the AppHost instead.
 
 ### Retrieval: your Part 3 cosine search, as a service
 
@@ -486,7 +387,7 @@ search, which is why your first question takes noticeably longer than the rest.
 
 ### Persistence + orchestration: the answer to "in-memory doesn't scale"
 
-`GenAiLab.AppHost/AppHost.cs`, as you left it after step 2.2:
+`GenAiLab.AppHost/AppHost.cs`, as you left it after step 2.1:
 
 ```csharp
 var openai = builder.AddConnectionString("openai");
@@ -538,7 +439,7 @@ authentication and the same two secrets you already used in Parts 2 and 3.
 There is no AppHost here, so all three changes are in the single `GenAiLab`
 project.
 
-**Set the deployment name.** Exactly as in [step 2.3](#23-use-the-deployment-name-your-resource-actually-has),
+**Set the deployment name.** Exactly as in [step 2.2](#22-use-the-deployment-name-your-resource-actually-has),
 this variant also hardcodes `gpt-4o-mini`, just through a different API. In
 `GenAiLab/Program.cs`, change:
 

@@ -67,11 +67,11 @@ attendees edit it by hand.
 
 ## Package versions are a security step, not housekeeping
 
-The template scaffolds Aspire **13.0.0**, which pulls in a MessagePack version with
-known high-severity advisories. `dotnet restore` reports `NU1903` until you move to
-13.5.3. Keep the version-bump step in Part 4 even if it looks like tidiness. Aspire
-13.5.3 also requires `<AspireUseCliBundle>true</AspireUseCliBundle>` to avoid the
-`ASPIRE010` warning.
+The current template scaffolds Aspire **13.4.6**, which is the workshop baseline.
+Keep that generated version throughout Parts 4, 10, and 11 rather than adding a
+separate Aspire upgrade exercise. The workshop focuses on .NET AI concepts; an
+unrelated orchestration upgrade creates extra opportunities for attendees to
+make errors without advancing the lesson.
 
 The Docker-free variant has its own version of this: a transitive
 `SQLitePCLRaw.lib.e_sqlite3` 2.1.10 reference with the same advisory as

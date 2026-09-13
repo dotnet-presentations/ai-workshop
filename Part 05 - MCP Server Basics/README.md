@@ -115,11 +115,13 @@ provides only the `aichatweb` template.
 
 Now let's create a new MCP server project using the template:
 
-The project needs to be created under the Part 5 folder. The `dotnet new`
-command writes to the current directory, and the configuration steps later in
-this part expect the project at
-`Part 05 - MCP Server Basics/MyMcpServer`, alongside the committed workshop
-snapshot.
+Create the project under the Part 5 folder because the MCP configuration you
+will create in Step 6 points to
+`Part 05 - MCP Server Basics/MyMcpServer`. The `dotnet new` command writes to
+the current directory, so starting here puts the project where that
+configuration expects it. You can choose a different location, but then you
+must update the `--project` path in `.vscode/mcp.json` (and in `.mcp.json` for
+Visual Studio) to match.
 
 1. **Start in the Part 5 directory**:
 
@@ -165,9 +167,9 @@ snapshot.
 1. Search for **MCP Server** and select the C# template.
 1. Name the project `MyMcpServer`, set the location to the
    `Part 05 - MCP Server Basics` folder, and select **Create**. This location
-   is the Visual Studio equivalent of starting the terminal in that folder
-   before running `dotnet new`; it keeps the project layout consistent with the
-   CLI instructions and the later MCP configuration.
+   matches the project path used by the MCP configuration in Step 6. If you
+   choose another location, update the `--project` path in that configuration
+   to match.
 1. In the generated project's directory, open a terminal and upgrade the MCP SDK:
 
    ```powershell

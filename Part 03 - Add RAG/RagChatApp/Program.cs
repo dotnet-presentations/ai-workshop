@@ -7,7 +7,7 @@
 //   1. IEmbeddingGenerator      (turn text into vectors)
 //   2. Chunk the document       (split into retrievable pieces)
 //   3. Embed + store            (an in-memory list - no vector database)
-//   4. Cosine similarity search (naive top-k retrieval, written by hand)
+//   4. Cosine similarity search (top-k retrieval)
 //   5. Augment the prompt        (inject retrieved context, then answer)
 //
 // Theme: the same swappable-abstraction idea from Part 2 (swap the chat provider)
@@ -18,6 +18,7 @@
 // (https://github.com/SteveSandersonMS/dotnet-ai-workshop), chapters 2, 3, and 6.
 // =============================================================================
 
+using System.Numerics.Tensors;
 using Azure;
 using Azure.AI.OpenAI;
 using Microsoft.Extensions.AI;
@@ -110,16 +111,18 @@ while (true)
     }
 
     // -------------------------------------------------------------------------
-    // 4. Cosine similarity search (written by hand)
+    // 4. Cosine similarity search
     // -------------------------------------------------------------------------
     // Embed the question with the SAME generator, then rank every stored chunk by
     // cosine similarity and take the top matches. This is the heart of retrieval.
+    // TensorPrimitives.CosineSimilarity does the same dot-product-over-magnitudes
+    // calculation as the manual version, but with a .NET-optimized implementation.
     ReadOnlyMemory<float> questionVector =
         (await embeddingGenerator.GenerateAsync(input)).Vector;
 
     const int topK = 3;
     var topChunks = store
-        .Select(item => (item.Text, Score: CosineSimilarity(questionVector.Span, item.Vector.Span)))
+        .Select(item => (item.Text, Score: TensorPrimitives.CosineSimilarity(questionVector.Span, item.Vector.Span)))
         .OrderByDescending(x => x.Score)
         .Take(topK)
         .Select(x => x.Text)
@@ -159,22 +162,3 @@ while (true)
 }
 
 Console.WriteLine("Goodbye!");
-
-// -----------------------------------------------------------------------------
-// Naive cosine similarity: dot(a, b) / (|a| * |b|).
-// Returns a value from -1 (opposite) to 1 (identical direction).
-// -----------------------------------------------------------------------------
-static float CosineSimilarity(ReadOnlySpan<float> a, ReadOnlySpan<float> b)
-{
-    float dot = 0f, magA = 0f, magB = 0f;
-    for (int i = 0; i < a.Length; i++)
-    {
-        dot += a[i] * b[i];
-        magA += a[i] * a[i];
-        magB += b[i] * b[i];
-    }
-
-    return magA == 0f || magB == 0f
-        ? 0f
-        : dot / (MathF.Sqrt(magA) * MathF.Sqrt(magB));
-}

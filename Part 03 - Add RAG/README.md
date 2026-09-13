@@ -254,28 +254,30 @@ Console.WriteLine();
 This is intentionally simple. You compute the search data once at startup and
 keep it in a list.
 
-### 2.4 Add cosine similarity helper
+### 2.4 Use TensorPrimitives.CosineSimilarity
 
-At the bottom of `Program.cs`, add:
+Add the `System.Numerics.Tensors` namespace at the top of `Program.cs` and then use the built-in helper when ranking chunks:
 
 ```csharp
-static float CosineSimilarity(ReadOnlySpan<float> a, ReadOnlySpan<float> b)
-{
-  float dot = 0f, magA = 0f, magB = 0f;
-  for (int i = 0; i < a.Length; i++)
-  {
-    dot += a[i] * b[i];
-    magA += a[i] * a[i];
-    magB += b[i] * b[i];
-  }
+using System.Numerics.Tensors;
 
-  return magA == 0f || magB == 0f
-    ? 0f
-    : dot / (MathF.Sqrt(magA) * MathF.Sqrt(magB));
-}
+float score = TensorPrimitives.CosineSimilarity(a, b);
 ```
 
-This is the manual scoring function used to rank which chunks are the best match.
+Cosine similarity is a way to measure how aligned two embedding vectors are. The math is `dot(a, b) / (|a| * |b|)`: it compares the direction of the vectors while normalizing for their length. A score near `1` means they point in almost the same direction, near `0` means they are unrelated, and near `-1` means they point in opposite directions.
+
+> [!TIP]
+> TL;DR: cosine similarity is the "same vibe detector" for embeddings. It asks, "Are these two vectors pointing roughly in the same direction?" If yes, they are probably talking about the same idea, even if they use different words. It's like judging whether two people are in the same conversation instead of counting how many times they said the word "the" — basically, semantic matching without the awkward small talk.
+
+```mermaid
+flowchart LR
+  Q[Question vector] -->|similar direction| R[Relevant chunk vector]
+  Q -->|different direction| N[Irrelevant chunk vector]
+  R --> H[High cosine similarity]
+  N --> L[Low cosine similarity]
+```
+
+In RAG, the question embedding and a relevant chunk embedding should point in a similar direction, so that chunk gets a higher score and ranks above less relevant chunks.
 
 ### 2.5 Add the grounded chat loop
 
@@ -300,7 +302,7 @@ while (true)
 
   const int topK = 3;
   var topChunks = store
-    .Select(item => (item.Text, Score: CosineSimilarity(questionVector.Span, item.Vector.Span)))
+    .Select(item => (item.Text, Score: TensorPrimitives.CosineSimilarity(questionVector.Span, item.Vector.Span)))
     .OrderByDescending(x => x.Score)
     .Take(topK)
     .Select(x => x.Text)

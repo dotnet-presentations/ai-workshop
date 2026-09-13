@@ -64,22 +64,71 @@ Part 2 project.
    `AzureOpenAI:Endpoint` and `AzureOpenAI:Key` values you used in Part 2.
 
 Create a `sample-docs` folder next to your project file and copy the sample
-markdown document into it.
+markdown document into it. Choose the Visual Studio or command-line option
+below.
 
-### Option A: Copy from the command line
+> [!NOTE]
+> If you opened the provided `RagChatApp` project, skip the setup options
+> below. That project already includes the sample document and its
+> copy-to-output setting. These steps are for attendees continuing with their
+> own Part 2 `ChatApp` project.
 
-```powershell
-mkdir sample-docs
-copy "..\Part 03 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md" "sample-docs\"
-```
-
-### Option B: Copy in Visual Studio 2026
+### Option A: Copy in Visual Studio 2026
 
 1. In Solution Explorer, right-click the project and select **Add > New Folder**.
    Name it `sample-docs`.
-1. Right-click `sample-docs` and select **Add > Existing Item**.
-1. Browse to `Part 03 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md`
-   and select **Add**.
+1. In File Explorer, open the repository's
+   `Part 03 - Add RAG\RagChatApp\sample-docs` folder.
+1. Drag `contoso-trailblazer-3000.md` from File Explorer onto the `sample-docs`
+   folder in Solution Explorer. If Visual Studio does not copy the file when
+   you drag it, right-click `sample-docs`, select **Add > Existing Item**, and
+   choose the same file.
+
+### Option B: Copy with a guided PowerShell script
+
+Run this from inside your Part 2 project. The script suggests the repository
+sample document and the current directory as defaults, but prompts so you can
+correct either path. It validates both paths before creating `sample-docs` and
+copying the file:
+
+The script finds the workshop repository, checks that the source Markdown file
+and destination project folder exist, then copies the document into the
+project's `sample-docs` folder. If you already know how to get the Markdown file
+into the correct directory, you can also do that on your own instead of using
+this script.
+
+```powershell
+$workshopRoot = git rev-parse --show-toplevel
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($workshopRoot)) {
+  throw "Run this command from a directory inside the workshop repository."
+}
+
+$defaultSource = Join-Path $workshopRoot "Part 03 - Add RAG\RagChatApp\sample-docs\contoso-trailblazer-3000.md"
+$defaultDestination = (Get-Location).Path
+
+$sourceInput = Read-Host "Source document [$defaultSource]"
+$source = if ([string]::IsNullOrWhiteSpace($sourceInput)) { $defaultSource } else { $sourceInput }
+
+$destinationInput = Read-Host "Destination project folder [$defaultDestination]"
+$destinationProject = if ([string]::IsNullOrWhiteSpace($destinationInput)) { $defaultDestination } else { $destinationInput }
+
+if (-not (Test-Path -LiteralPath $source -PathType Leaf)) {
+  throw "Source document was not found: $source"
+}
+
+if (-not (Test-Path -LiteralPath $destinationProject -PathType Container)) {
+  throw "Destination project folder was not found: $destinationProject"
+}
+
+$sampleDocs = Join-Path $destinationProject "sample-docs"
+$destination = Join-Path $sampleDocs (Split-Path $source -Leaf)
+
+Write-Host "Source:      $source"
+Write-Host "Destination: $destination"
+New-Item -ItemType Directory -Force -Path $sampleDocs | Out-Null
+Copy-Item -LiteralPath $source -Destination $destination -Force
+Write-Host "Copied sample document successfully."
+```
 
 The app reads the document from its output folder at runtime, so the file has to
 be copied on build. Select `contoso-trailblazer-3000.md` in Solution Explorer and
@@ -205,28 +254,30 @@ Console.WriteLine();
 This is intentionally simple. You compute the search data once at startup and
 keep it in a list.
 
-### 2.4 Add cosine similarity helper
+### 2.4 Use TensorPrimitives.CosineSimilarity
 
-At the bottom of `Program.cs`, add:
+Add the `System.Numerics.Tensors` namespace at the top of `Program.cs` and then use the built-in helper when ranking chunks:
 
 ```csharp
-static float CosineSimilarity(ReadOnlySpan<float> a, ReadOnlySpan<float> b)
-{
-  float dot = 0f, magA = 0f, magB = 0f;
-  for (int i = 0; i < a.Length; i++)
-  {
-    dot += a[i] * b[i];
-    magA += a[i] * a[i];
-    magB += b[i] * b[i];
-  }
-
-  return magA == 0f || magB == 0f
-    ? 0f
-    : dot / (MathF.Sqrt(magA) * MathF.Sqrt(magB));
-}
+using System.Numerics.Tensors;
 ```
 
-This is the manual scoring function used to rank which chunks are the best match.
+This makes the `TensorPrimitives.CosineSimilarity(...)` API available for the call you add in Step 2.5, where `questionVector` and `item.Vector` are both in scope.
+
+Cosine similarity is a way to measure how aligned two embedding vectors are. The math is `dot(a, b) / (|a| * |b|)`: it compares the direction of the vectors while normalizing for their length. A score near `1` means they point in almost the same direction, near `0` means they are unrelated, and near `-1` means they point in opposite directions.
+
+> [!TIP]
+> TL;DR: cosine similarity is the "same vibe detector" for embeddings. It asks, "Are these two vectors pointing roughly in the same direction?" If yes, they are probably talking about the same idea, even if they use different words. It's like judging whether two people are in the same conversation instead of counting how many times they said the word "the" — basically, semantic matching without the awkward small talk.
+
+```mermaid
+flowchart LR
+  Q[Question vector] -->|similar direction| R[Relevant chunk vector]
+  Q -->|different direction| N[Irrelevant chunk vector]
+  R --> H[High cosine similarity]
+  N --> L[Low cosine similarity]
+```
+
+In RAG, the question embedding and a relevant chunk embedding should point in a similar direction, so that chunk gets a higher score and ranks above less relevant chunks.
 
 ### 2.5 Add the grounded chat loop
 
@@ -251,7 +302,7 @@ while (true)
 
   const int topK = 3;
   var topChunks = store
-    .Select(item => (item.Text, Score: CosineSimilarity(questionVector.Span, item.Vector.Span)))
+    .Select(item => (item.Text, Score: TensorPrimitives.CosineSimilarity(questionVector.Span, item.Vector.Span)))
     .OrderByDescending(x => x.Score)
     .Take(topK)
     .Select(x => x.Text)
@@ -289,12 +340,17 @@ find the best matching chunks, add them to the prompt, then stream the answer.
 
 ### Checkpoint A: Complete manual implementation
 
+This is the completed manual RAG implementation. The provided
+`RagChatApp/Program.cs` is a manual reference project, not the final MEDI
+implementation for this part.
+
 After typing each section, compare with the reference files:
 
 - [RagChatApp/Program.cs](RagChatApp/Program.cs)
 - [checkpoints/manual-program.cs](checkpoints/manual-program.cs)
 
-At this checkpoint, your manual `Program.cs` should match the manual reference.
+Both files represent the manual RAG checkpoint. At this checkpoint, your
+manual `Program.cs` should match the manual reference.
 
 ## Step 3: Replace ingestion plumbing with MEDI (recommended)
 
@@ -325,9 +381,13 @@ dotnet add package Microsoft.Extensions.DataIngestion.Markdig --prerelease
 dotnet add package Microsoft.Extensions.Logging.Console
 dotnet add package Microsoft.ML.Tokenizers.Data.O200kBase
 dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
-dotnet add package Microsoft.Bcl.Memory --version 10.0.11
-dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
+dotnet add package Microsoft.Bcl.Memory --version 10.0.12
+dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.5
 ```
+
+The AI and MEDI commands use the latest compatible releases. Keep the explicit
+versions for `Microsoft.Bcl.Memory` and `SQLitePCLRaw.bundle_e_sqlite3`: they
+are security overrides required by the validated vector-store dependency graph.
 
 #### Option B: Add packages in Visual Studio 2026
 
@@ -340,8 +400,8 @@ dotnet add package SQLitePCLRaw.bundle_e_sqlite3 --version 3.0.4
    - `Microsoft.Extensions.Logging.Console`
    - `Microsoft.ML.Tokenizers.Data.O200kBase`
    - `Microsoft.SemanticKernel.Connectors.SqliteVec`
-1. Search for `Microsoft.Bcl.Memory`, select version `10.0.11`, and install it.
-1. Search for `SQLitePCLRaw.bundle_e_sqlite3`, select version `3.0.4`, and
+1. Search for `Microsoft.Bcl.Memory`, select version `10.0.12`, and install it.
+1. Search for `SQLitePCLRaw.bundle_e_sqlite3`, select version `3.0.5`, and
    install it.
 1. Select **Build > Build Solution**.
 
@@ -358,8 +418,8 @@ Install-Package Microsoft.Extensions.DataIngestion.Markdig -IncludePrerelease
 Install-Package Microsoft.Extensions.Logging.Console
 Install-Package Microsoft.ML.Tokenizers.Data.O200kBase
 Install-Package Microsoft.SemanticKernel.Connectors.SqliteVec -IncludePrerelease
-Install-Package Microsoft.Bcl.Memory -Version 10.0.11
-Install-Package SQLitePCLRaw.bundle_e_sqlite3 -Version 3.0.4
+Install-Package Microsoft.Bcl.Memory -Version 10.0.12
+Install-Package SQLitePCLRaw.bundle_e_sqlite3 -Version 3.0.5
 ```
 
 Three of these are prerelease, so they do not appear in the NuGet package
@@ -557,11 +617,13 @@ from a real vector store instead of an in-memory list.
 
 ### Checkpoint B: Complete MEDI implementation
 
-After typing each section, compare with the MEDI reference:
+This is the final recommended implementation for Part 3. After typing each
+section, compare your MEDI-based `Program.cs` with the MEDI reference:
 
 - [checkpoints/medi-program.cs](checkpoints/medi-program.cs)
 
-At this checkpoint, your MEDI-based `Program.cs` should match the checkpoint.
+Unlike `RagChatApp/Program.cs`, this checkpoint includes the MEDI ingestion
+pipeline and SQLite-backed vector store.
 
 ## Step 4: See the difference
 

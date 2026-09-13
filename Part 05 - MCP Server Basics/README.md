@@ -96,7 +96,14 @@ current .NET 10 SDK.
 
 Now let's create a new MCP server project using the template:
 
-1. **Navigate to the Part 5 directory**:
+Create the project under the Part 5 folder because the MCP configuration you
+will create in Step 6 points to
+`Part 05 - MCP Server Basics/MyMcpServer`. The `dotnet new` command writes to
+the current directory, so starting here puts the project where that
+configuration expects it. Keep the project in this location so the remaining
+steps and the provided configuration work as written.
+
+1. **Start in the Part 5 directory**:
 
    ```powershell
    cd "Part 05 - MCP Server Basics"
@@ -125,7 +132,8 @@ Now let's create a new MCP server project using the template:
 1. Select **File > New > Project**.
 1. Search for **MCP Server** and select the C# template.
 1. Name the project `MyMcpServer`, set the location to the
-   `Part 05 - MCP Server Basics` folder, and select **Create**.
+   `Part 05 - MCP Server Basics` folder, and select **Create**. This location
+   matches the project path used by the MCP configuration in Step 6.
 
 > [!NOTE]
 > If **MCP Server** does not appear in the **Create a new project** dialog,
@@ -402,10 +410,9 @@ If you prefer to use **Visual Studio 2026** instead of VS Code, you can configur
 
 1. **Make sure you have a solution file.** Visual Studio only discovers `.mcp.json`
    relative to a *solution* directory, so opening the bare `.csproj` is not enough.
-   From your `MyMcpServer` folder:
+   Open a terminal in the generated project's directory:
 
    ```powershell
-   cd MyMcpServer
    dotnet new sln --name MyMcpServer --format slnx
    dotnet sln add MyMcpServer.csproj
    ```

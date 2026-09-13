@@ -78,7 +78,7 @@ dotnet run --project eShopLite.AppHost
 
 The Aspire dashboard opens. Click through to the **store** endpoint, then go to **Products** and search.
 
-Search for `water`. You get the Insulated Water Bottle, because the word "water" is in the row.
+Search for `water`. You get three matches: the Outdoor Rain Jacket, the Insulated Water Bottle, and the Daypack, because the seeded descriptions include words such as "waterproof" and other `water` substrings.
 
 Now search for `warm at night`. You get **nothing**.
 
@@ -102,9 +102,14 @@ dotnet add package Microsoft.Extensions.AI.OpenAI
 dotnet add package Microsoft.SemanticKernel.Connectors.SqliteVec --prerelease
 ```
 
+The AI package commands use the latest compatible releases. Leave the
+project's explicit `SQLitePCLRaw.bundle_e_sqlite3` and `Microsoft.OpenApi`
+references in place; they are documented security and compatibility overrides,
+not AI package choices.
+
 `SqliteVec` gives you a vector store in a local file. No container, no service to run.
 
-> The project already pins `SQLitePCLRaw.bundle_e_sqlite3` 3.0.4 and `Microsoft.OpenApi` 2.12.2. Both are there to pull transitive dependencies above versions with open advisories, and neither has anything to do with AI. Leave them alone.
+> The project already pins `SQLitePCLRaw.bundle_e_sqlite3` 3.0.5 and `Microsoft.OpenApi` 2.12.2. Both are there to pull transitive dependencies above versions with open advisories, and neither has anything to do with AI. Leave them alone.
 
 <!-- -->
 
@@ -304,7 +309,8 @@ group.MapGet("/aisearch/{search}", async (
 
     // Preserve the ranking the vector search gave us.
     var ordered = ids
-        .Select(id => products.First(p => p.Id == id))
+        .Select(id => products.FirstOrDefault(p => p.Id == id))
+        .OfType<Product>()
         .ToList();
 
     return Results.Ok(ordered);
@@ -312,7 +318,7 @@ group.MapGet("/aisearch/{search}", async (
     .WithName("AiSearchProducts");
 ```
 
-The reordering step is easy to miss. `WHERE Id IN (...)` returns rows in whatever order the database likes, which throws away the ranking you just paid an embedding model to compute.
+The reordering step is easy to miss. `WHERE Id IN (...)` returns rows in whatever order the database likes, which throws away the ranking you just paid an embedding model to compute. `FirstOrDefault(...).OfType<Product>()` also skips stale vector IDs when a product row has disappeared from the relational table, instead of throwing `InvalidOperationException`.
 
 ### 1.7 Try it
 
@@ -488,29 +494,93 @@ builder.Services.AddScoped<ProductDiscovery>();
 
 ### 2.4 Add the page
 
-Create `Store/Components/Pages/Discovery.razor`. The full file is in `eShopLite/`; the parts that matter:
+Create `Store/Components/Pages/Discovery.razor`:
 
 ```razor
 @page "/discovery"
 @using DataEntities
 @using Store.Ai
 @inject ProductDiscovery Assistant
-```
 
-> Inject it as `Assistant`, not `Discovery`. Blazor generates a class named after the file, so `@inject ProductDiscovery Discovery` produces a member with the same name as its enclosing type and the compiler rejects it with CS0542.
+<PageTitle>Ask</PageTitle>
 
-```razor
-@if (result is not null)
+<h1>Ask</h1>
+
+<p>Describe what you need in your own words. Try "something to keep me warm at night".</p>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="input-group">
+            <input @bind="question" @bind:event="oninput" @onkeyup="HandleKeyUp"
+                   class="form-control" placeholder="What are you looking for?"
+                   aria-label="What are you looking for?" disabled="@busy" />
+            <button class="btn btn-primary" @onclick="Ask" disabled="@busy">Ask</button>
+        </div>
+    </div>
+</div>
+
+@if (busy)
+{
+    <p><em>Thinking...</em></p>
+}
+else if (result is not null)
 {
     <div class="alert alert-info">@result.Answer</div>
 
     @if (result.Products.Count > 0)
     {
         <h2 class="h5">Products used to answer</h2>
-        @* card for each product in result.Products *@
+        <div class="row">
+            @foreach (var product in result.Products)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Description</p>
+                            <p class="card-text"><strong>@product.Price.ToString("C")</strong></p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+
+@code {
+    private string question = string.Empty;
+    private DiscoveryResult? result;
+    private bool busy;
+
+    private async Task Ask()
+    {
+        if (string.IsNullOrWhiteSpace(question))
+        {
+            return;
+        }
+
+        busy = true;
+        try
+        {
+            result = await Assistant.AskAsync(question);
+        }
+        finally
+        {
+            busy = false;
+        }
+    }
+
+    private async Task HandleKeyUp(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await Ask();
+        }
     }
 }
 ```
+
+> Inject it as `Assistant`, not `Discovery`. Blazor generates a class named after the file, so `@inject ProductDiscovery Discovery` produces a member with the same name as its enclosing type and the compiler rejects it with CS0542.
 
 Showing the products the answer was built from is not decoration. It is how a shopper checks the assistant, and how you notice when retrieval is the thing that went wrong rather than the model.
 
@@ -554,19 +624,21 @@ Create `Store/Ai/SearchTelemetry.cs` — a capped in-memory queue of `SearchEven
 
 ### 3.2 Point an IChatClient at a local model
 
-Install [Foundry Local](https://learn.microsoft.com/azure/ai-foundry/foundry-local/get-started) and start a model:
+Install [Foundry Local](https://learn.microsoft.com/azure/ai-foundry/foundry-local/get-started) and start a small instruct model:
 
 ```bash
 winget install Microsoft.FoundryLocal
-foundry model run qwen2.5-1.5b-instruct-openvino-npu:5
+foundry run qwen2.5-1.5b
 ```
 
-Any small model will do. Pick an **instruct** model rather than a reasoning one — see the notes at the end of this step for why.
+This opens an interactive local model session. Leave it running in one terminal window, then open a second terminal to run `foundry server status` and the `curl`/`dotnet user-secrets` commands below. When you are done, press `Ctrl+C` in the first terminal to stop the model.
+
+Any small **instruct** model will do. Prefer the generic model id such as `qwen2.5-1.5b` and let Foundry Local choose the correct local variant rather than pinning an NPU-only id.
 
 Then find the endpoint and the exact model id it is serving:
 
 ```bash
-foundry service status
+foundry server status
 curl http://127.0.0.1:PORT/v1/models
 ```
 
@@ -577,7 +649,9 @@ dotnet user-secrets set "LocalModel:Endpoint" "http://127.0.0.1:PORT/v1"
 dotnet user-secrets set "LocalModel:Model" "THE-ID-FROM-/v1/models"
 ```
 
-> Two things that will cost you ten minutes if you guess. The endpoint must be the OpenAI-compatible base ending in `/v1` — the SDK appends `/chat/completions` to it. And the model id must be the one `/v1/models` reports, not the friendly alias; a model you have not downloaded returns `400`.
+> [!WARNING]
+> The first request can take minutes to load the model into memory. Warm it with a throwaway prompt before the demo, or the audience will sit through a long silence. The port reported by `foundry server status` can change after a restart, so re-run the secret setup after rebooting. And the model id must be the exact value from `/v1/models`, not the friendly alias; a model you have not downloaded returns `400`.
+> The endpoint must be the OpenAI-compatible base ending in `/v1` — the SDK appends `/chat/completions` to it.
 
 Foundry Local speaks the OpenAI protocol, so it needs no new package — the same `OpenAIClient` you already have, pointed somewhere else:
 

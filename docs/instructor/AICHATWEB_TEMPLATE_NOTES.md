@@ -4,8 +4,15 @@ Instructor-facing background for Parts 4 and 11. Attendees don't need any of thi
 but it explains why the workshop deviates from the template in a couple of places
 and what to say when someone asks.
 
-Verified against `Microsoft.Extensions.AI.Templates` **10.7.0-preview.3.26309.5**
-on .NET SDK 10.0.301, July 2026.
+Verified against `Microsoft.Extensions.AI.Templates` **10.10.0** on .NET SDK
+11.0.100-preview.7.26381.103, September 2026.
+
+A fresh 10.10.0 scaffold for `--vector-store qdrant --aspire` emits the Qdrant
+packages `Aspire.Qdrant.Client` and `CommunityToolkit.VectorData.Qdrant`; this is
+the package baseline used by Parts 4 and 10.
+`Microsoft.SemanticKernel.Connectors.Qdrant` is stale for this template and
+should not be added alongside the CommunityToolkit connector because it creates a
+second Qdrant registration path.
 
 ## Azure provisioning is the one real deviation
 
@@ -107,12 +114,30 @@ Two consequences for the room:
 - **`azd` deploys markitdown too.** It becomes a third container app alongside the
   web app and Qdrant.
 
+## Azure AI Search provisioning can return an opaque conflict
+
+When creating a Search service manually for workshop preparation, Azure may fail
+with `409 Conflict`, an `Unknown` error code, and only "An internal error has
+occurred." The deployment operation, provider registration, regional SKU quota,
+and name-availability check can all look valid.
+
+Before changing regions or opening a support request, retry with a globally
+distinctive service name such as `<event>-<owner>-search`. A September 2026 test
+failed with the generic-looking `azure-ai-search` name even though Azure's
+name-availability check returned `true`, then succeeded immediately with
+`azure-ai-search-workshop-jongalloway`.
+
+This applies to manual instructor setup. Part 11 normally lets Aspire and `azd`
+generate the Search infrastructure and should not require attendees to choose a
+service name.
+
 ## Things that go wrong in the room
 
 | Symptom | Cause |
 | --- | --- |
 | Dashboard shows an "Azure provisioning" banner and resources stay in Starting | `AddAzureOpenAI` still in `AppHost.cs`; the swap to `AddConnectionString` was missed |
 | 404 or "deployment not found" on the first chat message | `AddChatClient` still says `gpt-4o-mini` |
+| Manual Search creation fails with `409 Conflict` and `Unknown` | Retry with a globally distinctive service name before changing regions |
 | First question hangs for a minute | Expected — lazy ingestion, including the PDF round-trip through markitdown |
 | Qdrant or markitdown never start | Docker Desktop isn't running |
 | `NU1903` on restore | Package bump step skipped |

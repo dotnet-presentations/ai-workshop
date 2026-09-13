@@ -206,6 +206,11 @@ dotnet add package Microsoft.Extensions.Configuration.UserSecrets
 dotnet user-secrets init
 ```
 
+These commands intentionally use the latest compatible AI and Agent Framework
+packages. The committed snapshot records the versions validated with this
+workshop; if you try the optional MCP client excerpt above, keep its explicit
+`ModelContextProtocol.Core` package version.
+
 #### Option B: Visual Studio 2026
 
 1. Select **File > New > Project**, search for **Console App**, and select **Next**.

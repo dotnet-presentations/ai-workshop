@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.DataIngestion.MarkItDown" Version="10.7.0-preview.1.26309.5" />
     <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" Version="2.0.0" />
     <PackageReference Include="Microsoft.ML.Tokenizers.Data.O200kBase" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.12" />
     <PackageReference Include="Aspire.Azure.Search.Documents" Version="13.5.3" />
     <PackageReference Include="CommunityToolkit.VectorData.AzureAISearch" Version="1.0.0" />
   </ItemGroup>

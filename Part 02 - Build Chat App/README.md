@@ -61,6 +61,11 @@ dotnet add package Microsoft.Extensions.Configuration.UserSecrets
 dotnet add package Microsoft.Extensions.Logging.Console
 ```
 
+These commands intentionally use the latest compatible package versions. The
+committed snapshot records the versions that were validated for this workshop;
+do not add older version pins unless the lab calls for an explicit
+compatibility or security override.
+
 ### Option B: Add packages in Visual Studio 2026
 
 1. In Solution Explorer, right-click the `ChatApp` project and select

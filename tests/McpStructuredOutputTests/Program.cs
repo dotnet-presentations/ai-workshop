@@ -29,12 +29,22 @@ static async Task ValidatePart5Async(string repositoryRoot)
 	var weatherContent = GetStructuredContent(weather, "get_current_weather");
 	Assert(weatherContent.ValueKind == JsonValueKind.Object, "Weather result must be an object.");
 	Assert(weatherContent.GetProperty("city").GetString() == "Seattle", "Weather city was not preserved.");
+	Assert(
+		weatherContent.GetProperty("temperature").GetString()?.EndsWith("°C", StringComparison.Ordinal) == true,
+		"Weather temperature was not reported in Celsius.");
 
 	var forecast = await client.CallToolAsync(
 		"get_weather_forecast",
 		new Dictionary<string, object?> { ["city"] = "Seattle" });
 	var forecastContent = GetStructuredContent(forecast, "get_weather_forecast");
 	Assert(forecastContent.GetProperty("forecast").GetArrayLength() == 5, "Forecast did not return five days.");
+	foreach (var day in forecastContent.GetProperty("forecast").EnumerateArray())
+	{
+		Assert(day.GetProperty("highTemp").GetString()?.EndsWith("°C", StringComparison.Ordinal) == true,
+			"Forecast high temperature was not reported in Celsius.");
+		Assert(day.GetProperty("lowTemp").GetString()?.EndsWith("°C", StringComparison.Ordinal) == true,
+			"Forecast low temperature was not reported in Celsius.");
+	}
 
 	var random = await client.CallToolAsync(
 		"get_random_number",

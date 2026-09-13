@@ -84,7 +84,7 @@ Leave everything above it exactly as it is:
     <PackageId>YourName.MyMcpServer</PackageId>
     <PackageVersion>1.0.0</PackageVersion>
     <Authors>Your Name</Authors>
-    <Description>An MCP server that provides weather information tools for AI agents.</Description>
+    <Description>A workshop MCP server that provides simulated weather information in Celsius.</Description>
     <PackageTags>AI; MCP; server; stdio; weather</PackageTags>
     <PackageProjectUrl>https://github.com/your-username/weather-mcp-server</PackageProjectUrl>
     <RepositoryUrl>https://github.com/your-username/weather-mcp-server</RepositoryUrl>
@@ -118,12 +118,13 @@ with placeholders, so you are filling those in rather than rewriting the file.
 
 > [!IMPORTANT]
 > Replace every placeholder (`your-username`, `your repo name`, the package ID)
-> with real values before pushing to any registry.
+> with your own values before packing or pushing. This keeps even locally produced
+> artifacts clearly attributable.
 
 ```json
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
-  "description": "An MCP server that provides weather information tools for AI agents.",
+  "description": "A workshop MCP server that provides simulated weather information in Celsius.",
   "name": "io.github.your-username/weather-mcp-server",
   "version": "1.0.0",
   "packages": [
@@ -160,14 +161,13 @@ template put a short placeholder there. **Replace the contents** of
 ````markdown
 # MyMcpServer
 
-A Model Context Protocol (MCP) server that provides weather information tools for AI agents like GitHub Copilot.
+A workshop and demonstration Model Context Protocol (MCP) server that generates simulated weather information for AI agents like GitHub Copilot. It does not retrieve live weather data.
 
 ## Features
 
-- 🌤️ **Current Weather**: Get real-time weather conditions for any city
-- 📅 **Weather Forecast**: 5-day weather predictions with detailed information
+- 🌤️ **Current Weather**: Generate simulated weather conditions in Celsius for a city
+- 📅 **Weather Forecast**: Generate a simulated 5-day forecast in Celsius
 - 🔧 **Easy Integration**: Works with VS Code, Visual Studio, and any MCP-compatible client
-- ⚡ **Fast Response**: Optimized for quick weather data retrieval
 
 ## Installation
 
@@ -218,34 +218,15 @@ Can you give me a 5-day forecast for London?
 
 ## Configuration
 
-### Optional Environment Variables
-
-- `WEATHER_API_KEY`: Enhance weather data accuracy (optional)
-- `WEATHER_UNITS`: Set temperature units (celsius/fahrenheit, default: celsius)
-
-### VS Code Configuration
-
-```json
-{
-  "servers": {
-    "MyMcpServer": {
-      "type": "stdio", 
-      "command": "dnx",
-      "args": ["YourName.MyMcpServer", "--version", "1.0.0"],
-      "env": {
-        "WEATHER_UNITS": "fahrenheit"
-      }
-    }
-  }
-}
-```
+No API key or environment-variable configuration is required. The server
+generates simulated values and always reports temperatures in Celsius.
 
 ## Supported Tools
 
 | Tool | Description | Parameters |
 |------|-------------|------------|
-| `GetCurrentWeather` | Current weather conditions | `city` (string) |
-| `GetWeatherForecast` | 5-day weather forecast | `city` (string) |
+| `GetCurrentWeather` | Simulated current weather in Celsius | `city` (string) |
+| `GetWeatherForecast` | Simulated 5-day forecast in Celsius | `city` (string) |
 
 ## Requirements
 
@@ -254,7 +235,7 @@ Can you give me a 5-day forecast for London?
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT
 
 ## Support
 
@@ -399,10 +380,7 @@ in the `.csproj` was overwritten. Go back to Step 1.
         "--version",
         "1.0.0",
         "--yes"
-      ],
-      "env": {
-        "WEATHER_UNITS": "celsius"
-      }
+      ]
     }
   }
 }
@@ -422,10 +400,7 @@ in the `.csproj` was overwritten. Go back to Step 1.
         "YourName.MyMcpServer", 
         "--version",
         "1.0.0"
-      ],
-      "env": {
-        "WEATHER_UNITS": "celsius"
-      }
+      ]
     }
   }
 }
@@ -534,20 +509,9 @@ public class WeatherTools
 
 ### Configuration Security
 
-```json
-{
-  "servers": {
-    "MyMcpServer": {
-      "type": "stdio",
-      "command": "dnx",
-      "args": ["YourName.MyMcpServer"],
-      "env": {
-        "WEATHER_API_KEY": "${env:WEATHER_API_KEY}"
-      }
-    }
-  }
-}
-```
+This workshop server uses simulated data and accepts no credentials. If you
+replace the simulation with an external provider, keep its credentials out of
+source control and document the configuration your implementation supports.
 
 ## Step 8: Monitoring and Analytics
 

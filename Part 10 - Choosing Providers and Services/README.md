@@ -35,13 +35,12 @@ or scaffold the deployment variant directly:
 dotnet new aichatweb --provider azureopenai --vector-store azureaisearch --aspire --name GenAiLab --output GenAiLab
 ```
 
-If you scaffold this variant, follow Part 4 Steps 2.1-2.4, but do not run its
-three Qdrant-specific package commands. Use these Azure AI Search packages
-instead:
+If you scaffold this variant, follow Part 4 Steps 2.1-2.3. Pin the generated
+Azure AI Search packages to the workshop's Aspire 13.4.6 baseline:
 
 ```bash
-dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.5.3
-dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.5.3
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.4.6
+dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.4.6
 dotnet add GenAiLab.Web package CommunityToolkit.VectorData.AzureAISearch --version 1.0.0
 ```
 
@@ -230,11 +229,11 @@ From the `GenAiLab` solution directory:
 
 ```bash
 dotnet remove GenAiLab.AppHost package Aspire.Hosting.Qdrant
-dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.5.3
+dotnet add GenAiLab.AppHost package Aspire.Hosting.Azure.Search --version 13.4.6
 
 dotnet remove GenAiLab.Web package Aspire.Qdrant.Client
 dotnet remove GenAiLab.Web package CommunityToolkit.VectorData.Qdrant
-dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.5.3
+dotnet add GenAiLab.Web package Aspire.Azure.Search.Documents --version 13.4.6
 dotnet add GenAiLab.Web package CommunityToolkit.VectorData.AzureAISearch --version 1.0.0
 ```
 

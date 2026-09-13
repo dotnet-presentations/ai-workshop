@@ -8,7 +8,7 @@ Get up to speed quickly with AI app building in .NET. This workshop covers AI ap
 
 - Visual Studio 2026 or VS Code
 - .NET AI Web Chatbot template installed (`dotnet new install Microsoft.Extensions.AI.Templates`; walked through in Part 4)
-- MCP Server template installed (`dotnet new install Microsoft.McpServer.ProjectTemplates`; walked through in Part 5)
+- MCP Server template (`mcpserver`; included in .NET 10 SDK, walked through in Part 5)
 - .NET 10.0 SDK or later
 - Docker Desktop or Podman (recommended for the full Qdrant + Aspire path in Part 4)
 - Azure subscription with access to [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry) (Azure OpenAI), the primary AI provider
@@ -37,10 +37,9 @@ document reader still runs as a container when you launch the full app locally.
 
 ### Model Context Protocol (Parts 5-7)
 
-- .NET 10.0 SDK - Required for MCP development
+- .NET 10.0 SDK or later (includes the `mcpserver` template; walked through in Part 5)
 - Visual Studio Code
 - GitHub Copilot subscription (required for MCP testing)
-- `Microsoft.McpServer.ProjectTemplates` package (`dotnet new install Microsoft.McpServer.ProjectTemplates`; walked through in Part 5)
 
 ### Optional but Recommended
 

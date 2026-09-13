@@ -32,13 +32,12 @@ Before testing MCP functionality, verify all prerequisites are met:
 - [ ] **MCP Template** available
 
   ```powershell
-  dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1
-  dotnet new list | findstr mcp
-  # Expected: mcpserver template should be listed
+  dotnet new mcpserver -h
+  # Expected: mcpserver template help output (included in .NET 10.0.9+ SDK)
   ```
 
-  If version 1.2.1 is already installed, the install command may exit with code
-  106. Verify the template is listed and continue.
+  If using an older .NET 10 SDK build where `mcpserver` is not present out-of-the-box,
+  install it manually with `dotnet new install Microsoft.McpServer.ProjectTemplates@1.2.1`.
 
 - [ ] **MCP client support** available
   - Use a current VS Code or Visual Studio 2026 build for manual tool testing.

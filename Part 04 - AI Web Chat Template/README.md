@@ -105,7 +105,7 @@ Four things need to change, and all four are small:
 
 Templates ship on their own release cadence, so a freshly scaffolded project is
 usually a few versions behind the current packages. Update it before you go any
-further — this is what you would do on any real project, and it keeps your code
+further – this is what you would do on any real project, and it keeps your code
 matching the completed solution in this repo.
 
 This is not only housekeeping. The template scaffolds Aspire **13.0.0**, which
@@ -123,7 +123,7 @@ and enable the Aspire CLI bundle:
 </PropertyGroup>
 ```
 
-The `<Sdk>` element has to be edited by hand — `dotnet add package` only manages
+The `<Sdk>` element has to be edited by hand – `dotnet add package` only manages
 `<PackageReference>` items. For the rest, run these from the `GenAiLab` folder:
 
 ```bash
@@ -143,13 +143,13 @@ connector, so do not install a second Qdrant package alongside it.
 > [!NOTE]
 > The completed solution in this repo pins exact versions, so if a newer release
 > has shipped since this was written you may end up slightly ahead of it. That is
-> fine — the code in this part does not depend on anything that changed.
+> fine – the code in this part does not depend on anything that changed.
 
 **Already ran the app before doing this step?** Updating Aspire also updates the
 Qdrant container image, and the data volume written by the old version can stop the
 new one from starting. See
-[Qdrant won't start after updating packages](#qdrant-wont-start-after-updating-packages)
-in Step 3.
+[What to do if Qdrant won't start after updating packages](#what-to-do-if-qdrant-wont-start-after-updating-packages)
+in Step 3, but only if you encounter that problem.
 
 ### 2.2 Point the AppHost at your existing Azure OpenAI resource
 
@@ -184,7 +184,7 @@ and replace it with one line:
 var openai = builder.AddConnectionString("openai");
 ```
 
-`AddConnectionString` declares no Azure resource at all — Aspire just reads the
+`AddConnectionString` declares no Azure resource at all – Aspire just reads the
 `openai` connection string from configuration and passes it to the web project.
 Leave the rest of `AppHost.cs` alone; `WithReference(openai)` further down keeps
 working unchanged.
@@ -197,7 +197,7 @@ dotnet remove GenAiLab.AppHost package Aspire.Hosting.Azure.CognitiveServices
 
 > [!IMPORTANT]
 > Setting `ConnectionStrings:openai` does **not** make `AddAzureOpenAI` skip
-> provisioning — it is ignored, and the dashboard still asks for a subscription.
+> provisioning – it is ignored, and the dashboard still asks for a subscription.
 > The dialog behind the dashboard's **Enter values** button collects tenant,
 > subscription, resource group, and location, so there is nowhere to paste an
 > endpoint and key. Swapping to `AddConnectionString` is the fix.
@@ -223,7 +223,7 @@ to:
 openai.AddChatClient("gpt-5-mini")
 ```
 
-That string is a **deployment** name, not a model name — it has to match what is
+That string is a **deployment** name, not a model name – it has to match what is
 deployed on the resource you are pointing at. If yours is named something else,
 use that instead. This is the same coupling you will work around in
 [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md).
@@ -234,7 +234,7 @@ The embedding line below it already matches, so leave
 ### 2.4 Store the connection string
 
 The AppHost needs one setting, `ConnectionStrings:openai`, and it goes in **user
-secrets** — the same secrets-first rule as Parts 2 and 3. Never put a key in
+secrets** – the same secrets-first rule as Parts 2 and 3. Never put a key in
 `appsettings.json`.
 
 > [!IMPORTANT]
@@ -300,7 +300,10 @@ an error about `AddAzureOpenAI` or `AddDeployment` means step 2.2 is incomplete.
 ## Step 3: Run the app
 
 > [!IMPORTANT]
-> For Aspire solutions, launch the `GenAiLab.AppHost` project. AppHost bootstraps the other projects and supporting services (such as Qdrant). If you run only `GenAiLab.Web`, you skip the full orchestrated experience.
+> For Aspire solutions, launch the `GenAiLab.AppHost` project. AppHost bootstraps
+> the other projects and provisions and starts supporting services such as
+> Qdrant. Do not run only `GenAiLab.Web`: its dependencies will not be
+> provisioned or started, so the web app will not work correctly.
 
 Make sure Docker Desktop is running, then:
 
@@ -318,9 +321,13 @@ its health, logs, traces, and metrics. This is why `UseOpenTelemetry(...)` was i
 
 > [!TIP]
 > If the dashboard shows an **Azure provisioning** prompt asking for a subscription,
-> step 2.2 didn't take effect — `AppHost.cs` is still calling `AddAzureOpenAI`.
+> step 2.2 didn't take effect – `AppHost.cs` is still calling `AddAzureOpenAI`.
 
-### Qdrant won't start after updating packages
+### What to do if Qdrant won't start after updating packages
+
+> [!IMPORTANT]
+> Only follow the steps in this section if `vectordb` does not start after you
+> update the packages. If Qdrant starts normally, skip this section.
 
 If you ran the app before Step 2.1 and then updated the packages, `vectordb` may
 never reach **Running**. Its logs in the Aspire dashboard show a storage or version
@@ -334,13 +341,13 @@ var vectorDB = builder.AddQdrant("vectordb")
     .WithLifetime(ContainerLifetime.Persistent);       // container survives shutdown
 ```
 
-`WithDataVolume()` is the whole point of this part — it is the answer to Part 3's
+`WithDataVolume()` is the whole point of this part – it is the answer to Part 3's
 vectors vanishing on exit. But bumping Aspire also bumps the Qdrant image, and a
 data volume written by the older Qdrant can be incompatible with the newer one.
 `WithLifetime(ContainerLifetime.Persistent)` compounds it: the old container is
 kept and reused rather than recreated, so it does not pick up the new image.
 
-The fix is to throw away both. Nothing of value is lost — the volume holds only
+The fix is to throw away both. Nothing of value is lost – the volume holds only
 embeddings of the two sample documents, which the app regenerates on your next
 question.
 
@@ -357,7 +364,7 @@ docker volume rm genailab.apphost-38984c7271-vectordb-data
 In Docker Desktop, do the same from the **Containers** and **Volumes** tabs.
 
 Then run the AppHost again. Aspire recreates the container from the new image with
-an empty volume, and your first question re-ingests the sample documents — so it
+an empty volume, and your first question re-ingests the sample documents – so it
 will be slow again, exactly like the first run.
 
 > [!TIP]
@@ -369,9 +376,9 @@ will be slow again, exactly like the first run.
 1. In the Aspire dashboard, wait until `aichatweb-app`, `vectordb`, and `markitdown` are running.
 1. Open the `aichatweb-app` URL from the dashboard.
 1. Ask a question grounded in the sample data, for example "What water purification supplies are in the emergency survival kit?"
-1. The first question takes a while — that is ingestion running for the first time, including sending the sample PDF to the markitdown container. Later questions are fast.
+1. The first question takes a while – that is ingestion running for the first time, including sending the sample PDF to the markitdown container. Later questions are fast.
 1. Confirm the answer carries citations back to `Example_Emergency_Survival_Kit.pdf` or `Example_GPS_Watch.md` rather than reading like a generic model response. Clicking a citation opens the source document at the quoted text.
-1. In the dashboard, open logs and traces for `aichatweb-app` to see the search calls the model made on its own — the template registers search as a tool, so the model decides when to retrieve.
+1. In the dashboard, open logs and traces for `aichatweb-app` to see the search calls the model made on its own – the template registers search as a tool, so the model decides when to retrieve.
 
 If you want the official step-by-step quickstart for scaffold + config + first run, see:
 [.NET AI templates quickstart](https://learn.microsoft.com/en-us/dotnet/ai/quickstarts/ai-templates?tabs=visual-studio%2Cconfigure-visual-studio&pivots=azure-openai).
@@ -445,7 +452,7 @@ the vector-store level.
 ### Ingestion: your Part 3 chunk-and-embed step, as a pipeline
 
 `GenAiLab.Web/Services/Ingestion/DataIngestor.cs` builds an ingestion pipeline out
-of three pieces — a reader, a chunker, and a writer — and runs every file in
+of three pieces – a reader, a chunker, and a writer – and runs every file in
 `wwwroot/Data` through it:
 
 ```csharp
@@ -466,7 +473,7 @@ Markdig reader, and PDFs go to the **markitdown** container over MCP.
 
 | Part 3 (by hand) | Template (generated) |
 | --- | --- |
-| Split doc into paragraph chunks | `SemanticSimilarityChunker` — splits where the meaning shifts, not at fixed lengths |
+| Split doc into paragraph chunks | `SemanticSimilarityChunker` – splits where the meaning shifts, not at fixed lengths |
 | `GenerateAsync(chunks)` once at startup | `IngestionPipeline<T>.ProcessAsync(...)` |
 | `store.Add((text, vector))` in a `List` | `VectorStoreWriter<T>` upserting into Qdrant |
 | Plain text only | Markdown and PDF, via pluggable readers |
@@ -624,7 +631,7 @@ resource to talk to, and which deployment name to ask for. Both are choices abou
 ## What's next
 
 In **Part 5** you'll step outside the application itself and build a **Model
-Context Protocol (MCP) server** — a tool an AI agent can call. That tool becomes
+Context Protocol (MCP) server** – a tool an AI agent can call. That tool becomes
 the one you hand to an agent in Part 8.
 
 One thread stays open until the end of the day. Everything you have written so

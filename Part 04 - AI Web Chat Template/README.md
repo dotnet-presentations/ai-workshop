@@ -477,6 +477,42 @@ and paste:
 }
 ```
 
+**Correct the generated vector-store key type.** The current template gives
+`IngestedChunk.Key` a `Guid` type but registers the SQLite collection with a
+`string` key. The app builds successfully, but the first search fails when the
+collection is initialized.
+
+In `GenAiLab/Program.cs`, change:
+
+```csharp
+builder.Services.AddSqliteCollection<string, IngestedChunk>(
+    IngestedChunk.CollectionName, vectorStoreConnectionString);
+```
+
+to:
+
+```csharp
+builder.Services.AddSqliteCollection<Guid, IngestedChunk>(
+    IngestedChunk.CollectionName, vectorStoreConnectionString);
+```
+
+Then, in `GenAiLab/Services/SemanticSearch.cs`, change:
+
+```csharp
+VectorStoreCollection<string, IngestedChunk> vectorCollection,
+```
+
+to:
+
+```csharp
+VectorStoreCollection<Guid, IngestedChunk> vectorCollection,
+```
+
+Leave `IngestedChunk.Key` as `Guid`, and leave `VectorStoreWriter<string>` and
+`IngestionPipeline<string>` unchanged. Those `string` type arguments describe
+the ingested content, not the vector record's key. This template defect is
+tracked in [dotnet/extensions#7734](https://github.com/dotnet/extensions/issues/7734).
+
 **Clear the package advisory.** `dotnet restore` reports `NU1903` for a transitive
 `SQLitePCLRaw.lib.e_sqlite3` 2.1.10 reference. Pin the fixed version:
 

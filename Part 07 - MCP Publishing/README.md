@@ -174,7 +174,7 @@ A workshop and demonstration Model Context Protocol (MCP) server that generates 
 ### Using dnx (Recommended)
 
 ```bash
-dnx YourName.MyMcpServer --version 1.0.0 --yes
+dnx YourName.MyMcpServer --version 1.0.0
 ```
 
 ### Manual Configuration
@@ -190,8 +190,7 @@ Add to your `.vscode/mcp.json` or `.mcp.json`:
       "args": [
         "YourName.MyMcpServer",
         "--version",
-        "1.0.0",
-        "--yes"
+        "1.0.0"
       ]
     }
   }
@@ -378,8 +377,7 @@ in the `.csproj` was overwritten. Go back to Step 1.
       "args": [
         "YourName.MyMcpServer",
         "--version",
-        "1.0.0",
-        "--yes"
+        "1.0.0"
       ]
     }
   }

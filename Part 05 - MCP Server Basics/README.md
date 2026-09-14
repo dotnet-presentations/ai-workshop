@@ -690,7 +690,7 @@ When your MCP server runs, you might see log output in VS Code's Output panel:
 **Solution**:
 
 1. Check VS Code Output panel → "MCP" channel for errors
-2. Verify tool methods have proper `[McpTool]` attributes
+2. Verify tool methods have proper `[McpServerTool]` attributes
 3. Check for runtime exceptions in tool code
 4. Validate tool parameter types and descriptions
 

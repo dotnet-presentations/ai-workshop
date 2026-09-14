@@ -52,7 +52,7 @@ ContosoOrdersMcpServer/
 
 ## Step 2: Understanding Business MCP Tools
 
-Open `ContosoOrdersMcpServer/Tools/ContosoOrdersTools.cs` and examine the three business tools:
+Open `ContosoOrdersMcpServer/Tools/ContosoOrdersTools.cs` and examine the four business tools:
 
 ### Tool 1: Order Details Lookup
 
@@ -76,7 +76,19 @@ public CustomerOrderSearchResult SearchOrdersByCustomer(
 
 **Business Value**: Support teams can quickly find all orders for a customer to resolve issues or provide order history.
 
-### Tool 3: Product Inventory Status
+### Tool 3: Product Order Search
+
+```csharp
+[McpServerTool(UseStructuredContent = true)]
+[Description("Searches order history for orders containing a product.")]
+public ProductOrderSearchResult SearchOrdersByProduct(
+    [Description("Product name to search for in order items")] string productName)
+```
+
+**Business Value**: Managers can find orders containing a product without
+already knowing the customer or order ID.
+
+### Tool 4: Product Inventory Status
 
 ```csharp
 [McpServerTool(UseStructuredContent = true)]
@@ -123,6 +135,25 @@ tool and return its result as MCP structured content.
       "total": "$150.00",
       "status": "Shipped",
       "date": "2025-07-25"
+    }
+  ]
+}
+```
+
+### Product Orders Example
+
+```json
+{
+  "found": true,
+  "product": "Camping Tent",
+  "orders": [
+    {
+      "orderId": "12345",
+      "customer": "John Doe",
+      "total": "$150.00",
+      "status": "Shipped",
+      "date": "2025-07-25",
+      "matchingItems": ["Camping Tent"]
     }
   ]
 }
@@ -260,7 +291,9 @@ Check our inventory for hiking boots. Do we have them available and what's the c
 Check inventory for camping tents and sleeping bags, then find any recent orders that included these items. Provide a business summary.
 ```
 
-**Expected Result**: Copilot will use multiple tools to gather inventory data and order information, then provide a comprehensive business analysis.
+**Expected Result**: Copilot will use `GetProductInventory` and
+`SearchOrdersByProduct` for each product, then summarize stock levels, pricing,
+and the matching orders.
 
 ## Step 6: Understanding Tool Composition
 
@@ -282,8 +315,10 @@ Help resolve a customer issue: John Doe says his tent order is delayed. Can you:
 **What Happens**:
 
 1. Copilot calls `SearchOrdersByCustomer` for "John Doe"
-2. Copilot calls `GetProductInventory` for "Camping Tent"  
-3. Copilot analyzes the data and provides actionable recommendations
+2. Copilot calls `SearchOrdersByProduct` for "Camping Tent" to confirm which
+   orders included one
+3. Copilot calls `GetProductInventory` for "Camping Tent"
+4. Copilot analyzes the data and provides actionable recommendations
 
 ## Step 7: Security and Validation Considerations
 

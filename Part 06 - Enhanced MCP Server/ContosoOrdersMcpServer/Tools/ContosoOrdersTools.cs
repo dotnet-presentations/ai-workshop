@@ -9,13 +9,8 @@ namespace ContosoOrdersMcpServer.Tools;
 /// </summary>
 internal class ContosoOrdersTools
 {
-    [McpServerTool(UseStructuredContent = true)]
-    [Description("Retrieves order information from the Contoso business system.")]
-    public OrderLookupResult GetOrderDetails(
-        [Description("The order ID to look up")] string orderId)
-    {
-        // Simulate business data lookup
-        var orders = new Dictionary<string, OrderDetails>
+    private static readonly IReadOnlyDictionary<string, OrderDetails> Orders =
+        new Dictionary<string, OrderDetails>
         {
             ["12345"] = new("John Doe", "$150.00", "Shipped",
                 ["Camping Tent", "Sleeping Bag"],
@@ -25,10 +20,18 @@ internal class ContosoOrdersTools
                 "456 Trail Rd, Mountain View, MV 67890", "2025-07-30", null),
             ["12347"] = new("Bob Johnson", "$245.50", "Delivered",
                 ["Backpack", "Water Bottle", "Trail Mix"],
-                "789 Summit St, Peak Town, PT 11111", "2025-07-20", "1Z999AA1012345676")
+                "789 Summit St, Peak Town, PT 11111", "2025-07-20", "1Z999AA1012345676"),
+            ["12350"] = new("John Doe", "$75.99", "Delivered",
+                ["Sleeping Bag"],
+                "123 Adventure Lane, Outdoor City, OC 12345", "2025-07-15", "1Z999AA1012345677")
         };
 
-        if (orders.TryGetValue(orderId, out var order))
+    [McpServerTool(UseStructuredContent = true)]
+    [Description("Retrieves order information from the Contoso business system.")]
+    public OrderLookupResult GetOrderDetails(
+        [Description("The order ID to look up")] string orderId)
+    {
+        if (Orders.TryGetValue(orderId, out var order))
         {
             return new OrderLookupResult(true, orderId, order, null);
         }
@@ -41,27 +44,62 @@ internal class ContosoOrdersTools
     public CustomerOrderSearchResult SearchOrdersByCustomer(
         [Description("Customer name to search for")] string customerName)
     {
-        // Simulate customer search
-        var customerOrders = new Dictionary<string, CustomerOrder[]>
-        {
-            ["John Doe"] = [
-                new("12345", "$150.00", "Shipped", "2025-07-25"),
-                new("12350", "$75.99", "Delivered", "2025-07-15")
-            ],
-            ["Jane Smith"] = [new("12346", "$89.99", "Processing", "2025-07-30")],
-            ["Bob Johnson"] = [new("12347", "$245.50", "Delivered", "2025-07-20")]
-        };
-
-        var searchKey = customerOrders.Keys.FirstOrDefault(name =>
+        var customer = Orders.Values
+            .Select(order => order.Customer)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .FirstOrDefault(name =>
             name.Contains(customerName, StringComparison.OrdinalIgnoreCase));
 
-        if (searchKey != null)
+        if (customer != null)
         {
-            return new CustomerOrderSearchResult(true, searchKey, customerOrders[searchKey], null);
+            var orders = Orders
+                .Where(entry => entry.Value.Customer.Equals(customer, StringComparison.OrdinalIgnoreCase))
+                .Select(entry => new CustomerOrder(
+                    entry.Key,
+                    entry.Value.Total,
+                    entry.Value.Status,
+                    entry.Value.OrderDate))
+                .ToArray();
+
+            return new CustomerOrderSearchResult(true, customer, orders, null);
         }
 
         return new CustomerOrderSearchResult(
             false, customerName, [], $"No orders found for customer '{customerName}'.");
+    }
+
+    [McpServerTool(UseStructuredContent = true)]
+    [Description("Searches order history for orders containing a product.")]
+    public ProductOrderSearchResult SearchOrdersByProduct(
+        [Description("Product name to search for in order items")] string productName)
+    {
+        var orders = Orders
+            .Select(entry => new
+            {
+                entry.Key,
+                Order = entry.Value,
+                MatchingItems = entry.Value.Items
+                    .Where(item => ProductNamesMatch(item, productName))
+                    .ToArray()
+            })
+            .Where(result => result.MatchingItems.Length > 0)
+            .OrderByDescending(result => result.Order.OrderDate)
+            .Select(result => new ProductOrder(
+                result.Key,
+                result.Order.Customer,
+                result.Order.Total,
+                result.Order.Status,
+                result.Order.OrderDate,
+                result.MatchingItems))
+            .ToArray();
+
+        if (orders.Length > 0)
+        {
+            return new ProductOrderSearchResult(true, productName, orders, null);
+        }
+
+        return new ProductOrderSearchResult(
+            false, productName, [], $"No orders found containing product '{productName}'.");
     }
 
     [McpServerTool(UseStructuredContent = true)]
@@ -80,8 +118,7 @@ internal class ContosoOrdersTools
             ["Trail Mix"] = new("TM-006", 67, "$8.99", "Food")
         };
 
-        var searchKey = inventory.Keys.FirstOrDefault(name =>
-            name.Contains(productName, StringComparison.OrdinalIgnoreCase));
+        var searchKey = inventory.Keys.FirstOrDefault(name => ProductNamesMatch(name, productName));
 
         if (searchKey != null)
         {
@@ -90,6 +127,14 @@ internal class ContosoOrdersTools
 
         return new ProductInventoryResult(
             false, productName, null, $"Product '{productName}' not found in inventory.");
+    }
+
+    private static bool ProductNamesMatch(string productName, string searchTerm)
+    {
+        var normalizedSearchTerm = searchTerm.Trim();
+        return normalizedSearchTerm.Length > 0 &&
+            (productName.Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+             normalizedSearchTerm.Contains(productName, StringComparison.OrdinalIgnoreCase));
     }
 }
 
@@ -111,6 +156,20 @@ internal sealed record CustomerOrderSearchResult(
     string? Message);
 
 internal sealed record CustomerOrder(string OrderId, string Total, string Status, string Date);
+
+internal sealed record ProductOrderSearchResult(
+    bool Found,
+    string Product,
+    ProductOrder[] Orders,
+    string? Message);
+
+internal sealed record ProductOrder(
+    string OrderId,
+    string Customer,
+    string Total,
+    string Status,
+    string Date,
+    string[] MatchingItems);
 
 internal sealed record ProductInventoryResult(
     bool Found,

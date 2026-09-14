@@ -633,7 +633,7 @@ foundry run qwen2.5-1.5b
 
 This opens an interactive local model session. Leave it running in one terminal window, then open a second terminal to run `foundry server status` and the `curl`/`dotnet user-secrets` commands below. When you are done, press `Ctrl+C` in the first terminal to stop the model.
 
-Any small **instruct** model will do. Prefer the generic model id such as `qwen2.5-1.5b` and let Foundry Local choose the correct local variant rather than pinning an NPU-only id.
+Start with a small **instruct** model. Model size and the execution provider Foundry Local selects for your hardware both affect latency: a larger model or a variant that cannot use your accelerator may be far too slow for an interactive demo. Prefer the generic model id such as `qwen2.5-1.5b` and let Foundry Local choose a compatible local variant rather than pinning an NPU-only id.
 
 Then find the endpoint and the exact model id it is serving:
 
@@ -650,8 +650,28 @@ dotnet user-secrets set "LocalModel:Model" "THE-ID-FROM-/v1/models"
 ```
 
 > [!WARNING]
-> The first request can take minutes to load the model into memory. Warm it with a throwaway prompt before the demo, or the audience will sit through a long silence. The port reported by `foundry server status` can change after a restart, so re-run the secret setup after rebooting. And the model id must be the exact value from `/v1/models`, not the friendly alias; a model you have not downloaded returns `400`.
+> The first request can take minutes to load the model into memory. Warm it with a throwaway prompt before the demo, then time a second request as shown below. A loaded model can still be too slow for interactive use when its size or execution provider is a poor match for the hardware. The port reported by `foundry server status` can change after a restart, so re-run the secret setup after rebooting. And the model id must be the exact value from `/v1/models`, not the friendly alias; a model you have not downloaded returns `400`.
 > The endpoint must be the OpenAI-compatible base ending in `/v1` - the SDK appends `/chat/completions` to it.
+
+Use a short request to check the actual warm latency on the machine you will use:
+
+```powershell
+$body = @{
+    model = "THE-ID-FROM-/v1/models"
+    messages = @(@{ role = "user"; content = "Reply with exactly: ready" })
+    max_tokens = 10
+} | ConvertTo-Json -Depth 4
+
+(Measure-Command {
+    Invoke-RestMethod `
+        -Uri "http://127.0.0.1:PORT/v1/chat/completions" `
+        -Method Post `
+        -ContentType "application/json" `
+        -Body $body | Out-Null
+}).TotalSeconds
+```
+
+Run it once to load the model, then run it again to measure the warm response. There is no universal cutoff because hardware varies, but a result that would leave your audience wondering whether the page is stuck is not suitable for a live demo. Choose a smaller compatible model or a hardware-accelerated variant, then repeat the check.
 
 Foundry Local speaks the OpenAI protocol, so it needs no new package - the same `OpenAIClient` you already have, pointed somewhere else:
 
@@ -686,7 +706,7 @@ Because both are `IChatClient`, the code that calls the model is identical. Only
 
 ### 3.3 Try it
 
-Run the app, ask a few questions on the **Ask** page including some the store cannot answer, then open **Operations** and summarize.
+Run the app, ask a few questions on the **Ask** page including some the store cannot answer, then open **Operations** and summarize. The page shows a spinner and elapsed time while the local model is working, because even a warm response may take long enough to look stuck.
 
 ![The Operations page showing a three-bullet summary produced by the local model, identifying a zero-result search as a lost sale](../images/part09-operations-local-model.png)
 
@@ -694,9 +714,10 @@ The report correctly picks out a search that returned nothing and calls it a los
 
 It is also visibly weaker than `gpt-5-mini`. It missed one of the two zero-result searches, and it summarizes at a coarser level than the cloud model would. That is the honest tradeoff, and it is a better argument for [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) than any slide. A few practical notes from building this:
 
-- The first request loads the model into memory and can take **minutes** - over three on the machine these screenshots came from. Later requests took a few seconds. Warm the model before you demo this.
+- The first request loads the model into memory and can take **minutes** - over three on the machine these screenshots came from. Warm latency varies with model size, execution provider, and hardware; measure it before a demo instead of assuming the loaded model will respond in a few seconds.
 - Small models have small context windows - this one caps at about 3,700 input and 528 output tokens, so the code sends only the last 40 events.
 - Use an **instruct** model, not a *reasoning* one. A reasoning model spends much of that small output budget thinking out loud inside a `<think>` block and can hit the limit before it writes the answer, leaving the user staring at its notes. `OperationsAssistant.StripReasoning` trims that block if you do use one, but the better fix is to pick a model suited to the job.
+- Some local model and provider combinations can stop with an empty completion. The sample treats that as an error instead of displaying a blank report; switch to a smaller or better-supported model if it happens repeatedly.
 
 ## Where this goes next
 

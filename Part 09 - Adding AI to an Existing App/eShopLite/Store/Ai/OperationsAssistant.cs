@@ -55,7 +55,15 @@ public class OperationsAssistant(
         logger.LogInformation("Summarising {Count} search events on the local model.", events.Count);
 
         var response = await chatClient.GetResponseAsync(messages, cancellationToken: ct);
-        return StripReasoning(response.Text);
+        var summary = StripReasoning(response.Text);
+
+        if (string.IsNullOrWhiteSpace(summary))
+        {
+            throw new InvalidOperationException(
+                "The local model returned an empty response. Try a smaller model or a hardware-compatible execution provider.");
+        }
+
+        return summary;
     }
 
     // Reasoning models such as Phi-4-mini-reasoning narrate their thinking in a <think>

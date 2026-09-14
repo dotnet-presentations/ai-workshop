@@ -14,6 +14,8 @@ New test reports are written here using the template and skill at [`.github/skil
 
 - **[workshop-test-report-2026-07-27.md](testing/workshop-test-report-2026-07-27.md)** - Full run of Parts 1-11 against live Microsoft Foundry (deployment excluded)
 - **[workshop-test-report-2026-09-09.md](testing/workshop-test-report-2026-09-09.md)** - Focused attendee-style validation of the MCP progression in Parts 5-8
+- **[workshop-test-report-2026-09-11.md](testing/workshop-test-report-2026-09-11.md)** - Full attendee-style run of Parts 1-11 using Microsoft Azure AI Proxy (deployment configuration only)
+- **[workshop-test-report-2026-09-13.md](testing/workshop-test-report-2026-09-13.md)** - Full attendee-style retest of the Aspire 13.4.6 baseline (deployment configuration only)
 
 ### 🗄️ Archived Historical Artifacts (`/archive`)
 

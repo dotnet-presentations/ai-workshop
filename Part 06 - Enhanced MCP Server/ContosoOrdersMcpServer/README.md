@@ -7,6 +7,7 @@ the ContosoOrders business system.
 
 - `get_order_details` retrieves an order by ID.
 - `search_orders_by_customer` finds orders by customer name.
+- `search_orders_by_product` finds orders containing a product.
 - `get_product_inventory` checks inventory for a product or SKU.
 
 ## Run locally

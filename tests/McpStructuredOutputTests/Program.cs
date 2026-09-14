@@ -67,6 +67,7 @@ static async Task ValidatePart6Async(string repositoryRoot)
 	var tools = await client.ListToolsAsync();
 	AssertToolSchema(tools, "get_order_details", "orderId", "object", "found", "orderId");
 	AssertToolSchema(tools, "search_orders_by_customer", "customerName", "object", "found", "customer", "orders");
+	AssertToolSchema(tools, "search_orders_by_product", "productName", "object", "found", "product", "orders");
 	AssertToolSchema(tools, "get_product_inventory", "productName", "object", "found", "product");
 
 	var order = await client.CallToolAsync(
@@ -84,15 +85,52 @@ static async Task ValidatePart6Async(string repositoryRoot)
 	var customerOrdersContent = GetStructuredContent(customerOrders, "search_orders_by_customer");
 	Assert(customerOrdersContent.GetProperty("found").GetBoolean(), "Known customer was not found.");
 	Assert(customerOrdersContent.GetProperty("orders").GetArrayLength() == 2, "Known customer returned the wrong orders.");
+	await AssertCustomerOrdersMatchDetailsAsync(client, customerOrdersContent);
+
+	var janeOrders = await client.CallToolAsync(
+		"search_orders_by_customer",
+		new Dictionary<string, object?> { ["customerName"] = "Jane Smith" });
+	var janeOrdersContent = GetStructuredContent(janeOrders, "search_orders_by_customer");
+	await AssertCustomerOrdersMatchDetailsAsync(client, janeOrdersContent);
+	Assert(
+		janeOrdersContent.GetProperty("orders")[0].GetProperty("date").GetString() == "2025-07-30",
+		"Order 12346 did not preserve its expected date.");
+
+	var productOrders = await client.CallToolAsync(
+		"search_orders_by_product",
+		new Dictionary<string, object?> { ["productName"] = "camping tents" });
+	var productOrdersContent = GetStructuredContent(productOrders, "search_orders_by_product");
+	Assert(productOrdersContent.GetProperty("found").GetBoolean(), "Known product was not found in order history.");
+	Assert(
+		productOrdersContent.GetProperty("orders").EnumerateArray()
+			.Any(orderResult => orderResult.GetProperty("orderId").GetString() == "12345"),
+		"Known product returned the wrong order history.");
+
+	var sleepingBagOrders = await client.CallToolAsync(
+		"search_orders_by_product",
+		new Dictionary<string, object?> { ["productName"] = "sleeping bags" });
+	var sleepingBagOrdersContent = GetStructuredContent(sleepingBagOrders, "search_orders_by_product");
+	Assert(
+		sleepingBagOrdersContent.GetProperty("orders").GetArrayLength() == 2,
+		"Sleeping bags returned the wrong number of orders.");
+	Assert(
+		sleepingBagOrdersContent.GetProperty("orders")[1].GetProperty("orderId").GetString() == "12350",
+		"Sleeping bag order history did not include order 12350 in date order.");
 
 	var inventory = await client.CallToolAsync(
 		"get_product_inventory",
-		new Dictionary<string, object?> { ["productName"] = "Camping Tent" });
+		new Dictionary<string, object?> { ["productName"] = "camping tents" });
 	var inventoryContent = GetStructuredContent(inventory, "get_product_inventory");
 	Assert(inventoryContent.GetProperty("found").GetBoolean(), "Known product was not found.");
 	Assert(
 		inventoryContent.GetProperty("details").GetProperty("inStock").GetInt32() == 15,
 		"Known product returned the wrong inventory.");
+
+	var sleepingBagInventory = await client.CallToolAsync(
+		"get_product_inventory",
+		new Dictionary<string, object?> { ["productName"] = "sleeping bags" });
+	var sleepingBagInventoryContent = GetStructuredContent(sleepingBagInventory, "get_product_inventory");
+	Assert(sleepingBagInventoryContent.GetProperty("found").GetBoolean(), "Sleeping bag inventory was not found.");
 
 	var missingOrder = await client.CallToolAsync(
 		"get_order_details",
@@ -103,6 +141,42 @@ static async Task ValidatePart6Async(string repositoryRoot)
 		!missingContent.TryGetProperty("order", out var missingOrderData) ||
 			missingOrderData.ValueKind == JsonValueKind.Null,
 		"Unknown order included order data.");
+
+	var missingProductOrders = await client.CallToolAsync(
+		"search_orders_by_product",
+		new Dictionary<string, object?> { ["productName"] = "Kayak" });
+	var missingProductOrdersContent = GetStructuredContent(missingProductOrders, "search_orders_by_product");
+	Assert(!missingProductOrdersContent.GetProperty("found").GetBoolean(), "Unknown product was reported in order history.");
+	Assert(
+		missingProductOrdersContent.GetProperty("orders").GetArrayLength() == 0,
+		"Unknown product included order history.");
+}
+
+static async Task AssertCustomerOrdersMatchDetailsAsync(McpClient client, JsonElement customerSearch)
+{
+	var customer = customerSearch.GetProperty("customer").GetString();
+	foreach (var customerOrder in customerSearch.GetProperty("orders").EnumerateArray())
+	{
+		var orderId = customerOrder.GetProperty("orderId").GetString()
+			?? throw new InvalidOperationException("Customer order did not include an order ID.");
+		var lookup = await client.CallToolAsync(
+			"get_order_details",
+			new Dictionary<string, object?> { ["orderId"] = orderId });
+		var lookupContent = GetStructuredContent(lookup, "get_order_details");
+		Assert(lookupContent.GetProperty("found").GetBoolean(), $"Customer order {orderId} could not be retrieved.");
+
+		var details = lookupContent.GetProperty("order");
+		Assert(details.GetProperty("customer").GetString() == customer, $"Order {orderId} returned a different customer.");
+		Assert(
+			details.GetProperty("total").GetString() == customerOrder.GetProperty("total").GetString(),
+			$"Order {orderId} returned a different total.");
+		Assert(
+			details.GetProperty("status").GetString() == customerOrder.GetProperty("status").GetString(),
+			$"Order {orderId} returned a different status.");
+		Assert(
+			details.GetProperty("orderDate").GetString() == customerOrder.GetProperty("date").GetString(),
+			$"Order {orderId} returned a different date.");
+	}
 }
 
 static async Task<McpClient> CreateClientAsync(string repositoryRoot, string projectPath)

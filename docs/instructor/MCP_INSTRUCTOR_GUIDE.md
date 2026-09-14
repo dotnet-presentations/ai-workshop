@@ -236,17 +236,22 @@ A: Check tool descriptions are clear, VS Code MCP configuration is correct, and 
 
 #### **Code Deep Dive (20 minutes)**
 
-1. **Order Management Tool** (8 minutes)
+1. **Order Management Tool** (5 minutes)
    - `GetOrderDetails` implementation
    - Complex business data structures
    - Error handling for missing orders
 
-2. **Customer Search Tool** (6 minutes)
+2. **Customer Search Tool** (5 minutes)
    - `SearchOrdersByCustomer` functionality
    - String matching and data filtering
    - Extensibility for partial matching
 
-3. **Inventory Tool** (6 minutes)
+3. **Product Order Search Tool** (5 minutes)
+   - `SearchOrdersByProduct` functionality
+   - Shared order data across lookup paths
+   - Product matching and structured summaries
+
+4. **Inventory Tool** (5 minutes)
    - `GetProductInventory` implementation
    - Product availability and pricing
    - Business logic for stock management

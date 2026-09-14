@@ -280,6 +280,16 @@ dotnet run --project tests/McpStructuredOutputTests/McpStructuredOutputTests.csp
 - ✅ Returns product availability and pricing
 - ✅ Provides useful inventory information
 
+#### Test 8.4: Product Order Search
+
+1. Enter: "Find recent orders containing camping tents"
+
+**Expected Results**:
+
+- ✅ Uses `SearchOrdersByProduct` tool
+- ✅ Returns order `12345` with customer, date, status, and matching items
+- ✅ Handles plural product wording
+
 ### Test 9: Data Validation and Error Handling
 
 **Objective**: Test business tools handle edge cases properly
@@ -471,7 +481,9 @@ Use this checklist to verify complete MCP functionality:
 - [ ] Deterministic client validates discovery, schemas, and structured results
 - [ ] `GetOrderDetails` tool works correctly
 - [ ] `SearchOrdersByCustomer` tool works correctly
+- [ ] `SearchOrdersByProduct` tool works correctly
 - [ ] `GetProductInventory` tool works correctly
+- [ ] Customer-history orders match direct order details
 - [ ] Known and unknown lookup envelopes remain stable
 - [ ] Multiple servers work together in the selected IDE client
 
@@ -522,6 +534,11 @@ Use this checklist to verify complete MCP functionality:
 
 - "Check inventory for hiking boots"
 - Expected: Uses GetProductInventory, returns availability and pricing
+
+**Product Order Search**:
+
+- "Find recent orders containing camping tents"
+- Expected: Uses SearchOrdersByProduct, returns matching orders newest-first
 
 **Complex Business Query**:
 

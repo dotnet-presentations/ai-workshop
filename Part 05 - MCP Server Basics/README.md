@@ -231,46 +231,46 @@ namespace MyMcpServer.Tools;
 internal class WeatherTools
 {
     private static readonly string[] WeatherConditions = [
-      "Sunny", "Partly Cloudy", "Cloudy", "Overcast", "Light Rain",
+        "Sunny", "Partly Cloudy", "Cloudy", "Overcast", "Light Rain",
         "Heavy Rain", "Snow", "Fog", "Windy", "Stormy"
     ];
 
-      [McpServerTool(UseStructuredContent = true)]
+    [McpServerTool(UseStructuredContent = true)]
     [Description("Gets current weather for a specified city.")]
-      public async Task<CurrentWeather> GetCurrentWeather(
+    public async Task<CurrentWeather> GetCurrentWeather(
         [Description("Name of the city to get weather for")] string city)
     {
         // Simulate API call delay
         await Task.Delay(500);
-        
+
         // Simulate weather API call with realistic data
-         return new CurrentWeather(
-             city,
-             Random.Shared.Next(-10, 35) + "°C",
-             GetRandomWeatherCondition(),
-             Random.Shared.Next(30, 90) + "%",
-             Random.Shared.Next(5, 25) + " km/h",
-             Random.Shared.Next(980, 1040) + " hPa",
-             DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+        return new CurrentWeather(
+            city,
+            Random.Shared.Next(-10, 35) + "°C",
+            GetRandomWeatherCondition(),
+            Random.Shared.Next(30, 90) + "%",
+            Random.Shared.Next(5, 25) + " km/h",
+            Random.Shared.Next(980, 1040) + " hPa",
+            DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
     }
 
-          [McpServerTool(UseStructuredContent = true)]
+    [McpServerTool(UseStructuredContent = true)]
     [Description("Gets a 5-day weather forecast for a specified city starting from tomorrow.")]
-          public async Task<WeatherForecast> GetWeatherForecast(
+    public async Task<WeatherForecast> GetWeatherForecast(
         [Description("Name of the city to get forecast for")] string city)
     {
         // Simulate API call delay
         await Task.Delay(800);
-        
-            var forecast = Enumerable.Range(1, 5).Select(day => new WeatherForecastDay(
-                  DateTime.Now.AddDays(day).ToString("yyyy-MM-dd"),
-                  DateTime.Now.AddDays(day).ToString("dddd"),
-                  Random.Shared.Next(15, 35) + "°C",
-                  Random.Shared.Next(-5, 20) + "°C",
-                  GetRandomWeatherCondition(),
-                  Random.Shared.Next(0, 100) + "%")).ToArray();
 
-            return new WeatherForecast(city, forecast);
+        var forecast = Enumerable.Range(1, 5).Select(day => new WeatherForecastDay(
+            DateTime.Now.AddDays(day).ToString("yyyy-MM-dd"),
+            DateTime.Now.AddDays(day).ToString("dddd"),
+            Random.Shared.Next(15, 35) + "°C",
+            Random.Shared.Next(-5, 20) + "°C",
+            GetRandomWeatherCondition(),
+            Random.Shared.Next(0, 100) + "%")).ToArray();
+
+        return new WeatherForecast(city, forecast);
     }
 
     private static string GetRandomWeatherCondition()
@@ -280,23 +280,23 @@ internal class WeatherTools
 }
 
 internal sealed record CurrentWeather(
-   string City,
-   string Temperature,
-   string Condition,
-   string Humidity,
-   string WindSpeed,
-   string Pressure,
-   string LastUpdated);
+    string City,
+    string Temperature,
+    string Condition,
+    string Humidity,
+    string WindSpeed,
+    string Pressure,
+    string LastUpdated);
 
 internal sealed record WeatherForecast(string City, WeatherForecastDay[] Forecast);
 
 internal sealed record WeatherForecastDay(
-   string Date,
-   string DayName,
-   string HighTemp,
-   string LowTemp,
-   string Condition,
-   string ChanceOfRain);
+    string Date,
+    string DayName,
+    string HighTemp,
+    string LowTemp,
+    string Condition,
+    string ChanceOfRain);
 ```
 
 1. **Register the new weather tools** in `Program.cs`. Update the file to register both tool classes:
@@ -417,9 +417,6 @@ If you prefer to use **Visual Studio 2026** instead of VS Code, you can configur
    dotnet sln add MyMcpServer.csproj
    ```
 
-   > **NOTE:** The committed snapshot already includes `MyMcpServer.slnx`, so if you
-   > are exploring the snapshot rather than your own project you can skip this.
-
 2. **Create the MCP configuration file** `.mcp.json` next to the solution file:
 
    ```json
@@ -437,6 +434,10 @@ If you prefer to use **Visual Studio 2026** instead of VS Code, you can configur
      }
    }
    ```
+
+   > **NOTE:** The committed snapshot includes `MyMcpServer.slnx` and `.mcp.json`
+   > as conveniences for this optional Visual Studio path. They are not generated
+   > by `dotnet new mcpserver` or required for the primary VS Code path.
 
    The `--project` path is relative to the folder holding `.mcp.json`. If you put the
    configuration in a different solution's directory, adjust the path to point at

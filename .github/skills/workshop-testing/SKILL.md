@@ -5,7 +5,7 @@ description: 'Walk through the .NET AI Workshop as an attendee to validate that 
 
 # Workshop Testing
 
-Complete the workshop the way an attendee would — follow each `Part N - */README.md` literally, in a scratch directory — then reconcile what you produced against the committed snapshot and write a report.
+Complete the workshop the way an attendee would - follow each `Part N - */README.md` literally, in a scratch directory - then reconcile what you produced against the committed snapshot and write a report.
 
 ## Ground rules
 
@@ -35,21 +35,21 @@ The samples hardcode the deployment names `gpt-5-mini` and `text-embedding-3-sma
 
 | Part | What to do | Snapshot to reconcile |
 | --- | --- | --- |
-| 1 - Setup | Verify prerequisites and install steps actually work | — |
+| 1 - Setup | Verify prerequisites and install steps actually work | - |
 | 2 - Build Chat App | `dotnet new console -n ChatApp`, add packages and code per README. Run it: chat, streaming, structured output | `Part 02 - Build Chat App/ChatApp/` |
 | 3 - Add RAG | Continue from your Part 2 app (README says copy it). Verify retrieval answers from `sample-docs/contoso-trailblazer-3000.md`. Also check the two `checkpoints/*.cs` variants still compile against the described packages | `Part 03 - Add RAG/RagChatApp/` |
 | 4 - AI Web Chat Template | Scaffold with the exact command in the README (`--provider azureopenai --vector-store qdrant --aspire --name GenAiLab`). Run via `GenAiLab.AppHost`. Also sanity-check the documented Docker-free `--vector-store local` path | Compare shared app code with `Part 11 - Deployment/GenAiLab/`; expect Part 10's Azure AI Search substitutions |
 | 5 - MCP Server Basics | Verify `dotnet new mcpserver -n MyMcpServer` (included in .NET 10.0.9+ SDK) and add `WeatherTools` per README. Keep the template's `RandomNumberTools` | `Part 05 - MCP Server Basics/MyMcpServer/` |
-| 6 - Enhanced MCP Server *(bonus)* | Exploration only — build and run the existing snapshot, review the README's business-integration guidance | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
-| 7 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | — |
+| 6 - Enhanced MCP Server *(bonus)* | Exploration only - build and run the existing snapshot, review the README's business-integration guidance | `Part 06 - Enhanced MCP Server/ContosoOrdersMcpServer/` |
+| 7 - MCP Publishing *(bonus)* | Documentation review only. **Do not publish anything** | - |
 | 8 - Agent Framework Basics | `dotnet new console` → `AgentApp`, add `Microsoft.Agents.AI` per README. Verify the agent runs and can call the Part 5 weather tool if the README wires that up | `Part 08 - Agent Framework Basics/AgentApp/` |
-| 9 - Adding AI to an Existing App | Follow the README in `eShopLite-start/`, then reconcile against the `eShopLite/` answer key. The optional local-model step needs `LocalModel:Endpoint` / `LocalModel:Model` (Foundry Local or Ollama) in the `Store` project — note it as skipped if unavailable | `Part 09 - Adding AI to an Existing App/eShopLite/` (answer key); `Part 09 - Adding AI to an Existing App/eShopLite-start/` |
+| 9 - Adding AI to an Existing App | Follow the README in `eShopLite-start/`, then reconcile against the `eShopLite/` answer key. The optional local-model step needs `LocalModel:Endpoint` / `LocalModel:Model` (Foundry Local or Ollama) in the `Store` project - note it as skipped if unavailable | `Part 09 - Adding AI to an Existing App/eShopLite/` (answer key); `Part 09 - Adding AI to an Existing App/eShopLite-start/` |
 | 10 - Choosing Providers and Services | Apply the documented Azure AI Search package and registration changes to the Part 4 project. Verify Qdrant remains a usable fallback | Reconcile with `Part 11 - Deployment/GenAiLab/` |
 | 11 - Deployment | See below | `Part 11 - Deployment/GenAiLab/` |
 
 ### MCP server verification (Parts 5-6)
 
-An MCP server is a stdio process — it starts and waits. Check:
+An MCP server is a stdio process - it starts and waits. Check:
 
 1. `dotnet build` succeeds with no warnings.
 2. `dotnet run` waits for protocol input; no terminal banner is required.
@@ -63,7 +63,7 @@ An MCP server is a stdio process — it starts and waits. Check:
 Default to **configuration-only** testing: confirm `AppHost.cs` calls
 `AddAzureSearch("search")` and `WithExternalHttpEndpoints()`, confirm the web app
 uses the Azure AI Search vector-store registrations, and build `GenAiLab.sln` in
-Release. Note that `azure.yaml` and `.azure/` are *not* committed — `azd init`
+Release. Note that `azure.yaml` and `.azure/` are *not* committed - `azd init`
 generates them, and `.azure/` is gitignored.
 
 Only run a real deployment if the user explicitly asks. If so:
@@ -81,7 +81,7 @@ At the end of each code part, diff your working directory against the committed 
 - **README gap** (a step is missing, stale, or ambiguous) → record it as a finding; fix the README if the user asks.
 - **Your mistake** → redo the step.
 
-Before copying a working directory over a snapshot, strip `bin/`, `obj/`, `.vs/`, and `TestResults/`. Preserve `Properties/launchSettings.json` exactly for the Aspire projects — port drift breaks the Part 11 instructions. Then verify with `dotnet clean; dotnet build -c Release`.
+Before copying a working directory over a snapshot, strip `bin/`, `obj/`, `.vs/`, and `TestResults/`. Preserve `Properties/launchSettings.json` exactly for the Aspire projects - port drift breaks the Part 11 instructions. Then verify with `dotnet clean; dotnet build -c Release`.
 
 ## Report
 

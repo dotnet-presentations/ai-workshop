@@ -59,7 +59,7 @@ resource. It's worth pausing on: that string is a **deployment** name, not a mod
 name, and it's the same coupling Part 10 works around.
 
 `dotnet new aichatweb` does accept `-C/--ChatModel` and `-E/--EmbeddingModel`, and
-they substitute correctly — but `modelVersion` in `AddDeployment` stays pinned at
+they substitute correctly - but `modelVersion` in `AddDeployment` stays pinned at
 `2024-07-18` regardless, so `--ChatModel gpt-5-mini` generates a gpt-5-mini
 deployment carrying a gpt-4o-mini version string. Doesn't matter for the workshop
 since the deployment block is removed anyway. The deliberate choice is to have
@@ -93,7 +93,7 @@ Part 4 documents the `SQLitePCLRaw.bundle_e_sqlite3` 3.0.4 pin that clears it.
 Pass `--managed-identity false` for this variant. Left at its default it wants the
 attendee's signed-in identity to hold the **Azure AI Developer** role on the Azure
 OpenAI resource, which won't be true for shared workshop credentials. Turning it
-off produces `AzureOpenAI:Endpoint` and `AzureOpenAI:Key` user secrets — the same
+off produces `AzureOpenAI:Endpoint` and `AzureOpenAI:Key` user secrets - the same
 two names Parts 2 and 3 already use.
 
 ## Ingestion changed shape
@@ -107,7 +107,7 @@ lengths.
 
 Two consequences for the room:
 
-- **The first question is slow.** Ingestion is lazy — `SemanticSearch.LoadDocumentsAsync()`
+- **The first question is slow.** Ingestion is lazy - `SemanticSearch.LoadDocumentsAsync()`
   runs it on the first search, not at startup. The UI shows "Loading relevant
   documents (this will take a minute)". Later questions are fast. Warn people
   before they think it's broken.
@@ -138,6 +138,6 @@ service name.
 | Dashboard shows an "Azure provisioning" banner and resources stay in Starting | `AddAzureOpenAI` still in `AppHost.cs`; the swap to `AddConnectionString` was missed |
 | 404 or "deployment not found" on the first chat message | `AddChatClient` still says `gpt-4o-mini` |
 | Manual Search creation fails with `409 Conflict` and `Unknown` | Retry with a globally distinctive service name before changing regions |
-| First question hangs for a minute | Expected — lazy ingestion, including the PDF round-trip through markitdown |
+| First question hangs for a minute | Expected - lazy ingestion, including the PDF round-trip through markitdown |
 | Qdrant or markitdown never start | Docker Desktop isn't running |
 | `NU1903` on restore | Package bump step skipped |

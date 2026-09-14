@@ -72,7 +72,7 @@ If you still have your own Part 5 project from when you ran
 ### Configure package metadata
 
 Open `MyMcpServer.csproj`. The `mcpserver` template already wrote the properties
-that make this an MCP server, so **do not replace the file** — you are only
+that make this an MCP server, so **do not replace the file** - you are only
 filling in publishing metadata.
 
 Replace the `<!-- Set recommended package metadata -->` block with the following.

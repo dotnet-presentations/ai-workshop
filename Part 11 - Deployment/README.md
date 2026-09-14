@@ -10,7 +10,7 @@ Azure Developer CLI (`azd`). The recommended path runs the web application in
 Azure Container Apps and uses managed Azure AI Search for its vector index.
 
 > [!NOTE]
-> This part deliberately returns to the **Part 4 web application** rather than the samples from Parts 5-9. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship — it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the Part 9 capstone are things you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
+> This part deliberately returns to the **Part 4 web application** rather than the samples from Parts 5-9. Deployment is a property of a hosted application, and the Aspire-orchestrated web app is the realistic thing to ship - it has a front end, a vector store, and service dependencies that have to exist in Azure. The MCP servers, the agent sample, and the Part 9 capstone are things you run locally; what you learn here about `azd` and Container Apps applies to hosting any of them later.
 >
 > Docker Desktop or Podman is required only if you run the complete application
 > locally, because the markitdown document reader is a container. Azure Container
@@ -35,7 +35,7 @@ Use this snapshot if you did not keep your morning project or do not want to mak
 the Part 10 changes by hand.
 
 Either way, you supply your own credentials. Set `ConnectionStrings:openai` in user
-secrets on **`GenAiLab.AppHost`** — in Visual Studio, right-click the project and
+secrets on **`GenAiLab.AppHost`** - in Visual Studio, right-click the project and
 choose **Manage User Secrets**:
 
 ```json

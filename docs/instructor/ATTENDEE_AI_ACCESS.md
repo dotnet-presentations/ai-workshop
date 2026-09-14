@@ -8,7 +8,7 @@
 
 The workshop's main path assumes each attendee can provision a [Microsoft Foundry](https://learn.microsoft.com/azure/foundry/what-is-foundry)
 resource and deploy `gpt-5-mini` + `text-embedding-3-small`. In practice, a
-handful of attendees won't be able to — no subscription, corporate policy blocks,
+handful of attendees won't be able to - no subscription, corporate policy blocks,
 quota/region issues, or they simply run out of time during setup.
 
 ## Recommended fallback: azure-ai-proxy-lite
@@ -20,7 +20,7 @@ and hands out time-bound, capacity-capped access to attendees.
 Why it fits this workshop with no content changes:
 
 - **Drop-in compatible with the Azure OpenAI .NET SDK.** Attendees who use the
-  proxy set the exact same two user-secrets as everyone else — just pointed at the
+  proxy set the exact same two user-secrets as everyone else - just pointed at the
   proxy URL with an issued event key:
 
   ```bash
@@ -57,7 +57,7 @@ Why it fits this workshop with no content changes:
    against `text-embedding-3-small`. Do not record the key, endpoint, or private
    join information in the repository.
 6. Distribute join info out-of-band (e.g., a private gist / QR code shown in the
-   room) — keep it out of the public workshop materials.
+   room) - keep it out of the public workshop materials.
 
 ## Troubleshooting attendee access
 
@@ -70,6 +70,6 @@ Why it fits this workshop with no content changes:
 
 ## Deciding not to set it up
 
-That's fine — it's a safety net, not a requirement. Without it, attendees who
+That's fine - it's a safety net, not a requirement. Without it, attendees who
 can't get Foundry access can pair up with someone who can, or follow along and run
 the code later.

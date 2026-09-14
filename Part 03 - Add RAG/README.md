@@ -51,7 +51,7 @@ already reference, so there are no new packages in this step.
 
 ### Open the project in Visual Studio 2026
 
-You do not create another console app for this part—the RAG work extends the
+You do not create another console app for this part-the RAG work extends the
 Part 2 project.
 
 1. If `ChatApp` is already open from Part 2, keep using it.
@@ -267,7 +267,7 @@ This makes the `TensorPrimitives.CosineSimilarity(...)` API available for the ca
 Cosine similarity is a way to measure how aligned two embedding vectors are. The math is `dot(a, b) / (|a| * |b|)`: it compares the direction of the vectors while normalizing for their length. A score near `1` means they point in almost the same direction, near `0` means they are unrelated, and near `-1` means they point in opposite directions.
 
 > [!TIP]
-> TL;DR: cosine similarity is the "same vibe detector" for embeddings. It asks, "Are these two vectors pointing roughly in the same direction?" If yes, they are probably talking about the same idea, even if they use different words. It's like judging whether two people are in the same conversation instead of counting how many times they said the word "the" — basically, semantic matching without the awkward small talk.
+> TL;DR: cosine similarity is the "same vibe detector" for embeddings. It asks, "Are these two vectors pointing roughly in the same direction?" If yes, they are probably talking about the same idea, even if they use different words. It's like judging whether two people are in the same conversation instead of counting how many times they said the word "the" - basically, semantic matching without the awkward small talk.
 
 ```mermaid
 flowchart LR
@@ -653,7 +653,7 @@ declines when the answer is not there.
 ## What's next
 
 Step 3 already persists your knowledge base to `vectors.db`, so it survives a
-restart — but everything still runs in one console app, ingestion happens on
+restart - but everything still runs in one console app, ingestion happens on
 startup, and there is no UI. In **Part 4** you'll scaffold the **aichatweb
 template** and see the same ideas assembled as a web application, with a
 server-based vector store (Qdrant), a background ingestion service, and citation

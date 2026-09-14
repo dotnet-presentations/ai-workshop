@@ -25,7 +25,7 @@ Docker Desktop or Podman is required when you run the workshop's **Qdrant contai
 | Part 5 | Not required for the MCP exercises. |
 | Parts 6-7 | Not required. Containerizing an MCP server in Part 7 is optional. |
 | Part 8 | Not required. This module includes a standalone `AgentApp` sample and remains Docker-free. |
-| Part 9 | Not required. The `eShopLite` sample in this repo is an Aspire solution that deliberately avoids containers — it uses SQLite for both the catalog and the vector store. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
+| Part 9 | Not required. The `eShopLite` sample in this repo is an Aspire solution that deliberately avoids containers - it uses SQLite for both the catalog and the vector store. The companion eShopLite scenarios have their own prerequisites, which usually include a container runtime. |
 | Part 10 | Not required. Docker is still needed if you run the Part 4 Qdrant fallback locally. |
 | Part 11 | Docker is needed to run the markitdown document-reader container locally. The recommended vector store is managed Azure AI Search. |
 
@@ -67,12 +67,12 @@ The workshop is designed as a **two-part, roughly 8-hour hands-on lab** (8:30-5:
 | Bonus (any time) | Parts 6-7 | ~1h15m-1h45m | Enhanced MCP server and MCP publishing |
 
 > [!IMPORTANT]
-> **If you fall behind, cut Parts 10-11 (deployment preparation and deployment) — not Part 9 (the capstone).** Deployment is placed last deliberately: nothing depends on it, and it is the most environment-fragile section (Azure login, subscription and quota checks, provisioning time). Part 10 exists to set up the deployment, so if there is no time to deploy there is little reason to spend time choosing what to deploy to. The capstone is where the whole workshop comes together, so protect that time first. A short `azd up` walkthrough by the instructor is a reasonable substitute for a room that has run out of clock.
+> **If you fall behind, cut Parts 10-11 (deployment preparation and deployment) - not Part 9 (the capstone).** Deployment is placed last deliberately: nothing depends on it, and it is the most environment-fragile section (Azure login, subscription and quota checks, provisioning time). Part 10 exists to set up the deployment, so if there is no time to deploy there is little reason to spend time choosing what to deploy to. The capstone is where the whole workshop comes together, so protect that time first. A short `azd up` walkthrough by the instructor is a reasonable substitute for a room that has run out of clock.
 
 <!-- -->
 
 > [!TIP]
-> The morning is the tighter half. Ask attendees to complete [Part 1 - Setup](Part%2001%20-%20Setup/README.md) **before** the session — it is prerequisite installation rather than lab content, and moving it to pre-work buys back 15-20 minutes at exactly the point in the day where the schedule has the least slack.
+> The morning is the tighter half. Ask attendees to complete [Part 1 - Setup](Part%2001%20-%20Setup/README.md) **before** the session - it is prerequisite installation rather than lab content, and moving it to pre-work buys back 15-20 minutes at exactly the point in the day where the schedule has the least slack.
 
 Detailed architecture and sequence diagrams are documented in the individual module READMEs where each concept is implemented.
 
@@ -114,7 +114,7 @@ Part 5 is required: its weather tool is the tool you hand to an agent in Part 8.
 
 ### Capstone (Part 9)
 
-1. 🛒 [**Adding AI to an Existing App with eShopLite**](Part%2009%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md): Apply everything you have learned to an application that already exists. Start from a cut-down eShopLite with no AI in it, then add semantic search to the catalog API, grounded product discovery to the storefront, and an operations assistant running on a local model — before exploring the maintained eShopLite scenarios.
+1. 🛒 [**Adding AI to an Existing App with eShopLite**](Part%2009%20-%20Adding%20AI%20to%20an%20Existing%20App/README.md): Apply everything you have learned to an application that already exists. Start from a cut-down eShopLite with no AI in it, then add semantic search to the catalog API, grounded product discovery to the storefront, and an operations assistant running on a local model - before exploring the maintained eShopLite scenarios.
 
 ### Deployment (Parts 10-11)
 
@@ -156,7 +156,7 @@ cd ai-workshop
 .\.github\scripts\setup-workshop-credentials.ps1
 ```
 
-The script prompts for your Microsoft Foundry (Azure OpenAI) endpoint and key, the chat and embedding deployment names, and — optionally — an Azure subscription and region for Part 11 and a local model endpoint for Part 9.
+The script prompts for your Microsoft Foundry (Azure OpenAI) endpoint and key, the chat and embedding deployment names, and - optionally - an Azure subscription and region for Part 11 and a local model endpoint for Part 9.
 
 Values are saved as `WORKSHOP_*` environment variables so they persist across testing sessions. Useful switches:
 

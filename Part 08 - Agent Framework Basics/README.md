@@ -378,7 +378,7 @@ The coordination patterns you will hear about:
 MAF expresses these as workflows. The API is still evolving, but the shape looks like this (conceptual):
 
 ```csharp
-// Conceptual — API subject to change
+// Conceptual - API subject to change
 using Microsoft.Agents.AI.Workflows;
 using Microsoft.Extensions.AI;
 

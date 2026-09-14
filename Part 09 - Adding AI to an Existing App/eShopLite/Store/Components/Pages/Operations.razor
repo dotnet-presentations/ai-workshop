@@ -1,4 +1,5 @@
 @page "/operations"
+@implements IAsyncDisposable
 @using Store.Ai
 @inject IServiceProvider Services
 @inject SearchTelemetry Telemetry
@@ -25,7 +26,13 @@ else
 
     @if (busy)
     {
-        <p><em>Thinking locally...</em></p>
+        <div class="alert alert-secondary">
+            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            <span role="status">Thinking locally. Slow local models may take several minutes.</span>
+            <span aria-hidden="true">
+                @elapsedSeconds second@(elapsedSeconds == 1 ? "" : "s") elapsed.
+            </span>
+        </div>
     }
     else if (summary is not null)
     {
@@ -37,6 +44,8 @@ else
     private OperationsAssistant? assistant;
     private string? summary;
     private bool busy;
+    private int elapsedSeconds;
+    private readonly CancellationTokenSource componentCts = new();
 
     protected override void OnInitialized()
     {
@@ -51,17 +60,51 @@ else
         }
 
         busy = true;
+        summary = null;
+        elapsedSeconds = 0;
+        using var progressCts =
+            CancellationTokenSource.CreateLinkedTokenSource(componentCts.Token);
+        var progressTask = UpdateElapsedAsync(progressCts.Token);
+
         try
         {
-            summary = await assistant.SummarizeAsync();
+            summary = await assistant.SummarizeAsync(componentCts.Token);
+        }
+        catch (OperationCanceledException) when (componentCts.IsCancellationRequested)
+        {
         }
         catch (Exception ex)
         {
-            summary = $"The local model could not be reached: {ex.Message}";
+            summary = $"The local model could not complete the summary: {ex.Message}";
         }
         finally
         {
+            await progressCts.CancelAsync();
+            await progressTask;
             busy = false;
         }
+    }
+
+    private async Task UpdateElapsedAsync(CancellationToken ct)
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+
+        try
+        {
+            while (await timer.WaitForNextTickAsync(ct))
+            {
+                elapsedSeconds++;
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException) when (ct.IsCancellationRequested)
+        {
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await componentCts.CancelAsync();
+        componentCts.Dispose();
     }
 }

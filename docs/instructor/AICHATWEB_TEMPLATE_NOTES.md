@@ -96,6 +96,25 @@ OpenAI resource, which won't be true for shared workshop credentials. Turning it
 off produces `AzureOpenAI:Endpoint` and `AzureOpenAI:Key` user secrets - the same
 two names Parts 2 and 3 already use.
 
+### Correct the generated SQLite collection key type
+
+The current local-vector scaffold has a runtime-only key mismatch:
+
+- `IngestedChunk.Key` is a `Guid`.
+- `Program.cs` registers
+  `AddSqliteCollection<string, IngestedChunk>(...)`.
+- `SemanticSearch.cs` requests
+  `VectorStoreCollection<string, IngestedChunk>`.
+
+The project builds, but the first search fails when SqliteVec validates the
+collection model. Part 4 corrects both collection declarations to use `Guid`.
+Keep `IngestedChunk.Key` as `Guid`.
+
+Do not change `VectorStoreWriter<string>` or `IngestionPipeline<string>`. Their
+generic argument is the ingested chunk content type; `VectorStoreWriter`
+generates `Guid` vector-record keys independently. The template defect is tracked
+in [dotnet/extensions#7734](https://github.com/dotnet/extensions/issues/7734).
+
 ## Ingestion changed shape
 
 Older versions of the template read PDFs in-process with `PdfPig` through a

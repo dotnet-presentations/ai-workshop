@@ -118,7 +118,10 @@ internal class ContosoOrdersTools
             ["Trail Mix"] = new("TM-006", 67, "$8.99", "Food")
         };
 
-        var searchKey = inventory.Keys.FirstOrDefault(name => ProductNamesMatch(name, productName));
+        var normalizedProductName = productName.Trim();
+        var searchKey = inventory.Keys.FirstOrDefault(name =>
+            ProductNamesMatch(name, normalizedProductName) ||
+            inventory[name].Sku.Equals(normalizedProductName, StringComparison.OrdinalIgnoreCase));
 
         if (searchKey != null)
         {

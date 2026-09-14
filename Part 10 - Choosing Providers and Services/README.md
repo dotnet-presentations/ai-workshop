@@ -12,7 +12,7 @@ doing a job, and this is where it pays off: **swap the provider, keep the same
 interfaces.** The chat loop from Part 2, the RAG loop from Part 3, the template
 app from Part 4, and the capstone from Part 9 all run against a different
 provider with no application code changes. The only thing that changes is
-*registration* — an endpoint, a key, a model name.
+*registration* - an endpoint, a key, a model name.
 
 That matters at deployment time for reasons that are not academic: cost per
 token, data residency, whether a feature is allowed to call the cloud at all,

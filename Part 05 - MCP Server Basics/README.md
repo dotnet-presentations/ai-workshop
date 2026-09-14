@@ -116,10 +116,10 @@ steps and the provided configuration work as written.
    ```
 
    This creates a project containing:
-   - `Program.cs` — the MCP server host, using stdio transport
-   - `Tools/RandomNumberTools.cs` — an example tool
-   - `.mcp/server.json` — server metadata used when packaging (see [Part 7](../Part%2007%20-%20MCP%20Publishing/README.md))
-   - `README.md` — the template's own notes
+   - `Program.cs` - the MCP server host, using stdio transport
+   - `Tools/RandomNumberTools.cs` - an example tool
+   - `.mcp/server.json` - server metadata used when packaging (see [Part 7](../Part%2007%20-%20MCP%20Publishing/README.md))
+   - `README.md` - the template's own notes
 
 3. **Navigate to the new project**:
 

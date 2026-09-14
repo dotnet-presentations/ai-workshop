@@ -10,7 +10,7 @@
 > **existing** Azure OpenAI resource instead of provisioning a new one, and the chat
 > deployment is `gpt-5-mini`. It uses Azure AI Search for vectors. Ignore the
 > Azure OpenAI portion of "Using Azure Provisioning" below
-> — instead, set `ConnectionStrings:openai` in user secrets on `GenAiLab.AppHost`:
+> - instead, set `ConnectionStrings:openai` in user secrets on `GenAiLab.AppHost`:
 >
 > ```json
 > {

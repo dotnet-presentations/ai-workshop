@@ -35,7 +35,7 @@ This part ships two copies of the same solution:
 | Folder | What it is |
 | --- | --- |
 | `eShopLite-start/` | The store **before** any AI. This is the one you work in. |
-| `eShopLite/` | The finished app with all three steps already done — the answer key. Look here if you get stuck, or run it if you want to see where you are heading. |
+| `eShopLite/` | The finished app with all three steps already done - the answer key. Look here if you get stuck, or run it if you want to see where you are heading. |
 
 Open the starting solution:
 
@@ -56,7 +56,7 @@ Five projects, none of which reference an AI package yet:
 
 The two files worth reading before you change anything:
 
-**`Products/Endpoints/ProductEndpoints.cs`** — the catalog API. The search endpoint is a `LIKE` query:
+**`Products/Endpoints/ProductEndpoints.cs`** - the catalog API. The search endpoint is a `LIKE` query:
 
 ```csharp
 group.MapGet("/search/{search}", async (string search, ProductDataContext db) =>
@@ -67,7 +67,7 @@ group.MapGet("/search/{search}", async (string search, ProductDataContext db) =>
     .WithName("SearchProducts");
 ```
 
-**`Products/Data/SeedData.cs`** — twelve outdoor products that seed on first run.
+**`Products/Data/SeedData.cs`** - twelve outdoor products that seed on first run.
 
 ### Run it and watch keyword search fail
 
@@ -117,7 +117,7 @@ not AI package choices.
 >
 > A file-based vector store keeps this exercise Docker-free, which matters in a room full of laptops on conference wifi. It is not the enterprise answer.
 >
-> If your data already lives in SQL Server, you do not need a separate vector database at all. **SQL Server 2025 has a native [`vector` data type](https://learn.microsoft.com/sql/t-sql/data-types/vector-data-type?view=sql-server-ver17&tabs=csharp)** with built-in distance functions, so embeddings sit in the same table as the rows they describe, inside the same transaction and the same backup. The eShopLite [`08-Sql2025`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/08-Sql2025) scenario shows this in action. Azure AI Search, Postgres with `pgvector`, and Qdrant (which you saw in Part 4) are the other common choices — [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) compares them.
+> If your data already lives in SQL Server, you do not need a separate vector database at all. **SQL Server 2025 has a native [`vector` data type](https://learn.microsoft.com/sql/t-sql/data-types/vector-data-type?view=sql-server-ver17&tabs=csharp)** with built-in distance functions, so embeddings sit in the same table as the rows they describe, inside the same transaction and the same backup. The eShopLite [`08-Sql2025`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/08-Sql2025) scenario shows this in action. Azure AI Search, Postgres with `pgvector`, and Qdrant (which you saw in Part 4) are the other common choices - [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) compares them.
 >
 > The retrieval code barely changes between them. That is the point of `Microsoft.Extensions.VectorData`.
 
@@ -150,7 +150,7 @@ Three things to notice.
 
 `ProductVector` is not `Product`. The relational table stays the source of truth; this is a derived index built from it. Keeping them separate means you can rebuild the index whenever you like without touching the catalog.
 
-`EmbeddingSource` is a `string`, not a `float[]`. Because the vector store is configured with an embedding generator, assigning text is enough — the connector calls the embedding model for you on upsert and on search.
+`EmbeddingSource` is a `string`, not a `float[]`. Because the vector store is configured with an embedding generator, assigning text is enough - the connector calls the embedding model for you on upsert and on search.
 
 `CosineDistance` is required by the SQLite connector. Distance is the inverse of similarity: **lower means a closer match**. Getting that backwards is the easiest mistake to make here, and it shows up as a search that returns your worst results first.
 
@@ -359,7 +359,7 @@ Here is what six queries produced. Your exact values will differ a little, becau
 
 Real matches land between about 0.45 and 0.69, and queries for things this store does not sell land at 0.75 and above. Hence `maxDistance = 0.75`.
 
-Notice how narrow that gap is. A good match at 0.689 and a junk match at 0.754 are not far apart, and there is no universal correct value — it depends on your data, your embedding model, and how much you would rather show nothing than show something wrong. **You find this number by logging scores against real queries, not by reasoning about it.** Try setting it to `0.9` and searching for `socket wrench` to see what the unfiltered behaviour looks like.
+Notice how narrow that gap is. A good match at 0.689 and a junk match at 0.754 are not far apart, and there is no universal correct value - it depends on your data, your embedding model, and how much you would rather show nothing than show something wrong. **You find this number by logging scores against real queries, not by reasoning about it.** Try setting it to `0.9` and searching for `socket wrench` to see what the unfiltered behaviour looks like.
 
 ## Step 2: Grounded answers in the storefront
 
@@ -461,7 +461,7 @@ This is the RAG loop from Part 3 with the retrieval swapped for an HTTP call to 
 
 Two design choices are doing the work here.
 
-**The model never sees the catalog.** It sees the three products semantic search returned. That keeps the prompt small and cheap, and it means the model has nothing to hallucinate from — it cannot recommend a product it was never shown.
+**The model never sees the catalog.** It sees the three products semantic search returned. That keeps the prompt small and cheap, and it means the model has nothing to hallucinate from - it cannot recommend a product it was never shown.
 
 **The empty case never reaches the model.** If search found nothing, the method returns a fixed sentence. Sending "here are no products, now answer the question" to a language model is an invitation for it to help by inventing something.
 
@@ -602,7 +602,7 @@ Ask *"I need something to keep me warm at night when camping"*. You get a short 
 
 ![The Ask page answering a camping question, with the three products used to answer it shown as cards below](../images/part09-grounded-answer.png)
 
-Then ask for something the store does not sell — *"bear spray"*, *"a socket wrench set for my car"*. You get "We do not stock anything that matches that", because the distance gate from Step 1 rejected everything and the model was never called.
+Then ask for something the store does not sell - *"bear spray"*, *"a socket wrench set for my car"*. You get "We do not stock anything that matches that", because the distance gate from Step 1 rejected everything and the model was never called.
 
 ![The Ask page responding to a socket wrench query with "We do not stock anything that matches that. Try describing it differently."](../images/part09-no-match.png)
 
@@ -614,13 +614,13 @@ That second behaviour is the one worth demonstrating to anyone who is nervous ab
 
 Steps 1 and 2 face customers, and they use a cloud model. Not everything should.
 
-The store generates telemetry nobody reads: every search, how many results it returned, how long it took. Somewhere in that log is the fact that shoppers keep searching for things you do not sell. That is a report worth having, and it is a poor fit for a cloud model — it is high volume, it runs continuously rather than while a user waits, and it is internal data you may not want to send anywhere.
+The store generates telemetry nobody reads: every search, how many results it returned, how long it took. Somewhere in that log is the fact that shoppers keep searching for things you do not sell. That is a report worth having, and it is a poor fit for a cloud model - it is high volume, it runs continuously rather than while a user waits, and it is internal data you may not want to send anywhere.
 
 This step runs the same `IChatClient` code against a model on your own machine.
 
 ### 3.1 Record the telemetry
 
-Create `Store/Ai/SearchTelemetry.cs` — a capped in-memory queue of `SearchEvent(At, Query, ResultCount, ElapsedMs)` records. Register it as a singleton and call `telemetry.Record(...)` from `ProductDiscovery.AskAsync` after the search returns.
+Create `Store/Ai/SearchTelemetry.cs` - a capped in-memory queue of `SearchEvent(At, Query, ResultCount, ElapsedMs)` records. Register it as a singleton and call `telemetry.Record(...)` from `ProductDiscovery.AskAsync` after the search returns.
 
 ### 3.2 Point an IChatClient at a local model
 
@@ -651,9 +651,9 @@ dotnet user-secrets set "LocalModel:Model" "THE-ID-FROM-/v1/models"
 
 > [!WARNING]
 > The first request can take minutes to load the model into memory. Warm it with a throwaway prompt before the demo, or the audience will sit through a long silence. The port reported by `foundry server status` can change after a restart, so re-run the secret setup after rebooting. And the model id must be the exact value from `/v1/models`, not the friendly alias; a model you have not downloaded returns `400`.
-> The endpoint must be the OpenAI-compatible base ending in `/v1` — the SDK appends `/chat/completions` to it.
+> The endpoint must be the OpenAI-compatible base ending in `/v1` - the SDK appends `/chat/completions` to it.
 
-Foundry Local speaks the OpenAI protocol, so it needs no new package — the same `OpenAIClient` you already have, pointed somewhere else:
+Foundry Local speaks the OpenAI protocol, so it needs no new package - the same `OpenAIClient` you already have, pointed somewhere else:
 
 ```csharp
 var localEndpoint = builder.Configuration["LocalModel:Endpoint"];
@@ -690,12 +690,12 @@ Run the app, ask a few questions on the **Ask** page including some the store ca
 
 ![The Operations page showing a three-bullet summary produced by the local model, identifying a zero-result search as a lost sale](../images/part09-operations-local-model.png)
 
-The report correctly picks out a search that returned nothing and calls it a lost sale — from a model running on your laptop, over data that never left it.
+The report correctly picks out a search that returned nothing and calls it a lost sale - from a model running on your laptop, over data that never left it.
 
 It is also visibly weaker than `gpt-5-mini`. It missed one of the two zero-result searches, and it summarizes at a coarser level than the cloud model would. That is the honest tradeoff, and it is a better argument for [Part 10](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) than any slide. A few practical notes from building this:
 
-- The first request loads the model into memory and can take **minutes** — over three on the machine these screenshots came from. Later requests took a few seconds. Warm the model before you demo this.
-- Small models have small context windows — this one caps at about 3,700 input and 528 output tokens, so the code sends only the last 40 events.
+- The first request loads the model into memory and can take **minutes** - over three on the machine these screenshots came from. Later requests took a few seconds. Warm the model before you demo this.
+- Small models have small context windows - this one caps at about 3,700 input and 528 output tokens, so the code sends only the last 40 events.
 - Use an **instruct** model, not a *reasoning* one. A reasoning model spends much of that small output budget thinking out loud inside a `<think>` block and can hit the limit before it writes the answer, leaving the user staring at its notes. `OperationsAssistant.StripReasoning` trims that block if you do use one, but the better fix is to pick a model suited to the job.
 
 ## Where this goes next
@@ -723,7 +723,7 @@ The change in shape is that nobody is waiting for the answer. Once a request is 
 
 [`16-MCPStoreOperationsTools`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/16-MCPStoreOperationsTools)
 
-In Parts 5 and 6 you built MCP servers over data you invented for the purpose. This scenario puts an MCP server in front of a real application — tools like `search_products`, `check_inventory`, `get_order_status`.
+In Parts 5 and 6 you built MCP servers over data you invented for the purpose. This scenario puts an MCP server in front of a real application - tools like `search_products`, `check_inventory`, `get_order_status`.
 
 The reason to do that rather than hand an agent database access is that your service layer already contains rules that SQL does not: what "in stock" means when there is a pending reservation, which customers may see which prices, what has to be logged. An agent going straight to the tables bypasses all of it. An MCP tool is a supported entry point to your application that happens to be callable by a model, and the same authorization and auditing apply.
 
@@ -733,7 +733,7 @@ The practical constraint is that tool descriptions are the model's entire docume
 
 [`17-A2AStoreOperationsNetwork`](https://github.com/Azure-Samples/eShopLite/tree/main/scenarios/17-A2AStoreOperationsNetwork)
 
-Part 8 built a single agent. This scenario uses several — inventory, orders, customer service — each with its own tools and instructions, coordinating over the [A2A protocol](https://github.com/a2aproject/A2A).
+Part 8 built a single agent. This scenario uses several - inventory, orders, customer service - each with its own tools and instructions, coordinating over the [A2A protocol](https://github.com/a2aproject/A2A).
 
 The motivation is the same one that produces microservices: one agent holding every tool and every rule for the whole store has a prompt nobody can reason about, and a change to returns policy risks breaking order lookup. Splitting by domain keeps each agent's instructions small enough to review.
 
@@ -755,8 +755,8 @@ That is what makes this different from bolting a chatbot onto a homepage, and it
 
 ## Next steps
 
-- [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) — the model, hosting, and vector store decisions this part made for you
-- [Part 11: Deployment](../Part%2011%20-%20Deployment/README.md) — getting it to Azure
+- [Part 10: Choosing Providers and Services](../Part%2010%20-%20Choosing%20Providers%20and%20Services/README.md) - the model, hosting, and vector store decisions this part made for you
+- [Part 11: Deployment](../Part%2011%20-%20Deployment/README.md) - getting it to Azure
 
 ## Reference
 

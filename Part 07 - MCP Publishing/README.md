@@ -225,8 +225,8 @@ generates simulated values and always reports temperatures in Celsius.
 
 | Tool | Description | Parameters |
 |------|-------------|------------|
-| `GetCurrentWeather` | Simulated current weather in Celsius | `city` (string) |
-| `GetWeatherForecast` | Simulated 5-day forecast in Celsius | `city` (string) |
+| `get_current_weather` | Simulated current weather in Celsius | `city` (string) |
+| `get_weather_forecast` | Simulated 5-day forecast in Celsius | `city` (string) |
 
 ## Requirements
 

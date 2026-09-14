@@ -77,8 +77,7 @@ For both VS Code and Visual Studio, the configuration file uses the following se
       "args": [
         "<your package ID here>",
         "--version",
-        "<your package version here>",
-        "--yes"
+        "<your package version here>"
       ]
     }
   }

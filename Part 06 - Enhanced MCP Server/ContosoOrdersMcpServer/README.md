@@ -58,8 +58,7 @@ After publishing the package, configure an MCP client to run it with `dnx`:
       "args": [
         "ContosoOrdersMcpServer",
         "--version",
-        "0.1.0-beta",
-        "--yes"
+        "0.1.0-beta"
       ]
     }
   }
